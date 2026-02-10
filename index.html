@@ -1,64 +1,207 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cyborg Resilience Co-lab</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #f5f5f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1400px;
-            width: 100%;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-
-        .mockup-wrapper {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-
-            .container {
-                border-radius: 8px;
-            }
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cyborg Resilience Co-lab (CRC)｜賽伯格韌性實驗室</title>
+  <meta name="description" content="CRC explores digital resilience under contemporary conditions through research, fieldwork, and co-lab practice." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Noto+Sans+TC:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <div class="container">
-        <div class="mockup-wrapper">
-            <img src="mockup.svg" alt="Cyborg Resilience Co-lab" />
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="container hero-grid">
+      <div>
+        <h1 class="h1">
+          <span class="tight">Cyborg Resilience</span>
+          <span class="tight">Co-lab (CRC)</span>
+        </h1>
+        <h2 class="h2zh">賽伯格韌性實驗室</h2>
+        <div class="hr"></div>
+
+        <div class="bullets">
+          <div class="bullet">
+            <div class="icon">↗</div>
+            <div>
+              <div>成立於 2025 年 7 月</div>
+              <div class="en">FUNDED IN JULY, 2025</div>
+            </div>
+          </div>
+          <div class="bullet">
+            <div class="icon">↗</div>
+            <div>
+              <div>研究 × 科技 × 藝術的跨域行動平台</div>
+              <div class="en">RESEARCH • TECH • ART INITIATIVE</div>
+            </div>
+          </div>
+          <div class="bullet">
+            <div class="icon">↗</div>
+            <div>
+              <div>黑客 + 人權工作者 + 研究者 + 藝術家</div>
+              <div class="en">CIVIC HACKERS • DIGITAL RIGHTS ACTIVISTS • RESEARCHERS • ARTISTS</div>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <img class="hero-art" src="assets/hero-graphic.svg" alt="CRC graphic" />
     </div>
+  </header>
+
+  <!-- CRC & MORE -->
+  <section class="section">
+    <div class="container">
+      <div class="title-row">
+        <h2 class="h2">CRC and more..</h2>
+        <div class="mini-icons" aria-hidden="true">
+          <img src="assets/cube.svg" alt="" />
+          <img src="assets/cube.svg" alt="" />
+          <img src="assets/cube.svg" alt="" />
+        </div>
+      </div>
+      <div class="subhr"></div>
+
+      <div class="text-block">
+        <p>
+          CRC 探索在戰爭、災難與科技風險日益交疊的當代情境中，
+          何謂數位韌性。並以鬆散連結的 co-lab 形式運作，持續促成研究與實作之間的協作。
+          連結研究、實作與藝術，
+          CRC 探討後人類戰爭如何在軍事、公民與數位領域中被想像與實踐。
+        </p>
+        <p class="mono">
+          Exploring digital resilience under contemporary conditions in which war, disaster,
+          and technological risk increasingly overlap. CRC runs as a loosely connected co-lab that
+          sustains collaboration between research and practice, allowing diverse forms of expertise—
+          from social sciences and information engineering to artistic practice—to intersect.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEAM BAND -->
+  <section class="team">
+  <div class="team__inner">
+
+    <!-- 上方兩欄文字 -->
+    <div class="team__top">
+      <div class="bio">
+        <h3><span class="zh">耿璐</span> <span class="en">Lulu</span></h3>
+        <div class="sub zh">人權工作者</div>
+        <div class="sub en">Digital Rights Activist</div>
+      </div>
+
+      <div class="bio">
+        <h3><span class="zh">李梅君</span> <span class="en">Meichun Lee</span></h3>
+        <div class="sub zh">數位人類學家</div>
+        <div class="sub en">Digital Anthropologist</div>
+      </div>
+    </div>
+
+    <!-- 中間照片 + 線條裝飾 -->
+    <figure class="team__photo">
+      <img src="assets/team.jpg" alt="Team photo">
+      <div class="scanlines" aria-hidden="true">
+        <!-- 左邊兩條 -->
+        <i class="v v1"></i>
+        <i class="v v2"></i>
+        <!-- 右邊多條 -->
+        <i class="v v3"></i>
+        <i class="v v4"></i>
+        <i class="v v5"></i>
+        <i class="v v6"></i>
+      </div>
+    </figure>
+
+    <!-- 下方三欄文字 -->
+    <div class="team__bottom">
+      <div class="bio">
+        <h3><span class="zh">彭宬</span> <span class="en">CHENG PENG</span></h3>
+        <div class="sub zh">韌性松共同創辦人</div>
+        <div class="sub en">Co-founder of g0v Digital Resilience Hackathon</div>
+      </div>
+
+      <div class="bio">
+        <h3><span class="zh">李紫彤</span> <span class="en">Tzu Tung</span></h3>
+        <div class="sub zh">藝術家與策展人</div>
+        <div class="sub en">Curator &amp; Conceptual and Queer Feminist Artist</div>
+      </div>
+
+      <div class="bio">
+        <h3><span class="zh">荊輔翔</span> <span class="en">Sean</span></h3>
+        <div class="sub zh">工程師</div>
+        <div class="sub en">Meshtastic &amp; Drone Engineer</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+  <!-- OPENFUN BAND -->
+  <section class="section band-blue">
+    <div class="container grid-2">
+      <div class="cubes-decor" aria-hidden="true">
+        <img src="assets/cube.svg" alt="" />
+        <img src="assets/cube.svg" alt="" />
+        <img src="assets/cube.svg" alt="" />
+        <img src="assets/cube.svg" alt="" />
+      </div>
+
+      <div>
+        <h3 class="h3">CRC 與歐噴在 2026 年獲得 TWCIC 網路社群計畫</h3>
+        <div class="badge-line" style="margin:18px 0 22px">
+          <a class="btn white" href="#" onclick="return false;">歐噴有限公司 OpenFun Inc.</a>
+        </div>
+
+        <p>
+          一家成立於 2023 年 2 月的公民科技公司。其名稱結合了「Open」與「Fun」，體現對開放、協作與務實創新的信念。OpenFun 致力於打造可靠的數位基礎設施，以支援開放資料、公共參與與知情決策。公司由長期投入台灣公民科技生態系的 Ronny Wang 創立，團隊成員包括具備豐富經驗的工程師與專案經理，專長涵蓋前端開發、開源協作與專案管理。
+
+          OpenFun 以長期投入政府與立法資料的結構化工作而聞名，其代表性成果包括立法追蹤平台 LawTrace、提供公開 API 且持續更新的台灣公司資料庫，以及結合 AI 技術的國會逐字稿系統。除了系統開發之外，OpenFun 亦積極參與使用者研究、工作坊與數位韌性相關行動，致力於促進更健全且透明的公民資訊環境。
+
+        </p>
+        <p class="mono">
+          OpenFun Inc. is a Taiwan-based civic tech company founded February, 2023.
+          Its name combines Open and Fun, reflecting a belief in openness, collaboration,
+          and pragmatic innovation. OpenFun focuses on building reliable digital infrastructure
+          that supports open data, public participation, and informed decision-making.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- LATEST NEWS -->
+  <section class="section">
+    <div class="container" style="text-align:center">
+      <a class="btn" href="#latest-news">最新訊息&nbsp;&nbsp;LATEST NEWS</a>
+      <div class="dotrow" aria-hidden="true">
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+      </div>
+
+      <div id="latest-news" class="news-wrap" style="text-align:left">
+        <div id="news"></div>
+      </div>
+
+      <div class="dotrow" aria-hidden="true" style="margin-top:38px">
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div>© <span id="y"></span> CRC · Cyborg Resilience Co-lab</div>
+        <div class="mono">Made for GitHub Pages · Static site</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>

@@ -1,0 +1,222 @@
+:root{
+  --lime:#c1ff72;
+  --purple:#5e17eb;
+  --ink:#1a2123;
+  --white:#ffffff;
+  --muted:#5b676b;
+  --bg-blue:#7b87f3;
+  --max:1100px;
+  --radius:18px;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family: "Space Grotesk", system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans TC", sans-serif;
+  color:var(--ink);
+  line-height:1.5;
+  background:var(--white);
+}
+a{color:inherit}
+.container{max-width:var(--max); margin:0 auto; padding:0 24px}
+
+.section{padding:90px 0}
+.hero{background:var(--lime); padding:110px 0 90px}
+.hero-grid{display:grid; grid-template-columns: 1.25fr .75fr; gap:40px; align-items:center}
+@media (max-width: 900px){
+  .hero-grid{grid-template-columns:1fr; }
+  .hero{padding:80px 0 60px}
+}
+
+.h1{font-size:56px; line-height:1.05; letter-spacing:-0.02em; margin:0 0 10px; color:var(--purple)}
+.h1 .tight{display:block}
+.h2zh{font-size:42px; line-height:1.1; margin:0 0 26px; color:var(--purple)}
+@media (max-width: 520px){
+  .h1{font-size:42px}
+  .h2zh{font-size:32px}
+}
+
+.hr{width:120px; height:2px; background:var(--purple); margin:18px 0 28px}
+.bullets{display:grid; gap:18px; margin-top:8px}
+.bullet{display:grid; grid-template-columns: 18px 1fr; gap:10px; align-items:start; font-size:15px}
+.bullet .icon{color:var(--purple); font-weight:700; margin-top:2px}
+.bullet .en{opacity:.75; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "JetBrains Mono", monospace; font-size:12px}
+
+.hero-art{
+  width:100%;
+  max-width:420px;
+  justify-self:end;
+  filter: drop-shadow(0 12px 22px rgba(0,0,0,.08));
+}
+@media (max-width:900px){
+  .hero-art{justify-self:start; max-width:360px}
+}
+
+.title-row{display:flex; align-items:baseline; justify-content:space-between; gap:18px}
+.h2{font-size:54px; color:var(--purple); margin:0}
+@media (max-width: 700px){ .h2{font-size:40px}}
+.mini-icons{display:flex; gap:18px; align-items:center}
+.mini-icons img{width:52px; height:52px}
+
+.subhr{width:90px; height:2px; background:var(--purple); margin:18px 0 22px}
+.text-block{max-width:920px}
+.text-block p{margin:0 0 14px}
+.mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "JetBrains Mono", monospace; font-size:13px; opacity:.78}
+
+.band-purple{background:var(--purple); color:var(--white)}
+.band-blue{background:var(--bg-blue); color:var(--white)}
+.band-purple .h3, .band-blue .h3{color:var(--white)}
+.h3{font-size:24px; margin:0 0 14px}
+.grid-2{display:grid; grid-template-columns: 1fr 1fr; gap:36px; align-items:start}
+@media (max-width: 900px){ .grid-2{grid-template-columns:1fr} }
+
+.people{display:flex; flex-wrap:wrap; gap:36px; padding-bottom:16px}
+.person{min-width:220px}
+.person .name{font-weight:700; font-size:18px}
+.person .role{opacity:.85; font-size:13px; margin-top:2px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "JetBrains Mono", monospace;}
+.photo{
+  width:100%; border-radius:var(--radius);
+  border:2px solid rgba(193,255,114,.5);
+  overflow:hidden;
+}
+.photo img{display:block; width:100%; height:auto}
+
+.badge-line{display:flex; gap:18px; flex-wrap:wrap; align-items:center}
+.pill{
+  display:inline-flex; align-items:center; gap:10px;
+  border:2px solid rgba(255,255,255,.6);
+  padding:10px 14px; border-radius:999px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "JetBrains Mono", monospace;
+  font-size:12px;
+  background: rgba(0,0,0,.06);
+}
+.pill span{opacity:.95}
+.btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  border:2px solid var(--purple);
+  color:var(--purple);
+  background:transparent;
+  padding:14px 18px;
+  border-radius:999px;
+  font-weight:700;
+  letter-spacing:.02em;
+  cursor:pointer;
+  text-decoration:none;
+}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
+.btn.white{border-color:rgba(255,255,255,.8); color:var(--white)}
+.btn.white:hover{background: rgba(255,255,255,.08)}
+
+.cubes-decor{display:grid; grid-template-columns: repeat(2,64px); gap:18px; align-content:start}
+.cubes-decor img{width:64px; height:64px}
+.dotrow{display:flex; gap:70px; justify-content:center; padding-top:26px}
+.dot{width:8px; height:8px; border-radius:50%; background:var(--lime)}
+
+.news-wrap{display:grid; gap:18px; margin-top:28px}
+.card{
+  border:2px solid rgba(94,23,235,.25);
+  border-radius:var(--radius);
+  padding:18px 18px;
+  background:#fff;
+}
+.card .meta{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "JetBrains Mono", monospace; font-size:12px; color:rgba(26,33,35,.65)}
+.card h4{margin:8px 0 8px; font-size:18px; color:var(--purple)}
+.card p{margin:0; color:rgba(26,33,35,.86)}
+.footer{padding:36px 0; border-top:1px solid rgba(0,0,0,.08); color:rgba(26,33,35,.72)}
+.footer .row{display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap}
+
+.team{
+  background:#5a2bff; /* 紫底 */
+  padding: 64px 0;
+  color:#fff;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+}
+
+.team__inner{
+  width:min(1100px, 92vw);
+  margin:0 auto;
+}
+
+.team__top{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-bottom: 22px;
+}
+
+.team__bottom{
+  display:grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 36px;
+  margin-top: 26px;
+}
+
+.bio h3{
+  margin:0 0 6px 0;
+  font-size: 28px;
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: .5px;
+}
+.bio .sub{
+  font-size: 18px;
+  line-height: 1.35;
+  opacity: .95;
+}
+.bio .sub.en{ margin-top: 6px; opacity:.9; }
+
+.team__photo{
+  position:relative;
+  margin: 0 auto;
+  width: min(980px, 92vw);
+  aspect-ratio: 16/7;    /* 讓它像你截圖一樣扁長 */
+  overflow:hidden;
+  /* 如果你想要四周留白像截圖那樣，可加 padding + 背景 */
+}
+
+.team__photo img{
+  width:100%;
+  height:100%;
+  object-fit: cover;
+  display:block;
+}
+
+/* 線條疊在圖片上 */
+.scanlines{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+}
+
+/* 每條線 */
+.scanlines .v{
+  position:absolute;
+  top:0;
+  bottom:0;
+  width:4px;
+  background: rgba(90,43,255,.95); /* 跟底色一致 */
+}
+
+/* 你截圖那種「左邊兩條、右邊多條」 */
+.scanlines .v1{ left: 7%; }
+.scanlines .v2{ left: 9.5%; }
+
+.scanlines .v3{ right: 22%; }
+.scanlines .v4{ right: 18%; }
+.scanlines .v5{ right: 12%; }
+.scanlines .v6{ right: 8%; }
+
+/* 右邊有一條「較短」的線（像截圖那樣中間才開始） */
+.scanlines .v3{
+  top: 15%;
+  bottom: 0;
+}
+
+/* RWD：小螢幕改成上下排 */
+@media (max-width: 760px){
+  .team__top{ grid-template-columns: 1fr; }
+  .team__bottom{ grid-template-columns: 1fr; }
+  .bio h3{ font-size: 24px; }
+  .bio .sub{ font-size: 16px; }
+}

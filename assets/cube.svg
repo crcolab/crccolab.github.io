@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- faces -->
+  <polygon points="32,4 56,18 32,32 8,18" fill="#c1ff72" fill-opacity="0.85"/>
+  <polygon points="32,32 56,18 56,46 32,60" fill="#5e17eb" fill-opacity="0.25"/>
+  <polygon points="32,32 8,18 8,46 32,60" fill="#ffffff" fill-opacity="0.12"/>
+
+  <!-- wireframe -->
+  <path d="M32 4 56 18v28L32 60 8 46V18L32 4Z" fill="none" stroke="#5e17eb" stroke-width="2"/>
+  <path d="M32 4v28l24-14" fill="none" stroke="#5e17eb" stroke-width="2"/>
+  <path d="M32 32 8 18" fill="none" stroke="#5e17eb" stroke-width="2"/>
+  <path d="M32 32v28" fill="none" stroke="#5e17eb" stroke-width="2"/>
+</svg>

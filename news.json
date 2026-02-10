@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "date": "2026-02-10",
+      "category": "Update",
+      "title": "CRC Website Draft Online",
+      "summary": "Initial static site template is ready. Replace text, people, and images with your real content."
+    },
+    {
+      "date": "2026-02-01",
+      "category": "Research",
+      "title": "Digital resilience fieldwork notes",
+      "summary": "We are compiling lessons learned across research, fieldwork, and hands-on engagements with decentralized communication."
+    },
+    {
+      "date": "2026-01-18",
+      "category": "Event",
+      "title": "Co-lab meetup",
+      "summary": "A small co-lab session to connect civic hackers, researchers, and artists around digital rights and resilience."
+    }
+  ]
+}

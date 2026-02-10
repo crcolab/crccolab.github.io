@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 300">
+  <defs>
+    <g id="cube">
+      <polygon points="32,4 56,18 32,32 8,18" fill="#c1ff72" fill-opacity="0.85"/>
+      <polygon points="32,32 56,18 56,46 32,60" fill="#5e17eb" fill-opacity="0.25"/>
+      <polygon points="32,32 8,18 8,46 32,60" fill="#ffffff" fill-opacity="0.12"/>
+      <path d="M32 4 56 18v28L32 60 8 46V18L32 4Z" fill="none" stroke="#5e17eb" stroke-width="2"/>
+      <path d="M32 4v28l24-14" fill="none" stroke="#5e17eb" stroke-width="2"/>
+      <path d="M32 32 8 18" fill="none" stroke="#5e17eb" stroke-width="2"/>
+      <path d="M32 32v28" fill="none" stroke="#5e17eb" stroke-width="2"/>
+    </g>
+  </defs>
+
+  <rect x="10" y="10" width="400" height="280" fill="none" stroke="#5e17eb" stroke-width="2"/>
+  <circle cx="215" cy="80" r="38" fill="none" stroke="#5e17eb" stroke-width="2"/>
+
+  <g transform="translate(95,110)">
+    <g transform="translate(0,0) scale(1.2)"><use href="#cube"/></g>
+    <g transform="translate(110,0) scale(1.2)"><use href="#cube"/></g>
+    <g transform="translate(220,0) scale(1.2)"><use href="#cube"/></g>
+
+    <g transform="translate(55,80) scale(1.2)"><use href="#cube"/></g>
+    <g transform="translate(165,80) scale(1.2)"><use href="#cube"/></g>
+
+    <g transform="translate(0,160) scale(1.2)"><use href="#cube"/></g>
+    <g transform="translate(110,160) scale(1.2)"><use href="#cube"/></g>
+    <g transform="translate(220,160) scale(1.2)"><use href="#cube"/></g>
+  </g>
+</svg>
