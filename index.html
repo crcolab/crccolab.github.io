@@ -101,18 +101,71 @@
       </div>
     </div>
 
-    <!-- 中間照片 + 線條裝飾 -->
+    <!-- 中間影片 + 監控 HUD -->
     <figure class="team__photo">
-      <img src="assets/team.jpg" alt="Team photo">
-      <div class="scanlines" aria-hidden="true">
-        <!-- 左邊兩條 -->
-        <i class="v v1"></i>
-        <i class="v v2"></i>
-        <!-- 右邊多條 -->
-        <i class="v v3"></i>
-        <i class="v v4"></i>
-        <i class="v v5"></i>
-        <i class="v v6"></i>
+      <video class="team__video" autoplay muted loop playsinline
+             poster="assets/team-video-poster.jpg">
+        <source src="assets/team-video.mp4"  type="video/mp4">
+        <source src="assets/team-video.webm" type="video/webm">
+        <!-- fallback for no-video browsers -->
+        <img src="assets/team.jpg" alt="Team photo">
+      </video>
+
+      <div class="hud-overlay" aria-hidden="true">
+        <!-- CRT scanlines -->
+        <div class="scanlines-h"></div>
+        <!-- noise / grain -->
+        <div class="noise-grain"></div>
+
+        <!-- HUD text -->
+        <span class="hud-text hud-rec">REC ● <span class="hud-ts">2025.07.01 — 23:47:12</span></span>
+        <span class="hud-text hud-cam">CAM-03 / CRC-LAB</span>
+
+        <!-- face targets (positions tuned after video is added) -->
+        <div class="face-target" data-delay="0.4"
+             style="--tx:8%;--ty:18%;--tw:14%;--th:28%">
+          <svg class="ft-bracket" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <path d="M0,20 L0,0 L20,0" /><path d="M80,0 L100,0 L100,20" />
+            <path d="M100,80 L100,100 L80,100" /><path d="M20,100 L0,100 L0,80" />
+          </svg>
+          <span class="face-label">ID:001 — 97.4%</span>
+        </div>
+
+        <div class="face-target" data-delay="0.8"
+             style="--tx:28%;--ty:15%;--tw:14%;--th:28%">
+          <svg class="ft-bracket" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <path d="M0,20 L0,0 L20,0" /><path d="M80,0 L100,0 L100,20" />
+            <path d="M100,80 L100,100 L80,100" /><path d="M20,100 L0,100 L0,80" />
+          </svg>
+          <span class="face-label">ID:002 — 98.2%</span>
+        </div>
+
+        <div class="face-target" data-delay="1.2"
+             style="--tx:44%;--ty:20%;--tw:14%;--th:28%">
+          <svg class="ft-bracket" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <path d="M0,20 L0,0 L20,0" /><path d="M80,0 L100,0 L100,20" />
+            <path d="M100,80 L100,100 L80,100" /><path d="M20,100 L0,100 L0,80" />
+          </svg>
+          <span class="face-label">ID:003 — 95.8%</span>
+        </div>
+
+        <div class="face-target" data-delay="1.6"
+             style="--tx:62%;--ty:16%;--tw:14%;--th:28%">
+          <svg class="ft-bracket" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <path d="M0,20 L0,0 L20,0" /><path d="M80,0 L100,0 L100,20" />
+            <path d="M100,80 L100,100 L80,100" /><path d="M20,100 L0,100 L0,80" />
+          </svg>
+          <span class="face-label">ID:004 — 96.1%</span>
+        </div>
+
+        <div class="face-target" data-delay="2.0"
+             style="--tx:80%;--ty:18%;--tw:14%;--th:28%">
+          <svg class="ft-bracket" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <path d="M0,20 L0,0 L20,0" /><path d="M80,0 L100,0 L100,20" />
+            <path d="M100,80 L100,100 L80,100" /><path d="M20,100 L0,100 L0,80" />
+          </svg>
+          <span class="face-label">ID:005 — 99.0%</span>
+        </div>
       </div>
     </figure>
 
