@@ -29,6 +29,7 @@ a{color:inherit}
 }
 
 .h1{font-size:56px; line-height:1.05; letter-spacing:-0.02em; margin:0 0 10px; color:var(--purple)}
+.cyborg-text{cursor:pointer; transition:opacity 0.2s ease}
 .h1 .tight{display:block}
 .h2zh{font-size:42px; line-height:1.1; margin:0 0 26px; color:var(--purple)}
 @media (max-width: 520px){

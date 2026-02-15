@@ -26,7 +26,34 @@ function escapeHtml(str){
 document.addEventListener('DOMContentLoaded', () => {
   loadNews();
   initSurveillanceHUD();
+  initCyborgToggle();
 });
+
+function initCyborgToggle(){
+  const el = document.querySelector('.cyborg-text');
+  const hero = document.querySelector('.hero');
+  if(!el || !hero) return;
+
+  let isScrolled = false;
+
+  window.addEventListener('scroll', () => {
+    const rect = hero.getBoundingClientRect();
+    if(rect.bottom < 0){
+      isScrolled = true;
+      el.textContent = el.dataset.alt;
+    } else {
+      isScrolled = false;
+      el.textContent = el.dataset.original;
+    }
+  });
+
+  el.addEventListener('mouseenter', () => {
+    el.textContent = el.dataset.alt;
+  });
+  el.addEventListener('mouseleave', () => {
+    if(!isScrolled) el.textContent = el.dataset.original;
+  });
+}
 
 function initSurveillanceHUD(){
   const video = document.querySelector('.team__video');
