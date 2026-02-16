@@ -30,29 +30,90 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initCyborgToggle(){
-  const el = document.querySelector('.cyborg-text');
+  const heroEl = document.querySelector('.cyborg-text');
+  const navEl = document.querySelector('.cyborg-text-nav');
   const hero = document.querySelector('.hero');
-  if(!el || !hero) return;
+  const navbar = document.querySelector('.navbar');
+  if(!heroEl || !hero || !navbar) return;
 
+  const allEls = navEl ? [heroEl, navEl] : [heroEl];
   let isScrolled = false;
 
   window.addEventListener('scroll', () => {
-    const rect = hero.getBoundingClientRect();
+    const rect = heroEl.getBoundingClientRect();
     if(rect.bottom < 0){
       isScrolled = true;
-      el.textContent = el.dataset.alt;
+      navbar.classList.add('visible');
+      allEls.forEach(el => el.textContent = el.dataset.alt);
     } else {
       isScrolled = false;
-      el.textContent = el.dataset.original;
+      navbar.classList.remove('visible');
+      allEls.forEach(el => el.textContent = el.dataset.original);
     }
   });
 
-  el.addEventListener('mouseenter', () => {
-    el.textContent = el.dataset.alt;
+  allEls.forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      el.textContent = el.dataset.alt;
+    });
+    el.addEventListener('mouseleave', () => {
+      if(!isScrolled) el.textContent = el.dataset.original;
+    });
   });
-  el.addEventListener('mouseleave', () => {
-    if(!isScrolled) el.textContent = el.dataset.original;
-  });
+
+  // Random spray-paint glitch effect on navbar text
+  if(navEl){
+    let glitchTimer = null;
+    let isGlitching = false;
+
+    function scheduleGlitch(){
+      const delay = (Math.random() * 15 + 5) * 1000; // 5–20 seconds
+      glitchTimer = setTimeout(runGlitch, delay);
+    }
+
+    function runGlitch(){
+      if(!isScrolled || isGlitching){ scheduleGlitch(); return; }
+      isGlitching = true;
+
+      // Phase 1: static blink (~0.5s)
+      navEl.classList.add('glitch');
+      setTimeout(() => {
+        navEl.classList.remove('glitch');
+
+        // Phase 2: spray-paint "Cyborg" (~0.6s)
+        navEl.textContent = navEl.dataset.original;
+        navEl.classList.add('spray');
+
+        setTimeout(() => {
+          navEl.classList.remove('spray');
+          // Reset inline styles that background-clip may leave
+          navEl.style.backgroundClip = '';
+          navEl.style.webkitBackgroundClip = '';
+          navEl.style.webkitTextFillColor = '';
+          navEl.style.filter = '';
+          navEl.style.background = '';
+
+          // Hold "Cyborg" for a beat
+          setTimeout(() => {
+            // Phase 3: blink back to "Cyber"
+            navEl.classList.add('glitch');
+            setTimeout(() => {
+              navEl.classList.remove('glitch');
+              navEl.textContent = navEl.dataset.alt;
+              navEl.classList.add('fade-back');
+              setTimeout(() => {
+                navEl.classList.remove('fade-back');
+                isGlitching = false;
+                scheduleGlitch();
+              }, 400);
+            }, 500);
+          }, 800);
+        }, 600);
+      }, 500);
+    }
+
+    scheduleGlitch();
+  }
 }
 
 function initSurveillanceHUD(){

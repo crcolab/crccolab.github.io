@@ -20,6 +20,76 @@ body{
 a{color:inherit}
 .container{max-width:var(--max); margin:0 auto; padding:0 24px}
 
+.navbar{
+  position:fixed;
+  top:0;left:0;
+  width:100%;
+  z-index:1000;
+  background:var(--white);
+  padding:12px 24px;
+  transform:translateY(-100%);
+  transition:transform 0.3s ease;
+}
+.navbar.visible{
+  transform:translateY(0);
+}
+.nav-title{
+  font-size:56px;
+  line-height:1.05;
+  letter-spacing:-0.02em;
+  margin:0;
+  color:var(--purple);
+}
+.nav-title .tight{
+  display:inline;
+}
+@media (max-width: 520px){
+  .nav-title{font-size:42px}
+}
+.navbar .cyborg-text-nav{
+  cursor:pointer;
+  transition:opacity 0.2s ease;
+  position:relative;
+  display:inline-block;
+}
+
+/* Glitch / static blink effect */
+.cyborg-text-nav.glitch{
+  animation:glitchBlink 0.12s steps(2) 4;
+}
+@keyframes glitchBlink{
+  0%  {opacity:1; transform:translate(0,0); filter:none}
+  25% {opacity:0.3; transform:translate(-2px,1px); filter:blur(1px)}
+  50% {opacity:0.8; transform:translate(3px,-1px); filter:blur(0.5px) hue-rotate(90deg)}
+  75% {opacity:0.2; transform:translate(-1px,-2px); filter:blur(2px)}
+  100%{opacity:1; transform:translate(0,0); filter:none}
+}
+
+/* Spray-paint reveal for "Cyborg" */
+.cyborg-text-nav.spray{
+  animation:sprayIn 0.6s cubic-bezier(.22,1,.36,1) forwards;
+  background:linear-gradient(135deg, var(--purple) 0%, #8b5cf6 40%, var(--purple) 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  filter:url(#spraypaint);
+  text-shadow:none;
+}
+@keyframes sprayIn{
+  0%  {letter-spacing:0.15em; opacity:0.4; transform:scale(1.08)}
+  40% {letter-spacing:0.02em; opacity:0.9}
+  100%{letter-spacing:-0.02em; opacity:1; transform:scale(1)}
+}
+
+/* Fade back to normal "Cyber" */
+.cyborg-text-nav.fade-back{
+  animation:fadeBack 2s ease forwards;
+}
+@keyframes fadeBack{
+  0%  {opacity:0.6; filter:blur(1px)}
+  100%{opacity:1; filter:none}
+}
+
 .section{padding:90px 0}
 .hero{background:var(--lime); padding:110px 0 90px}
 .hero-grid{display:grid; grid-template-columns: 1.25fr .75fr; gap:40px; align-items:center}

@@ -15,6 +15,14 @@
 </head>
 <body>
 
+  <!-- NAVBAR (sticky, appears after scrolling past hero) -->
+  <nav class="navbar">
+    <h1 class="nav-title">
+      <span class="tight"><span class="cyborg-text-nav" data-original="Cyborg" data-alt="Cyber">Cyborg</span> Resilience</span>
+      <span class="tight">Co-lab</span>
+    </h1>
+  </nav>
+
   <!-- HERO -->
   <header class="hero">
     <div class="container hero-grid">
@@ -254,6 +262,16 @@
       </div>
     </div>
   </footer>
+
+  <!-- SVG filter for spray-paint texture (hidden) -->
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <filter id="spraypaint">
+        <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="4" result="noise"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+  </svg>
 
   <script src="script.js"></script>
   <script>
