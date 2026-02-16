@@ -55,14 +55,17 @@ function initCyborgToggle(){
   function setupGlitch(el, opts){
     let timer = null;
     let running = false;
+    let done = false;
     const shouldRun = opts.guard || (() => true);
 
     function schedule(){
+      if(done) return;
       const delay = (Math.random() * 15 + 5) * 1000; // 5–20s
       timer = setTimeout(run, delay);
     }
 
     function run(){
+      if(done) return;
       if(!shouldRun() || running){ schedule(); return; }
       running = true;
 
@@ -85,7 +88,7 @@ function initCyborgToggle(){
           // Re-add highlight since spray removal cleared inline styles
           el.classList.add('cyber-highlight');
 
-          // Hold "Cyber" for a beat
+          // Hold "Cyber" for 10 seconds
           setTimeout(() => {
             // Phase 3: blink back to "Cyborg"
             el.classList.add('glitch');
@@ -97,19 +100,20 @@ function initCyborgToggle(){
               setTimeout(() => {
                 el.classList.remove('fade-back');
                 running = false;
+                done = false;
                 schedule();
               }, 400);
             }, 500);
-          }, 800);
+          }, 10000);
         }, 600);
       }, 500);
     }
 
     schedule();
 
-    // Hover trigger
+    // Hover trigger (disabled after sequence completes)
     el.addEventListener('mouseenter', () => {
-      if(!shouldRun() || running) return;
+      if(done || !shouldRun() || running) return;
       clearTimeout(timer);
       run();
     });
