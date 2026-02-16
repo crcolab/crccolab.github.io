@@ -53,17 +53,26 @@ a{color:inherit}
   display:inline-block;
 }
 
-/* Glitch / static blink effect */
+/* TV static overlay effect */
 .cyborg-text.glitch,
 .cyborg-text-nav.glitch{
-  animation:glitchBlink 0.12s steps(2) 4;
+  animation:staticFlicker 0.1s steps(2) 5;
 }
-@keyframes glitchBlink{
-  0%  {opacity:1; transform:translate(0,0); filter:none}
-  25% {opacity:0.3; transform:translate(-2px,1px); filter:blur(1px)}
-  50% {opacity:0.8; transform:translate(3px,-1px); filter:blur(0.5px) hue-rotate(90deg)}
-  75% {opacity:0.2; transform:translate(-1px,-2px); filter:blur(2px)}
-  100%{opacity:1; transform:translate(0,0); filter:none}
+@keyframes staticFlicker{
+  0%  {opacity:1}
+  50% {opacity:0.3}
+  100%{opacity:1}
+}
+.cyborg-text.glitch::before,
+.cyborg-text-nav.glitch::before{
+  content:"";
+  position:absolute;
+  inset:-4px -6px;
+  z-index:1;
+  opacity:1;
+  image-rendering:pixelated;
+  -ms-interpolation-mode:nearest-neighbor;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 18'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='1' seed='1'%3E%3Canimate attributeName='seed' values='1;7;13;23;37' dur='0.25s' calcMode='discrete' repeatCount='indefinite'/%3E%3C/feTurbulence%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='discrete' tableValues='0 .33 .67 1'/%3E%3CfeFuncG type='discrete' tableValues='0 .33 .67 1'/%3E%3CfeFuncB type='discrete' tableValues='0 .33 .67 1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") center/cover;
 }
 
 /* Spray-paint reveal for "Cyborg" */
@@ -83,11 +92,16 @@ a{color:inherit}
   100%{letter-spacing:-0.02em; opacity:1; transform:scale(1)}
 }
 
-/* "Cyber" pixel font + black marker highlight */
-.cyborg-text.cyber-highlight,
-.cyborg-text-nav.cyber-highlight{
+/* "Cyber" 2P font — applied whenever text is "cyber" */
+.cyborg-text.cyber-font,
+.cyborg-text-nav.cyber-font{
   font-family:"Press Start 2P", cursive;
   font-size:0.66em;
+}
+
+/* Black marker highlight behind "cyber" */
+.cyborg-text.cyber-highlight,
+.cyborg-text-nav.cyber-highlight{
   background:none !important;
   -webkit-background-clip:unset !important;
   background-clip:unset !important;

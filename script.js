@@ -43,11 +43,9 @@ function initCyborgToggle(){
     if(rect.bottom < 0){
       isScrolled = true;
       navbar.classList.add('visible');
-      if(navEl) navEl.textContent = navEl.dataset.original;
     } else {
       isScrolled = false;
       navbar.classList.remove('visible');
-      if(navEl) navEl.textContent = navEl.dataset.original;
     }
   });
 
@@ -56,7 +54,7 @@ function initCyborgToggle(){
     let timer = null;
     let running = false;
     let done = false;
-    const shouldRun = opts.guard || (() => true);
+    const canStart = opts.guardStart || (() => true);
 
     function schedule(){
       if(done) return;
@@ -66,7 +64,8 @@ function initCyborgToggle(){
 
     function run(){
       if(done) return;
-      if(!shouldRun() || running){ schedule(); return; }
+      if(running) return;
+      if(!canStart()){ schedule(); return; }
       running = true;
 
       // Phase 1: static blink
@@ -76,7 +75,7 @@ function initCyborgToggle(){
 
         // Phase 2: spray-paint "Cyber" with marker highlight
         el.textContent = el.dataset.alt;
-        el.classList.add('spray', 'cyber-highlight');
+        el.classList.add('spray', 'cyber-font', 'cyber-highlight');
 
         setTimeout(() => {
           el.classList.remove('spray');
@@ -94,7 +93,7 @@ function initCyborgToggle(){
             el.classList.add('glitch');
             el.classList.remove('cyber-highlight');
             setTimeout(() => {
-              el.classList.remove('glitch');
+              el.classList.remove('glitch', 'cyber-font');
               el.textContent = el.dataset.original;
               el.classList.add('fade-back');
               setTimeout(() => {
@@ -113,18 +112,18 @@ function initCyborgToggle(){
 
     // Hover trigger (disabled after sequence completes)
     el.addEventListener('mouseenter', () => {
-      if(done || !shouldRun() || running) return;
+      if(done || !canStart() || running) return;
       clearTimeout(timer);
       run();
     });
   }
 
-  // Hero element — always active (no guard)
-  setupGlitch(heroEl, { guard: () => true });
+  // Hero element — always active
+  setupGlitch(heroEl, { guardStart: () => true });
 
-  // Navbar element — only when scrolled past hero
+  // Navbar element — only starts when scrolled past hero, but never interrupts mid-sequence
   if(navEl){
-    setupGlitch(navEl, { guard: () => isScrolled });
+    setupGlitch(navEl, { guardStart: () => isScrolled });
   }
 }
 
