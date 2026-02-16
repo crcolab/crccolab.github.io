@@ -1,27 +1,24 @@
-async function loadNews(){
+import { items } from './news/index.js';
+
+function loadNews(){
   const container = document.getElementById('news');
   if(!container) return;
-  try{
-    const res = await fetch('news.json', {cache:'no-store'});
-    const data = await res.json();
-    container.innerHTML = data.items.map((item, i) => `
-      <article class="card"${item.detail ? ' data-has-detail data-index="'+i+'"' : ''}>
-        <div class="meta">${escapeHtml(item.date)} · ${escapeHtml(item.category)}</div>
-        <h4>${escapeHtml(item.title)}</h4>
-        <p>${escapeHtml(item.summary)}</p>
-      </article>
-    `).join('');
 
-    // Bind click → modal
-    container.querySelectorAll('[data-has-detail]').forEach(card => {
-      card.addEventListener('click', () => {
-        const item = data.items[card.dataset.index];
-        openNewsModal(item);
-      });
+  container.innerHTML = items.map((item, i) => `
+    <article class="card"${item.detail ? ' data-has-detail data-index="'+i+'"' : ''}>
+      <div class="meta">${escapeHtml(item.date)} · ${escapeHtml(item.category)}</div>
+      <h4>${escapeHtml(item.title)}</h4>
+      <p>${escapeHtml(item.summary)}</p>
+    </article>
+  `).join('');
+
+  // Bind click → modal
+  container.querySelectorAll('[data-has-detail]').forEach(card => {
+    card.addEventListener('click', () => {
+      const item = items[card.dataset.index];
+      openNewsModal(item);
     });
-  }catch(e){
-    container.innerHTML = `<div class="card"><h4>News</h4><p>Could not load news.json. If you're testing locally, use a simple server (see README).</p></div>`;
-  }
+  });
 }
 function escapeHtml(str){
   return String(str)
@@ -168,6 +165,16 @@ function initSurveillanceHUD(){
 }
 
 /* ── News detail modal ── */
+function formatDetail(text){
+  // Escape HTML first, then apply formatting
+  let safe = escapeHtml(text);
+  // Newlines → line break
+  safe = safe.split('\n').join('<br>');
+  // URLs → clickable links
+  safe = safe.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+  return safe;
+}
+
 function openNewsModal(item){
   const overlay = document.getElementById('news-modal');
   const img     = overlay.querySelector('.modal__img');
@@ -177,7 +184,7 @@ function openNewsModal(item){
 
   meta.textContent  = item.date + ' · ' + item.category;
   title.textContent = item.title;
-  body.textContent  = item.detail || item.summary;
+  body.innerHTML = formatDetail(item.detail || item.summary);
 
   if(item.image){
     img.src = item.image;

@@ -263,10 +263,12 @@ a{color:inherit}
 .modal-overlay.open .modal{transform:translateY(0) scale(1)}
 .modal__close{position:absolute;top:12px;right:14px;background:none;border:none;font-size:26px;cursor:pointer;color:rgba(26,33,35,.6);line-height:1}
 .modal__close:hover{color:var(--purple)}
-.modal__img{width:100%;border-radius:8px;margin-bottom:16px;object-fit:cover;max-height:300px}
+.modal__img{width:100%;border-radius:8px;margin-bottom:16px}
 .modal__meta{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"JetBrains Mono",monospace;font-size:12px;color:rgba(26,33,35,.65)}
 .modal__title{margin:8px 0 12px;font-size:20px;color:var(--purple)}
 .modal__body{margin:0;color:rgba(26,33,35,.86);line-height:1.65}
+.modal__body a{color:var(--purple);text-decoration:underline;word-break:break-all}
+.modal__body a:hover{opacity:.75}
 .footer{padding:36px 0; border-top:1px solid rgba(0,0,0,.08); color:rgba(26,33,35,.72)}
 .footer .row{display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap}
 
