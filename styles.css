@@ -147,7 +147,7 @@ a{color:inherit}
   100%{opacity:1; filter:none}
 }
 
-.section{padding:90px 0}
+.section{padding:60px 0}
 .hero{background:var(--lime); padding:110px 0 90px}
 .hero-grid{display:grid; grid-template-columns: 1.25fr .75fr; gap:40px; align-items:center}
 @media (max-width: 900px){
