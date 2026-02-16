@@ -4,13 +4,21 @@ async function loadNews(){
   try{
     const res = await fetch('news.json', {cache:'no-store'});
     const data = await res.json();
-    container.innerHTML = data.items.map(item => `
-      <article class="card">
+    container.innerHTML = data.items.map((item, i) => `
+      <article class="card"${item.detail ? ' data-has-detail data-index="'+i+'"' : ''}>
         <div class="meta">${escapeHtml(item.date)} · ${escapeHtml(item.category)}</div>
         <h4>${escapeHtml(item.title)}</h4>
         <p>${escapeHtml(item.summary)}</p>
       </article>
     `).join('');
+
+    // Bind click → modal
+    container.querySelectorAll('[data-has-detail]').forEach(card => {
+      card.addEventListener('click', () => {
+        const item = data.items[card.dataset.index];
+        openNewsModal(item);
+      });
+    });
   }catch(e){
     container.innerHTML = `<div class="card"><h4>News</h4><p>Could not load news.json. If you're testing locally, use a simple server (see README).</p></div>`;
   }
@@ -158,3 +166,43 @@ function initSurveillanceHUD(){
     if(!activated){ activated = true; activateTargets(); }
   }, 2000);
 }
+
+/* ── News detail modal ── */
+function openNewsModal(item){
+  const overlay = document.getElementById('news-modal');
+  const img     = overlay.querySelector('.modal__img');
+  const meta    = overlay.querySelector('.modal__meta');
+  const title   = overlay.querySelector('.modal__title');
+  const body    = overlay.querySelector('.modal__body');
+
+  meta.textContent  = item.date + ' · ' + item.category;
+  title.textContent = item.title;
+  body.textContent  = item.detail || item.summary;
+
+  if(item.image){
+    img.src = item.image;
+    img.alt = item.title;
+    img.hidden = false;
+  } else {
+    img.hidden = true;
+  }
+
+  overlay.removeAttribute('hidden');
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeNewsModal(){
+  const overlay = document.getElementById('news-modal');
+  overlay.classList.remove('open');
+  overlay.setAttribute('hidden', '');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const overlay = document.getElementById('news-modal');
+  if(!overlay) return;
+  overlay.querySelector('.modal__close').addEventListener('click', closeNewsModal);
+  overlay.addEventListener('click', e => { if(e.target === overlay) closeNewsModal(); });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape' && !overlay.hidden) closeNewsModal(); });
+});

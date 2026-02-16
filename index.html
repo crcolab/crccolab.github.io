@@ -273,6 +273,17 @@
     </defs>
   </svg>
 
+  <!-- News detail modal -->
+  <div id="news-modal" class="modal-overlay" hidden>
+    <div class="modal">
+      <button class="modal__close" aria-label="Close">&times;</button>
+      <img class="modal__img" src="" alt="" hidden>
+      <div class="modal__meta"></div>
+      <h3 class="modal__title"></h3>
+      <p class="modal__body"></p>
+    </div>
+  </div>
+
   <script src="script.js"></script>
   <script>
     document.getElementById('y').textContent = new Date().getFullYear();
