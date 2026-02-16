@@ -115,12 +115,14 @@ function initCyborgToggle(){
 
     schedule();
 
-    // Hover trigger (disabled after sequence completes)
-    el.addEventListener('mouseenter', () => {
+    // Hover / touch trigger (disabled after sequence completes)
+    const trigger = () => {
       if(done || !canStart() || running) return;
       clearTimeout(timer);
       run();
-    });
+    };
+    el.addEventListener('mouseenter', trigger);
+    el.addEventListener('touchstart', trigger, {passive: true});
   }
 
   // Hero element — always active
