@@ -36,7 +36,6 @@ function initCyborgToggle(){
   const navbar = document.querySelector('.navbar');
   if(!heroEl || !hero || !navbar) return;
 
-  const allEls = navEl ? [heroEl, navEl] : [heroEl];
   let isScrolled = false;
 
   window.addEventListener('scroll', () => {
@@ -44,67 +43,61 @@ function initCyborgToggle(){
     if(rect.bottom < 0){
       isScrolled = true;
       navbar.classList.add('visible');
-      allEls.forEach(el => el.textContent = el.dataset.alt);
+      if(navEl) navEl.textContent = navEl.dataset.original;
     } else {
       isScrolled = false;
       navbar.classList.remove('visible');
-      allEls.forEach(el => el.textContent = el.dataset.original);
+      if(navEl) navEl.textContent = navEl.dataset.original;
     }
   });
 
-  allEls.forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      el.textContent = el.dataset.alt;
-    });
-    el.addEventListener('mouseleave', () => {
-      if(!isScrolled) el.textContent = el.dataset.original;
-    });
-  });
+  // Glitch effect helper — works on any element
+  function setupGlitch(el, opts){
+    let timer = null;
+    let running = false;
+    const shouldRun = opts.guard || (() => true);
 
-  // Random spray-paint glitch effect on navbar text
-  if(navEl){
-    let glitchTimer = null;
-    let isGlitching = false;
-
-    function scheduleGlitch(){
-      const delay = (Math.random() * 15 + 5) * 1000; // 5–20 seconds
-      glitchTimer = setTimeout(runGlitch, delay);
+    function schedule(){
+      const delay = (Math.random() * 15 + 5) * 1000; // 5–20s
+      timer = setTimeout(run, delay);
     }
 
-    function runGlitch(){
-      if(!isScrolled || isGlitching){ scheduleGlitch(); return; }
-      isGlitching = true;
+    function run(){
+      if(!shouldRun() || running){ schedule(); return; }
+      running = true;
 
-      // Phase 1: static blink (~0.5s)
-      navEl.classList.add('glitch');
+      // Phase 1: static blink
+      el.classList.add('glitch');
       setTimeout(() => {
-        navEl.classList.remove('glitch');
+        el.classList.remove('glitch');
 
-        // Phase 2: spray-paint "Cyborg" (~0.6s)
-        navEl.textContent = navEl.dataset.original;
-        navEl.classList.add('spray');
+        // Phase 2: spray-paint "Cyber" with marker highlight
+        el.textContent = el.dataset.alt;
+        el.classList.add('spray', 'cyber-highlight');
 
         setTimeout(() => {
-          navEl.classList.remove('spray');
-          // Reset inline styles that background-clip may leave
-          navEl.style.backgroundClip = '';
-          navEl.style.webkitBackgroundClip = '';
-          navEl.style.webkitTextFillColor = '';
-          navEl.style.filter = '';
-          navEl.style.background = '';
+          el.classList.remove('spray');
+          el.style.backgroundClip = '';
+          el.style.webkitBackgroundClip = '';
+          el.style.webkitTextFillColor = '';
+          el.style.filter = '';
+          el.style.background = '';
+          // Re-add highlight since spray removal cleared inline styles
+          el.classList.add('cyber-highlight');
 
-          // Hold "Cyborg" for a beat
+          // Hold "Cyber" for a beat
           setTimeout(() => {
-            // Phase 3: blink back to "Cyber"
-            navEl.classList.add('glitch');
+            // Phase 3: blink back to "Cyborg"
+            el.classList.add('glitch');
+            el.classList.remove('cyber-highlight');
             setTimeout(() => {
-              navEl.classList.remove('glitch');
-              navEl.textContent = navEl.dataset.alt;
-              navEl.classList.add('fade-back');
+              el.classList.remove('glitch');
+              el.textContent = el.dataset.original;
+              el.classList.add('fade-back');
               setTimeout(() => {
-                navEl.classList.remove('fade-back');
-                isGlitching = false;
-                scheduleGlitch();
+                el.classList.remove('fade-back');
+                running = false;
+                schedule();
               }, 400);
             }, 500);
           }, 800);
@@ -112,7 +105,22 @@ function initCyborgToggle(){
       }, 500);
     }
 
-    scheduleGlitch();
+    schedule();
+
+    // Hover trigger
+    el.addEventListener('mouseenter', () => {
+      if(!shouldRun() || running) return;
+      clearTimeout(timer);
+      run();
+    });
+  }
+
+  // Hero element — always active (no guard)
+  setupGlitch(heroEl, { guard: () => true });
+
+  // Navbar element — only when scrolled past hero
+  if(navEl){
+    setupGlitch(navEl, { guard: () => isScrolled });
   }
 }
 

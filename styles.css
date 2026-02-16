@@ -54,6 +54,7 @@ a{color:inherit}
 }
 
 /* Glitch / static blink effect */
+.cyborg-text.glitch,
 .cyborg-text-nav.glitch{
   animation:glitchBlink 0.12s steps(2) 4;
 }
@@ -66,6 +67,7 @@ a{color:inherit}
 }
 
 /* Spray-paint reveal for "Cyborg" */
+.cyborg-text.spray,
 .cyborg-text-nav.spray{
   animation:sprayIn 0.6s cubic-bezier(.22,1,.36,1) forwards;
   background:linear-gradient(135deg, var(--purple) 0%, #8b5cf6 40%, var(--purple) 100%);
@@ -81,7 +83,20 @@ a{color:inherit}
   100%{letter-spacing:-0.02em; opacity:1; transform:scale(1)}
 }
 
+/* Black marker highlight behind "Cyber" */
+.cyborg-text.cyber-highlight,
+.cyborg-text-nav.cyber-highlight{
+  background:linear-gradient(to bottom, transparent 33%, #000 33%);
+  -webkit-background-clip:unset;
+  background-clip:unset;
+  -webkit-text-fill-color:unset;
+  color:var(--white);
+  padding:0 0.08em;
+  margin:0 -0.08em;
+}
+
 /* Fade back to normal "Cyber" */
+.cyborg-text.fade-back,
 .cyborg-text-nav.fade-back{
   animation:fadeBack 2s ease forwards;
 }
@@ -99,7 +114,7 @@ a{color:inherit}
 }
 
 .h1{font-size:56px; line-height:1.05; letter-spacing:-0.02em; margin:0 0 10px; color:var(--purple)}
-.cyborg-text{cursor:pointer; transition:opacity 0.2s ease}
+.cyborg-text{cursor:pointer; transition:opacity 0.2s ease; position:relative; display:inline-block}
 .h1 .tight{display:block}
 .h2zh{font-size:42px; line-height:1.1; margin:0 0 26px; color:var(--purple)}
 @media (max-width: 520px){
