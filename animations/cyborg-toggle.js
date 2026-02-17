@@ -56,6 +56,16 @@ export function initCyborgToggle(){
           // Re-add highlight since spray removal cleared inline styles
           el.classList.add('cyber-highlight');
 
+          // Random static blinks during the 10s "Cyber" hold
+          const blinkCount = Math.floor(Math.random() * 4) + 2; // 2–5
+          const blinkTimes = Array.from({length: blinkCount}, () => Math.random() * 9500 + 200);
+          blinkTimes.forEach(t => {
+            setTimeout(() => {
+              el.classList.add('glitch');
+              setTimeout(() => el.classList.remove('glitch'), 150);
+            }, t);
+          });
+
           // Hold "Cyber" for 10 seconds
           setTimeout(() => {
             // Phase 3: blink back to "Cyborg"
