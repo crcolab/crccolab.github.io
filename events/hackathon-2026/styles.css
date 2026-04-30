@@ -561,3 +561,234 @@ a{color:inherit}
   from{opacity:0; transform:translateY(8px)}
   to{opacity:1; transform:translateY(0)}
 }
+
+/* ============================================================
+   PANEL POSTER — 數位生命線
+   ============================================================ */
+.panel-poster{
+  background:var(--lime);
+  padding:72px 0 64px;
+  position:relative; overflow:hidden;
+}
+.panel-poster__ribbon{
+  position:absolute; inset:0; width:100%; height:100%;
+  pointer-events:none; z-index:0;
+}
+.panel-poster__inner{
+  max-width:var(--max); margin:0 auto; padding:0 32px;
+  position:relative; z-index:1;
+}
+
+/* Header row */
+.panel-poster__header{
+  display:flex; align-items:flex-start; justify-content:space-between;
+  flex-wrap:wrap; gap:14px; margin-bottom:28px;
+}
+.panel-poster__tag{
+  display:inline-flex; align-items:center;
+  background:var(--purple); color:#fff;
+  font-family:"Space Grotesk", sans-serif;
+  font-weight:800; font-size:16px; letter-spacing:.12em;
+  padding:8px 22px 8px 18px;
+  border-radius:999px 12px 12px 999px;
+  position:relative;
+}
+.panel-poster__tag::after{
+  content:""; position:absolute; right:-14px; top:50%;
+  transform:translateY(-50%);
+  border:8px solid transparent;
+  border-left-color:var(--purple);
+}
+.panel-poster__eyebrow{
+  display:flex; align-items:center; flex-wrap:wrap; gap:4px;
+  color:var(--purple); font-weight:700;
+}
+.panel-poster__eyebrow .zh{
+  font-family:"Noto Sans TC", sans-serif; font-size:17px;
+}
+.panel-poster__eyebrow .sep{
+  font-family:ui-monospace,monospace; font-size:14px;
+}
+.panel-poster__eyebrow .g0v-wordmark{
+  font-family:"Press Start 2P", cursive;
+  font-size:15px; letter-spacing:.04em;
+}
+.panel-poster__eyebrow .g0v-wordmark .zero{
+  display:inline-block;
+  position:relative;
+}
+.panel-poster__eyebrow .g0v-wordmark .zero::after{
+  content:"";
+  position:absolute;
+  left:50%; top:50%;
+  width:130%; height:2px;
+  background:var(--purple);
+  transform:translate(-50%,-50%) rotate(-20deg);
+}
+.panel-poster__eyebrow .summit{
+  font-family:"Space Grotesk", sans-serif;
+  font-size:17px; font-weight:700; letter-spacing:.04em;
+  margin-left:4px;
+}
+
+/* Title */
+.panel-poster__title{
+  font-family:"Noto Sans TC", sans-serif;
+  font-size:clamp(38px, 7vw, 82px);
+  font-weight:900;
+  line-height:1.1;
+  color:var(--purple);
+  margin:0 0 20px;
+  letter-spacing:-.01em;
+}
+.panel-poster__title span{display:block}
+
+.panel-poster__hr{
+  height:3px; background:var(--purple);
+  margin-bottom:40px; border-radius:2px;
+}
+
+/* Speaker cards */
+.panel-poster__speakers{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:24px;
+  margin-bottom:44px;
+}
+@media (max-width:760px){
+  .panel-poster__speakers{grid-template-columns:1fr; max-width:360px}
+}
+
+.speaker-card{
+  background:#fff;
+  border-radius:24px;
+  overflow:hidden;
+  box-shadow:0 8px 24px rgba(94,23,235,.14);
+  transition:transform .35s cubic-bezier(.2,.8,.2,1),
+             box-shadow .35s cubic-bezier(.2,.8,.2,1);
+  cursor:default;
+}
+.speaker-card:hover{
+  transform:translateY(-8px);
+  box-shadow:0 20px 48px rgba(94,23,235,.26);
+}
+
+.speaker-card__photo-wrap{
+  background:var(--lime);
+  height:260px; overflow:hidden;
+  position:relative;
+}
+.speaker-card__photo-wrap::after{
+  content:"";
+  position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(ellipse at 60% 0%, rgba(94,23,235,.18) 0%, transparent 70%);
+  opacity:0;
+  transition:opacity .5s ease;
+}
+.speaker-card:hover .speaker-card__photo-wrap::after{
+  opacity:1;
+}
+
+/* Shimmer ribbon behind photo on hover */
+.speaker-card__photo-wrap::before{
+  content:"";
+  position:absolute; inset:0; pointer-events:none; z-index:0;
+  background:
+    repeating-linear-gradient(
+      130deg,
+      transparent 0 30px,
+      rgba(94,23,235,.08) 30px 34px,
+      transparent 34px 64px
+    );
+  background-size:200% 200%;
+  background-position:0% 0%;
+  transition:background-position 0s;
+}
+.speaker-card:hover .speaker-card__photo-wrap::before{
+  animation:ribbonShimmer 1.2s linear forwards;
+}
+@keyframes ribbonShimmer{
+  from{background-position:0% 0%}
+  to{background-position:100% 100%}
+}
+
+.speaker-card__photo-wrap img{
+  width:100%; height:100%;
+  object-fit:cover; object-position:top center;
+  display:block; position:relative; z-index:1;
+  transition:transform .5s cubic-bezier(.2,.8,.2,1);
+}
+.speaker-card:hover .speaker-card__photo-wrap img{
+  transform:scale(1.06);
+}
+
+.speaker-card__info{
+  padding:20px 22px 24px;
+  text-align:center;
+}
+.speaker-card__name{
+  font-family:"Noto Sans TC", sans-serif;
+  font-size:20px; font-weight:700;
+  color:var(--ink); margin-bottom:6px;
+  letter-spacing:-.01em;
+}
+.speaker-card__role{
+  font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size:12px; line-height:1.6;
+  color:rgba(26,33,35,.6);
+}
+
+/* Footer strip */
+.panel-poster__footer{
+  display:flex; align-items:center; justify-content:space-between;
+  flex-wrap:wrap; gap:18px;
+  border-top:2px solid var(--purple);
+  padding-top:24px;
+}
+.panel-poster__meta{
+  display:flex; flex-direction:column; gap:4px;
+}
+.panel-poster__meta-date{
+  font-family:"Press Start 2P", cursive;
+  font-size:18px; color:var(--purple); letter-spacing:-.01em;
+}
+.panel-poster__meta-date .time{
+  font-size:14px; margin-left:12px; opacity:.8;
+}
+.panel-poster__meta-venue{
+  font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size:14px; color:var(--ink); font-weight:700;
+  letter-spacing:.04em;
+}
+.panel-poster__cta{
+  display:inline-flex; align-items:center;
+  background:var(--lime); color:var(--purple);
+  border:2.5px solid var(--purple);
+  padding:12px 28px; border-radius:999px;
+  font-weight:700; font-size:15px;
+  text-decoration:none;
+  transition:background .18s, color .18s, transform .18s;
+}
+.panel-poster__cta:hover{
+  background:var(--purple); color:var(--lime);
+  transform:translateY(-1px);
+}
+
+@media (max-width:680px){
+  .panel-poster__header{flex-direction:column; gap:10px}
+  .panel-poster__footer{flex-direction:column; align-items:flex-start}
+  .panel-poster__meta-date{font-size:14px}
+  .panel-poster__meta-date .time{font-size:11px}
+}
+
+@media (prefers-reduced-motion: reduce){
+  .speaker-card,
+  .speaker-card__photo-wrap img,
+  .panel-poster__cta{
+    transition:none; animation:none;
+  }
+  .speaker-card:hover{
+    transform:none;
+    box-shadow:0 4px 16px rgba(94,23,235,.22);
+  }
+}
