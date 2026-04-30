@@ -659,6 +659,34 @@ a{color:inherit}
   .panel-poster__speakers{grid-template-columns:1fr; max-width:360px}
 }
 
+/* 3 + 1: three speakers on top, host centred on second row */
+.panel-poster__speakers--3plus1{
+  grid-template-columns:repeat(3,1fr);
+}
+.panel-poster__speakers--3plus1 .speaker-card--host{
+  grid-column:1/-1;
+  justify-self:center;
+  max-width:320px;
+  width:100%;
+}
+@media (max-width:760px){
+  .panel-poster__speakers--3plus1{grid-template-columns:1fr;max-width:360px}
+  .panel-poster__speakers--3plus1 .speaker-card--host{max-width:none;justify-self:stretch}
+}
+
+.speaker-card__host-badge{
+  display:inline-block;
+  margin-left:6px;
+  padding:2px 8px;
+  font-family:"Press Start 2P",monospace;
+  font-size:9px;
+  letter-spacing:.06em;
+  background:var(--lime);
+  color:var(--ink);
+  border-radius:999px;
+  vertical-align:middle;
+}
+
 .speaker-card{
   background:#fff;
   border-radius:24px;
