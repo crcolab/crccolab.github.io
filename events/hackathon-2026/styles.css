@@ -799,7 +799,7 @@ a{color:inherit}
    host strip with sketched avatar, QR footer.
    ============================================================ */
 #panel-after-blackout{
-  background:linear-gradient(178deg,#7a4cf0 0%,#5e17eb 38%,#4a10c2 100%);
+  background:linear-gradient(180deg,#6b3ce8 0%,#5a18e6 45%,#4a10c2 100%);
   color:#fff;
   padding:80px 0 72px;
   isolation:isolate;
@@ -917,21 +917,20 @@ a{color:inherit}
 /* Host strip */
 #panel-after-blackout .panel-poster__host{
   display:flex; align-items:center; justify-content:space-between;
-  gap:24px; margin:8px 0 44px;
-  padding:18px 4px 0;
-  border-top:2px solid rgba(255,255,255,.85);
+  gap:24px; margin:24px 0 36px;
+  padding:0;
   flex-wrap:wrap;
 }
 #panel-after-blackout .panel-poster__host-text{
   font-family:"Space Grotesk","Noto Sans TC",sans-serif;
   font-size:clamp(18px,2.2vw,24px);
-  color:var(--lime); font-weight:600;
+  color:#fff; font-weight:600;
   letter-spacing:.02em;
 }
 #panel-after-blackout .panel-poster__host-text b{
   font-family:"Press Start 2P",cursive;
   font-size:.78em;
-  color:var(--lime);
+  color:#fff;
   margin:0 4px;
   letter-spacing:.04em;
 }
@@ -973,7 +972,7 @@ a{color:inherit}
 }
 #panel-after-blackout .panel-poster__meta-venue{
   font-family:"Noto Sans TC",sans-serif;
-  font-size:18px; font-weight:700; color:#0c0a1a;
+  font-size:20px; font-weight:700; color:#0c0a1a;
   letter-spacing:.02em; line-height:1.4;
   margin-top:4px;
 }
