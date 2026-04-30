@@ -1005,3 +1005,212 @@ a{color:inherit}
   #panel-after-blackout .panel-poster__host{flex-direction:row}
   #panel-after-blackout .panel-poster__host-avatar{width:72px; height:72px}
 }
+
+/* ============================================================
+   PANEL POSTER — 數位韌性實驗室 / Off-the-Grid Network
+   (#panel-offgrid-network)
+   Lavender bg, deep navy diagonal slab, 4-col speaker grid,
+   multi-host strip, QR + CTA footer.
+   ============================================================ */
+#panel-offgrid-network{
+  background:#d9ccff;
+  color:var(--ink);
+  padding:72px 0 68px;
+  isolation:isolate;
+}
+#panel-offgrid-network .panel-poster__bgswirl{
+  position:absolute; inset:0; width:100%; height:100%;
+  pointer-events:none; z-index:0;
+}
+
+/* Header */
+.offgrid-header{
+  align-items:flex-start; justify-content:space-between;
+  margin-bottom:32px;
+}
+.offgrid-tag{
+  background:var(--lime); color:var(--ink);
+  border-radius:999px 12px 12px 999px;
+  padding:9px 24px 9px 20px;
+  font-size:15px; font-weight:800; letter-spacing:.12em;
+}
+.offgrid-tag::after{
+  border-left-color:var(--lime);
+}
+.offgrid-eyebrow{
+  flex-direction:column; align-items:flex-end; gap:4px;
+  color:var(--purple); text-align:right;
+}
+.offgrid-eyebrow .zh{
+  font-family:"Noto Sans TC",sans-serif;
+  font-size:clamp(16px,2vw,22px); font-weight:700;
+}
+.offgrid-eyebrow .g0v-line{
+  display:inline-flex; align-items:center; gap:6px;
+}
+.offgrid-eyebrow .sep{
+  font-family:ui-monospace,monospace; font-size:14px;
+}
+.offgrid-eyebrow .g0v-wordmark{
+  font-family:"Press Start 2P",cursive;
+  font-size:18px; letter-spacing:.04em; color:var(--purple);
+}
+.offgrid-eyebrow .g0v-wordmark .zero::after{
+  background:var(--purple);
+}
+.offgrid-eyebrow .summit{
+  font-family:"Space Grotesk",sans-serif;
+  font-size:18px; font-weight:700; margin-left:4px; color:var(--purple);
+}
+
+/* Navy diagonal slab */
+.offgrid-slab{
+  background:#1a1a4d;
+  clip-path:polygon(0 5%, 100% 0, 100% 95%, 0 100%);
+  padding:clamp(48px,7vw,72px) clamp(24px,4vw,48px) clamp(48px,7vw,72px);
+  margin:0 -32px;
+  position:relative;
+}
+.offgrid-slab__title{
+  font-family:"Space Grotesk","Noto Sans TC",sans-serif;
+  font-size:clamp(32px,5.5vw,64px);
+  font-weight:900; line-height:1.05;
+  color:#fff;
+  margin:0 0 36px;
+  letter-spacing:-.01em;
+  text-transform:uppercase;
+}
+.offgrid-slab__title span{display:block}
+
+/* 4-col speaker grid inside slab */
+.offgrid-speakers{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
+}
+.offgrid-speaker{
+  display:flex; flex-direction:column;
+}
+.offgrid-speaker__photo{
+  width:100%; aspect-ratio:1/1.1;
+  overflow:hidden; background:#2e2770;
+  border-radius:4px;
+  margin-bottom:14px;
+  flex-shrink:0;
+}
+.offgrid-speaker__photo img{
+  width:100%; height:100%;
+  object-fit:cover; object-position:top center;
+  display:block;
+  transition:transform .5s cubic-bezier(.2,.8,.2,1);
+}
+.offgrid-speaker:hover .offgrid-speaker__photo img{
+  transform:scale(1.05);
+}
+.offgrid-speaker__name{
+  font-family:"Space Grotesk","Noto Sans TC",sans-serif;
+  font-size:clamp(14px,1.6vw,18px); font-weight:800;
+  color:#fff;
+  margin-bottom:5px;
+  line-height:1.2;
+}
+.offgrid-speaker__name--lime{
+  color:var(--lime);
+}
+.offgrid-speaker__role{
+  font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+  font-size:clamp(10px,1.1vw,13px); line-height:1.55;
+  color:rgba(255,255,255,.65);
+}
+
+/* Host strip (lavender zone) */
+.offgrid-hosts{
+  display:flex; align-items:center; flex-wrap:wrap;
+  gap:16px 24px;
+  padding:24px 0 20px;
+  border-bottom:1.5px solid rgba(94,23,235,.2);
+  margin-bottom:24px;
+}
+.offgrid-hosts__label{
+  font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+  font-size:13px; color:rgba(26,33,35,.55);
+  white-space:nowrap;
+}
+.offgrid-hosts__group{
+  display:inline-flex; align-items:flex-start; gap:12px;
+  font-family:"Noto Sans TC","Space Grotesk",sans-serif;
+  font-size:clamp(14px,1.6vw,17px); font-weight:700;
+  color:var(--ink); line-height:1.45;
+}
+.offgrid-hosts__bar{
+  display:block; flex-shrink:0;
+  width:2px; height:44px; border-radius:2px;
+  background:var(--lime); margin-top:2px;
+}
+.offgrid-hosts__names{
+  font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+  font-size:clamp(12px,1.4vw,15px); font-weight:500;
+  color:var(--purple); line-height:1.7;
+}
+
+/* Footer */
+.offgrid-footer{
+  display:flex; align-items:flex-end; justify-content:space-between;
+  flex-wrap:wrap; gap:20px;
+}
+.offgrid-meta .panel-poster__meta-date{
+  font-family:"Press Start 2P",cursive;
+  font-size:clamp(16px,2.2vw,24px);
+  color:#1a1a4d; letter-spacing:.01em; line-height:1.2;
+}
+.offgrid-time{
+  font-family:"Press Start 2P",cursive;
+  font-size:clamp(14px,1.8vw,20px);
+  color:#1a1a4d; letter-spacing:.01em; line-height:1.2;
+}
+.offgrid-meta .panel-poster__meta-venue{
+  font-family:"Noto Sans TC",sans-serif;
+  font-size:clamp(14px,1.8vw,18px); font-weight:700;
+  color:var(--ink); line-height:1.4; margin-top:6px;
+}
+.offgrid-footer__cta{
+  display:inline-flex; align-items:center;
+  background:var(--lime); color:var(--purple);
+  border:2.5px solid var(--purple);
+  padding:12px 28px; border-radius:999px;
+  font-family:"Noto Sans TC","Space Grotesk",sans-serif;
+  font-weight:700; font-size:15px;
+  text-decoration:none;
+  transition:background .18s, color .18s, transform .18s;
+  align-self:flex-end;
+}
+.offgrid-footer__cta:hover{
+  background:var(--purple); color:var(--lime);
+  transform:translateY(-1px);
+}
+
+/* Responsive */
+@media (max-width:760px){
+  .offgrid-slab{
+    margin:0 -20px;
+    clip-path:polygon(0 3%, 100% 0, 100% 97%, 0 100%);
+    padding:40px 20px 40px;
+  }
+  .offgrid-speakers{
+    grid-template-columns:repeat(2,1fr);
+    gap:16px;
+  }
+  .offgrid-header{
+    flex-direction:column; align-items:flex-start; gap:10px;
+  }
+  .offgrid-eyebrow{
+    align-items:flex-start; text-align:left;
+  }
+  .offgrid-footer{
+    flex-direction:column; align-items:flex-start;
+  }
+  .offgrid-footer__cta{align-self:stretch; text-align:center; justify-content:center}
+}
+@media (max-width:420px){
+  .offgrid-speakers{grid-template-columns:1fr; max-width:280px}
+}
