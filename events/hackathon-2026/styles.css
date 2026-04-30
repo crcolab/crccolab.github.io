@@ -659,34 +659,6 @@ a{color:inherit}
   .panel-poster__speakers{grid-template-columns:1fr; max-width:360px}
 }
 
-/* 3 + 1: three speakers on top, host centred on second row */
-.panel-poster__speakers--3plus1{
-  grid-template-columns:repeat(3,1fr);
-}
-.panel-poster__speakers--3plus1 .speaker-card--host{
-  grid-column:1/-1;
-  justify-self:center;
-  max-width:320px;
-  width:100%;
-}
-@media (max-width:760px){
-  .panel-poster__speakers--3plus1{grid-template-columns:1fr;max-width:360px}
-  .panel-poster__speakers--3plus1 .speaker-card--host{max-width:none;justify-self:stretch}
-}
-
-.speaker-card__host-badge{
-  display:inline-block;
-  margin-left:6px;
-  padding:2px 8px;
-  font-family:"Press Start 2P",monospace;
-  font-size:9px;
-  letter-spacing:.06em;
-  background:var(--lime);
-  color:var(--ink);
-  border-radius:999px;
-  vertical-align:middle;
-}
-
 .speaker-card{
   background:#fff;
   border-radius:24px;
@@ -819,4 +791,218 @@ a{color:inherit}
     transform:none;
     box-shadow:0 4px 16px rgba(94,23,235,.22);
   }
+}
+
+/* ============================================================
+   PANEL POSTER — 斷網之後 (#panel-after-blackout)
+   Deep purple bg, lime title, lime-swirl speaker photos,
+   host strip with sketched avatar, QR footer.
+   ============================================================ */
+#panel-after-blackout{
+  background:linear-gradient(178deg,#7a4cf0 0%,#5e17eb 38%,#4a10c2 100%);
+  color:#fff;
+  padding:80px 0 72px;
+  isolation:isolate;
+}
+#panel-after-blackout .panel-poster__bgswirl{
+  position:absolute; inset:0; width:100%; height:100%;
+  pointer-events:none; z-index:0;
+}
+
+/* Header */
+#panel-after-blackout .panel-poster__header{
+  align-items:flex-start; justify-content:space-between;
+  margin-bottom:36px;
+}
+#panel-after-blackout .panel-poster__tag{
+  background:#d6c6ff; color:#2a0d8a;
+  border-radius:0; padding:10px 30px 10px 22px;
+  clip-path:polygon(0 0, calc(100% - 18px) 0, 100% 50%, calc(100% - 18px) 100%, 0 100%);
+  font-family:"Space Grotesk", sans-serif;
+  font-weight:800; font-size:18px; letter-spacing:.18em;
+}
+#panel-after-blackout .panel-poster__tag::after{display:none}
+#panel-after-blackout .panel-poster__eyebrow{
+  flex-direction:column; align-items:flex-end; gap:4px;
+  color:#fff; text-align:right;
+}
+#panel-after-blackout .panel-poster__eyebrow .zh{
+  font-family:"Noto Sans TC", sans-serif;
+  font-size:clamp(20px,2.4vw,28px);
+  font-weight:700; letter-spacing:.02em;
+}
+#panel-after-blackout .panel-poster__eyebrow .g0v-line{
+  display:inline-flex; align-items:center; gap:6px;
+}
+#panel-after-blackout .panel-poster__eyebrow .sep{
+  font-family:ui-monospace,monospace; font-size:16px; opacity:.85;
+}
+#panel-after-blackout .panel-poster__eyebrow .g0v-wordmark{
+  font-family:"Press Start 2P", cursive;
+  font-size:22px; letter-spacing:.04em; color:#fff;
+}
+#panel-after-blackout .panel-poster__eyebrow .g0v-wordmark .zero::after{
+  background:#ff3b3b; height:3px; width:140%;
+}
+#panel-after-blackout .panel-poster__eyebrow .summit{
+  font-family:"Space Grotesk", sans-serif;
+  font-size:22px; font-weight:600; margin-left:6px;
+}
+
+/* Title */
+#panel-after-blackout .panel-poster__title{
+  color:var(--lime);
+  font-size:clamp(40px,6.8vw,76px);
+  text-shadow:0 2px 0 rgba(0,0,0,.05);
+  margin-bottom:24px;
+}
+#panel-after-blackout .panel-poster__hr{
+  background:#fff; height:3px; opacity:.95;
+  margin-bottom:48px;
+}
+
+/* Speaker grid: 3 across, override 3plus1 leftovers */
+#panel-after-blackout .panel-poster__speakers{
+  grid-template-columns:repeat(3,1fr);
+  gap:22px;
+  margin-bottom:32px;
+}
+@media (max-width:760px){
+  #panel-after-blackout .panel-poster__speakers{
+    grid-template-columns:1fr; max-width:380px; margin-inline:auto;
+  }
+}
+
+#panel-after-blackout .speaker-card{
+  background:#fff;
+  border-radius:22px;
+  box-shadow:0 14px 40px rgba(20,5,80,.32);
+}
+#panel-after-blackout .speaker-card__photo-wrap{
+  background:var(--lime);
+  height:300px;
+  border-top-left-radius:22px;
+  border-top-right-radius:22px;
+}
+/* Replace shimmer ribbon with curling lime swirl backdrop */
+#panel-after-blackout .speaker-card__photo-wrap::before{
+  content:none;
+}
+#panel-after-blackout .speaker-card__swirl{
+  position:absolute; inset:0; z-index:0; pointer-events:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 240'><g fill='none' stroke='%2398d94a' stroke-width='14' stroke-linecap='round' opacity='0.75'><path d='M40 60 C 80 20, 160 40, 150 100 S 60 160, 80 200 S 170 220, 180 180'/><path d='M20 180 C 60 140, 130 170, 120 220'/></g></svg>");
+  background-repeat:no-repeat;
+  background-size:120% 120%;
+  background-position:center;
+}
+#panel-after-blackout .speaker-card__photo-wrap img{
+  position:relative; z-index:1;
+  mix-blend-mode:multiply; /* fuse subject onto lime/swirl bg */
+}
+/* If photos are pre-keyed (transparent PNGs), multiply still preserves them */
+#panel-after-blackout .speaker-card__info{
+  text-align:left;
+  padding:16px 20px 20px;
+}
+#panel-after-blackout .speaker-card__name{
+  font-size:22px; font-weight:800; color:#0c0a1a;
+  letter-spacing:-.01em; margin-bottom:6px;
+}
+#panel-after-blackout .speaker-card__role{
+  font-family:"Noto Sans TC","Space Grotesk",sans-serif;
+  font-size:14px; line-height:1.5; color:#1a1130;
+  opacity:.75;
+}
+
+/* Host strip */
+#panel-after-blackout .panel-poster__host{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:24px; margin:8px 0 44px;
+  padding:18px 4px 0;
+  border-top:2px solid rgba(255,255,255,.85);
+  flex-wrap:wrap;
+}
+#panel-after-blackout .panel-poster__host-text{
+  font-family:"Space Grotesk","Noto Sans TC",sans-serif;
+  font-size:clamp(18px,2.2vw,24px);
+  color:var(--lime); font-weight:600;
+  letter-spacing:.02em;
+}
+#panel-after-blackout .panel-poster__host-text b{
+  font-family:"Press Start 2P",cursive;
+  font-size:.78em;
+  color:var(--lime);
+  margin:0 4px;
+  letter-spacing:.04em;
+}
+#panel-after-blackout .panel-poster__host-affil{
+  font-weight:500; opacity:.92;
+}
+#panel-after-blackout .panel-poster__host-avatar{
+  width:96px; height:96px; flex-shrink:0;
+  border-radius:999px; overflow:hidden;
+  background:#fff;
+  box-shadow:0 6px 20px rgba(0,0,0,.18), inset 0 0 0 3px #fff;
+}
+#panel-after-blackout .panel-poster__host-avatar img{
+  width:100%; height:100%; object-fit:cover; object-position:center top;
+  filter:grayscale(1) contrast(1.05);
+  display:block;
+}
+
+/* Footer */
+#panel-after-blackout .panel-poster__footer{
+  border-top:none;
+  padding-top:8px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:24px;
+  flex-wrap:wrap;
+}
+#panel-after-blackout .panel-poster__meta{
+  gap:8px;
+}
+#panel-after-blackout .panel-poster__meta-date,
+#panel-after-blackout .panel-poster__meta-time{
+  font-family:"Press Start 2P",cursive;
+  font-size:clamp(20px,2.6vw,30px);
+  color:#0c0a1a;
+  letter-spacing:.02em;
+  line-height:1.15;
+}
+#panel-after-blackout .panel-poster__meta-venue{
+  font-family:"Noto Sans TC",sans-serif;
+  font-size:18px; font-weight:700; color:#0c0a1a;
+  letter-spacing:.02em; line-height:1.4;
+  margin-top:4px;
+}
+#panel-after-blackout .panel-poster__cta{
+  background:#d6c6ff; color:#2a0d8a;
+  border:none;
+  border-radius:999px;
+  padding:14px 26px;
+  font-family:"Noto Sans TC",sans-serif;
+  font-weight:700; font-size:16px;
+  justify-self:end; align-self:end;
+  box-shadow:0 4px 14px rgba(0,0,0,.18);
+}
+#panel-after-blackout .panel-poster__cta:hover{
+  background:#fff; color:#2a0d8a;
+}
+
+@media (max-width:760px){
+  #panel-after-blackout .panel-poster__header{
+    flex-direction:column; align-items:flex-start;
+  }
+  #panel-after-blackout .panel-poster__eyebrow{
+    align-items:flex-start; text-align:left;
+  }
+  #panel-after-blackout .panel-poster__footer{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+  #panel-after-blackout .panel-poster__cta{align-self:stretch; text-align:center}
+  #panel-after-blackout .panel-poster__host{flex-direction:row}
+  #panel-after-blackout .panel-poster__host-avatar{width:72px; height:72px}
 }

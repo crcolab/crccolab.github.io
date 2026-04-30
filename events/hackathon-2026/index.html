@@ -465,12 +465,19 @@
   </section>
 
   <!-- PANEL POSTER — 斷網之後 -->
-  <section class="panel-poster" id="panel-after-blackout">
-    <svg class="panel-poster__ribbon" aria-hidden="true" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-      <path d="M860 80 Q600 400 320 180 Q140 40 -100 300" stroke="#5e17eb" stroke-width="90" fill="none" stroke-linecap="round" opacity="0.22"/>
-      <path d="M600 -20 Q380 250 120 100 Q-20 20 -200 220" stroke="#5e17eb" stroke-width="60" fill="none" stroke-linecap="round" opacity="0.13"/>
-      <circle cx="120" cy="120" r="120" fill="#5e17eb" opacity="0.09"/>
-      <circle cx="720" cy="380" r="80" fill="#5e17eb" opacity="0.07"/>
+  <section class="panel-poster panel-poster--blackout" id="panel-after-blackout">
+    <!-- Lime swirls on deep purple -->
+    <svg class="panel-poster__bgswirl" aria-hidden="true" viewBox="0 0 800 1000" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <g fill="none" stroke="#c1ff72" stroke-linecap="round">
+        <path d="M-40 880 C 60 760, 220 760, 240 880 S 420 1000, 460 880 S 640 760, 700 880" stroke-width="3" opacity="0.18"/>
+        <path d="M-20 920 C 80 800, 240 800, 260 920 S 440 1040, 480 920" stroke-width="2.5" opacity="0.14"/>
+        <path d="M620 60 C 720 -40, 880 60, 780 160 S 620 240, 700 320" stroke-width="3" opacity="0.16"/>
+      </g>
+      <g fill="none" stroke="#c1ff72" opacity="0.08">
+        <circle cx="120" cy="940" r="60" stroke-width="2"/>
+        <circle cx="120" cy="940" r="100" stroke-width="2"/>
+        <circle cx="120" cy="940" r="140" stroke-width="2"/>
+      </g>
     </svg>
 
     <div class="panel-poster__inner">
@@ -478,68 +485,77 @@
         <div class="panel-poster__tag" aria-label="PANEL">PANEL</div>
         <div class="panel-poster__eyebrow">
           <span class="zh">數位韌性系列活動</span>
-          <span class="sep">&nbsp;(at)&nbsp;</span>
-          <span class="g0v-wordmark"><span class="g">G</span><span class="zero">Ø</span><span class="v">V</span></span>
-          <span class="summit">summit</span>
+          <span class="g0v-line">
+            <span class="sep">(at)</span>
+            <span class="g0v-wordmark"><span class="g">G</span><span class="zero">Ø</span><span class="v">V</span></span>
+            <span class="summit">summit</span>
+          </span>
         </div>
       </div>
 
       <h2 class="panel-poster__title">
         <span>斷網之後：打造烏克蘭、</span>
-        <span>緬甸與台灣的通訊韌性網絡</span>
+        <span>緬甸與台灣通訊韌性網絡</span>
       </h2>
       <div class="panel-poster__hr"></div>
 
-      <div class="panel-poster__speakers panel-poster__speakers--3plus1">
+      <div class="panel-poster__speakers">
 
         <div class="speaker-card">
           <div class="speaker-card__photo-wrap">
+            <span class="speaker-card__swirl" aria-hidden="true"></span>
             <img src="/events/hackathon-2026/assets/speakers/aidan.jpg" alt="Aidan" loading="lazy">
           </div>
           <div class="speaker-card__info">
             <div class="speaker-card__name">Aidan</div>
-            <div class="speaker-card__role">dComms<br>烏克蘭去中心化通訊</div>
+            <div class="speaker-card__role">dComms</div>
           </div>
         </div>
 
         <div class="speaker-card">
           <div class="speaker-card__photo-wrap">
+            <span class="speaker-card__swirl" aria-hidden="true"></span>
             <img src="/events/hackathon-2026/assets/speakers/michael-suantak.jpg" alt="Michael Suantak" loading="lazy">
           </div>
           <div class="speaker-card__info">
             <div class="speaker-card__name">Michael Suantak</div>
-            <div class="speaker-card__role">ASORCOM<br>緬甸社區通訊基礎設施</div>
+            <div class="speaker-card__role">eimiAI,<br>ASORCCOM</div>
           </div>
         </div>
 
         <div class="speaker-card">
           <div class="speaker-card__photo-wrap">
-            <img src="/events/hackathon-2026/assets/speakers/sean-ching.jpg" alt="荊輔翔 Sean" loading="lazy">
+            <span class="speaker-card__swirl" aria-hidden="true"></span>
+            <img src="/events/hackathon-2026/assets/speakers/sean-ching.png" alt="荊輔翔" loading="lazy">
           </div>
           <div class="speaker-card__info">
-            <div class="speaker-card__name">荊輔翔 Sean</div>
-            <div class="speaker-card__role">Meshtastic 台灣應用</div>
-          </div>
-        </div>
-
-        <div class="speaker-card speaker-card--host">
-          <div class="speaker-card__photo-wrap">
-            <img src="/events/hackathon-2026/assets/speakers/mg-lee.jpg" alt="MG Lee" loading="lazy">
-          </div>
-          <div class="speaker-card__info">
-            <div class="speaker-card__name">MG Lee <span class="speaker-card__host-badge">HOST · 主持</span></div>
-            <div class="speaker-card__role">主持人</div>
+            <div class="speaker-card__name">荊輔翔</div>
+            <div class="speaker-card__role">無人機和 Meshtastic 工程師，CRC 成員</div>
           </div>
         </div>
 
       </div>
 
+      <!-- Host strip -->
+      <div class="panel-poster__host">
+        <div class="panel-poster__host-text">
+          <span class="panel-poster__host-label">主持人：</span><b>MG Lee</b>
+          <span class="panel-poster__host-sep"> / </span>
+          <span class="panel-poster__host-affil">中研院民族所助研究員</span>
+        </div>
+        <div class="panel-poster__host-avatar">
+          <img src="/events/hackathon-2026/assets/speakers/mg-lee.jpg" alt="MG Lee" loading="lazy">
+        </div>
+      </div>
+
+      <!-- Footer strip -->
       <div class="panel-poster__footer">
         <div class="panel-poster__meta">
-          <div class="panel-poster__meta-date">05/24（日）<span class="time">13:00—14:30</span></div>
-          <div class="panel-poster__meta-venue">中研院人文館 R2 第二會議室 · English</div>
+          <div class="panel-poster__meta-date">05/24（日）</div>
+          <div class="panel-poster__meta-time">13:00 - 14:30</div>
+          <div class="panel-poster__meta-venue">中研院人文館<br>R2 第二會議室</div>
         </div>
-        <a class="panel-poster__cta" href="#schedule">了解更多活動資訊</a>
+        <a class="panel-poster__cta" href="https://forms.gle/GYkm8WfmwqkQ8biEA" target="_blank" rel="noopener">了解更多活動資訊</a>
       </div>
     </div>
   </section>
