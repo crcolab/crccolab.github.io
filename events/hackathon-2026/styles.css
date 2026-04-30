@@ -118,7 +118,7 @@ a{color:inherit}
 }
 .hero__meta .label{
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  font-size:14px; letter-spacing:.14em; text-transform:uppercase;
   color:rgba(26,33,35,.6);
 }
 .hero__meta .value{font-size:17px; line-height:1.35}
