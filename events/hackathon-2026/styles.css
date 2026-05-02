@@ -514,6 +514,17 @@ a{color:inherit}
   font-size:11px; letter-spacing:.18em; text-transform:uppercase;
   color:rgba(94,23,235,.6);
 }
+.sponsor-card .placeholder--logo{
+  height:96px;
+  padding:10px;
+  background:#fff;
+}
+.sponsor-card .placeholder--logo img{
+  max-height:100%; max-width:100%;
+  object-fit:contain;
+  display:block;
+  margin:auto;
+}
 
 /* ---------- CTA band ---------- */
 .cta-band{
@@ -1114,7 +1125,7 @@ a{color:inherit}
 }
 .offgrid-speaker__role{
   font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
-  font-size:clamp(10px,1.1vw,13px); line-height:1.55;
+  font-size:clamp(14px,1.1vw,14px); line-height:1.55;
   color:rgba(255,255,255,.65);
   margin-bottom:14px;
 }
