@@ -749,7 +749,7 @@ a{color:inherit}
 }
 .speaker-card__role{
   font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size:12px; line-height:1.6;
+  font-size:14px; line-height:1.6;
   color:rgba(26,33,35,.6);
 }
 
