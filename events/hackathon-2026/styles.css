@@ -656,7 +656,7 @@ a{color:inherit}
   margin-bottom:44px;
 }
 @media (max-width:760px){
-  .panel-poster__speakers{grid-template-columns:1fr; max-width:360px}
+  .panel-poster__speakers{grid-template-columns:repeat(2,1fr); max-width:520px; margin-inline:auto}
 }
 
 .speaker-card{
@@ -869,7 +869,7 @@ a{color:inherit}
 }
 @media (max-width:760px){
   #panel-after-blackout .panel-poster__speakers{
-    grid-template-columns:1fr; max-width:380px; margin-inline:auto;
+    grid-template-columns:repeat(2,1fr); max-width:520px; margin-inline:auto;
   }
 }
 
