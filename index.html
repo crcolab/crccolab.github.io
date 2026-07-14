@@ -25,6 +25,15 @@
   })(window,document,'script','dataLayer','GTM-58VP9F9K');</script>
   <!-- End Google Tag Manager -->
 
+  <!-- Restore saved theme before first paint -->
+  <script>
+    try {
+      if (localStorage.getItem('crc-theme') === 'purple') {
+        document.documentElement.classList.add('theme-purple');
+      }
+    } catch (e) {}
+  </script>
+
   <title>Cyborg Resilience Co-lab (CRC)｜賽伯格韌性實驗室</title>
   <link rel="icon" type="image/png" href="/favicon.png">
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
@@ -65,7 +74,7 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@400;600;700&family=Noto+Sans+TC:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -75,276 +84,301 @@
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
 
-  <!-- NAVBAR (sticky, appears after scrolling past hero) -->
-  <nav class="navbar">
-    <h1 class="nav-title">
-      <span class="tight"><span class="cyborg-text-nav" data-original="Cyborg" data-alt="cyber">Cyborg</span> Resilience</span>
-      <span class="tight">Co-lab</span>
-    </h1>
-  </nav>
+  <!-- Shared brand vectors: the official CRC mark + the isometric net-cube.
+       Geometry comes verbatim from the identity guide — do not redraw. -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="crc-mark" viewBox="230.27 216.22 385.35 162.34">
+        <path fill="var(--mark-letter,#46288B)" d="M358.91,324.27s0-.01,0-.02c0,0,0-.01-.01-.02l-10.76-10.76s0-.01-.02-.01c0,0-.01-.01-.02-.01s-.01,0-.02,0c-.01,0-.01,0-.02,0s-.02.01-.02.01t-.02.01l-3.98,3.98-4.27,4.27c-.22.22-.42.43-.65.65l-2.16,2.16c-4.04,4.04-7.25,7.12-9.65,9.24-2.39,2.12-4.84,3.83-7.34,5.13-2.5,1.3-5.03,1.95-7.6,1.95-2.56,0-5.1-.65-7.6-1.95-2.5-1.3-4.94-3.01-7.34-5.13-2.4-2.12-5.61-5.2-9.65-9.24l-2.16-2.16c-2.64-2.64-4.87-4.93-6.69-6.87l-4.72-4.72c-2.53-2.53-4.44-4.49-5.73-5.89-1.29-1.39-2.26-2.67-2.91-3.82s-.98-2.26-.99-3.34c.01-1.07.34-2.18.99-3.33.65-1.15,1.62-2.42,2.91-3.82,1.29-1.4,3.2-3.36,5.73-5.89l5.15-5.15c.47-.47.91-.91,1.34-1.33,1.44-1.5,3.08-3.16,4.92-5l2.16-2.16c4.04-4.04,7.25-7.12,9.65-9.24,2.39-2.12,4.84-3.83,7.34-5.13,2.5-1.3,5.03-1.95,7.59-1.95,2.57,0,5.1.65,7.59,1.95,2.5,1.3,4.94,3.01,7.34,5.13,2.4,2.12,5.61,5.2,9.65,9.24l2.16,2.16c1.14,1.14,2.19,2.2,3.18,3.21,0,0,0,0,.01,0h.01s.02-.01.02-.02l10.78-10.78s.02-.01.02-.02,0-.01.01-.02v-.04s-.01-.02-.01-.02c0-.01-.01-.01-.02-.02l-10.78-10.78s-.01-.01-.01-.01l-20.3-20.3c-.06-.08-.11-.16-.17-.23l-8.12-8.11c-.12-.13-.26-.23-.4-.31-.15-.08-.31-.15-.47-.19-.16-.05-.32-.07-.49-.07-.16,0-.33.02-.48.07-.17.04-.32.11-.47.19-.14.08-.28.18-.4.31l-.8.8h-.01c-.47.44-1.13,1.09-1.99,1.95l-1.59,1.59-56.37,56.36-.04-.04-10.92,10.93,63.45,63.45c.06.07.1.14.16.21l8.12,8.11c.12.13.25.23.4.31.15.08.3.15.47.19.15.05.32.07.48.07.17,0,.33-.02.49-.07.16-.04.32-.11.47-.19.14-.08.28-.18.4-.31l8.12-8.11s.05-.07.08-.11l26.1-26.1s.01,0,.02.01h.04s.02-.01.02-.01c.01,0,.01-.01.02-.02l10.76-10.76s.01-.01.01-.02c0,0,0-.01,0-.02.01,0,.01-.01.01-.02,0,0,0-.01-.01-.02Z"/>
+        <path fill="var(--mark-letter,#46288B)" d="M607.35,324.27s0-.01,0-.02c0,0,0-.01-.01-.02l-10.76-10.76s0-.01-.02-.01c0,0-.01-.01-.02-.01s-.01,0-.02,0c-.01,0-.01,0-.02,0s-.02.01-.02.01t-.02.01l-3.98,3.98-4.27,4.27c-.22.22-.42.43-.65.65l-2.16,2.16c-4.04,4.04-7.25,7.12-9.65,9.24-2.39,2.12-4.84,3.83-7.34,5.13-2.5,1.3-5.03,1.95-7.59,1.95-2.56,0-5.1-.65-7.6-1.95-2.5-1.3-4.94-3.01-7.34-5.13-2.4-2.12-5.61-5.2-9.65-9.24l-2.16-2.16c-2.64-2.64-4.87-4.93-6.69-6.87l-4.72-4.72c-2.53-2.53-4.44-4.49-5.73-5.89-1.29-1.4-2.26-2.67-2.91-3.82s-.98-2.26-.99-3.34c.01-1.07.34-2.18.99-3.33.65-1.15,1.62-2.42,2.91-3.82,1.29-1.4,3.2-3.36,5.73-5.89l5.15-5.15c.47-.47.91-.91,1.34-1.33,1.44-1.5,3.08-3.16,4.92-5l2.16-2.16c4.04-4.04,7.25-7.12,9.65-9.24,2.39-2.12,4.84-3.83,7.34-5.13,2.5-1.3,5.03-1.95,7.59-1.95,2.57,0,5.1.65,7.59,1.95,2.5,1.3,4.94,3.01,7.34,5.13,2.4,2.12,5.61,5.2,9.65,9.24l2.16,2.16c1.14,1.14,2.19,2.2,3.18,3.21,0,0,0,0,.01,0h.01s.02-.01.02-.02l10.78-10.78s.02-.01.02-.02,0-.01.01-.02v-.04s-.01-.02-.01-.02c0-.01-.01-.01-.02-.02l-10.78-10.78s-.01-.01-.01-.01l-20.3-20.3c-.06-.08-.11-.16-.17-.23l-8.12-8.11c-.12-.13-.26-.23-.4-.31-.15-.08-.31-.15-.47-.19-.16-.05-.32-.07-.49-.07-.16,0-.33.02-.48.07-.17.04-.32.11-.47.19-.14.08-.28.18-.4.31l-.8.8h-.01c-.47.44-1.13,1.09-1.99,1.95l-1.59,1.59-56.37,56.36-.04-.04-8.7,8.71-.4-.32c-1.05,1.33-5.81,4.53-7.56,5.5-1.87,1.03-3.87,1.71-6.12,2.08-2.6.43-5.17.61-7.65.52-2.75-.08-6.27-.32-10.46-.71h0c-4.7-.45-8.68-.72-11.83-.82-.68-.02-1.36-.02-2.05-.01l26.33-26.34,7.24-7.24c.12-.12.22-.25.31-.4.08-.15.14-.3.19-.46.04-.16.07-.33.07-.49,0-.17-.03-.33-.07-.49-.05-.16-.11-.31-.19-.46,0-.01-.02-.02-.02-.03-.01-.01-.01-.02-.02-.03-.08-.15-.18-.29-.3-.41l-31.43-31.43-8.1-8.09c-.12-.13-.26-.23-.4-.31-.15-.08-.31-.15-.47-.19-.16-.05-.32-.07-.49-.07-.16,0-.32.02-.48.07-.16.04-.32.11-.47.19-.14.08-.28.18-.4.31l-64.49,64.48c-.1.1-.18.22-.25.34l-.27.28-6.65,6.65,4.61,4.61c.06.1.12.19.21.28l44.31,44.25,18.59,18.58h.01s3.91,3.89,3.91,3.89c.12.13.26.23.41.31.15.09.31.15.47.2.16.04.33.07.49.07.17,0,.34-.03.5-.07.16-.05.32-.11.47-.2.15-.08.29-.18.41-.31l8.21-8.21c.12-.12.22-.26.31-.41.08-.15.15-.3.19-.47.05-.16.07-.32.07-.49s-.02-.33-.07-.5c-.04-.16-.11-.31-.19-.47-.08-.14-.19-.28-.31-.41l-23.79-23.75c.84-2.66,1.63-4.88,2.34-6.61.66-1.6,1.61-3.19,2.84-4.75,1.05-1.33,2.41-2.44,4.15-3.41,1.88-1.03,3.88-1.72,6.13-2.08,2.59-.43,5.17-.61,7.65-.53,2.75.09,6.27.33,10.46.72h0c4.7.44,8.67.72,11.83.82.54.01,1.09.02,1.64.02,2.96,0,5.97-.25,8.99-.74,3.96-.65,7.69-1.93,11.08-3.8,2.33-1.29,5.88-3.71,8.7-6.05l53.05,53.05c.06.07.1.14.16.21l8.12,8.11c.12.13.25.23.4.31.15.08.3.15.47.19.15.05.32.07.48.07.17,0,.33-.02.49-.07.16-.04.32-.11.47-.19.14-.08.28-.18.4-.31l8.12-8.11s.05-.07.08-.11l26.1-26.1s.01,0,.02.01h.04s.02-.01.02-.01c.01,0,.01-.01.02-.02l10.76-10.76s.01-.01.01-.02c0,0,0-.01,0-.02.01,0,.01-.01.01-.02,0,0,0-.01-.01-.02ZM414.87,308.77h0s-.59.59-.59.59c-1.64,1.64-2.92,2.88-3.82,3.72-.91.84-1.73,1.47-2.48,1.89-.75.42-1.47.64-2.17.64-.7,0-1.42-.22-2.17-.64s-1.57-1.05-2.48-1.89c-.91-.84-2.18-2.08-3.82-3.72l-3.35-3.35c-1.64-1.64-2.88-2.92-3.72-3.83-.84-.91-1.47-1.73-1.89-2.48s-.64-1.47-.64-2.17c0-.7.22-1.42.64-2.17s1.05-1.57,1.89-2.48c.84-.91,2.08-2.18,3.72-3.82l3.35-3.35c.06-.06.11-.11.17-.17l28.84-28.84s.05-.06.08-.09c1.14-1.14,2.22-2.07,3.24-2.79,1.01-.72,2.11-1.3,3.28-1.74s2.38-.66,3.63-.67c1.25,0,2.46.23,3.63.67s2.26,1.02,3.28,1.73c1.01.72,2.09,1.65,3.24,2.79s2.07,2.22,2.79,3.24c.72,1.01,1.29,2.11,1.73,3.28.44,1.17.66,2.38.67,3.63,0,1.25-.23,2.46-.67,3.63-.44,1.17-1.02,2.26-1.73,3.28-.72,1.01-1.65,2.09-2.79,3.24h0s-31.85,31.85-31.85,31.85Z"/>
+        <path fill="var(--mark-node,#B7D32D)" d="M239.04,292.12c0-.73.02-1.34.06-1.81.04-.48.13-.94.29-1.4s.41-.85.75-1.2c.34-.34.74-.6,1.2-.75s.92-.25,1.4-.29c.48-.04,1.08-.05,1.81-.05h10.97c.73,0,1.34.02,1.81.05.48.04.94.13,1.4.29s.85.41,1.2.75c.34.34.6.74.75,1.2s.25.92.29,1.4c.04.48.05,1.08.05,1.81v10.97c0,.73-.02,1.34-.05,1.81-.04.48-.13.94-.29,1.4-.16.46-.41.85-.75,1.2-.34.34-.74.6-1.2.75-.45.16-.92.25-1.4.29-.48.04-1.08.05-1.81.05h-10.97c-.73,0-1.34-.02-1.81-.05-.48-.04-.94-.13-1.4-.29-.45-.16-.85-.41-1.2-.75-.34-.34-.6-.74-.75-1.2-.16-.45-.25-.92-.29-1.4-.04-.48-.06-1.08-.06-1.81v-10.97Z"/>
+        <path fill="var(--mark-node,#B7D32D)" d="M363.37,292.12c0-.73.02-1.34.06-1.81.04-.48.13-.94.29-1.4s.41-.85.75-1.2c.34-.34.74-.6,1.2-.75s.92-.25,1.4-.29c.48-.04,1.08-.05,1.81-.05h10.97c.73,0,1.34.02,1.81.05.48.04.94.13,1.4.29s.85.41,1.2.75c.34.34.6.74.75,1.2s.25.92.29,1.4c.04.48.05,1.08.05,1.81v10.97c0,.73-.02,1.34-.05,1.81-.04.48-.13.94-.29,1.4-.16.46-.41.85-.75,1.2-.34.34-.74.6-1.2.75-.45.16-.92.25-1.4.29-.48.04-1.08.05-1.81.05h-10.97c-.73,0-1.34-.02-1.81-.05-.48-.04-.94-.13-1.4-.29-.45-.16-.85-.41-1.2-.75-.34-.34-.6-.74-.75-1.2-.16-.45-.25-.92-.29-1.4-.04-.48-.06-1.08-.06-1.81v-10.97Z"/>
+        <path fill="var(--mark-node,#B7D32D)" d="M487.71,292.12c0-.73.02-1.34.06-1.81.04-.48.13-.94.29-1.4s.41-.85.75-1.2c.34-.34.74-.6,1.2-.75s.92-.25,1.4-.29c.48-.04,1.08-.05,1.81-.05h10.97c.73,0,1.34.02,1.81.05.48.04.94.13,1.4.29s.85.41,1.2.75c.34.34.6.74.75,1.2s.25.92.29,1.4c.04.48.05,1.08.05,1.81v10.97c0,.73-.02,1.34-.05,1.81-.04.48-.13.94-.29,1.4-.16.46-.41.85-.75,1.2-.34.34-.74.6-1.2.75-.45.16-.92.25-1.4.29-.48.04-1.08.05-1.81.05h-10.97c-.73,0-1.34-.02-1.81-.05-.48-.04-.94-.13-1.4-.29-.45-.16-.85-.41-1.2-.75-.34-.34-.6-.74-.75-1.2-.16-.45-.25-.92-.29-1.4-.04-.48-.06-1.08-.06-1.81v-10.97Z"/>
+      </symbol>
+      <symbol id="crc-cube" viewBox="-67.39 -76.5 134.78 153"><g fill="none" stroke="var(--cube-edge,#46288B)" stroke-width="var(--cube-sw,3)" stroke-linecap="round"><line x1="0" y1="-68" x2="-58.89" y2="-34"/><line x1="29.44" y1="-51" x2="-29.44" y2="-17"/><line x1="58.89" y1="-34" x2="0" y2="0"/><line x1="0" y1="-68" x2="58.89" y2="-34"/><line x1="-29.44" y1="-51" x2="29.44" y2="-17"/><line x1="-58.89" y1="-34" x2="0" y2="0"/><line x1="58.89" y1="34" x2="0" y2="68"/><line x1="58.89" y1="0" x2="0" y2="34"/><line x1="58.89" y1="-34" x2="0" y2="0"/><line x1="58.89" y1="34" x2="58.89" y2="-34"/><line x1="29.44" y1="51" x2="29.44" y2="-17"/><line x1="0" y1="68" x2="0" y2="0"/><line x1="-58.89" y1="34" x2="0" y2="68"/><line x1="-58.89" y1="0" x2="0" y2="34"/><line x1="-58.89" y1="-34" x2="0" y2="0"/><line x1="-58.89" y1="34" x2="-58.89" y2="-34"/><line x1="-29.44" y1="51" x2="-29.44" y2="-17"/><line x1="0" y1="68" x2="0" y2="0"/></g><g fill="var(--cube-node,#B7D32D)"><rect x="-5.5" y="-73.5" width="11" height="11" rx="2"/><rect x="-34.94" y="-56.5" width="11" height="11" rx="2"/><rect x="-64.39" y="-39.5" width="11" height="11" rx="2"/><rect x="23.94" y="-56.5" width="11" height="11" rx="2"/><rect x="-5.5" y="-39.5" width="11" height="11" rx="2"/><rect x="-34.94" y="-22.5" width="11" height="11" rx="2"/><rect x="53.39" y="-39.5" width="11" height="11" rx="2"/><rect x="23.94" y="-22.5" width="11" height="11" rx="2"/><rect x="-5.5" y="-5.5" width="11" height="11" rx="2"/><rect x="53.39" y="28.5" width="11" height="11" rx="2"/><rect x="23.94" y="45.5" width="11" height="11" rx="2"/><rect x="-5.5" y="62.5" width="11" height="11" rx="2"/><rect x="53.39" y="-5.5" width="11" height="11" rx="2"/><rect x="23.94" y="11.5" width="11" height="11" rx="2"/><rect x="-5.5" y="28.5" width="11" height="11" rx="2"/><rect x="-64.39" y="28.5" width="11" height="11" rx="2"/><rect x="-64.39" y="-5.5" width="11" height="11" rx="2"/><rect x="-34.94" y="45.5" width="11" height="11" rx="2"/><rect x="-34.94" y="11.5" width="11" height="11" rx="2"/></g></symbol>
+    </defs>
+  </svg>
 
-  <!-- HERO -->
-  <header class="hero">
-    <div class="container hero-grid">
-      <div>
-        <h1 class="h1">
-          <span class="tight"><span class="cyborg-text" data-original="Cyborg" data-alt="cyber">Cyborg</span> Resilience</span>
-          <span class="tight">Co-lab</span>
-        </h1>
-        <h2 class="h2zh">賽伯格韌性實驗室</h2>
-        <p class="sr-only">Cyborg Resilience Co-lab · Cyber Resilience Co-lab · 賽伯格韌性實驗室 (CRC)</p>
-        <noscript><p>Cyborg Resilience Co-lab · Cyber Resilience Co-lab · 賽伯格韌性實驗室 (CRC)</p></noscript>
-        <div class="hr"></div>
-
-        <div class="bullets">
-          <div class="bullet">
-            <div class="icon">↗</div>
-            <div>
-              <div>成立於 2025 年 7 月</div>
-              <div class="en" lang="en">FUNDED IN JULY, 2025</div>
-            </div>
-          </div>
-          <div class="bullet">
-            <div class="icon">↗</div>
-            <div>
-              <div>研究 × 科技 × 藝術的跨域行動平台</div>
-              <div class="en" lang="en">RESEARCH • TECH • ART INITIATIVE</div>
-            </div>
-          </div>
-          <div class="bullet">
-            <div class="icon">↗</div>
-            <div>
-              <div>黑客 + 數位人權工作者 + 研究者 + 藝術家</div>
-              <div class="en" lang="en">CIVIC HACKERS • DIGITAL RIGHTS ACTIVISTS • RESEARCHERS • ARTISTS</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <img class="hero-art" src="assets/hero-graphic.svg" alt="CRC graphic" />
+  <!-- HEADER -->
+  <header class="site-header">
+    <a href="#top" class="site-header__brand" aria-label="CRC home">
+      <svg class="crc-mark" viewBox="0 0 385.35 162.34" aria-hidden="true"><use href="#crc-mark"/></svg>
+      <span class="logotype logotype-en" role="img" aria-label="Cyborg Resilience Co-lab"></span>
+    </a>
+    <nav class="site-nav">
+      <a href="#about" class="site-nav__link"><span class="zh">關於</span><span class="en" lang="en">About</span></a>
+      <a href="#team" class="site-nav__link"><span class="zh">團隊</span><span class="en" lang="en">Team</span></a>
+      <a href="#news" class="site-nav__link"><span class="zh">訊息</span><span class="en" lang="en">News</span></a>
+      <a href="/events/hackathon-2026/" class="site-nav__link"><span class="zh">活動</span><span class="en" lang="en">Events</span></a>
+    </nav>
+    <div class="site-header__actions">
+      <button class="theme-toggle" id="theme-toggle" aria-label="Switch light / purple theme" title="Switch theme">◐</button>
+      <a class="crc-btn crc-btn--primary crc-btn--sm" href="#news">最新消息<span class="crc-btn__arrow" aria-hidden="true">↗</span></a>
     </div>
   </header>
 
-  <!-- CRC & MORE -->
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <svg class="hero__net" aria-hidden="true">
+      <defs>
+        <pattern id="crc-net-tile" width="78" height="78" patternUnits="userSpaceOnUse">
+          <path d="M39,0 Q52.65,25.35 78,39 Q52.65,52.65 39,78 Q25.35,52.65 0,39 Q25.35,25.35 39,0 Z" fill="none" stroke="var(--net-line)" stroke-width="1.5"/>
+          <rect x="36.5" y="-2.5" width="5" height="5" rx=".9" fill="var(--net-node)"/>
+          <rect x="75.5" y="36.5" width="5" height="5" rx=".9" fill="var(--net-node)"/>
+          <rect x="36.5" y="75.5" width="5" height="5" rx=".9" fill="var(--net-node)"/>
+          <rect x="-2.5" y="36.5" width="5" height="5" rx=".9" fill="var(--net-node)"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#crc-net-tile)"/>
+    </svg>
+
+    <div class="container hero__inner">
+      <h1 class="hero__title">
+        <svg class="crc-mark" viewBox="0 0 385.35 162.34" aria-hidden="true"><use href="#crc-mark"/></svg>
+        <span class="hero__logotypes">
+          <span class="logotype logotype-en" role="img" aria-label="Cyborg Resilience Co-lab"></span>
+          <span class="logotype logotype-zh" role="img" aria-label="賽伯格韌性實驗室"></span>
+        </span>
+      </h1>
+      <p class="sr-only">Cyborg Resilience Co-lab · Cyber Resilience Co-lab · 賽伯格韌性實驗室 (CRC)</p>
+      <noscript><p>Cyborg Resilience Co-lab · Cyber Resilience Co-lab · 賽伯格韌性實驗室 (CRC)</p></noscript>
+
+      <div class="hero__cubes" aria-hidden="true">
+        <svg class="crc-cube crc-cube--lime-edge cube-float" viewBox="0 0 134.78 153"><use href="#crc-cube"/></svg>
+        <svg class="crc-cube crc-cube--lime-edge cube-float cube-float--d1" viewBox="0 0 134.78 153"><use href="#crc-cube"/></svg>
+        <svg class="crc-cube crc-cube--lime-edge cube-float cube-float--d2" viewBox="0 0 134.78 153"><use href="#crc-cube"/></svg>
+      </div>
+    </div>
+
+    <div class="hero__marquee">
+      <div class="crc-marquee">
+        <div class="crc-marquee__track">
+          <span class="crc-marquee__item"><span>研究 × 科技 × 藝術的跨域行動平台</span><span class="crc-marquee__dot"></span></span>
+          <span class="crc-marquee__item" lang="en"><span>RESEARCH · TECH · ART INITIATIVE</span><span class="crc-marquee__dot"></span></span>
+          <span class="crc-marquee__item"><span>黑客 + 數位人權工作者 + 研究者 + 藝術家</span><span class="crc-marquee__dot"></span></span>
+          <span class="crc-marquee__item" lang="en"><span>CIVIC HACKERS · DIGITAL RIGHTS ACTIVISTS</span><span class="crc-marquee__dot"></span></span>
+          <span class="crc-marquee__item"><span>數位韌性 DIGITAL RESILIENCE</span><span class="crc-marquee__dot"></span></span>
+          <span class="crc-marquee__item" aria-hidden="true"><span>研究 × 科技 × 藝術的跨域行動平台</span><span class="crc-marquee__dot"></span></span>
+          <span class="crc-marquee__item" aria-hidden="true" lang="en"><span>RESEARCH · TECH · ART INITIATIVE</span><span class="crc-marquee__dot"></span></span>
+          <span class="crc-marquee__item" aria-hidden="true"><span>黑客 + 數位人權工作者 + 研究者 + 藝術家</span><span class="crc-marquee__dot"></span></span>
+          <span class="crc-marquee__item" aria-hidden="true" lang="en"><span>CIVIC HACKERS · DIGITAL RIGHTS ACTIVISTS</span><span class="crc-marquee__dot"></span></span>
+          <span class="crc-marquee__item" aria-hidden="true"><span>數位韌性 DIGITAL RESILIENCE</span><span class="crc-marquee__dot"></span></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
   <section class="section" id="about">
     <div class="container">
-      <div class="title-row">
-        <h2 class="h2">CRC and more..</h2>
-        <div class="mini-icons" aria-hidden="true">
-          <img src="assets/cube.svg" alt="" />
-          <img src="assets/cube.svg" alt="" />
-          <img src="assets/cube.svg" alt="" />
-        </div>
+      <div class="section__head">
+        <h2 class="crc-heading">
+          <span class="crc-heading__en" lang="en">CRC and more…</span>
+          <span class="crc-heading__zh">關於 CRC，以及更多</span>
+        </h2>
       </div>
-      <div class="subhr"></div>
 
-      <div class="text-block">
-        <p>
-          CRC 探索在戰爭、災難與科技風險日益交疊的當代情境中，
-          何謂數位韌性。並以鬆散連結的 co-lab 形式運作，持續促成研究與實作之間的協作。
-          連結研究、實作與藝術，
-          CRC 探討後人類戰爭如何在軍事、公民與數位領域中被想像與實踐。
+      <div class="about__cubes" aria-hidden="true">
+        <svg class="crc-cube" viewBox="0 0 134.78 153"><use href="#crc-cube"/></svg>
+        <svg class="crc-cube crc-cube--lime-edge" viewBox="0 0 134.78 153"><use href="#crc-cube"/></svg>
+        <svg class="crc-cube" viewBox="0 0 134.78 153"><use href="#crc-cube"/></svg>
+      </div>
+
+      <div class="about__body">
+        <p class="about__zh">
+          CRC 探索在戰爭、災難與科技風險日益交疊的當代情境中，何謂數位韌性。並以鬆散連結的
+          co-lab 形式運作，持續促成研究與實作之間的協作。連結研究、實作與藝術，CRC
+          探討後人類戰爭如何在軍事、公民與數位領域中被想像與實踐。
         </p>
-        <p class="mono" lang="en">
+        <p class="about__en" lang="en">
           CRC explores digital resilience under contemporary conditions in which war, disaster,
           and technological risk increasingly overlap. CRC runs as a loosely connected co-lab that
-          sustains collaboration between research and practice, allowing diverse forms of expertise—
-          from social sciences and information engineering to artistic practice—to intersect.
+          sustains collaboration between research and practice — allowing diverse forms of expertise,
+          from social sciences and information engineering to artistic practice, to intersect.
         </p>
+      </div>
+
+      <div class="about__cta">
+        <a class="crc-btn crc-btn--ghost crc-btn--md" href="#news">最新訊息 Latest news<span class="crc-btn__arrow" aria-hidden="true">↗</span></a>
       </div>
     </div>
   </section>
 
-  <!-- LATEST NEWS -->
-  <section class="section band-blue" id="news-section">
-    <div class="container" style="text-align:center">
-      <a class="btn white" href="#latest-news">最新訊息&nbsp;&nbsp;LATEST NEWS</a>
-      <div class="dotrow" aria-hidden="true">
-        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-      </div>
-
-      <div id="latest-news" class="news-wrap" style="text-align:left">
-        <div id="news"></div>
-      </div>
-
-      <div class="dotrow" aria-hidden="true" style="margin-top:38px">
-        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- TEAM BAND -->
-  <section class="team">
-  <div class="team__inner">
-
-    <!-- 上方兩欄文字 -->
-    <div class="team__top">
-      <div class="bio">
-        <h3><span class="zh" lang="zh-Hant">耿璐</span> <span class="en" lang="en">Lulu</span></h3>
-        <div class="sub zh" lang="zh-Hant">數位人權工作者</div>
-        <div class="sub en" lang="en">Digital Rights Activist</div>
-      </div>
-
-      <div class="bio">
-        <h3><span class="zh" lang="zh-Hant">李梅君</span> <span class="en" lang="en">Meichun Lee</span></h3>
-        <div class="sub zh" lang="zh-Hant">數位人類學家</div>
-        <div class="sub en" lang="en">Digital Anthropologist</div>
-      </div>
-    </div>
-
-    <!-- 中間影片 + 監控 HUD -->
-    <figure class="team__photo">
-      <video class="team__video" autoplay muted loop playsinline
-             poster="assets/team-video-poster.jpg">
-        <source src="assets/team-video.mp4"  type="video/mp4">
-        <source src="assets/team-video.webm" type="video/webm">
-        <!-- fallback for no-video browsers -->
-        <img src="assets/team.jpg" alt="Team photo">
-      </video>
-
-      <div class="hud-overlay" aria-hidden="true">
-        <!-- CRT scanlines -->
-        <div class="scanlines-h"></div>
-        <!-- noise / grain -->
-        <div class="noise-grain"></div>
-
-        <!-- HUD text -->
-        <span class="hud-text hud-rec">REC ● <span class="hud-ts">2025.07.01 — 23:47:12</span></span>
-        <span class="hud-text hud-cam">CAM-03 / CRC-LAB</span>
-
-        <!-- face targets (positions tuned after video is added) -->
-        <div class="face-target" data-delay="0.4"
-             style="--tx:8%;--ty:30%;--tw:14%;--th:28%">
-          <svg class="ft-bracket" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <path d="M0,20 L0,0 L20,0" /><path d="M80,0 L100,0 L100,20" />
-            <path d="M100,80 L100,100 L80,100" /><path d="M20,100 L0,100 L0,80" />
-          </svg>
-          <span class="face-label"></span>
-        </div>
-
-        <div class="face-target" data-delay="0.8"
-             style="--tx:28%;--ty:15%;--tw:14%;--th:28%">
-          <svg class="ft-bracket" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <path d="M0,20 L0,0 L20,0" /><path d="M80,0 L100,0 L100,20" />
-            <path d="M100,80 L100,100 L80,100" /><path d="M20,100 L0,100 L0,80" />
-          </svg>
-          <span class="face-label"></span>
-        </div>
-
-        <div class="face-target" data-delay="1.2"
-             style="--tx:44%;--ty:20%;--tw:14%;--th:5%">
-          <svg class="ft-bracket" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <path d="M0,20 L0,0 L20,0" /><path d="M80,0 L100,0 L100,20" />
-            <path d="M100,80 L100,100 L80,100" /><path d="M20,100 L0,100 L0,80" />
-          </svg>
-          <span class="face-label"></span>
-        </div>
-
-        <div class="face-target" data-delay="1.6"
-             style="--tx:62%;--ty:16%;--tw:14%;--th:40%">
-          <svg class="ft-bracket" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <path d="M0,20 L0,0 L20,0" /><path d="M80,0 L100,0 L100,20" />
-            <path d="M100,80 L100,100 L80,100" /><path d="M20,100 L0,100 L0,80" />
-          </svg>
-          <span class="face-label"></span>
-        </div>
-
-        <div class="face-target" data-delay="2.0"
-             style="--tx:80%;--ty:18%;--tw:14%;--th:30%">
-          <svg class="ft-bracket" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <path d="M0,20 L0,0 L20,0" /><path d="M80,0 L100,0 L100,20" />
-            <path d="M100,80 L100,100 L80,100" /><path d="M20,100 L0,100 L0,80" />
-          </svg>
-          <span class="face-label"></span>
-        </div>
-      </div>
-    </figure>
-
-    <!-- 下方三欄文字 -->
-    <div class="team__bottom">
-      <div class="bio">
-        <h3><span class="zh" lang="zh-Hant">彭宬</span> <span class="en" lang="en">CHENG PENG</span></h3>
-        <div class="sub zh" lang="zh-Hant">韌性松共同創辦人</div>
-        <div class="sub en" lang="en">Co-founder of g0v Digital Resilience Hackathon</div>
-      </div>
-
-      <div class="bio">
-        <h3><span class="zh" lang="zh-Hant">李紫彤</span> <span class="en" lang="en">Tzu Tung</span></h3>
-        <div class="sub zh" lang="zh-Hant">藝術家與策展人</div>
-        <div class="sub en" lang="en">Curator &amp; Conceptual and Queer Feminist Artist</div>
-      </div>
-
-      <div class="bio">
-        <h3><span class="zh" lang="zh-Hant">荊輔翔</span> <span class="en" lang="en">Sean</span></h3>
-        <div class="sub zh" lang="zh-Hant">工程師</div>
-        <div class="sub en" lang="en">Meshtastic &amp; Drone Engineer</div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-  <!-- OPENFUN BAND -->
-  <section class="section band-blue">
-    <div class="container grid-2">
-      <div class="cubes-decor" aria-hidden="true">
-        <img src="assets/cube.svg" alt="" />
-        <img src="assets/cube.svg" alt="" />
-        <img src="assets/cube.svg" alt="" />
-        <img src="assets/cube.svg" alt="" />
-      </div>
-
-      <div>
-        <h3 class="h3">CRC 與歐噴在 2026 年獲得 TWNIC 網路社群計畫</h3>
-        <div class="badge-line" style="margin:18px 0 22px">
-          <a class="btn white" href="https://openfun.tw/" onclick="window.open(this.href, '_blank'); return false;">歐噴有限公司 OpenFun Inc.</a>
-        </div>
-
-        <p>
-          一家成立於 2023 年 2 月的公民科技公司。其名稱結合了「Open」與「Fun」，體現對開放、協作與務實創新的信念。OpenFun 致力於打造可靠的數位基礎設施，以支援開放資料、公共參與與知情決策。公司由長期投入台灣公民科技生態系的 Ronny Wang 創立，團隊成員包括具備豐富經驗的工程師與專案經理，專長涵蓋前端開發、開源協作與專案管理。
-
-          OpenFun 以長期投入政府與立法資料的結構化工作而聞名，其代表性成果包括立法追蹤平台 LawTrace、提供公開 API 且持續更新的台灣公司資料庫，以及結合 AI 技術的國會逐字稿系統。除了系統開發之外，OpenFun 亦積極參與使用者研究、工作坊與數位韌性相關行動，致力於促進更健全且透明的公民資訊環境。
-
-        </p>
-        <p class="mono" lang="en">
-          OpenFun Inc. is a Taiwan-based civic tech company founded in February, 2023.
-          Its name combines Open and Fun, reflecting a belief in openness, collaboration,
-          and pragmatic innovation. OpenFun focuses on building reliable digital infrastructure
-          that supports open data, public participation, and informed decision-making.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <footer class="footer">
+  <!-- TEAM -->
+  <section class="section section--muted" id="team">
     <div class="container">
-      <div class="row">
-        <div>© <span id="y"></span> CRC · Cyborg Resilience Co-lab</div>
-        <div class="footer__socials">
-          <a href="mailto:mclee@gate.sinica.edu.tw" aria-label="Email">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4 12 13 2 4"/></svg>
-          </a>
-          <a href="https://github.com/crcolab/" aria-label="GitHub" target="_blank" rel="noopener">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.5-1.4-1.3-1.8-1.3-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.4 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.7 1.7.3 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg>
-          </a>
-          <a href="https://www.facebook.com/profile.php?id=61587673071547" aria-label="Facebook" target="_blank" rel="noopener">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.1c0-6.6-5.4-12-12-12S0 5.5 0 12.1c0 6 4.4 10.9 10.1 11.9v-8.4H7.1v-3.5h3V9.4c0-3 1.8-4.7 4.5-4.7 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-2 .9-2 1.9v2.3h3.3l-.5 3.5h-2.8v8.4C19.6 23 24 18 24 12.1"/></svg>
-          </a>
-        </div>
-        <div class="mono">Made with ❤️ in Taiwan </div>
+      <div class="section__head">
+        <h2 class="crc-heading">
+          <span class="crc-heading__en" lang="en">The Co-lab</span>
+          <span class="crc-heading__zh">團隊</span>
+        </h2>
+        <p class="section__note">一個由黑客、研究者與藝術家鬆散連結的協作體。</p>
       </div>
+
+      <div class="team__grid">
+        <figure class="team-card">
+          <div class="team-card__photo"><div class="team-card__ph" aria-hidden="true"><span>Lu</span></div></div>
+          <figcaption>
+            <div class="team-card__names"><span class="team-card__zh" lang="zh-Hant">耿璐</span><span class="team-card__en" lang="en">Lulu</span></div>
+            <div class="team-card__role-zh" lang="zh-Hant">數位人權工作者</div>
+            <div class="team-card__role-en" lang="en">Digital Rights Activist</div>
+          </figcaption>
+        </figure>
+        <figure class="team-card">
+          <div class="team-card__photo"><div class="team-card__ph" aria-hidden="true"><span>Me</span></div></div>
+          <figcaption>
+            <div class="team-card__names"><span class="team-card__zh" lang="zh-Hant">李梅君</span><span class="team-card__en" lang="en">Meichun Lee</span></div>
+            <div class="team-card__role-zh" lang="zh-Hant">數位人類學家</div>
+            <div class="team-card__role-en" lang="en">Digital Anthropologist</div>
+          </figcaption>
+        </figure>
+        <figure class="team-card">
+          <div class="team-card__photo"><div class="team-card__ph" aria-hidden="true"><span>Ch</span></div></div>
+          <figcaption>
+            <div class="team-card__names"><span class="team-card__zh" lang="zh-Hant">彭宬</span><span class="team-card__en" lang="en">CHENG PENG</span></div>
+            <div class="team-card__role-zh" lang="zh-Hant">韌性松共同創辦人</div>
+            <div class="team-card__role-en" lang="en">Co-founder, g0v Resilience Hackathon</div>
+          </figcaption>
+        </figure>
+        <figure class="team-card">
+          <div class="team-card__photo"><div class="team-card__ph" aria-hidden="true"><span>Tz</span></div></div>
+          <figcaption>
+            <div class="team-card__names"><span class="team-card__zh" lang="zh-Hant">李紫彤</span><span class="team-card__en" lang="en">Tzu Tung</span></div>
+            <div class="team-card__role-zh" lang="zh-Hant">藝術家與策展人</div>
+            <div class="team-card__role-en" lang="en">Curator &amp; Queer-Feminist Artist</div>
+          </figcaption>
+        </figure>
+        <figure class="team-card">
+          <div class="team-card__photo"><div class="team-card__ph" aria-hidden="true"><span>Se</span></div></div>
+          <figcaption>
+            <div class="team-card__names"><span class="team-card__zh" lang="zh-Hant">荊輔翔</span><span class="team-card__en" lang="en">Sean</span></div>
+            <div class="team-card__role-zh" lang="zh-Hant">工程師</div>
+            <div class="team-card__role-en" lang="en">Meshtastic &amp; Drone Engineer</div>
+          </figcaption>
+        </figure>
+      </div>
+
+      <div class="team__feature">
+        <div class="crc-hud">
+          <video class="crc-hud__media team__video" autoplay muted loop playsinline
+                 poster="/assets/team-video-poster.jpg">
+            <source src="/assets/team-video.mp4" type="video/mp4">
+            <source src="/assets/team-video.webm" type="video/webm">
+            <img src="/assets/team.jpg" alt="Team photo">
+          </video>
+
+          <div class="crc-hud__scan" aria-hidden="true"></div>
+          <span class="crc-hud__corner tl" aria-hidden="true"></span>
+          <span class="crc-hud__corner tr" aria-hidden="true"></span>
+          <span class="crc-hud__corner bl" aria-hidden="true"></span>
+          <span class="crc-hud__corner br" aria-hidden="true"></span>
+          <div class="crc-hud__bar top" aria-hidden="true">
+            <span class="crc-hud__rec"><span class="crc-hud__dot"></span>REC</span>
+            <span>CAM-03 / CRC-LAB</span>
+          </div>
+          <div class="crc-hud__bar bot" aria-hidden="true">
+            <span>2025.07.01 — 23:47:12</span>
+            <span>◉ ◉ ◉</span>
+          </div>
+
+          <div class="face-target" data-delay="0.4" style="--tx:8%;--ty:30%;--tw:14%;--th:28%" aria-hidden="true">
+            <svg class="ft-bracket" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <path d="M0,20 L0,0 L20,0" /><path d="M80,0 L100,0 L100,20" />
+              <path d="M100,80 L100,100 L80,100" /><path d="M20,100 L0,100 L0,80" />
+            </svg>
+          </div>
+          <div class="face-target" data-delay="0.8" style="--tx:28%;--ty:15%;--tw:14%;--th:28%" aria-hidden="true">
+            <svg class="ft-bracket" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <path d="M0,20 L0,0 L20,0" /><path d="M80,0 L100,0 L100,20" />
+              <path d="M100,80 L100,100 L80,100" /><path d="M20,100 L0,100 L0,80" />
+            </svg>
+          </div>
+          <div class="face-target" data-delay="1.2" style="--tx:44%;--ty:20%;--tw:14%;--th:5%" aria-hidden="true">
+            <svg class="ft-bracket" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <path d="M0,20 L0,0 L20,0" /><path d="M80,0 L100,0 L100,20" />
+              <path d="M100,80 L100,100 L80,100" /><path d="M20,100 L0,100 L0,80" />
+            </svg>
+          </div>
+          <div class="face-target" data-delay="1.6" style="--tx:62%;--ty:16%;--tw:14%;--th:40%" aria-hidden="true">
+            <svg class="ft-bracket" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <path d="M0,20 L0,0 L20,0" /><path d="M80,0 L100,0 L100,20" />
+              <path d="M100,80 L100,100 L80,100" /><path d="M20,100 L0,100 L0,80" />
+            </svg>
+          </div>
+          <div class="face-target" data-delay="2.0" style="--tx:80%;--ty:18%;--tw:14%;--th:30%" aria-hidden="true">
+            <svg class="ft-bracket" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <path d="M0,20 L0,0 L20,0" /><path d="M80,0 L100,0 L100,20" />
+              <path d="M100,80 L100,100 L80,100" /><path d="M20,100 L0,100 L0,80" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWS + PARTNER -->
+  <section class="section" id="news">
+    <div class="container">
+      <div class="section__head">
+        <h2 class="crc-heading">
+          <span class="crc-heading__en" lang="en">Latest News</span>
+          <span class="crc-heading__zh">最新訊息</span>
+        </h2>
+      </div>
+
+      <div class="news__grid">
+        <div class="crc-card">
+          <span class="crc-card__bar" aria-hidden="true"></span>
+          <div class="partner__tags">
+            <span class="crc-tag"><span class="crc-tag__node" aria-hidden="true"></span>合作夥伴</span>
+            <span class="crc-tag crc-tag--outline" lang="en">Partner</span>
+          </div>
+          <p class="partner__logo">OpenFun 歐噴有限公司</p>
+          <p class="partner__body">
+            一家成立於 2023 年的公民科技公司，名稱結合「Open」與「Fun」。OpenFun 打造可靠的數位基礎設施，
+            支援開放資料、公共參與與知情決策——代表作包括立法追蹤平台 LawTrace 與 AI 國會逐字稿系統。
+            CRC 與 OpenFun 在 2026 年共同獲得 TWNIC 網路社群計畫支持。
+          </p>
+          <a class="crc-btn crc-btn--ghost crc-btn--md" href="https://openfun.tw/" target="_blank" rel="noopener">openfun.tw<span class="crc-btn__arrow" aria-hidden="true">↗</span></a>
+        </div>
+
+        <div id="news-list" class="news__list"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer theme-purple">
+    <div class="container footer__inner">
+      <div>
+        <div class="footer__lockup">
+          <svg class="crc-mark" viewBox="0 0 385.35 162.34" aria-hidden="true"><use href="#crc-mark"/></svg>
+          <span class="logotype logotype-en" role="img" aria-label="Cyborg Resilience Co-lab"></span>
+          <span class="logotype logotype-zh" role="img" aria-label="賽伯格韌性實驗室"></span>
+        </div>
+        <p class="footer__tag">研究 × 科技 × 藝術的跨域行動平台。探索戰爭、災難與科技風險交疊下的數位韌性。</p>
+      </div>
+      <div class="footer__cols">
+        <div class="footer__col">
+          <h4>導覽 · Navigate</h4>
+          <a href="#about">關於 About</a>
+          <a href="#team">團隊 Team</a>
+          <a href="#news">訊息 News</a>
+          <a href="/events/hackathon-2026/">活動 Events</a>
+        </div>
+        <div class="footer__col">
+          <h4>連結 · Connect</h4>
+          <a href="https://github.com/crcolab/" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://www.facebook.com/profile.php?id=61587673071547" target="_blank" rel="noopener">Facebook</a>
+          <a href="mailto:mclee@gate.sinica.edu.tw">Email</a>
+        </div>
+      </div>
+    </div>
+    <div class="container footer__base">
+      <span>© <span id="y"></span> CRC · Cyborg Resilience Co-lab · 賽伯格韌性實驗室</span>
+      <span>Made with ❤️ in Taiwan</span>
     </div>
   </footer>
-
-  <!-- SVG filter for spray-paint texture (hidden) -->
-  <svg width="0" height="0" style="position:absolute">
-    <defs>
-      <filter id="spraypaint">
-        <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="4" result="noise"/>
-        <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G"/>
-      </filter>
-    </defs>
-  </svg>
 
   <!-- News detail modal -->
   <div id="news-modal" class="modal-overlay" hidden>
