@@ -18,6 +18,7 @@ import {
   getTrackedRectAtTime,
   isMappedRectEligible,
   isValidMemberTrack,
+  initSurveillanceHUD,
   mapNormalizedRect,
 } from '../animations/surveillance-hud.js';
 
@@ -379,4 +380,497 @@ test('HUD controller wires direct input without duplicating roster HTML', async 
   assert.match(source, /computePanelPlacement\(/);
   assert.match(source, /\.textContent = rosterEntry\./);
   assert.doesNotMatch(source, /\.innerHTML\s*=/);
+});
+
+class FakeEventTarget {
+  constructor() {
+    this.listeners = new Map();
+    this.parentNode = null;
+  }
+
+  addEventListener(type, listener) {
+    const listeners = this.listeners.get(type) || [];
+    listeners.push(listener);
+    this.listeners.set(type, listeners);
+  }
+
+  dispatch(type, init = {}) {
+    const event = {
+      ...init,
+      type,
+      bubbles: Boolean(init.bubbles),
+      defaultPrevented: false,
+      preventDefault() {
+        this.defaultPrevented = true;
+      },
+    };
+    this.dispatchEvent(event);
+    return event;
+  }
+
+  dispatchEvent(event) {
+    if (!event.target) event.target = this;
+    event.currentTarget = this;
+
+    for (const listener of this.listeners.get(event.type) || []) {
+      listener.call(this, event);
+    }
+
+    if (event.bubbles && this.parentNode) {
+      this.parentNode.dispatchEvent(event);
+    }
+    return !event.defaultPrevented;
+  }
+}
+
+class FakeClassList {
+  constructor() {
+    this.values = new Set();
+  }
+
+  add(value) {
+    this.values.add(value);
+  }
+
+  remove(value) {
+    this.values.delete(value);
+  }
+
+  contains(value) {
+    return this.values.has(value);
+  }
+}
+
+class FakeHTMLElement extends FakeEventTarget {
+  constructor(ownerDocument) {
+    super();
+    this.ownerDocument = ownerDocument;
+    this.attributes = new Map();
+    this.classList = new FakeClassList();
+    this.dataset = {};
+    this.style = {};
+    this.hidden = false;
+    this.disabled = false;
+    this.textContent = '';
+    this.clientWidth = 0;
+    this.clientHeight = 0;
+    this.offsetWidth = 0;
+    this.offsetHeight = 0;
+    this.queryResults = new Map();
+    this.queryAllResults = new Map();
+    this.closestResults = new Map();
+  }
+
+  querySelector(selector) {
+    return this.queryResults.get(selector) || null;
+  }
+
+  querySelectorAll(selector) {
+    return this.queryAllResults.get(selector) || [];
+  }
+
+  closest(selector) {
+    return this.closestResults.get(selector) || null;
+  }
+
+  setAttribute(name, value) {
+    this.attributes.set(name, String(value));
+    if (name === 'disabled') this.disabled = true;
+  }
+
+  getBoundingClientRect() {
+    return {
+      left: 0,
+      top: 0,
+      width: this.clientWidth,
+      height: this.clientHeight,
+    };
+  }
+
+  contains(node) {
+    for (let current = node; current; current = current.parentNode) {
+      if (current === this) return true;
+    }
+    return false;
+  }
+
+  focus() {
+    const previous = this.ownerDocument.activeElement;
+    if (previous === this) return;
+    if (previous?.dispatch) {
+      previous.dispatch('focusout', { bubbles: true, relatedTarget: this });
+    }
+    this.ownerDocument.activeElement = this;
+    this.dispatch('focus');
+  }
+
+  blur() {
+    if (this.ownerDocument.activeElement !== this) return;
+    this.ownerDocument.activeElement = null;
+    this.dispatch('focusout', { bubbles: true, relatedTarget: null });
+  }
+}
+
+class FakeDocument extends FakeEventTarget {
+  constructor() {
+    super();
+    this.activeElement = null;
+    this.hidden = false;
+    this.ids = new Map();
+    this.queryResults = new Map();
+  }
+
+  querySelector(selector) {
+    return this.queryResults.get(selector) || null;
+  }
+
+  getElementById(id) {
+    return this.ids.get(id) || null;
+  }
+}
+
+class FakeVideo extends FakeHTMLElement {
+  constructor(ownerDocument, paused) {
+    super(ownerDocument);
+    this.paused = paused;
+    this.ended = false;
+    this.readyState = 1;
+    this.videoWidth = 1920;
+    this.videoHeight = 1044;
+    this.currentTime = 3;
+    this.pauseCalls = 0;
+    this.playCalls = 0;
+    this.frameCallbacks = new Map();
+    this.nextFrameHandle = 1;
+  }
+
+  pause() {
+    this.pauseCalls += 1;
+    this.paused = true;
+  }
+
+  async play() {
+    this.playCalls += 1;
+    this.paused = false;
+  }
+
+  requestVideoFrameCallback(callback) {
+    const handle = this.nextFrameHandle;
+    this.nextFrameHandle += 1;
+    this.frameCallbacks.set(handle, callback);
+    return handle;
+  }
+
+  cancelVideoFrameCallback(handle) {
+    this.frameCallbacks.delete(handle);
+  }
+}
+
+const installControllerHarness = ({ paused = false } = {}) => {
+  const document = new FakeDocument();
+  const window = new FakeEventTarget();
+  const hud = new FakeHTMLElement(document);
+  const overlay = new FakeHTMLElement(document);
+  const panel = new FakeHTMLElement(document);
+  const video = new FakeVideo(document, paused);
+  const outside = new FakeHTMLElement(document);
+  const targets = new Map();
+  const panelFields = new Map();
+  let nextAnimationFrame = 1;
+  const animationFrames = new Map();
+
+  hud.clientWidth = 1176;
+  hud.clientHeight = 504;
+  overlay.hidden = true;
+  overlay.parentNode = hud;
+  panel.hidden = true;
+  panel.offsetWidth = 220;
+  panel.offsetHeight = 110;
+  panel.parentNode = overlay;
+  video.parentNode = hud;
+  video.closestResults.set('.crc-hud', hud);
+
+  for (const field of ['name-zh', 'name-en', 'role-zh', 'role-en']) {
+    const element = new FakeHTMLElement(document);
+    element.parentNode = panel;
+    panelFields.set(field, element);
+    panel.queryResults.set('[data-panel-field="' + field + '"]', element);
+  }
+
+  for (const id of MEMBER_IDS) {
+    const target = new FakeHTMLElement(document);
+    target.dataset.memberId = id;
+    target.disabled = true;
+    target.parentNode = overlay;
+    targets.set(id, target);
+
+    for (const [key, suffix] of [
+      ['nameZh', 'name-zh'],
+      ['nameEn', 'name-en'],
+      ['roleZh', 'role-zh'],
+      ['roleEn', 'role-en'],
+    ]) {
+      const rosterField = new FakeHTMLElement(document);
+      rosterField.textContent = '  ' + id + '-' + key + '  ';
+      document.ids.set('team-member-' + id + '-' + suffix, rosterField);
+    }
+  }
+
+  overlay.queryResults.set('[data-team-member-panel]', panel);
+  overlay.queryAllResults.set('.team-member-target', [...targets.values()]);
+  hud.queryResults.set('[data-team-member-overlay]', overlay);
+  document.queryResults.set('.team__video', video);
+
+  const replacements = {
+    document,
+    window,
+    HTMLElement: FakeHTMLElement,
+    ResizeObserver: class {
+      observe() {}
+    },
+    requestAnimationFrame(callback) {
+      const handle = nextAnimationFrame;
+      nextAnimationFrame += 1;
+      animationFrames.set(handle, callback);
+      return handle;
+    },
+    cancelAnimationFrame(handle) {
+      animationFrames.delete(handle);
+    },
+  };
+  const originals = new Map();
+
+  for (const [name, value] of Object.entries(replacements)) {
+    originals.set(name, Object.getOwnPropertyDescriptor(globalThis, name));
+    Object.defineProperty(globalThis, name, {
+      configurable: true,
+      writable: true,
+      value,
+    });
+  }
+
+  const restore = () => {
+    for (const [name, descriptor] of originals) {
+      if (descriptor) Object.defineProperty(globalThis, name, descriptor);
+      else Reflect.deleteProperty(globalThis, name);
+    }
+  };
+
+  try {
+    initSurveillanceHUD();
+  } catch (error) {
+    restore();
+    throw error;
+  }
+
+  return {
+    document,
+    outside,
+    overlay,
+    panel,
+    panelFields,
+    targets,
+    video,
+    restore,
+    activeId() {
+      return MEMBER_IDS.find(
+        (id) => targets.get(id).classList.contains('is-active'),
+      ) || null;
+    },
+  };
+};
+
+test('hidden interaction clears UI then resumes its owned pause when visible', () => {
+  const harness = installControllerHarness();
+
+  try {
+    harness.targets.get('lulu').dispatch('pointerenter', {
+      pointerType: 'mouse',
+    });
+    assert.equal(harness.panel.hidden, false);
+    assert.equal(harness.video.paused, true);
+
+    harness.document.hidden = true;
+    harness.document.dispatch('visibilitychange');
+    assert.equal(harness.panel.hidden, true);
+    assert.equal(harness.video.playCalls, 0);
+
+    harness.document.hidden = false;
+    harness.document.dispatch('visibilitychange');
+    assert.equal(harness.video.playCalls, 1);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('visible eligibility invalidation resumes an interaction-owned pause', () => {
+  const harness = installControllerHarness();
+
+  try {
+    harness.targets.get('lulu').dispatch('pointerenter', {
+      pointerType: 'mouse',
+    });
+    harness.video.currentTime = 8;
+    harness.video.dispatch('seeked');
+
+    assert.equal(harness.panel.hidden, true);
+    assert.equal(harness.video.playCalls, 1);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('same target modalities keep the panel open until pointer and focus both leave', async () => {
+  const harness = installControllerHarness();
+  const target = harness.targets.get('lulu');
+
+  try {
+    target.dispatch('pointerenter', { pointerType: 'mouse' });
+    target.focus();
+    target.dispatch('pointerleave', { pointerType: 'mouse' });
+
+    assert.equal(harness.activeId(), 'lulu');
+    assert.equal(harness.panel.hidden, false);
+    assert.equal(harness.video.playCalls, 0);
+
+    target.dispatch('pointerenter', { pointerType: 'mouse' });
+    target.blur();
+    await Promise.resolve();
+
+    assert.equal(harness.activeId(), 'lulu');
+    assert.equal(harness.panel.hidden, false);
+    assert.equal(harness.video.playCalls, 0);
+
+    target.dispatch('pointerleave', { pointerType: 'mouse' });
+    assert.equal(harness.panel.hidden, true);
+    assert.equal(harness.video.playCalls, 1);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('different target modalities prefer focus then return to the hovered target without resuming', async () => {
+  const harness = installControllerHarness();
+  const hovered = harness.targets.get('lulu');
+  const focused = harness.targets.get('meichun');
+
+  try {
+    hovered.dispatch('pointerenter', { pointerType: 'mouse' });
+    focused.focus();
+
+    assert.equal(harness.activeId(), 'meichun');
+    assert.equal(harness.video.playCalls, 0);
+
+    focused.blur();
+    await Promise.resolve();
+
+    assert.equal(harness.activeId(), 'lulu');
+    assert.equal(harness.panel.hidden, false);
+    assert.equal(harness.video.playCalls, 0);
+
+    hovered.dispatch('pointerleave', { pointerType: 'mouse' });
+    assert.equal(harness.panel.hidden, true);
+    assert.equal(harness.video.playCalls, 1);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('global Escape dismisses an active panel while focus is outside the overlay', () => {
+  const harness = installControllerHarness();
+
+  try {
+    harness.targets.get('lulu').dispatch('pointerenter', {
+      pointerType: 'mouse',
+    });
+    harness.outside.focus();
+
+    const event = harness.document.dispatch('keydown', { key: 'Escape' });
+
+    assert.equal(event.defaultPrevented, true);
+    assert.equal(harness.activeId(), null);
+    assert.equal(harness.panel.hidden, true);
+    assert.equal(harness.video.playCalls, 1);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('outside touch dismisses an active panel regardless of opening modality', () => {
+  const harness = installControllerHarness();
+
+  try {
+    harness.targets.get('lulu').dispatch('pointerenter', {
+      pointerType: 'mouse',
+    });
+    harness.document.dispatch('pointerdown', {
+      pointerType: 'touch',
+      clientX: -1,
+      clientY: -1,
+    });
+
+    assert.equal(harness.activeId(), null);
+    assert.equal(harness.panel.hidden, true);
+    assert.equal(harness.video.playCalls, 1);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('already-paused video is not resumed by interaction dismissal', () => {
+  const harness = installControllerHarness({ paused: true });
+  const target = harness.targets.get('lulu');
+
+  try {
+    target.dispatch('pointerenter', { pointerType: 'mouse' });
+    assert.equal(harness.panel.hidden, false);
+    assert.equal(harness.video.pauseCalls, 0);
+
+    target.dispatch('pointerleave', { pointerType: 'mouse' });
+    assert.equal(harness.panel.hidden, true);
+    assert.equal(harness.video.playCalls, 0);
+    assert.equal(harness.video.paused, true);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('unexpected playback is re-paused under an existing owned lease', () => {
+  const harness = installControllerHarness();
+  const target = harness.targets.get('lulu');
+
+  try {
+    target.dispatch('pointerenter', { pointerType: 'mouse' });
+    assert.equal(harness.video.pauseCalls, 1);
+
+    harness.video.paused = false;
+    harness.video.dispatch('playing');
+    assert.equal(harness.video.paused, true);
+    assert.equal(harness.video.pauseCalls, 2);
+
+    target.dispatch('pointerleave', { pointerType: 'mouse' });
+    assert.equal(harness.video.playCalls, 1);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('unexpected playback after pre-paused activation acquires an owned lease', () => {
+  const harness = installControllerHarness({ paused: true });
+  const target = harness.targets.get('lulu');
+
+  try {
+    target.dispatch('pointerenter', { pointerType: 'mouse' });
+    assert.equal(harness.video.pauseCalls, 0);
+
+    harness.video.paused = false;
+    harness.video.dispatch('playing');
+    assert.equal(harness.video.paused, true);
+    assert.equal(harness.video.pauseCalls, 1);
+
+    target.dispatch('pointerleave', { pointerType: 'mouse' });
+    assert.equal(harness.video.playCalls, 1);
+  } finally {
+    harness.restore();
+  }
 });

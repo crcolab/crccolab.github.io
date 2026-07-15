@@ -247,7 +247,10 @@ export function createPlaybackLease(video) {
 
   return {
     pauseForInteraction() {
-      if (ownsPause) return true;
+      if (ownsPause) {
+        if (!video.paused && !video.ended) video.pause();
+        return true;
+      }
       ownsPause = !video.paused && !video.ended;
       if (ownsPause) video.pause();
       return ownsPause;
@@ -321,7 +324,9 @@ export function initSurveillanceHUD() {
   let frameKind = null;
   let panelPlacementFrame = null;
   let activeId = null;
-  let activeInput = null;
+  let pointerId = null;
+  let focusedId = null;
+  let touchId = null;
   let started = false;
 
   function rebuildTransform() {
@@ -337,6 +342,9 @@ export function initSurveillanceHUD() {
     target.disabled = true;
     target.classList.remove('is-active');
     layouts.delete(id);
+    if (pointerId === id) pointerId = null;
+    if (focusedId === id) focusedId = null;
+    if (touchId === id) touchId = null;
   }
 
   function setPanelContent(id) {
@@ -367,7 +375,7 @@ export function initSurveillanceHUD() {
     });
   }
 
-  function activateMember(id, input) {
+  function activateMember(id) {
     if (!layouts.has(id) || activeId === id) return;
 
     const switching = activeId !== null;
@@ -375,7 +383,6 @@ export function initSurveillanceHUD() {
 
     if (activeId) targets.get(activeId).classList.remove('is-active');
     activeId = id;
-    activeInput = input;
 
     targets.get(id).classList.add('is-active');
     setPanelContent(id);
@@ -383,12 +390,11 @@ export function initSurveillanceHUD() {
     positionActivePanel();
   }
 
-  function dismissMember(allowResume = true) {
-    if (!activeId) return;
+  function clearActiveMember() {
+    if (!activeId) return false;
 
     targets.get(activeId)?.classList.remove('is-active');
     activeId = null;
-    activeInput = null;
     panel.hidden = true;
     delete panel.dataset.side;
 
@@ -397,7 +403,31 @@ export function initSurveillanceHUD() {
       panelPlacementFrame = null;
     }
 
-    void playback.resumeIfOwned(allowResume && !document.hidden);
+    return true;
+  }
+
+  function dismissMember() {
+    if (!clearActiveMember()) return;
+    void playback.resumeIfOwned(!document.hidden);
+  }
+
+  function clearInteractionState() {
+    pointerId = null;
+    focusedId = null;
+    touchId = null;
+  }
+
+  function reconcileActiveMember() {
+    const nextId = [touchId, focusedId, pointerId]
+      .find((id) => id && layouts.has(id)) || null;
+
+    if (!nextId) {
+      dismissMember();
+    } else if (nextId === activeId) {
+      positionActivePanel();
+    } else {
+      activateMember(nextId);
+    }
   }
 
   function renderAt(time = video.currentTime) {
@@ -435,11 +465,7 @@ export function initSurveillanceHUD() {
       });
     }
 
-    if (activeId && !layouts.has(activeId)) {
-      dismissMember(false);
-    } else if (activeId) {
-      positionActivePanel();
-    }
+    reconcileActiveMember();
   }
 
   function stopFrameLoop() {
@@ -487,7 +513,7 @@ export function initSurveillanceHUD() {
 
   function handlePlaying() {
     if (activeId) {
-      video.pause();
+      playback.pauseForInteraction();
       return;
     }
     requestNextFrame();
@@ -504,17 +530,23 @@ export function initSurveillanceHUD() {
 
   function handleVisibilityChange() {
     if (document.hidden) {
-      dismissMember(false);
+      clearInteractionState();
+      clearActiveMember();
       stopFrameLoop();
-    } else if (!video.paused) {
+    } else {
       renderAt();
-      requestNextFrame();
+      if (playback.ownsPause()) {
+        void playback.resumeIfOwned();
+      } else if (!video.paused) {
+        requestNextFrame();
+      }
     }
   }
 
-  function handleOverlayKeydown(event) {
+  function handleDocumentKeydown(event) {
     if (event.key !== 'Escape' || !activeId) return;
     event.preventDefault();
+    clearInteractionState();
     dismissMember();
 
     if (document.activeElement instanceof HTMLElement) {
@@ -543,37 +575,41 @@ export function initSurveillanceHUD() {
     if (selectedId) {
       event.preventDefault();
       if (activeId === selectedId) {
+        clearInteractionState();
         dismissMember();
       } else {
-        activateMember(selectedId, 'touch');
+        clearInteractionState();
+        touchId = selectedId;
+        reconcileActiveMember();
       }
-    } else if (activeId && activeInput === 'touch') {
+    } else if (activeId) {
+      clearInteractionState();
       dismissMember();
     }
   }
 
   for (const [id, target] of targets) {
     target.addEventListener('pointerenter', (event) => {
-      if (event.pointerType !== 'touch') activateMember(id, 'pointer');
+      if (event.pointerType === 'touch') return;
+      touchId = null;
+      pointerId = id;
+      reconcileActiveMember();
     });
     target.addEventListener('pointerleave', (event) => {
-      if (
-        event.pointerType !== 'touch'
-        && activeId === id
-        && activeInput === 'pointer'
-      ) {
-        dismissMember();
-      }
+      if (event.pointerType === 'touch' || pointerId !== id) return;
+      pointerId = null;
+      reconcileActiveMember();
     });
-    target.addEventListener('focus', () => activateMember(id, 'keyboard'));
+    target.addEventListener('focus', () => {
+      touchId = null;
+      focusedId = id;
+      reconcileActiveMember();
+    });
     target.addEventListener('focusout', () => {
       queueMicrotask(() => {
-        if (
-          activeInput === 'keyboard'
-          && !overlay.contains(document.activeElement)
-        ) {
-          dismissMember();
-        }
+        if (focusedId !== id || document.activeElement === target) return;
+        focusedId = null;
+        reconcileActiveMember();
       });
     });
   }
@@ -589,7 +625,7 @@ export function initSurveillanceHUD() {
 
   const resizeObserver = new ResizeObserver(invalidateGeometry);
   resizeObserver.observe(hud);
-  overlay.addEventListener('keydown', handleOverlayKeydown);
+  document.addEventListener('keydown', handleDocumentKeydown);
   document.addEventListener('pointerdown', handleTouchPointerDown, true);
   document.addEventListener('visibilitychange', handleVisibilityChange);
   window.addEventListener('orientationchange', invalidateGeometry);
