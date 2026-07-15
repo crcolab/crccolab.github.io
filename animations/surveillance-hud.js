@@ -315,9 +315,13 @@ export function initSurveillanceHUD() {
   if (!validIds.length) return;
 
   const layouts = new Map();
+  const playback = createPlaybackLease(video);
   let transform = null;
   let frameHandle = null;
   let frameKind = null;
+  let panelPlacementFrame = null;
+  let activeId = null;
+  let activeInput = null;
   let started = false;
 
   function rebuildTransform() {
@@ -331,7 +335,69 @@ export function initSurveillanceHUD() {
   function disableTarget(id) {
     const target = targets.get(id);
     target.disabled = true;
+    target.classList.remove('is-active');
     layouts.delete(id);
+  }
+
+  function setPanelContent(id) {
+    const rosterEntry = roster.get(id);
+    panelFields.nameZh.textContent = rosterEntry.nameZh.textContent.trim();
+    panelFields.nameEn.textContent = rosterEntry.nameEn.textContent.trim();
+    panelFields.roleZh.textContent = rosterEntry.roleZh.textContent.trim();
+    panelFields.roleEn.textContent = rosterEntry.roleEn.textContent.trim();
+  }
+
+  function positionActivePanel() {
+    if (!activeId || !layouts.has(activeId) || panel.hidden) return;
+    if (panelPlacementFrame !== null) cancelAnimationFrame(panelPlacementFrame);
+
+    panelPlacementFrame = requestAnimationFrame(() => {
+      panelPlacementFrame = null;
+      const layout = layouts.get(activeId);
+      if (!layout || panel.hidden) return;
+
+      const placement = computePanelPlacement(
+        layout.visualRect,
+        { width: panel.offsetWidth, height: panel.offsetHeight },
+        { width: hud.clientWidth, height: hud.clientHeight },
+      );
+      panel.style.left = placement.left + 'px';
+      panel.style.top = placement.top + 'px';
+      panel.dataset.side = placement.side;
+    });
+  }
+
+  function activateMember(id, input) {
+    if (!layouts.has(id) || activeId === id) return;
+
+    const switching = activeId !== null;
+    if (!switching) playback.pauseForInteraction();
+
+    if (activeId) targets.get(activeId).classList.remove('is-active');
+    activeId = id;
+    activeInput = input;
+
+    targets.get(id).classList.add('is-active');
+    setPanelContent(id);
+    panel.hidden = false;
+    positionActivePanel();
+  }
+
+  function dismissMember(allowResume = true) {
+    if (!activeId) return;
+
+    targets.get(activeId)?.classList.remove('is-active');
+    activeId = null;
+    activeInput = null;
+    panel.hidden = true;
+    delete panel.dataset.side;
+
+    if (panelPlacementFrame !== null) {
+      cancelAnimationFrame(panelPlacementFrame);
+      panelPlacementFrame = null;
+    }
+
+    void playback.resumeIfOwned(allowResume && !document.hidden);
   }
 
   function renderAt(time = video.currentTime) {
@@ -367,6 +433,12 @@ export function initSurveillanceHUD() {
         visualRect,
         touchRect: expandTouchRect(visualRect),
       });
+    }
+
+    if (activeId && !layouts.has(activeId)) {
+      dismissMember(false);
+    } else if (activeId) {
+      positionActivePanel();
     }
   }
 
@@ -414,6 +486,10 @@ export function initSurveillanceHUD() {
   }
 
   function handlePlaying() {
+    if (activeId) {
+      video.pause();
+      return;
+    }
     requestNextFrame();
   }
 
@@ -428,11 +504,78 @@ export function initSurveillanceHUD() {
 
   function handleVisibilityChange() {
     if (document.hidden) {
+      dismissMember(false);
       stopFrameLoop();
     } else if (!video.paused) {
       renderAt();
       requestNextFrame();
     }
+  }
+
+  function handleOverlayKeydown(event) {
+    if (event.key !== 'Escape' || !activeId) return;
+    event.preventDefault();
+    dismissMember();
+
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+  }
+
+  function handleTouchPointerDown(event) {
+    if (event.pointerType !== 'touch') return;
+
+    const bounds = hud.getBoundingClientRect();
+    const point = {
+      x: event.clientX - bounds.left,
+      y: event.clientY - bounds.top,
+    };
+    const insideHud = (
+      point.x >= 0
+      && point.x <= bounds.width
+      && point.y >= 0
+      && point.y <= bounds.height
+    );
+    const selectedId = insideHud
+      ? pickNearestTarget(point, [...layouts.values()])
+      : null;
+
+    if (selectedId) {
+      event.preventDefault();
+      if (activeId === selectedId) {
+        dismissMember();
+      } else {
+        activateMember(selectedId, 'touch');
+      }
+    } else if (activeId && activeInput === 'touch') {
+      dismissMember();
+    }
+  }
+
+  for (const [id, target] of targets) {
+    target.addEventListener('pointerenter', (event) => {
+      if (event.pointerType !== 'touch') activateMember(id, 'pointer');
+    });
+    target.addEventListener('pointerleave', (event) => {
+      if (
+        event.pointerType !== 'touch'
+        && activeId === id
+        && activeInput === 'pointer'
+      ) {
+        dismissMember();
+      }
+    });
+    target.addEventListener('focus', () => activateMember(id, 'keyboard'));
+    target.addEventListener('focusout', () => {
+      queueMicrotask(() => {
+        if (
+          activeInput === 'keyboard'
+          && !overlay.contains(document.activeElement)
+        ) {
+          dismissMember();
+        }
+      });
+    });
   }
 
   function start() {
@@ -446,12 +589,14 @@ export function initSurveillanceHUD() {
 
   const resizeObserver = new ResizeObserver(invalidateGeometry);
   resizeObserver.observe(hud);
+  overlay.addEventListener('keydown', handleOverlayKeydown);
+  document.addEventListener('pointerdown', handleTouchPointerDown, true);
+  document.addEventListener('visibilitychange', handleVisibilityChange);
+  window.addEventListener('orientationchange', invalidateGeometry);
   video.addEventListener('loadedmetadata', start);
   video.addEventListener('playing', handlePlaying);
   video.addEventListener('pause', handlePause);
   video.addEventListener('seeked', handleSeeked);
-  document.addEventListener('visibilitychange', handleVisibilityChange);
-  window.addEventListener('orientationchange', invalidateGeometry);
 
   if (video.readyState >= 1) start();
 }

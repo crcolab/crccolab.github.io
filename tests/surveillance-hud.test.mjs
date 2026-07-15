@@ -362,3 +362,21 @@ test('HUD initializer uses media-frame sync, resize invalidation, and no legacy 
   assert.doesNotMatch(source, /querySelectorAll\('\.face-target'\)/);
   assert.doesNotMatch(source, /}, 2000\)/);
 });
+
+test('HUD controller wires direct input without duplicating roster HTML', async () => {
+  const source = await readFile(
+    new URL('../animations/surveillance-hud.js', import.meta.url),
+    'utf8',
+  );
+
+  assert.match(source, /const playback = createPlaybackLease\(video\)/);
+  assert.match(source, /addEventListener\('pointerenter'/);
+  assert.match(source, /addEventListener\('pointerleave'/);
+  assert.match(source, /addEventListener\('focus'/);
+  assert.match(source, /addEventListener\('focusout'/);
+  assert.match(source, /addEventListener\('pointerdown'/);
+  assert.match(source, /addEventListener\('keydown'/);
+  assert.match(source, /computePanelPlacement\(/);
+  assert.match(source, /\.textContent = rosterEntry\./);
+  assert.doesNotMatch(source, /\.innerHTML\s*=/);
+});
