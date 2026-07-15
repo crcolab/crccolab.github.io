@@ -120,6 +120,102 @@ img,svg,video{max-width:100%}
 .logotype-en{-webkit-mask-image:url("/assets/logo/crc-logotype-en.svg");mask-image:url("/assets/logo/crc-logotype-en.svg");aspect-ratio:822.77/87.17}
 .logotype-zh{-webkit-mask-image:url("/assets/logo/crc-logotype-zh-mask.png");mask-image:url("/assets/logo/crc-logotype-zh-mask.png");aspect-ratio:8.1/1}
 
+/* ---------- Split wordmark for the Cyborg↔cyber glitch easter egg.
+   Applied only to the hero + header instances (footer stays static).
+   The outer .logotype-en carries the existing width/height rules;
+   masking is delegated to the two inner .logotype-en-mask segments so
+   we can glitch the "Cyborg" side while "Resilience Co-lab" holds still.
+   --cyborg-frac is measured once from the SVG path geometry
+   (viewBox 85.28 86.35 822.77 87.17, "Cyborg" ends at x=315.18, "R" starts
+   at x=353.68 → split at 334.43 → (334.43-85.28)/822.77 = 0.3028). */
+.logotype-split{
+  --cyborg-frac:0.3028;
+  background:none;
+  -webkit-mask-image:none;mask-image:none;
+  display:inline-flex;align-items:stretch;
+  aspect-ratio:822.77/87.17;
+  vertical-align:top;line-height:0;
+}
+.logotype-en-mask{
+  display:inline-block;height:100%;
+  background:currentColor;
+  -webkit-mask-image:url("/assets/logo/crc-logotype-en.svg");
+          mask-image:url("/assets/logo/crc-logotype-en.svg");
+  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+}
+.logotype-en-mask--cyborg{
+  width:100%;
+  -webkit-mask-size:calc(100% / var(--cyborg-frac)) 100%;
+          mask-size:calc(100% / var(--cyborg-frac)) 100%;
+  -webkit-mask-position:left center;mask-position:left center;
+}
+.logotype-en-mask--rest{
+  width:calc((1 - var(--cyborg-frac)) * 100%);
+  -webkit-mask-size:calc(100% / (1 - var(--cyborg-frac))) 100%;
+          mask-size:calc(100% / (1 - var(--cyborg-frac))) 100%;
+  -webkit-mask-position:right center;mask-position:right center;
+}
+.glitch-word{
+  position:relative;
+  display:inline-block;
+  width:calc(var(--cyborg-frac) * 100%);
+  height:100%;
+  container-type:size;
+  cursor:pointer;
+}
+.glitch-word__alt{
+  position:absolute;inset:0;
+  display:none;
+  align-items:center;justify-content:flex-start;
+  font-family:"Press Start 2P",cursive;
+  font-size:52cqh;
+  line-height:1;
+  color:#fff;
+  padding:0 .15em;
+  -webkit-text-stroke:2.5px #B7D32D;
+  paint-order:stroke fill;
+  text-shadow:
+    -1px -1px 0 #000, 1px -1px 0 #000,-1px 1px 0 #000, 1px 1px 0 #000,
+     0   -1px 0 #000, 0    1px 0 #000,-1px 0   0 #000, 1px 0   0 #000;
+  z-index:0;
+}
+.glitch-word__alt::before{
+  content:"";
+  position:absolute;
+  top:33%;left:-2px;right:-2px;bottom:-2px;
+  background:#000;
+  transform:rotate(-2deg);
+  z-index:-1;
+}
+.glitch-word.glitch{animation:cgStaticFlicker .1s steps(2) 5}
+@keyframes cgStaticFlicker{0%{opacity:1}50%{opacity:.3}100%{opacity:1}}
+.glitch-word.glitch::after{
+  content:"";
+  position:absolute;inset:-4px -6px;z-index:2;opacity:1;pointer-events:none;
+  image-rendering:pixelated;-ms-interpolation-mode:nearest-neighbor;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 18'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='1' seed='1'%3E%3Canimate attributeName='seed' values='1;7;13;23;37' dur='0.25s' calcMode='discrete' repeatCount='indefinite'/%3E%3C/feTurbulence%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='discrete' tableValues='0 .33 .67 1'/%3E%3CfeFuncG type='discrete' tableValues='0 .33 .67 1'/%3E%3CfeFuncB type='discrete' tableValues='0 .33 .67 1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") center/cover;
+}
+.glitch-word.cyber .logotype-en-mask--cyborg{visibility:hidden}
+.glitch-word.cyber .glitch-word__alt{
+  display:flex;
+  animation:cgSprayIn .6s cubic-bezier(.22,1,.36,1) forwards;
+  filter:url(#spraypaint);
+}
+.glitch-word.cyber.settled .glitch-word__alt{animation:none;filter:none}
+@keyframes cgSprayIn{
+  0%  {letter-spacing:.15em;opacity:.4;transform:scale(1.08)}
+  40% {letter-spacing:.02em;opacity:.9}
+  100%{letter-spacing:-.02em;opacity:1;transform:scale(1)}
+}
+.glitch-word.fade-back .logotype-en-mask--cyborg{animation:cgFadeBack 2s ease forwards}
+@keyframes cgFadeBack{0%{opacity:.6;filter:blur(1px)}100%{opacity:1;filter:none}}
+@media (prefers-reduced-motion:reduce){
+  .glitch-word.glitch,
+  .glitch-word.cyber .glitch-word__alt,
+  .glitch-word.fade-back .logotype-en-mask--cyborg{animation:none !important}
+  .glitch-word.glitch::after{display:none}
+}
+
 /* net cube (inline <use href="#crc-cube">) */
 .crc-cube{display:block;overflow:visible;
   --cube-edge:var(--crc-purple);--cube-node:var(--crc-lime)}
