@@ -215,6 +215,63 @@ export function computePanelPlacement(
   };
 }
 
+export function shuffleMemberIds(ids, random = Math.random) {
+  const shuffled = [...ids];
+
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(random() * (index + 1));
+    [shuffled[index], shuffled[swapIndex]] = [
+      shuffled[swapIndex],
+      shuffled[index],
+    ];
+  }
+
+  return shuffled;
+}
+
+export function takeNextVisibleMember(bag, visibleIds) {
+  const remaining = [...bag];
+  const index = remaining.findIndex((id) => visibleIds.has(id));
+  if (index === -1) return { memberId: null, remaining };
+
+  const [memberId] = remaining.splice(index, 1);
+  return { memberId, remaining };
+}
+
+export function getTeaserDelay(random = Math.random) {
+  return Math.min(5000, Math.floor(2500 + random() * 2501));
+}
+
+export function createPlaybackLease(video) {
+  let ownsPause = false;
+
+  return {
+    pauseForInteraction() {
+      if (ownsPause) return true;
+      ownsPause = !video.paused && !video.ended;
+      if (ownsPause) video.pause();
+      return ownsPause;
+    },
+
+    async resumeIfOwned(allowResume = true) {
+      if (!ownsPause) return false;
+      ownsPause = false;
+      if (!allowResume) return false;
+
+      try {
+        await video.play();
+        return true;
+      } catch {
+        return false;
+      }
+    },
+
+    ownsPause() {
+      return ownsPause;
+    },
+  };
+}
+
 export function initSurveillanceHUD(){
   const video = document.querySelector('.team__video');
   const targets = document.querySelectorAll('.face-target');

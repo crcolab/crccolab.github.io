@@ -6,6 +6,10 @@ import {
   MEMBER_TRACKS,
 } from '../animations/team-member-tracks.js';
 import {
+  shuffleMemberIds,
+  takeNextVisibleMember,
+  getTeaserDelay,
+  createPlaybackLease,
   expandTouchRect,
   pickNearestTarget,
   computePanelPlacement,
@@ -193,4 +197,102 @@ test('panel placement prefers right, then left, and clamps with an 8px inset', (
     { width: 100, height: 100 },
   );
   assert.deepEqual(clamped, { left: 8, top: 8, side: 'right' });
+});
+
+test('shuffle bags do not mutate input and visible selection consumes only a shown ID', () => {
+  const source = ['lulu', 'meichun', 'cheng'];
+  assert.deepEqual(shuffleMemberIds(source, () => 0), ['meichun', 'cheng', 'lulu']);
+  assert.deepEqual(source, ['lulu', 'meichun', 'cheng']);
+
+  const selected = takeNextVisibleMember(
+    ['lulu', 'meichun', 'cheng'],
+    new Set(['cheng']),
+  );
+  assert.deepEqual(selected, {
+    memberId: 'cheng',
+    remaining: ['lulu', 'meichun'],
+  });
+
+  assert.deepEqual(
+    takeNextVisibleMember(['lulu', 'meichun'], new Set()),
+    { memberId: null, remaining: ['lulu', 'meichun'] },
+  );
+});
+
+test('teaser delay is an inclusive integer from 2500 through 5000ms', () => {
+  assert.equal(getTeaserDelay(() => 0), 2500);
+  assert.equal(getTeaserDelay(() => 0.5), 3750);
+  assert.equal(getTeaserDelay(() => 0.999999), 5000);
+});
+
+test('playback lease resumes only a pause it owns and catches play rejection', async () => {
+  const playingVideo = {
+    paused: false,
+    ended: false,
+    pauseCalls: 0,
+    playCalls: 0,
+    pause() {
+      this.pauseCalls += 1;
+      this.paused = true;
+    },
+    async play() {
+      this.playCalls += 1;
+      this.paused = false;
+    },
+  };
+  const lease = createPlaybackLease(playingVideo);
+
+  assert.equal(lease.pauseForInteraction(), true);
+  assert.equal(lease.pauseForInteraction(), true);
+  assert.equal(lease.ownsPause(), true);
+  assert.equal(playingVideo.pauseCalls, 1);
+  assert.equal(await lease.resumeIfOwned(), true);
+  assert.equal(playingVideo.playCalls, 1);
+  assert.equal(lease.ownsPause(), false);
+
+  const pausedVideo = {
+    paused: true,
+    ended: false,
+    pause() {
+      throw new Error('must not pause');
+    },
+    async play() {
+      throw new Error('must not play');
+    },
+  };
+  const pausedLease = createPlaybackLease(pausedVideo);
+  assert.equal(pausedLease.pauseForInteraction(), false);
+  assert.equal(await pausedLease.resumeIfOwned(), false);
+
+  const blockedVideo = {
+    paused: false,
+    ended: false,
+    pause() {
+      this.paused = true;
+    },
+    async play() {
+      throw new Error('autoplay blocked');
+    },
+  };
+  const blockedLease = createPlaybackLease(blockedVideo);
+  blockedLease.pauseForInteraction();
+  assert.equal(await blockedLease.resumeIfOwned(), false);
+  assert.equal(blockedLease.ownsPause(), false);
+});
+
+test('playback lease can release ownership without resuming while hidden', async () => {
+  const video = {
+    paused: false,
+    ended: false,
+    pause() {
+      this.paused = true;
+    },
+    async play() {
+      throw new Error('must not play');
+    },
+  };
+  const lease = createPlaybackLease(video);
+  lease.pauseForInteraction();
+  assert.equal(await lease.resumeIfOwned(false), false);
+  assert.equal(lease.ownsPause(), false);
 });
