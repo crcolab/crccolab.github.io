@@ -391,7 +391,6 @@ img,svg,video{max-width:100%}
   width:100%;
   height:100%;
   container-type:size;
-  cursor:pointer;
 }
 .glitch-word__alt{
   display:none;
