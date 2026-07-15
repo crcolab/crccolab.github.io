@@ -315,6 +315,10 @@ export function initSurveillanceHUD() {
     [...overlay.querySelectorAll('.team-member-target')]
       .map((target) => [target.dataset.memberId, target]),
   );
+  const externalControls = new Map(
+    [...document.querySelectorAll('.team-card__names[data-member-id]')]
+      .map((control) => [control.dataset.memberId, control]),
+  );
   const roster = new Map();
 
   for (const id of MEMBER_IDS) {
@@ -335,6 +339,12 @@ export function initSurveillanceHUD() {
     }
   }
 
+  for (const [id, control] of externalControls) {
+    if (roster.has(id)) continue;
+    control.disabled = true;
+    externalControls.delete(id);
+  }
+
   const validIds = MEMBER_IDS.filter((id) => roster.has(id));
   if (!validIds.length) return;
 
@@ -348,6 +358,9 @@ export function initSurveillanceHUD() {
   let pointerId = null;
   let focusedId = null;
   let touchId = null;
+  let externalHoverId = null;
+  let externalPinnedId = null;
+  let pendingExternalId = null;
   let started = false;
   const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
   let teaserBag = [];
@@ -379,6 +392,23 @@ export function initSurveillanceHUD() {
     panelFields.nameEn.textContent = rosterEntry.nameEn.textContent.trim();
     panelFields.roleZh.textContent = rosterEntry.roleZh.textContent.trim();
     panelFields.roleEn.textContent = rosterEntry.roleEn.textContent.trim();
+  }
+
+  function getDesiredExternalId() {
+    return externalPinnedId || externalHoverId;
+  }
+
+  function syncExternalPressedState() {
+    for (const [id, control] of externalControls) {
+      control.setAttribute('aria-pressed', String(id === externalPinnedId));
+    }
+  }
+
+  function clearExternalSelection(id) {
+    if (externalHoverId === id) externalHoverId = null;
+    if (externalPinnedId === id) externalPinnedId = null;
+    if (pendingExternalId === id) pendingExternalId = null;
+    syncExternalPressedState();
   }
 
   function positionActivePanel() {
@@ -503,7 +533,8 @@ export function initSurveillanceHUD() {
   }
 
   function dismissMember() {
-    if (!clearActiveMember()) return;
+    const clearedActiveMember = clearActiveMember();
+    if (!clearedActiveMember && !playback.ownsPause()) return;
     void playback.resumeIfOwned(!document.hidden);
     scheduleTeaser();
   }
@@ -512,6 +543,10 @@ export function initSurveillanceHUD() {
     pointerId = null;
     focusedId = null;
     touchId = null;
+    externalHoverId = null;
+    externalPinnedId = null;
+    pendingExternalId = null;
+    syncExternalPressedState();
 
     const focusedTarget = document.activeElement;
     if (
@@ -523,15 +558,60 @@ export function initSurveillanceHUD() {
   }
 
   function reconcileActiveMember() {
-    const nextId = [touchId, focusedId, pointerId]
+    const desiredExternalId = getDesiredExternalId();
+    const nextId = [touchId, focusedId, pointerId, desiredExternalId]
       .find((id) => id && layouts.has(id)) || null;
+
+    if (!nextId && desiredExternalId && pendingExternalId === desiredExternalId) {
+      clearActiveMember();
+      return;
+    }
 
     if (!nextId) {
       dismissMember();
     } else if (nextId === activeId) {
+      if (pendingExternalId === nextId) pendingExternalId = null;
       positionActivePanel();
     } else {
+      if (pendingExternalId === nextId) pendingExternalId = null;
       activateMember(nextId);
+    }
+  }
+
+  function requestExternalActivation(id) {
+    if (!started || !externalControls.has(id)) return;
+
+    if (layouts.has(id)) {
+      pendingExternalId = null;
+      reconcileActiveMember();
+      return;
+    }
+
+    const firstTrackedTime = getFirstTrackedTime(MEMBER_TRACKS[id]);
+    if (firstTrackedTime === null) {
+      clearExternalSelection(id);
+      reconcileActiveMember();
+      return;
+    }
+
+    pendingExternalId = id;
+    suspendTeasers();
+    playback.pauseForInteraction();
+    clearActiveMember();
+
+    try {
+      if (Math.abs(video.currentTime - firstTrackedTime) <= 0.000001) {
+        renderAt(firstTrackedTime);
+        if (pendingExternalId === id) {
+          clearExternalSelection(id);
+          dismissMember();
+        }
+      } else {
+        video.currentTime = firstTrackedTime;
+      }
+    } catch {
+      clearExternalSelection(id);
+      dismissMember();
     }
   }
 
@@ -634,7 +714,13 @@ export function initSurveillanceHUD() {
   }
 
   function handleSeeked() {
+    const requestedId = pendingExternalId;
     renderAt();
+
+    if (requestedId && pendingExternalId === requestedId) {
+      clearExternalSelection(requestedId);
+      reconcileActiveMember();
+    }
   }
 
   function handleVisibilityChange() {
@@ -655,14 +741,35 @@ export function initSurveillanceHUD() {
   }
 
   function handleDocumentKeydown(event) {
-    if (event.key !== 'Escape' || !activeId) return;
+    if (event.key !== 'Escape') return;
+    if (
+      !activeId
+      && !externalHoverId
+      && !externalPinnedId
+      && !pendingExternalId
+      && !playback.ownsPause()
+    ) return;
     event.preventDefault();
     clearInteractionState();
     dismissMember();
   }
 
-  function handleTouchPointerDown(event) {
-    if (event.pointerType !== 'touch') return;
+  function handleDocumentPointerDown(event) {
+    const insideExternalControl = [...externalControls.values()]
+      .some((control) => control.contains(event.target));
+    if (insideExternalControl) return;
+
+    if (event.pointerType !== 'touch') {
+      const insideHudTarget = [...targets.values()]
+        .some((target) => target.contains(event.target));
+      if (externalPinnedId && !insideHudTarget) {
+        externalPinnedId = null;
+        pendingExternalId = null;
+        syncExternalPressedState();
+        reconcileActiveMember();
+      }
+      return;
+    }
 
     const panelBounds = panel.getBoundingClientRect();
     const insidePanel = !panel.hidden && pointInRect(
@@ -706,7 +813,7 @@ export function initSurveillanceHUD() {
         touchId = selectedId;
         reconcileActiveMember();
       }
-    } else if (activeId) {
+    } else if (activeId || playback.ownsPause()) {
       clearInteractionState();
       dismissMember();
     }
@@ -741,6 +848,47 @@ export function initSurveillanceHUD() {
     });
   }
 
+  for (const [id, control] of externalControls) {
+    control.addEventListener('pointerenter', (event) => {
+      if (event.pointerType === 'touch') return;
+      externalHoverId = id;
+      requestExternalActivation(getDesiredExternalId());
+    });
+
+    control.addEventListener('pointerleave', (event) => {
+      if (event.pointerType === 'touch' || externalHoverId !== id) return;
+      externalHoverId = null;
+      if (pendingExternalId === id && externalPinnedId !== id) {
+        pendingExternalId = null;
+      }
+      queueMicrotask(() => {
+        if (externalHoverId !== null) return;
+        const desiredId = getDesiredExternalId();
+        if (desiredId && !layouts.has(desiredId)) {
+          requestExternalActivation(desiredId);
+        } else {
+          reconcileActiveMember();
+        }
+      });
+    });
+
+    control.addEventListener('click', () => {
+      if (externalPinnedId === id) {
+        externalPinnedId = null;
+        externalHoverId = null;
+        if (pendingExternalId === id) pendingExternalId = null;
+        syncExternalPressedState();
+        reconcileActiveMember();
+        return;
+      }
+
+      externalPinnedId = id;
+      pendingExternalId = null;
+      syncExternalPressedState();
+      requestExternalActivation(id);
+    });
+  }
+
   function start() {
     if (started || !video.videoWidth || !video.videoHeight) return;
     started = true;
@@ -756,7 +904,7 @@ export function initSurveillanceHUD() {
   const resizeObserver = new ResizeObserver(invalidateGeometry);
   resizeObserver.observe(hud);
   document.addEventListener('keydown', handleDocumentKeydown);
-  document.addEventListener('pointerdown', handleTouchPointerDown, true);
+  document.addEventListener('pointerdown', handleDocumentPointerDown, true);
   document.addEventListener('visibilitychange', handleVisibilityChange);
   window.addEventListener('orientationchange', invalidateGeometry);
   motionQuery.addEventListener('change', handleMotionPreferenceChange);
