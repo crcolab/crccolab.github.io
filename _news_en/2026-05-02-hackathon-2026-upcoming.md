@@ -8,7 +8,7 @@ locale: en-US
 
 The subsea cables that connect the internet have recently become a major focus. Surrounded by sea, Taiwan is especially sensitive and vulnerable to changes affecting subsea cables, and even more so amid unstable geopolitics. When the internet truly disappears, can we still get a message out?
 
-CRC and OpenFun Inc. are co-organizing this two-day event, inviting practitioners from Ukraine (dComms), Myanmar (ASORCOM), and Taiwan to share how they have used alternatives such as Meshtastic, Reticulum, federated protocols, and local servers to build off-grid communications resilience in war zones, jungles, and remote offshore communities.
+CRC and OpenFun Inc. are co-organizing this two-day event, inviting practitioners from Ukraine (dComms), Myanmar (ASORCOM), and Taiwan to share how they have used alternatives such as Meshtastic, Reticulum, federated protocols, and local servers to build off-grid communications resilience in war zones, jungles, outlying islands, and remote rural communities.
 
 Dates: Saturday, May 23, warm-up action · Sunday, May 24, one-day hackathon
 Venue: Humanities and Social Sciences Building, Academia Sinica (Nangang, Taipei)

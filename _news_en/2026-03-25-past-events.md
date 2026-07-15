@@ -8,7 +8,7 @@ locale: en-US
 
 What happens when subsea cables go dark? Are subsea cables a false issue?
 
-The subsea cables that connect the internet have recently become a major focus. Surrounded by sea, Taiwan is especially sensitive and vulnerable to changes affecting subsea cables. They are even more fragile amid unstable geopolitics.
+The subsea cables that connect the internet have recently become a major focus. Surrounded by sea, Taiwan is especially sensitive and vulnerable to changes affecting subsea cables, and this vulnerability is even more pronounced amid unstable geopolitics.
 
 The first { Digital Resilience Forum } examined every facet of the subsea cable issue. Alongside presentations on two technical projects, the “Taiwan Subsea Cable Dynamic Map” and “Digital Service Resilience Testing,” which helped everyone understand what exactly we should worry about when it comes to subsea cables, the forum examined their impact from the perspectives of policy, social security, and civic participation.
 
