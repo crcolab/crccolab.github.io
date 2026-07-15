@@ -1196,6 +1196,40 @@ test('external click pins, switches, and toggles without releasing playback', ()
   }
 });
 
+test('external hover and click supersede sticky direct touch without playback churn', () => {
+  const harness = installControllerHarness();
+  const luluPoint = targetCenter(harness.targets.get('lulu'));
+  const meichun = harness.externalControls.get('meichun');
+
+  try {
+    harness.document.dispatch('pointerdown', {
+      pointerType: 'touch',
+      clientX: luluPoint.x,
+      clientY: luluPoint.y,
+    });
+    assert.equal(harness.activeId(), 'lulu');
+    assert.equal(harness.video.pauseCalls, 1);
+
+    meichun.dispatch('pointerenter', { pointerType: 'mouse' });
+    assert.equal(harness.activeId(), 'meichun');
+
+    harness.document.dispatch('pointerdown', {
+      pointerType: 'touch',
+      clientX: luluPoint.x,
+      clientY: luluPoint.y,
+    });
+    assert.equal(harness.activeId(), 'lulu');
+
+    meichun.dispatch('click');
+    assert.equal(harness.activeId(), 'meichun');
+    assert.equal(meichun.attributes.get('aria-pressed'), 'true');
+    assert.equal(harness.video.pauseCalls, 1);
+    assert.equal(harness.video.playCalls, 0);
+  } finally {
+    harness.restore();
+  }
+});
+
 test('outside pointer and Escape clear an external pin', () => {
   const harness = installControllerHarness();
   const control = harness.externalControls.get('lulu');

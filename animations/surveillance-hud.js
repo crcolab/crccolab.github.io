@@ -882,6 +882,7 @@ export function initSurveillanceHUD() {
   for (const [id, control] of externalControls) {
     control.addEventListener('pointerenter', (event) => {
       if (event.pointerType === 'touch') return;
+      touchId = null;
       externalHoverId = id;
       requestExternalActivation(getDesiredExternalId());
     });
@@ -904,6 +905,7 @@ export function initSurveillanceHUD() {
     });
 
     control.addEventListener('click', () => {
+      touchId = null;
       if (externalPinnedId === id) {
         externalPinnedId = null;
         externalHoverId = null;
