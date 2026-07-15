@@ -1,0 +1,20 @@
+---
+permalink: /api/latest.json
+---
+{% assign sections = "news,events,media" | split: "," %}
+{
+{% for name in sections %}
+  "{{ name }}": [
+    {% assign docs = site[name] | sort: "date" | reverse %}
+    {% for item in docs limit: 3 %}
+    {
+      "title": {{ item.title | jsonify }},
+      "date": {{ item.date | date: "%Y-%b-%d" | upcase | jsonify }},
+      "category": {{ item.category | jsonify }},
+      "summary": {{ item.summary | strip_newlines | truncate: 160 | jsonify }},
+      "url": {{ item.link | default: item.url | jsonify }}
+    }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  ]{% unless forloop.last %},{% endunless %}
+{% endfor %}
+}

@@ -44,6 +44,10 @@
   <link rel="alternate" hreflang="zh-Hant" href="https://crcolab.art/" />
   <link rel="alternate" hreflang="en" href="https://crcolab.art/" />
   <link rel="alternate" hreflang="x-default" href="https://crcolab.art/" />
+  <link rel="alternate" type="application/atom+xml" title="CRC — All updates" href="/feed.xml">
+  <link rel="alternate" type="application/atom+xml" title="CRC — News" href="/news/feed.xml">
+  <link rel="alternate" type="application/atom+xml" title="CRC — Events" href="/events/feed.xml">
+  <link rel="alternate" type="application/atom+xml" title="CRC — Media" href="/media/feed.xml">
   <meta property="og:site_name" content="Cyborg Resilience Co-lab" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://crcolab.art/" />
@@ -118,8 +122,9 @@
     <nav class="site-nav">
       <a href="#about" class="site-nav__link"><span class="zh">關於</span><span class="en" lang="en">About</span></a>
       <a href="#team" class="site-nav__link"><span class="zh">團隊</span><span class="en" lang="en">Team</span></a>
-      <a href="#news" class="site-nav__link"><span class="zh">訊息</span><span class="en" lang="en">News</span></a>
-      <a href="/events/hackathon-2026/" class="site-nav__link"><span class="zh">活動</span><span class="en" lang="en">Events</span></a>
+      <a href="/news/" class="site-nav__link"><span class="zh">訊息</span><span class="en" lang="en">News</span></a>
+      <a href="/events/" class="site-nav__link"><span class="zh">活動</span><span class="en" lang="en">Events</span></a>
+      <a href="/media/" class="site-nav__link"><span class="zh">媒體</span><span class="en" lang="en">Media</span></a>
     </nav>
     <div class="site-header__actions">
       <button class="theme-toggle" id="theme-toggle" aria-label="Switch light / purple theme" title="Switch theme">◐</button>
@@ -379,8 +384,9 @@
           <h4>導覽 · Navigate</h4>
           <a href="#about">關於 About</a>
           <a href="#team">團隊 Team</a>
-          <a href="#news">訊息 News</a>
-          <a href="/events/hackathon-2026/">活動 Events</a>
+          <a href="/news/">訊息 News</a>
+          <a href="/events/">活動 Events</a>
+          <a href="/media/">媒體 Media</a>
         </div>
         <div class="footer__col">
           <h4>連結 · Connect</h4>
@@ -395,17 +401,6 @@
       <span>Made with ❤️ in Taiwan</span>
     </div>
   </footer>
-
-  <!-- News detail modal -->
-  <div id="news-modal" class="modal-overlay" hidden>
-    <div class="modal">
-      <button class="modal__close" aria-label="Close">&times;</button>
-      <img class="modal__img" src="" alt="" hidden>
-      <div class="modal__meta"></div>
-      <h3 class="modal__title"></h3>
-      <p class="modal__body"></p>
-    </div>
-  </div>
 
   <script type="module" src="script.js"></script>
   <script src="/assets/consent.js" defer></script>
