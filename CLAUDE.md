@@ -6,7 +6,7 @@ Guidance for Claude Code when working in this repo.
 
 Static site for **Cyborg Resilience Co-lab (CRC)** at `crcolab.art`. Plain HTML/CSS/JS
 plus Jekyll (built by GitHub Pages on push from `main`) for the content sections
-(`/news/`, `/events/`, `/media/`), their item pages, Atom feeds, and sitemap.
+(`/news/`, `/events/`, `/records/`), their item pages, Atom feeds, and sitemap.
 
 ## Layout
 
@@ -14,12 +14,12 @@ plus Jekyll (built by GitHub Pages on push from `main`) for the content sections
 - `animations/` — vanilla JS modules: `cyborg-glitch.js`, `surveillance-hud.js`
 - `events/<slug>/` — self-contained event sub-pages with their own `index.html` + `styles.css`
 - `assets/` — shared images / SVGs / video
-- `_news/`, `_events/`, `_media/` — content collections, one Markdown file per item
+- `_news/`, `_events/`, `_records/` — content collections, one Markdown file per item
   (front-matter: `title`, `date`, `category`, `summary`, optional `image`,
   `source`/`external_url` for media, `start_date`/`end_date`/`location_name` for
   events, `link` to point listings at another URL)
 - `_layouts/`, `_includes/` — Jekyll templates (item pages, section indexes, SEO head, Atom entries)
-- `news/`, `events/`, `media/` — section index pages + per-section `feed.xml`
+- `news/`, `events/`, `records/` — section index pages + per-section `feed.xml`
 - `api/latest.json` — Liquid-generated JSON the homepage fetches for its latest-3 blocks
 - `sections.css` — shared styles for section pages (loads after `styles.css`)
 
@@ -47,7 +47,7 @@ Bilingual pattern: **zh-Hant primary**, English in mono as secondary. Headings p
 - **No local build tooling beyond Jekyll-on-Pages.** GitHub Pages runs Jekyll on push;
   don't introduce bundlers, npm, or frameworks. `Gemfile` (github-pages gem) exists
   only for local preview; `_site/` and `Gemfile.lock` stay gitignored.
-- **Adding a content item:** drop a Markdown file in `_news/`/`_events/`/`_media/`
+- **Adding a content item:** drop a Markdown file in `_news/`/`_events/`/`_records/`
   named `YYYY-MM-DD-slug.md` — indexes, feeds, sitemap, and homepage JSON update
   automatically on build. No registration file to edit.
 - **Asset paths:** use root-absolute (`/assets/cube.svg`, `/favicon.png`) so they resolve from any sub-page.

@@ -4,7 +4,7 @@ import { initCyborgGlitch } from './animations/cyborg-glitch.js';
 const HOME_SECTIONS = [
   { key: 'news',   zh: '最新訊息', en: 'Latest News',      href: '/news/'   },
   { key: 'events', zh: '活動',     en: 'Events',           href: '/events/' },
-  { key: 'media',  zh: '記錄/報導', en: 'As Seen on Media', href: '/media/'  },
+  { key: 'records', zh: '記錄/報導', en: 'As Seen on Media', href: '/records/'  },
 ];
 
 async function loadNews(){

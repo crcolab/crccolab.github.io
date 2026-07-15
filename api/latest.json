@@ -1,7 +1,7 @@
 ---
 permalink: /api/latest.json
 ---
-{% assign sections = "news,events,media" | split: "," %}
+{% assign sections = "news,events,records" | split: "," %}
 {
 {% for name in sections %}
   "{{ name }}": [

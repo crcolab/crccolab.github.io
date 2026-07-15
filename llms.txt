@@ -12,14 +12,14 @@ All content pages are static HTML — no JavaScript required to read them.
 
 - [Latest News 最新訊息](https://crcolab.art/news/): announcements and updates
 - [Events 活動](https://crcolab.art/events/): forums, hackathons, workshops
-- [As Seen on Media 記錄/報導](https://crcolab.art/media/): event records, press coverage, panels, talks
+- [As Seen on Media 記錄/報導](https://crcolab.art/records/): event records, press coverage, panels, talks
 
 ## Feeds (Atom)
 
 - [All updates](https://crcolab.art/feed.xml)
 - [News](https://crcolab.art/news/feed.xml)
 - [Events](https://crcolab.art/events/feed.xml)
-- [Media](https://crcolab.art/media/feed.xml)
+- [Media](https://crcolab.art/records/feed.xml)
 
 ## Other
 

@@ -17,17 +17,17 @@ collections:
   events:
     output: true
     permalink: /events/:name/
-  media:
+  records:
     output: true
-    permalink: /media/:name/
+    permalink: /records/:name/
 
 defaults:
   - scope: { type: news }
     values: { layout: item, section: news }
   - scope: { type: events }
     values: { layout: item, section: events }
-  - scope: { type: media }
-    values: { layout: item, section: media }
+  - scope: { type: records }
+    values: { layout: item, section: records }
 
 exclude:
   - README.md
