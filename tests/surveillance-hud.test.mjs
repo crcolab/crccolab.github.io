@@ -155,6 +155,35 @@ test('touch rectangles expand to 44px without moving the center', () => {
   );
 });
 
+test('frame-aware touch rectangles keep 44px in frame and preserve tracked centers', () => {
+  const frame = { width: 100, height: 100 };
+  const edgeRects = [
+    { x: 0, y: 45, width: 10, height: 10 },
+    { x: 90, y: 45, width: 10, height: 10 },
+    { x: 45, y: 0, width: 10, height: 10 },
+    { x: 45, y: 90, width: 10, height: 10 },
+  ];
+
+  for (const rect of edgeRects) {
+    const expanded = expandTouchRect(rect, 44, frame);
+    const inFrameWidth = Math.max(
+      0,
+      Math.min(expanded.x + expanded.width, frame.width)
+        - Math.max(expanded.x, 0),
+    );
+    const inFrameHeight = Math.max(
+      0,
+      Math.min(expanded.y + expanded.height, frame.height)
+        - Math.max(expanded.y, 0),
+    );
+
+    assert.equal(expanded.x + expanded.width / 2, rect.x + rect.width / 2);
+    assert.equal(expanded.y + expanded.height / 2, rect.y + rect.height / 2);
+    assert.ok(inFrameWidth >= 44);
+    assert.ok(inFrameHeight >= 44);
+  }
+});
+
 test('overlapping touch targets choose the nearest visual center with stable ties', () => {
   const candidates = [
     {
@@ -347,6 +376,15 @@ test('team target CSS is invisible by default and exposes teaser, active, focus,
   assert.match(css, /\.team-member-panel\{[^}]*pointer-events:none/s);
   assert.match(css, /prefers-reduced-motion:reduce/);
   assert.doesNotMatch(css, /\.face-target/);
+});
+
+test('reduced-motion direct brackets remain visibly drawn without animation', async () => {
+  const css = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
+
+  assert.match(
+    css,
+    /@media \(prefers-reduced-motion:reduce\)\{[\s\S]*?\.team-member-target\.is-active \.team-member-target__bracket path,\s*\.team-member-target:focus-visible \.team-member-target__bracket path\{stroke-dashoffset:0\}/,
+  );
 });
 
 test('HUD initializer uses media-frame sync, resize invalidation, and no legacy fallback', async () => {
@@ -599,6 +637,9 @@ const installControllerHarness = ({
   paused = false,
   reducedMotion = false,
   randomValues = [0],
+  frameWidth = 1176,
+  frameHeight = 504,
+  currentTime = 3,
 } = {}) => {
   const document = new FakeDocument();
   const window = new FakeEventTarget();
@@ -629,8 +670,8 @@ const installControllerHarness = ({
     return motionQuery;
   };
 
-  hud.clientWidth = 1176;
-  hud.clientHeight = 504;
+  hud.clientWidth = frameWidth;
+  hud.clientHeight = frameHeight;
   overlay.hidden = true;
   overlay.parentNode = hud;
   panel.hidden = true;
@@ -638,6 +679,7 @@ const installControllerHarness = ({
   panel.offsetHeight = 110;
   panel.parentNode = overlay;
   video.parentNode = hud;
+  video.currentTime = currentTime;
   video.closestResults.set('.crc-hud', hud);
 
   for (const field of ['name-zh', 'name-en', 'role-zh', 'role-en']) {
@@ -762,6 +804,13 @@ const installControllerHarness = ({
   };
 };
 
+const targetCenter = (target) => ({
+  x: Number.parseFloat(target.style.left)
+    + Number.parseFloat(target.style.width) / 2,
+  y: Number.parseFloat(target.style.top)
+    + Number.parseFloat(target.style.height) / 2,
+});
+
 test('teasers use fresh endpoint delays and stay visible for 700ms without opening or pausing', () => {
   const harness = installControllerHarness({
     randomValues: [0, 0, 0, 0, 0, 0.999999],
@@ -819,7 +868,7 @@ test('teaser bag skips target-free frames without consuming a member', () => {
   }
 });
 
-test('reduced motion blocks teasers and preference changes cancel or restart them', () => {
+test('reduced motion blocks teasers and preference changes cancel or restart them', async () => {
   const harness = installControllerHarness({ reducedMotion: true });
 
   try {
@@ -843,6 +892,7 @@ test('reduced motion blocks teasers and preference changes cancel or restart the
     harness.targets.get('lulu').dispatch('pointerleave', {
       pointerType: 'mouse',
     });
+    await Promise.resolve();
     harness.setReducedMotion(false);
     assert.deepEqual(harness.timerDelays(), [2500]);
   } finally {
@@ -870,7 +920,7 @@ test('pause cancels a visible teaser and playing starts a fresh wait', () => {
   }
 });
 
-test('direct activation cancels teasers and dismissal starts a fresh wait', () => {
+test('direct activation cancels teasers and dismissal starts a fresh wait', async () => {
   const harness = installControllerHarness();
   const target = harness.targets.get('lulu');
 
@@ -886,6 +936,7 @@ test('direct activation cancels teasers and dismissal starts a fresh wait', () =
     assert.equal(harness.video.paused, true);
 
     target.dispatch('pointerleave', { pointerType: 'mouse' });
+    await Promise.resolve();
     assert.equal(harness.activeId(), null);
     assert.equal(harness.panel.hidden, true);
     assert.equal(harness.video.paused, false);
@@ -938,6 +989,77 @@ test('hidden interaction clears UI then resumes its owned pause when visible', (
   }
 });
 
+test('hidden owned pause re-pauses unexpected playback and synchronizes after restore', () => {
+  const harness = installControllerHarness();
+
+  try {
+    harness.targets.get('lulu').dispatch('pointerenter', {
+      pointerType: 'mouse',
+    });
+    harness.document.hidden = true;
+    harness.document.dispatch('visibilitychange');
+
+    harness.video.paused = false;
+    harness.video.dispatch('playing');
+    assert.equal(harness.video.paused, true);
+    assert.equal(harness.video.pauseCalls, 2);
+    assert.deepEqual(harness.timerDelays(), []);
+
+    harness.document.hidden = false;
+    harness.document.dispatch('visibilitychange');
+    assert.equal(harness.video.playCalls, 1);
+    assert.equal(harness.video.paused, false);
+
+    harness.video.dispatch('playing');
+    assert.deepEqual(harness.timerDelays(), [2500]);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('same-target touch blurs the focused team target while dismissing', () => {
+  const harness = installControllerHarness();
+  const target = harness.targets.get('lulu');
+
+  try {
+    target.focus();
+    const point = targetCenter(target);
+    const event = harness.document.dispatch('pointerdown', {
+      pointerType: 'touch',
+      clientX: point.x,
+      clientY: point.y,
+    });
+
+    assert.equal(event.defaultPrevented, true);
+    assert.equal(harness.activeId(), null);
+    assert.equal(harness.panel.hidden, true);
+    assert.equal(harness.document.activeElement, null);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('hiding blurs the focused team target before restoration', () => {
+  const harness = installControllerHarness();
+  const target = harness.targets.get('lulu');
+
+  try {
+    target.focus();
+    harness.document.hidden = true;
+    harness.document.dispatch('visibilitychange');
+
+    assert.equal(harness.document.activeElement, null);
+    assert.equal(harness.activeId(), null);
+    assert.equal(harness.panel.hidden, true);
+
+    harness.document.hidden = false;
+    harness.document.dispatch('visibilitychange');
+    assert.equal(harness.activeId(), null);
+  } finally {
+    harness.restore();
+  }
+});
+
 test('visible eligibility invalidation resumes an interaction-owned pause', () => {
   const harness = installControllerHarness();
 
@@ -977,6 +1099,7 @@ test('same target modalities keep the panel open until pointer and focus both le
     assert.equal(harness.video.playCalls, 0);
 
     target.dispatch('pointerleave', { pointerType: 'mouse' });
+    await Promise.resolve();
     assert.equal(harness.panel.hidden, true);
     assert.equal(harness.video.playCalls, 1);
   } finally {
@@ -1004,8 +1127,29 @@ test('different target modalities prefer focus then return to the hovered target
     assert.equal(harness.video.playCalls, 0);
 
     hovered.dispatch('pointerleave', { pointerType: 'mouse' });
+    await Promise.resolve();
     assert.equal(harness.panel.hidden, true);
     assert.equal(harness.video.playCalls, 1);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('overlapping pointer transition switches directly without releasing playback', async () => {
+  const harness = installControllerHarness();
+  const first = harness.targets.get('lulu');
+  const second = harness.targets.get('meichun');
+
+  try {
+    first.dispatch('pointerenter', { pointerType: 'mouse' });
+    first.dispatch('pointerleave', { pointerType: 'mouse' });
+    second.dispatch('pointerenter', { pointerType: 'mouse' });
+    await Promise.resolve();
+
+    assert.equal(harness.activeId(), 'meichun');
+    assert.equal(harness.panel.hidden, false);
+    assert.equal(harness.video.playCalls, 0);
+    assert.equal(harness.video.pauseCalls, 1);
   } finally {
     harness.restore();
   }
@@ -1026,6 +1170,7 @@ test('global Escape dismisses an active panel while focus is outside the overlay
     assert.equal(harness.activeId(), null);
     assert.equal(harness.panel.hidden, true);
     assert.equal(harness.video.playCalls, 1);
+    assert.equal(harness.document.activeElement, harness.outside);
   } finally {
     harness.restore();
   }
@@ -1052,7 +1197,66 @@ test('outside touch dismisses an active panel regardless of opening modality', (
   }
 });
 
-test('already-paused video is not resumed by interaction dismissal', () => {
+test('touching the visible panel dismisses before target hit-testing', () => {
+  const harness = installControllerHarness();
+  const coveredTarget = harness.targets.get('meichun');
+
+  try {
+    harness.targets.get('lulu').dispatch('pointerenter', {
+      pointerType: 'mouse',
+    });
+    const point = targetCenter(coveredTarget);
+    harness.panel.getBoundingClientRect = () => ({
+      left: point.x - 10,
+      top: point.y - 10,
+      width: 20,
+      height: 20,
+      right: point.x + 10,
+      bottom: point.y + 10,
+    });
+
+    const event = harness.document.dispatch('pointerdown', {
+      pointerType: 'touch',
+      clientX: point.x,
+      clientY: point.y,
+    });
+
+    assert.equal(event.defaultPrevented, true);
+    assert.equal(harness.activeId(), null);
+    assert.equal(harness.panel.hidden, true);
+    assert.equal(harness.video.playCalls, 1);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('frame-aware touch acquisition reaches an edge-cropped mobile target', () => {
+  const frameHeight = 219.375;
+  const harness = installControllerHarness({
+    frameWidth: 390,
+    frameHeight,
+    currentTime: 6,
+  });
+  const target = harness.targets.get('tzu-tung');
+
+  try {
+    assert.equal(target.disabled, false);
+    const point = targetCenter(target);
+    const event = harness.document.dispatch('pointerdown', {
+      pointerType: 'touch',
+      clientX: point.x,
+      clientY: frameHeight - 43.9,
+    });
+
+    assert.equal(event.defaultPrevented, true);
+    assert.equal(harness.activeId(), 'tzu-tung');
+    assert.equal(harness.panel.hidden, false);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('already-paused video is not resumed by interaction dismissal', async () => {
   const harness = installControllerHarness({ paused: true });
   const target = harness.targets.get('lulu');
 
@@ -1062,6 +1266,7 @@ test('already-paused video is not resumed by interaction dismissal', () => {
     assert.equal(harness.video.pauseCalls, 0);
 
     target.dispatch('pointerleave', { pointerType: 'mouse' });
+    await Promise.resolve();
     assert.equal(harness.panel.hidden, true);
     assert.equal(harness.video.playCalls, 0);
     assert.equal(harness.video.paused, true);
@@ -1070,7 +1275,7 @@ test('already-paused video is not resumed by interaction dismissal', () => {
   }
 });
 
-test('unexpected playback is re-paused under an existing owned lease', () => {
+test('unexpected playback is re-paused under an existing owned lease', async () => {
   const harness = installControllerHarness();
   const target = harness.targets.get('lulu');
 
@@ -1084,13 +1289,14 @@ test('unexpected playback is re-paused under an existing owned lease', () => {
     assert.equal(harness.video.pauseCalls, 2);
 
     target.dispatch('pointerleave', { pointerType: 'mouse' });
+    await Promise.resolve();
     assert.equal(harness.video.playCalls, 1);
   } finally {
     harness.restore();
   }
 });
 
-test('unexpected playback after pre-paused activation acquires an owned lease', () => {
+test('unexpected playback after pre-paused activation acquires an owned lease', async () => {
   const harness = installControllerHarness({ paused: true });
   const target = harness.targets.get('lulu');
 
@@ -1104,6 +1310,7 @@ test('unexpected playback after pre-paused activation acquires an owned lease', 
     assert.equal(harness.video.pauseCalls, 1);
 
     target.dispatch('pointerleave', { pointerType: 'mouse' });
+    await Promise.resolve();
     assert.equal(harness.video.playCalls, 1);
   } finally {
     harness.restore();

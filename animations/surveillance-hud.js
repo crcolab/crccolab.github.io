@@ -118,14 +118,30 @@ export function isMappedRectEligible(rect, frame) {
   return visibleArea / (rect.width * rect.height) >= 0.5;
 }
 
-export function expandTouchRect(rect, minimumSize = 44) {
-  const width = Math.max(rect.width, minimumSize);
-  const height = Math.max(rect.height, minimumSize);
+export function expandTouchRect(rect, minimumSize = 44, frame = null) {
+  const centerX = rect.x + rect.width / 2;
+  const centerY = rect.y + rect.height / 2;
+  let halfWidth = Math.max(rect.width / 2, minimumSize / 2);
+  let halfHeight = Math.max(rect.height / 2, minimumSize / 2);
+
+  if (frame) {
+    halfWidth = Math.max(
+      halfWidth,
+      minimumSize - centerX,
+      minimumSize - (frame.width - centerX),
+    );
+    halfHeight = Math.max(
+      halfHeight,
+      minimumSize - centerY,
+      minimumSize - (frame.height - centerY),
+    );
+  }
+
   return {
-    x: rect.x - (width - rect.width) / 2,
-    y: rect.y - (height - rect.height) / 2,
-    width,
-    height,
+    x: centerX - halfWidth,
+    y: centerY - halfHeight,
+    width: halfWidth * 2,
+    height: halfHeight * 2,
   };
 }
 
@@ -491,6 +507,14 @@ export function initSurveillanceHUD() {
     pointerId = null;
     focusedId = null;
     touchId = null;
+
+    const focusedTarget = document.activeElement;
+    if (
+      focusedTarget instanceof HTMLElement
+      && targets.get(focusedTarget.dataset.memberId) === focusedTarget
+    ) {
+      focusedTarget.blur();
+    }
   }
 
   function reconcileActiveMember() {
@@ -537,7 +561,7 @@ export function initSurveillanceHUD() {
       layouts.set(id, {
         id,
         visualRect,
-        touchRect: expandTouchRect(visualRect),
+        touchRect: expandTouchRect(visualRect, 44, frameSize),
       });
     }
 
@@ -589,7 +613,7 @@ export function initSurveillanceHUD() {
   }
 
   function handlePlaying() {
-    if (activeId) {
+    if (activeId || playback.ownsPause()) {
       suspendTeasers();
       playback.pauseForInteraction();
       return;
@@ -630,14 +654,27 @@ export function initSurveillanceHUD() {
     event.preventDefault();
     clearInteractionState();
     dismissMember();
-
-    if (document.activeElement instanceof HTMLElement) {
-      document.activeElement.blur();
-    }
   }
 
   function handleTouchPointerDown(event) {
     if (event.pointerType !== 'touch') return;
+
+    const panelBounds = panel.getBoundingClientRect();
+    const insidePanel = !panel.hidden && pointInRect(
+      { x: event.clientX, y: event.clientY },
+      {
+        x: panelBounds.left,
+        y: panelBounds.top,
+        width: panelBounds.width,
+        height: panelBounds.height,
+      },
+    );
+    if (insidePanel) {
+      event.preventDefault();
+      clearInteractionState();
+      dismissMember();
+      return;
+    }
 
     const bounds = hud.getBoundingClientRect();
     const point = {
@@ -680,7 +717,10 @@ export function initSurveillanceHUD() {
     target.addEventListener('pointerleave', (event) => {
       if (event.pointerType === 'touch' || pointerId !== id) return;
       pointerId = null;
-      reconcileActiveMember();
+      queueMicrotask(() => {
+        if (pointerId !== null) return;
+        reconcileActiveMember();
+      });
     });
     target.addEventListener('focus', () => {
       touchId = null;

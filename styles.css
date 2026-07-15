@@ -323,6 +323,8 @@ img,svg,video{max-width:100%}
   .crc-hud__dot{animation:none}
   .team-member-target__bracket,.team-member-target__bracket path,.team-member-panel{
     animation:none!important;transition:none!important}
+  .team-member-target.is-active .team-member-target__bracket path,
+  .team-member-target:focus-visible .team-member-target__bracket path{stroke-dashoffset:0}
 }
 
 /* ---------- News / partner ---------- */
