@@ -444,12 +444,16 @@ img,svg,video{max-width:100%}
 /* State: cyber — hide the vector, show the pixel-font alt in its place.
    Text color inherits from the wordmark's currentColor (purple on light theme,
    lime on purple theme) so "cyber" reads as a font-swap of the same lettering
-   rather than a foreign overlay. */
+   rather than a foreign overlay. Font-size (55cqh) is empirically calibrated
+   so the pixel-font "cyber" fits within the .glitch-word slot at both hero
+   and header scales (measured ratio ≈ 1.02 — near-exact fit). Because cyber
+   no longer overhangs its slot, the earlier justify-content and .rest
+   translateX workarounds are unnecessary and were removed. */
 .glitch-word.cyber .logotype-en--cyborg{visibility:hidden}
 .glitch-word.cyber .glitch-word__alt{
   display:flex;
   font-family:"Press Start 2P", cursive;
-  font-size:clamp(0.5rem, 90cqh, 4rem);
+  font-size:clamp(0.5rem, 55cqh, 4rem);
   letter-spacing:-0.02em;
   animation:sprayIn 0.6s cubic-bezier(.22,1,.36,1) both;
   filter:url(#spraypaint);
@@ -459,29 +463,6 @@ img,svg,video{max-width:100%}
   0%  {letter-spacing:0.15em; opacity:0.4; transform:scale(1.08)}
   40% {letter-spacing:0.02em; opacity:0.9}
   100%{letter-spacing:-0.02em; opacity:1; transform:scale(1)}
-}
-
-/* The pixel-font "cyber" is wider than the Cyborg slot. In the hero it centers
-   within .glitch-word (centered overflow on both sides). In the sticky header
-   the .crc-mark sits just to the left of .glitch-word, so a left-side overhang
-   would cover the mark — pin the header instance to its slot's left edge so
-   the overflow goes only rightward. */
-.glitch-word.cyber .glitch-word__alt{justify-content:center}
-.site-header__brand .glitch-word.cyber .glitch-word__alt{justify-content:flex-start}
-
-/* Shift the "Resilience Co-lab" segment right while .cyber is active so the
-   overflowing pixel-font text doesn't visually run into it. Measured overhang
-   for the hero (centered layout) is ~10.5% of .logotype-split width; header
-   uses flex-start so the full right-overflow is ~23% of split — bump the
-   header shift accordingly. Transition matches sprayIn timing. */
-.logotype-split .logotype-en--rest{
-  transition:transform 0.6s cubic-bezier(.22,1,.36,1);
-}
-.glitch-word.cyber ~ .logotype-en--rest{
-  transform:translateX(15%);
-}
-.site-header__brand .glitch-word.cyber ~ .logotype-en--rest{
-  transform:translateX(30%);
 }
 
 /* State: fade-back — brief blur-in as the vector restores */
