@@ -8,6 +8,6 @@ permalink: /en/news/feed.xml
   <link rel="self" href="{{ '/en/news/feed.xml' | absolute_url }}"/>
   <id>{{ '/en/news/' | absolute_url }}</id>
   {% assign entries = site.news_en | sort: "date" | reverse %}
-  <updated>{{ entries.first.date | date_to_xmlschema }}</updated>
+  <updated>{{ entries.first.date | default: site.time | date_to_xmlschema }}</updated>
   {% include atom-entries.html entries=entries %}
 </feed>

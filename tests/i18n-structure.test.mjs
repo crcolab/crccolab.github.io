@@ -62,6 +62,18 @@ test('English indexes, feeds, and latest API declare exact routes and collection
   }
 });
 
+test('English feeds fall back to the build time when their collections are empty', async () => {
+  const feeds = await Promise.all([
+    read('en/feed.xml'),
+    read('en/news/feed.xml'),
+    read('en/events/feed.xml'),
+    read('en/records/feed.xml'),
+  ]);
+  for (const feed of feeds) {
+    assert.match(feed, /\.first\.date \| default: site\.time \| date_to_xmlschema/);
+  }
+});
+
 test('section and item layouts use locale copy instead of bilingual labels', async () => {
   const [indexLayout, itemLayout] = await Promise.all([
     read('_layouts/section-index.html'), read('_layouts/item.html'),
