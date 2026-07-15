@@ -172,7 +172,7 @@ img,svg,video{max-width:100%}
 @supports not (background:color-mix(in srgb,#fff 82%,transparent)){.site-header{background:var(--surface-page)}}
 .site-header__brand{text-decoration:none;display:inline-flex;align-items:center;gap:.85em;color:var(--text-brand)}
 .site-header__brand .crc-mark{height:34px;width:81px}
-.site-header__brand .logotype-en{height:22px;width:208px}
+.site-header__brand .logotype-split{width:208px}
 .site-nav{display:flex;gap:8px;margin-left:auto}
 .site-nav__link{display:inline-flex;flex-direction:column;line-height:1.1;text-decoration:none;padding:8px 12px;border-radius:8px;
   color:var(--text-primary);transition:background var(--dur-fast) var(--ease-out)}
@@ -195,7 +195,7 @@ img,svg,video{max-width:100%}
 .hero__title .crc-mark{width:280px;height:118px;flex:none}
 .theme-purple .hero__title .crc-mark{--mark-letter:var(--crc-lime)}
 .hero__logotypes{display:flex;flex-direction:column;gap:18px;flex:none;max-width:100%}
-.hero__logotypes .logotype-en{width:min(470px,84vw)}
+.hero__logotypes .logotype-split{width:min(470px,84vw)}
 .hero__logotypes .logotype-zh{width:min(330px,59vw)}
 .hero__cubes{display:flex;align-items:flex-start;justify-content:center;gap:clamp(36px,8vw,110px);margin-top:clamp(44px,7vw,90px);flex-wrap:wrap}
 .hero__cubes .crc-cube{width:168px;--cube-sw:2.5}
@@ -345,6 +345,64 @@ img,svg,video{max-width:100%}
 .footer__base{margin-top:48px;padding-top:22px;border-top:1px solid rgba(255,255,255,.16);display:flex;justify-content:space-between;
   gap:16px;flex-wrap:wrap;font-size:13px;color:rgba(255,255,255,.6)}
 
+/* ---------- Cyborg↔cyber glitch (see docs/.../2026-07-15-cyborg-cyber-glitch-design.md) ---------- */
+:root{
+  /* Measured once from the SVG glyph geometry — see Task 1 of the plan. */
+  --cyborg-frac:0.3028;
+}
+
+/* Split container renders pixel-identical to the single .logotype-en mask when idle. */
+.logotype-split{
+  display:inline-flex;
+  align-items:stretch;
+  aspect-ratio:822.77 / 87.17;
+  color:inherit;
+  vertical-align:middle;
+}
+/* The fractional width lives on .glitch-word — the actual flex item inside
+   .logotype-split — not on .logotype-en--cyborg, which is nested one level
+   deeper (inside .glitch-word) so it can double as the glitch alt-text slot.
+   .logotype-en--cyborg then simply fills that correctly-sized parent. */
+.logotype-split .glitch-word{
+  width:calc(var(--cyborg-frac) * 100%);
+}
+.logotype-split .logotype-en--cyborg{
+  width:100%;
+  height:100%;
+  aspect-ratio:auto;
+  -webkit-mask-position:left center;mask-position:left center;
+  -webkit-mask-size:calc(100% / var(--cyborg-frac)) 100%;
+          mask-size:calc(100% / var(--cyborg-frac)) 100%;
+}
+.logotype-split .logotype-en--rest{
+  width:calc((1 - var(--cyborg-frac)) * 100%);
+  height:100%;
+  aspect-ratio:auto;
+  -webkit-mask-position:right center;mask-position:right center;
+  -webkit-mask-size:calc(100% / (1 - var(--cyborg-frac))) 100%;
+          mask-size:calc(100% / (1 - var(--cyborg-frac))) 100%;
+}
+
+/* Cyborg slot doubles as the glitch container. Container-type: size enables cqh
+   sizing for the pixel-font "cyber" alt in Task 4. */
+.glitch-word{
+  position:relative;
+  display:block;
+  width:100%;
+  height:100%;
+  container-type:size;
+  cursor:pointer;
+}
+.glitch-word__alt{
+  display:none;
+  position:absolute;
+  inset:0;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  pointer-events:none;
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width:900px){
   .about__body,.news__grid{grid-template-columns:1fr}
@@ -355,5 +413,5 @@ img,svg,video{max-width:100%}
 @media (max-width:520px){
   .team__grid{grid-template-columns:1fr 1fr;gap:14px}
   .crc-hud{aspect-ratio:16/9}
-  .site-header__brand .logotype-en{display:none}
+  .site-header__brand .logotype-split{display:none}
 }
