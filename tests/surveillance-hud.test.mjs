@@ -411,7 +411,7 @@ test('team grid CSS is compact, responsive, and keyboard-visible', async () => {
   assert.doesNotMatch(css, /\.team-card__photo|\.team-card__ph/);
 });
 
-test('team markup has five semantic targets linked to the existing roster copy', async () => {
+test('team markup has five semantic targets linked to the Chinese roster copy', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
   const ids = ['lulu', 'meichun', 'cheng', 'tzu-tung', 'sean'];
 
@@ -421,15 +421,20 @@ test('team markup has five semantic targets linked to the existing roster copy',
   assert.match(html, /data-team-member-panel[^>]*hidden[^>]*aria-hidden="true"/);
 
   for (const id of ids) {
-    const labelIds = [
+    const compatibilityIds = [
       'team-member-' + id + '-name-zh',
       'team-member-' + id + '-name-en',
       'team-member-' + id + '-role-zh',
       'team-member-' + id + '-role-en',
     ];
-    for (const labelId of labelIds) {
+    for (const labelId of compatibilityIds) {
       assert.match(html, new RegExp('id="' + labelId + '"'));
     }
+
+    const labelIds = [
+      'team-member-' + id + '-name-zh',
+      'team-member-' + id + '-role-zh',
+    ];
 
     const openingTag = html.match(
       new RegExp(
@@ -444,6 +449,7 @@ test('team markup has five semantic targets linked to the existing roster copy',
       openingTag,
       new RegExp('aria-labelledby="' + labelIds.join(' ') + '"'),
     );
+    assert.doesNotMatch(openingTag, /team-member-[^" ]+-(?:name|role)-en/);
   }
 
   for (const field of ['name-zh', 'name-en', 'role-zh', 'role-en']) {

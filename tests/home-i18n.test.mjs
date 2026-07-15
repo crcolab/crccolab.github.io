@@ -26,3 +26,24 @@ test('homepages are reciprocal, single-language static pages', () => {
   assert.doesNotMatch(zh, /class="(?:about__en|team-card__role-en|crc-heading__en)"/);
   assert.doesNotMatch(en, /class="(?:about__zh|team-card__role-zh|crc-heading__zh)"/);
 });
+
+test('Chinese homepage localizes generic interface copy', () => {
+  assert.match(zh, /id="theme-toggle" aria-label="切換淺色／紫色主題" title="切換主題"/);
+  assert.match(zh, /<img src="\/assets\/team\.jpg" alt="團隊合照">/);
+  assert.match(zh, /<a href="mailto:mclee@gate\.sinica\.edu\.tw">電子郵件<\/a>/);
+  assert.match(zh, />在台灣用心製作<\/span>/);
+  assert.doesNotMatch(zh, /Switch light \/ purple theme|Switch theme|Team photo|>Email<|Made with ❤️ in Taiwan/);
+});
+
+test('HUD target accessible names reference only the current locale', () => {
+  for (const id of ['lulu', 'meichun', 'cheng', 'tzu-tung', 'sean']) {
+    const zhTarget = zh.match(new RegExp(`<button[^>]*class="team-member-target"[^>]*data-member-id="${id}"[^>]*>`))?.[0];
+    const enTarget = en.match(new RegExp(`<button[^>]*class="team-member-target"[^>]*data-member-id="${id}"[^>]*>`))?.[0];
+    assert.ok(zhTarget, `missing Chinese target for ${id}`);
+    assert.ok(enTarget, `missing English target for ${id}`);
+    assert.match(zhTarget, new RegExp(`aria-labelledby="team-member-${id}-name-zh team-member-${id}-role-zh"`));
+    assert.doesNotMatch(zhTarget, new RegExp(`team-member-${id}-(?:name|role)-en`));
+    assert.match(enTarget, new RegExp(`aria-labelledby="team-member-${id}-name-en team-member-${id}-role-en"`));
+    assert.doesNotMatch(enTarget, new RegExp(`team-member-${id}-(?:name|role)-zh`));
+  }
+});
