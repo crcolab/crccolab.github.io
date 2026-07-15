@@ -11,7 +11,7 @@ plus Jekyll (built by GitHub Pages on push from `main`) for the content sections
 ## Layout
 
 - `index.html`, `styles.css`, `script.js` — landing page
-- `animations/` — vanilla JS modules: `cyborg-toggle.js`, `news-modal.js`, `surveillance-hud.js`
+- `animations/` — vanilla JS modules: `cyborg-glitch.js`, `surveillance-hud.js`
 - `events/<slug>/` — self-contained event sub-pages with their own `index.html` + `styles.css`
 - `assets/` — shared images / SVGs / video
 - `_news/`, `_events/`, `_media/` — content collections, one Markdown file per item
@@ -64,6 +64,7 @@ Bilingual pattern: **zh-Hant primary**, English in mono as secondary. Headings p
 bundle exec jekyll serve   # full site incl. generated sections (http://127.0.0.1:4000)
 python3 -m http.server 8000  # static-only work (landing page, event sub-pages)
 ```
+Needs Ruby 3.3 (see .ruby-version) — Ruby 3.4+ breaks the github-pages gem (removed csv default gem). On macOS: brew install ruby@3.3.
 
 ## Deploy
 
