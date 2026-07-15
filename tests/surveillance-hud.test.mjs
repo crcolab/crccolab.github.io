@@ -59,6 +59,37 @@ test('calibrated tracks are normalized, ordered, and sampled at most 0.5s apart'
   }
 });
 
+test('calibrated tracks preserve verified member identities at both segment starts', () => {
+  const landmarks = [
+    {
+      time: 1.136667,
+      expected: {
+        lulu: { x: .386, y: .319, width: .047, height: .172 },
+        meichun: { x: .541, y: .319, width: .050, height: .202 },
+        cheng: { x: .292, y: .452, width: .064, height: .218 },
+      },
+    },
+    {
+      time: 9.166667,
+      expected: {
+        lulu: { x: .386, y: .316, width: .046, height: .180 },
+        meichun: { x: .535, y: .321, width: .053, height: .199 },
+        cheng: { x: .292, y: .452, width: .062, height: .215 },
+      },
+    },
+  ];
+
+  for (const { time, expected } of landmarks) {
+    for (const [id, rect] of Object.entries(expected)) {
+      assert.deepEqual(
+        getTrackedRectAtTime(MEMBER_TRACKS[id], time),
+        rect,
+        id + ' identity mismatch at ' + time,
+      );
+    }
+  }
+});
+
 test('tracked rectangles return exact frames and interpolate within one segment', () => {
   const track = {
     id: 'sample',
@@ -601,6 +632,7 @@ class FakeVideo extends FakeHTMLElement {
     super(ownerDocument);
     this.paused = paused;
     this.ended = false;
+    this.seeking = false;
     this.readyState = 1;
     this.videoWidth = 1920;
     this.videoHeight = 1044;
@@ -635,6 +667,10 @@ class FakeVideo extends FakeHTMLElement {
 
 const installControllerHarness = ({
   paused = false,
+  ended = false,
+  seeking = false,
+  readyState = 1,
+  dispatchPlaying = !paused,
   reducedMotion = false,
   randomValues = [0],
   frameWidth = 1176,
@@ -680,6 +716,9 @@ const installControllerHarness = ({
   panel.parentNode = overlay;
   video.parentNode = hud;
   video.currentTime = currentTime;
+  video.ended = ended;
+  video.seeking = seeking;
+  video.readyState = readyState;
   video.closestResults.set('.crc-hud', hud);
 
   for (const field of ['name-zh', 'name-en', 'role-zh', 'role-en']) {
@@ -760,6 +799,7 @@ const installControllerHarness = ({
 
   try {
     initSurveillanceHUD();
+    if (dispatchPlaying) video.dispatch('playing');
   } catch (error) {
     restore();
     throw error;
@@ -894,6 +934,8 @@ test('reduced motion blocks teasers and preference changes cancel or restart the
     });
     await Promise.resolve();
     harness.setReducedMotion(false);
+    assert.deepEqual(harness.timerDelays(), []);
+    harness.video.dispatch('playing');
     assert.deepEqual(harness.timerDelays(), [2500]);
   } finally {
     harness.restore();
@@ -920,6 +962,154 @@ test('pause cancels a visible teaser and playing starts a fresh wait', () => {
   }
 });
 
+test('presentation snapshot bootstraps cached autoplay after a missed playing event', () => {
+  const harness = installControllerHarness({
+    readyState: 3,
+    dispatchPlaying: false,
+  });
+
+  try {
+    assert.equal(harness.overlay.hidden, false);
+    assert.deepEqual(harness.timerDelays(), [2500]);
+    assert.equal(harness.video.frameCallbacks.size, 1);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('presentation snapshot resumes a fully buffered seek without playing', () => {
+  const harness = installControllerHarness({ readyState: 4 });
+
+  try {
+    harness.video.seeking = true;
+    harness.video.dispatch('seeking');
+    assert.deepEqual(harness.timerDelays(), []);
+    assert.equal(harness.video.frameCallbacks.size, 0);
+
+    harness.video.seeking = false;
+    harness.video.dispatch('seeked');
+    assert.deepEqual(harness.timerDelays(), [2500]);
+    assert.equal(harness.video.frameCallbacks.size, 1);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('presentation snapshot rejects incomplete bootstrap media states', () => {
+  const states = [
+    { paused: true, readyState: 4 },
+    { ended: true, readyState: 4 },
+    { seeking: true, readyState: 4 },
+    { readyState: 2 },
+  ];
+
+  for (const state of states) {
+    const harness = installControllerHarness({
+      ...state,
+      dispatchPlaying: false,
+    });
+
+    try {
+      assert.deepEqual(harness.timerDelays(), [], JSON.stringify(state));
+      assert.equal(
+        harness.video.frameCallbacks.size,
+        0,
+        JSON.stringify(state),
+      );
+    } finally {
+      harness.restore();
+    }
+  }
+});
+
+test('presentation suspension cancels teasers and frames until playing', () => {
+  for (const eventName of ['waiting', 'stalled', 'pause', 'ended']) {
+    const harness = installControllerHarness();
+
+    try {
+      harness.runTimer(2500);
+      assert.equal(harness.teasingIds().length, 1, eventName);
+      assert.equal(harness.video.frameCallbacks.size, 1, eventName);
+
+      if (eventName === 'pause') harness.video.paused = true;
+      if (eventName === 'ended') harness.video.ended = true;
+      harness.video.dispatch(eventName);
+
+      assert.deepEqual(harness.teasingIds(), [], eventName);
+      assert.deepEqual(harness.timerDelays(), [], eventName);
+      assert.equal(harness.video.frameCallbacks.size, 0, eventName);
+
+      harness.video.paused = false;
+      harness.video.ended = false;
+      harness.video.dispatch('seeked');
+      assert.deepEqual(harness.timerDelays(), [], eventName);
+      assert.equal(harness.video.frameCallbacks.size, 0, eventName);
+
+      harness.video.dispatch('playing');
+      assert.deepEqual(harness.timerDelays(), [2500], eventName);
+      assert.equal(harness.video.frameCallbacks.size, 1, eventName);
+    } finally {
+      harness.restore();
+    }
+  }
+});
+
+test('presentation suspension keeps target-free seeks idle until playing', () => {
+  const harness = installControllerHarness();
+
+  try {
+    harness.video.currentTime = 8;
+    harness.video.dispatch('seeking');
+
+    assert.equal(harness.targets.get('lulu').disabled, false);
+    assert.deepEqual(harness.timerDelays(), []);
+    assert.equal(harness.video.frameCallbacks.size, 0);
+
+    harness.video.dispatch('seeked');
+    assert.equal(
+      MEMBER_IDS.every((id) => harness.targets.get(id).disabled),
+      true,
+    );
+    assert.deepEqual(harness.timerDelays(), []);
+    assert.equal(harness.video.frameCallbacks.size, 0);
+
+    harness.video.dispatch('playing');
+    assert.deepEqual(harness.timerDelays(), [2500]);
+    assert.equal(harness.video.frameCallbacks.size, 1);
+
+    harness.runTimer(2500);
+    assert.deepEqual(harness.teasingIds(), []);
+    assert.deepEqual(harness.timerDelays(), [2500]);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('presentation suspension ignores stale callbacks after playing restarts', () => {
+  const harness = installControllerHarness();
+
+  try {
+    const staleCallback = [...harness.video.frameCallbacks.values()][0];
+    assert.equal(typeof staleCallback, 'function');
+
+    harness.video.dispatch('waiting');
+    harness.video.currentTime = 8;
+    staleCallback();
+    assert.equal(harness.targets.get('lulu').disabled, false);
+    assert.equal(harness.video.frameCallbacks.size, 0);
+
+    harness.video.dispatch('playing');
+    assert.equal(harness.video.frameCallbacks.size, 1);
+    staleCallback();
+
+    assert.equal(harness.targets.get('lulu').disabled, false);
+    assert.equal(harness.video.frameCallbacks.size, 1);
+    assert.deepEqual(harness.timerDelays(), [2500]);
+  } finally {
+    harness.restore();
+  }
+});
+
 test('direct activation cancels teasers and dismissal starts a fresh wait', async () => {
   const harness = installControllerHarness();
   const target = harness.targets.get('lulu');
@@ -940,6 +1130,8 @@ test('direct activation cancels teasers and dismissal starts a fresh wait', asyn
     assert.equal(harness.activeId(), null);
     assert.equal(harness.panel.hidden, true);
     assert.equal(harness.video.paused, false);
+    assert.deepEqual(harness.timerDelays(), []);
+    harness.video.dispatch('playing');
     assert.deepEqual(harness.timerDelays(), [2500]);
   } finally {
     harness.restore();
@@ -1012,6 +1204,41 @@ test('hidden owned pause re-pauses unexpected playback and synchronizes after re
 
     harness.video.dispatch('playing');
     assert.deepEqual(harness.timerDelays(), [2500]);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('click activation focuses a detail-zero target without prior focus', () => {
+  const harness = installControllerHarness();
+  const target = harness.targets.get('lulu');
+
+  try {
+    target.dispatch('click', { detail: 0 });
+
+    assert.equal(harness.activeId(), 'lulu');
+    assert.equal(harness.document.activeElement, target);
+    assert.equal(harness.panel.hidden, false);
+    assert.equal(harness.video.pauseCalls, 1);
+    assert.equal(harness.video.playCalls, 0);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('click activation leaves an already focused target open', () => {
+  const harness = installControllerHarness();
+  const target = harness.targets.get('lulu');
+
+  try {
+    target.focus();
+    target.dispatch('click', { detail: 0 });
+
+    assert.equal(harness.activeId(), 'lulu');
+    assert.equal(harness.document.activeElement, target);
+    assert.equal(harness.panel.hidden, false);
+    assert.equal(harness.video.pauseCalls, 1);
+    assert.equal(harness.video.playCalls, 0);
   } finally {
     harness.restore();
   }
