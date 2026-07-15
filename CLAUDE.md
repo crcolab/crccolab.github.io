@@ -50,6 +50,10 @@ Bilingual pattern: **zh-Hant primary**, English in mono as secondary. Headings p
 - **Adding a content item:** drop a Markdown file in `_news/`/`_events/`/`_records/`
   named `YYYY-MM-DD-slug.md` — indexes, feeds, sitemap, and homepage JSON update
   automatically on build. No registration file to edit.
+- **Date convention for `_records/`:** use the date CRC engaged with / shared the
+  coverage, not the source article's original publish date. Keeps the records
+  timeline consistent with CRC's actual activity. Same for `_news/` (announcement date).
+  `_events/` uses the event's `start_date`.
 - **Asset paths:** use root-absolute (`/assets/cube.svg`, `/favicon.png`) so they resolve from any sub-page.
 - **Sub-pages:** put under `events/<slug>/` with their own `index.html` + `styles.css`. Reuse the design tokens above; deviate only when the layout demands it (e.g. schedule cards).
 - **Top bar on sub-pages:** sticky, with a `←` back-link to `/` and a breadcrumb in mono.

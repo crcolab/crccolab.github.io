@@ -13,11 +13,11 @@ image: /assets/2026-MAY-24-offline-mission-1.jpg
 
 CRC 在此正式宣佈：本次離線行動，任務成功！
 
-![離線行動現場 2](/assets/2026-MAY-24-offline-mission-2.jpg)
+![離線行動現場](/assets/2026-MAY-24-offline-mission-2.jpg)
 
-![離線行動現場 4](/assets/2026-MAY-24-offline-mission-4.jpg)
+![離線行動現場](/assets/2026-MAY-24-offline-mission-4.jpg)
 
-![離線行動現場 5](/assets/2026-MAY-24-offline-mission-5.jpg)
+![離線行動現場](/assets/2026-MAY-24-offline-mission-5.jpg)
 
 更多後續分享，敬請關注我們。CRC 持續發電傳訊中⚡
 

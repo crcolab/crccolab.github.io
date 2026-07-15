@@ -8,7 +8,9 @@ external_url: https://dset.tw/event-news/481/
 image: /assets/2026-APR-10-dset-forum-coverage.jpg
 ---
 
-DSET 兼任研究員張仁瑋於 3 月 25 日代表出席由賽伯格韌性實驗室（CRC, Cyber Resilience Co-lab）主辦、以「地緣政治下海纜與網路基礎設施」為題的「數位韌性論壇」，分享 **#烏克蘭戰時資安與通訊維運** 經驗，並提出對台灣的政策建議。
+<!-- date 2026-04-10 is an estimate; the DSET article did not include a publish date. Placed between the 3/25 forum and the 4/20 Kuma article. -->
+
+DSET 兼任研究員張仁瑋於 3 月 25 日代表出席由賽伯格韌性實驗室（CRC, Cyborg Resilience Co-lab）主辦、以「地緣政治下海纜與網路基礎設施」為題的「數位韌性論壇」，分享 **#烏克蘭戰時資安與通訊維運** 經驗，並提出對台灣的政策建議。
 
 本次「數位韌性論壇」由賽伯格韌性實驗室（CRC）、g0v.tw 台灣零時政府、開放文化基金會等社群共同推動，並由 CRC 共同創辦人李梅君與開放文化基金會執行長李欣穎主持。DSET 於論壇下半場參與討論，與國防安全研究院、數位發展部及民間技術社群代表共同交流數位韌性相關議題。
 
