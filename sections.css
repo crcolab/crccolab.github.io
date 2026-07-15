@@ -1,0 +1,61 @@
+/* ============================================================
+   CRC — shared styles for Jekyll section pages
+   (/news/, /events/, /media/ indexes + item pages)
+   Loads after /styles.css and reuses its tokens.
+   ============================================================ */
+
+/* ---------- top bar ---------- */
+.topbar{position:sticky;top:0;z-index:50;background:var(--surface-page);
+  border-bottom:1px solid var(--ink-100)}
+.topbar__inner{max-width:1100px;margin:0 auto;padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px}
+.topbar__home{display:inline-flex;align-items:center;gap:10px;text-decoration:none;
+  font-family:var(--font-display);font-weight:600;font-size:14px;color:var(--text-primary)}
+.topbar__back{display:inline-block;transition:transform .18s ease}
+.topbar__home:hover .topbar__back{transform:translateX(-3px)}
+.topbar__crumb{font-family:var(--font-display);font-size:12px;letter-spacing:.08em;
+  text-transform:lowercase;color:var(--text-secondary)}
+.topbar__crumb a{color:inherit;text-decoration:none}
+.topbar__crumb b{color:var(--crc-purple)}
+
+/* ---------- shared page shell ---------- */
+.item-page,.index-page{padding:56px 0 80px}
+.item-page .container,.index-page .container{max-width:1100px;margin:0 auto;padding:0 24px}
+
+/* ---------- item page ---------- */
+.item{max-width:760px}
+.item__title{font-family:var(--font-body);font-weight:900;
+  font-size:clamp(26px,4vw,40px);line-height:1.3;color:var(--text-primary);margin:14px 0 24px}
+.item__image{max-width:100%;border-radius:var(--radius-lg);margin:0 0 24px}
+.item__body{font-size:16px;line-height:1.9;color:var(--text-primary)}
+.item__body p{margin:0 0 1.2em}
+.item__body a{color:var(--crc-purple);word-break:break-all}
+.item__body blockquote{margin:0 0 1.2em;padding:12px 18px;border-left:4px solid var(--crc-lime);
+  background:var(--surface-muted);border-radius:0 var(--radius-lg) var(--radius-lg) 0}
+.item__backlink{margin-top:48px;font-family:var(--font-display);font-size:14px}
+.item__backlink a{color:var(--crc-purple);text-decoration:none}
+.item__backlink a:hover{text-decoration:underline}
+
+/* ---------- section index ---------- */
+.index-page__desc{margin:10px 0 0;font-size:15px;line-height:1.7;color:var(--text-secondary);max-width:60ch}
+.index-page__feed{margin:8px 0 0;font-family:var(--font-display);font-size:12px;letter-spacing:.08em}
+.index-page__feed a{color:var(--crc-purple);text-decoration:none}
+.index-page__list{margin-top:36px;display:flex;flex-direction:column}
+.crc-news--link{display:block;text-decoration:none;padding:22px 0;border-top:1px solid var(--ink-100)}
+.crc-news--link:first-child{border-top:0}
+.crc-news--featured .crc-news__title{font-size:23px}
+.crc-news--link:hover .crc-news__title{color:var(--text-brand)}
+.crc-news--link:hover .crc-news__arrow{transform:translate(2px,-2px)}
+
+/* ---------- footer ---------- */
+.sections-footer{border-top:1px solid var(--ink-100);margin-top:40px}
+.sections-footer__inner{max-width:1100px;margin:0 auto;padding:22px 24px;
+  display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between;
+  font-family:var(--font-display);font-size:12px;letter-spacing:.05em;color:var(--text-secondary)}
+.sections-footer__inner nav{display:flex;gap:16px}
+.sections-footer__inner a{color:var(--crc-purple);text-decoration:none;text-transform:uppercase}
+.sections-footer__inner a:hover{text-decoration:underline}
+
+@media (max-width:640px){
+  .topbar__crumb{display:none}
+}

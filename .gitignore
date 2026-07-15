@@ -25,3 +25,11 @@ lerna-debug.log*
 
 # Local feature worktrees
 .worktrees/
+=======
+# Jekyll
+_site/
+.jekyll-cache/
+.jekyll-metadata
+Gemfile.lock
+vendor/
+.DS_Store

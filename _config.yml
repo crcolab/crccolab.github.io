@@ -1,0 +1,43 @@
+title: Cyborg Resilience Co-lab
+description: >-
+  研究 × 科技 × 藝術的跨域行動平台。探索戰爭、災難與科技風險交疊下的數位韌性。
+  Cyborg Resilience Co-lab (CRC) — civic hackers, digital-rights activists,
+  researchers and artists working on digital resilience in Taiwan.
+url: "https://crcolab.art"
+lang: zh-Hant
+timezone: Asia/Taipei
+
+# needed so upcoming-event pages emit before their date arrives
+future: true
+
+plugins:
+  - jekyll-sitemap
+
+collections:
+  news:
+    output: true
+    permalink: /news/:name/
+  events:
+    output: true
+    permalink: /events/:name/
+  records:
+    output: true
+    permalink: /records/:name/
+
+defaults:
+  - scope: { type: news }
+    values: { layout: item, section: news }
+  - scope: { type: events }
+    values: { layout: item, section: events }
+  - scope: { type: records }
+    values: { layout: item, section: records }
+
+exclude:
+  - README.md
+  - LICENSE
+  - CLAUDE.md
+  - docs/
+  - .superpowers/
+  - Gemfile
+  - Gemfile.lock
+  - vendor/

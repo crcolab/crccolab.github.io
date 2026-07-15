@@ -1,0 +1,37 @@
+---
+layout: default
+---
+{% assign items = site[page.section] | sort: "date" | reverse %}
+<main class="index-page">
+  <div class="container">
+    <div class="section__head">
+      <h1 class="crc-heading">
+        <span class="crc-heading__en" lang="en">{{ page.title_en }}</span>
+        <span class="crc-heading__zh">{{ page.title }}</span>
+      </h1>
+      <p class="index-page__desc">{{ page.description }}</p>
+      <p class="index-page__feed" lang="en"><a href="/{{ page.section }}/feed.xml">Atom feed ↗</a></p>
+    </div>
+
+    {{ content }}
+
+    <div class="index-page__list">
+      {% for item in items %}
+      <a class="crc-news crc-news--link{% if forloop.index <= 3 %} crc-news--featured{% endif %}" href="{{ item.link | default: item.url }}">
+        <div class="crc-news__meta">
+          <span class="crc-news__date">{{ item.date | date: "%Y-%b-%d" | upcase }}</span>
+          <span class="crc-news__cat">{{ item.category }}</span>
+          {% if item.source %}<span class="crc-news__cat" lang="en">{{ item.source }}</span>{% endif %}
+        </div>
+        <div class="crc-news__row">
+          <div>
+            <h2 class="crc-news__title">{{ item.title }}</h2>
+            <p class="crc-news__excerpt">{{ item.summary | strip_newlines | truncate: 160 }}</p>
+          </div>
+          <span class="crc-news__arrow" aria-hidden="true">↗</span>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</main>

@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+{% include head-seo.html %}
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar__inner">
+      <a class="topbar__home" href="/">
+        <span class="topbar__back">←</span>
+        <span>Cyborg Resilience Co-lab</span>
+      </a>
+      <div class="topbar__crumb" lang="en">
+        {% if page.section %}<a href="/{{ page.section }}/">{{ page.section }}</a>{% endif %}{% if page.collection %} / <b>{{ page.slug | default: page.url | split: "/" | last }}</b>{% endif %}
+      </div>
+    </div>
+  </header>
+
+  {{ content }}
+
+  <footer class="sections-footer">
+    <div class="sections-footer__inner">
+      <span>© <span id="y"></span> CRC · Cyborg Resilience Co-lab · 賽伯格韌性實驗室</span>
+      <nav lang="en">
+        <a href="/news/">News</a>
+        <a href="/events/">Events</a>
+        <a href="/records/">Media</a>
+        <a href="/feed.xml">Atom</a>
+      </nav>
+    </div>
+  </footer>
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+</html>

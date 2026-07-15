@@ -1,0 +1,27 @@
+# Cyborg Resilience Co-lab (CRC) · 賽伯格韌性實驗室
+
+> 研究 × 科技 × 藝術的跨域行動平台，探索戰爭、災難與科技風險交疊下的數位韌性。
+> A Taiwan-based initiative of civic hackers, digital-rights activists, researchers
+> and artists working on digital resilience: subsea cables, off-the-grid
+> communication (Meshtastic, Reticulum), and internet-shutdown preparedness.
+
+Primary language is Traditional Chinese (zh-Hant) with English secondary.
+All content pages are static HTML — no JavaScript required to read them.
+
+## Sections
+
+- [Latest News 最新訊息](https://crcolab.art/news/): announcements and updates
+- [Events 活動](https://crcolab.art/events/): forums, hackathons, workshops
+- [As Seen on Media 記錄/報導](https://crcolab.art/records/): event records, press coverage, panels, talks
+
+## Feeds (Atom)
+
+- [All updates](https://crcolab.art/feed.xml)
+- [News](https://crcolab.art/news/feed.xml)
+- [Events](https://crcolab.art/events/feed.xml)
+- [Media](https://crcolab.art/records/feed.xml)
+
+## Other
+
+- [Sitemap](https://crcolab.art/sitemap.xml)
+- Contact: mclee@gate.sinica.edu.tw · GitHub: https://github.com/crcolab/
