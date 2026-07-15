@@ -347,3 +347,18 @@ test('team target CSS is invisible by default and exposes teaser, active, focus,
   assert.match(css, /prefers-reduced-motion:reduce/);
   assert.doesNotMatch(css, /\.face-target/);
 });
+
+test('HUD initializer uses media-frame sync, resize invalidation, and no legacy fallback', async () => {
+  const source = await readFile(
+    new URL('../animations/surveillance-hud.js', import.meta.url),
+    'utf8',
+  );
+
+  assert.match(source, /requestVideoFrameCallback/);
+  assert.match(source, /requestAnimationFrame/);
+  assert.match(source, /new ResizeObserver/);
+  assert.match(source, /loadedmetadata/);
+  assert.match(source, /seeked/);
+  assert.doesNotMatch(source, /querySelectorAll\('\.face-target'\)/);
+  assert.doesNotMatch(source, /}, 2000\)/);
+});

@@ -272,34 +272,186 @@ export function createPlaybackLease(video) {
   };
 }
 
-export function initSurveillanceHUD(){
+export function initSurveillanceHUD() {
   const video = document.querySelector('.team__video');
-  const targets = document.querySelectorAll('.face-target');
-  if(!video || !targets.length) return;
+  const hud = video?.closest('.crc-hud');
+  const overlay = hud?.querySelector('[data-team-member-overlay]');
+  const panel = overlay?.querySelector('[data-team-member-panel]');
+  if (!video || !hud || !overlay || !panel) return;
 
-  // Set CSS --delay from data-delay attribute
-  targets.forEach(t => {
-    t.style.setProperty('--delay', t.dataset.delay + 's');
-  });
+  const panelFields = {
+    nameZh: panel.querySelector('[data-panel-field="name-zh"]'),
+    nameEn: panel.querySelector('[data-panel-field="name-en"]'),
+    roleZh: panel.querySelector('[data-panel-field="role-zh"]'),
+    roleEn: panel.querySelector('[data-panel-field="role-en"]'),
+  };
+  if (Object.values(panelFields).some((field) => !field)) return;
 
-  function activateTargets(){
-    targets.forEach(t => t.classList.add('pop-in'));
-    // After all pop-ins finish, switch to idle pulse
-    const maxDelay = Math.max(...[...targets].map(t => parseFloat(t.dataset.delay)));
-    setTimeout(() => {
-      targets.forEach(t => {
-        t.classList.remove('pop-in');
-        t.classList.add('active');
-      });
-    }, (maxDelay + 0.6) * 1000);
+  const targets = new Map(
+    [...overlay.querySelectorAll('.team-member-target')]
+      .map((target) => [target.dataset.memberId, target]),
+  );
+  const roster = new Map();
+
+  for (const id of MEMBER_IDS) {
+    const entry = {
+      nameZh: document.getElementById('team-member-' + id + '-name-zh'),
+      nameEn: document.getElementById('team-member-' + id + '-name-en'),
+      roleZh: document.getElementById('team-member-' + id + '-role-zh'),
+      roleEn: document.getElementById('team-member-' + id + '-role-en'),
+    };
+    if (
+      targets.has(id)
+      && Object.values(entry).every(Boolean)
+      && isValidMemberTrack(MEMBER_TRACKS[id])
+    ) {
+      roster.set(id, entry);
+    } else {
+      targets.get(id)?.setAttribute('disabled', '');
+    }
   }
 
-  // Sync to video playback; fallback if autoplay blocked
-  let activated = false;
-  video.addEventListener('playing', () => {
-    if(!activated){ activated = true; activateTargets(); }
-  });
-  setTimeout(() => {
-    if(!activated){ activated = true; activateTargets(); }
-  }, 2000);
+  const validIds = MEMBER_IDS.filter((id) => roster.has(id));
+  if (!validIds.length) return;
+
+  const layouts = new Map();
+  let transform = null;
+  let frameHandle = null;
+  let frameKind = null;
+  let started = false;
+
+  function rebuildTransform() {
+    transform = computeCoverTransform(
+      { width: video.videoWidth, height: video.videoHeight },
+      { width: hud.clientWidth, height: hud.clientHeight },
+    );
+    return transform;
+  }
+
+  function disableTarget(id) {
+    const target = targets.get(id);
+    target.disabled = true;
+    layouts.delete(id);
+  }
+
+  function renderAt(time = video.currentTime) {
+    const currentTransform = transform || rebuildTransform();
+    if (!currentTransform) return;
+
+    const frameSize = {
+      width: currentTransform.frameWidth,
+      height: currentTransform.frameHeight,
+    };
+
+    for (const id of validIds) {
+      const normalized = getTrackedRectAtTime(MEMBER_TRACKS[id], time);
+      if (!normalized) {
+        disableTarget(id);
+        continue;
+      }
+
+      const visualRect = mapNormalizedRect(normalized, currentTransform);
+      if (!isMappedRectEligible(visualRect, frameSize)) {
+        disableTarget(id);
+        continue;
+      }
+
+      const target = targets.get(id);
+      target.disabled = false;
+      target.style.left = visualRect.x + 'px';
+      target.style.top = visualRect.y + 'px';
+      target.style.width = visualRect.width + 'px';
+      target.style.height = visualRect.height + 'px';
+      layouts.set(id, {
+        id,
+        visualRect,
+        touchRect: expandTouchRect(visualRect),
+      });
+    }
+  }
+
+  function stopFrameLoop() {
+    if (frameHandle === null) return;
+
+    if (
+      frameKind === 'video'
+      && typeof video.cancelVideoFrameCallback === 'function'
+    ) {
+      video.cancelVideoFrameCallback(frameHandle);
+    } else if (frameKind === 'raf') {
+      cancelAnimationFrame(frameHandle);
+    }
+
+    frameHandle = null;
+    frameKind = null;
+  }
+
+  function requestNextFrame() {
+    if (frameHandle !== null || video.paused || document.hidden) return;
+
+    if (typeof video.requestVideoFrameCallback === 'function') {
+      frameKind = 'video';
+      frameHandle = video.requestVideoFrameCallback(() => {
+        frameHandle = null;
+        frameKind = null;
+        renderAt();
+        requestNextFrame();
+      });
+    } else {
+      frameKind = 'raf';
+      frameHandle = requestAnimationFrame(() => {
+        frameHandle = null;
+        frameKind = null;
+        renderAt();
+        requestNextFrame();
+      });
+    }
+  }
+
+  function invalidateGeometry() {
+    transform = null;
+    renderAt();
+  }
+
+  function handlePlaying() {
+    requestNextFrame();
+  }
+
+  function handlePause() {
+    stopFrameLoop();
+    renderAt();
+  }
+
+  function handleSeeked() {
+    renderAt();
+  }
+
+  function handleVisibilityChange() {
+    if (document.hidden) {
+      stopFrameLoop();
+    } else if (!video.paused) {
+      renderAt();
+      requestNextFrame();
+    }
+  }
+
+  function start() {
+    if (started || !video.videoWidth || !video.videoHeight) return;
+    started = true;
+    rebuildTransform();
+    renderAt();
+    overlay.hidden = false;
+    if (!video.paused) requestNextFrame();
+  }
+
+  const resizeObserver = new ResizeObserver(invalidateGeometry);
+  resizeObserver.observe(hud);
+  video.addEventListener('loadedmetadata', start);
+  video.addEventListener('playing', handlePlaying);
+  video.addEventListener('pause', handlePause);
+  video.addEventListener('seeked', handleSeeked);
+  document.addEventListener('visibilitychange', handleVisibilityChange);
+  window.addEventListener('orientationchange', invalidateGeometry);
+
+  if (video.readyState >= 1) start();
 }
