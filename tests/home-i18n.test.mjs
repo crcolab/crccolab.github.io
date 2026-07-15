@@ -35,6 +35,21 @@ test('Chinese homepage localizes generic interface copy', () => {
   assert.doesNotMatch(zh, /Switch light \/ purple theme|Switch theme|Team photo|>Email<|Made with ❤️ in Taiwan/);
 });
 
+test('Chinese homepage localizes its brand and feed labels', () => {
+  assert.match(zh, /class="site-header__brand" aria-label="CRC 首頁"/);
+  for (const [title, href] of [
+    ['CRC — 所有更新', '/feed.xml'],
+    ['CRC — 最新訊息', '/news/feed.xml'],
+    ['CRC — 活動', '/events/feed.xml'],
+    ['CRC — 記錄／報導', '/records/feed.xml'],
+  ]) {
+    assert.match(zh, new RegExp(`title="${title}" href="${href.replaceAll('.', '\\.')}"`));
+  }
+  assert.doesNotMatch(zh, /aria-label="CRC home"|title="CRC — (?:All updates|News|Events|Media)"/);
+  assert.match(en, /aria-label="CRC home"/);
+  assert.match(en, /title="CRC — All updates"/);
+});
+
 test('HUD target accessible names reference only the current locale', () => {
   for (const id of ['lulu', 'meichun', 'cheng', 'tzu-tung', 'sean']) {
     const zhTarget = zh.match(new RegExp(`<button[^>]*class="team-member-target"[^>]*data-member-id="${id}"[^>]*>`))?.[0];
