@@ -1,0 +1,12 @@
+{% for item in include.entries limit: 20 %}
+  <entry>
+    <title>{{ item.title | xml_escape }}</title>
+    <link href="{{ item.url | absolute_url }}"/>
+    <id>{{ item.url | absolute_url }}</id>
+    <updated>{{ item.date | date_to_xmlschema }}</updated>
+    <category term="{{ item.category | xml_escape }}"/>
+    <summary type="text">{{ item.summary | strip_newlines | xml_escape }}</summary>
+    <content type="html">{{ item.content | markdownify | xml_escape }}</content>
+    <author><name>Cyborg Resilience Co-lab</name></author>
+  </entry>
+{% endfor %}
