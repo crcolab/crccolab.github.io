@@ -1,0 +1,73 @@
+zh-Hant:
+  language_switcher_label: 選擇語言
+  navigation:
+    about: 關於
+    team: 團隊
+    news: 訊息
+    events: 活動
+    records: 記錄／報導
+    latest: 最新消息
+  sections:
+    news: 最新訊息
+    events: 活動
+    records: 記錄／報導
+  view_all: 查看全部
+  view_source: 閱讀原文
+  back_to:
+    news: 所有訊息
+    events: 所有活動
+    records: 所有記錄／報導
+  bilingual_event: 雙語活動頁
+  feed:
+    label: Atom 訂閱
+    all: 所有更新
+    news: 最新訊息
+    events: 活動
+    records: 記錄／報導
+    subtitle: CRC 賽伯格韌性實驗室的最新訊息、活動與媒體報導
+  footer:
+    navigate: 導覽
+    connect: 連結
+    atom: Atom 訂閱
+    made_in_taiwan: 在台灣製作
+  consent:
+    message: 我們使用匿名分析資料改善網站。只有在你同意後才會啟用分析。
+    accept: 同意
+    reject: 不同意
+
+en-US:
+  language_switcher_label: Choose language
+  navigation:
+    about: About
+    team: Team
+    news: News
+    events: Events
+    records: Media
+    latest: Latest updates
+  sections:
+    news: Latest News
+    events: Events
+    records: As Seen in the Media
+  view_all: View all
+  view_source: View source
+  back_to:
+    news: All news
+    events: All events
+    records: All media
+  bilingual_event: Bilingual event page
+  feed:
+    label: Atom feed
+    all: All updates
+    news: News
+    events: Events
+    records: Media
+    subtitle: News, events, and media appearances from Cyborg Resilience Co-lab
+  footer:
+    navigate: Navigate
+    connect: Connect
+    atom: Atom feed
+    made_in_taiwan: Made with care in Taiwan
+  consent:
+    message: We use anonymous analytics to improve this website. Analytics starts only after you consent.
+    accept: Accept
+    reject: Decline

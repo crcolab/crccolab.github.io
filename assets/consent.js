@@ -1,4 +1,10 @@
 (function () {
+  var localized = document.currentScript.dataset;
+  var copy = {
+    message: localized.message || '本站使用 Cookie 進行匿名流量分析（Google Analytics）。 This site uses cookies for anonymous traffic analytics (Google Analytics).',
+    accept: localized.accept || '接受 Accept',
+    reject: localized.reject || '拒絕 Decline'
+  };
   var STORAGE_KEY = 'crc-consent';
 
   function update(value) {
@@ -24,21 +30,20 @@
       'background:#161618;color:#ededf0;',
       'padding:14px 24px;',
       'display:flex;align-items:center;gap:18px;flex-wrap:wrap;',
-      'font-family:"Noto Sans TC","Funnel Display",sans-serif;font-size:13.5px;',
+      'font-family:"Noto Sans TC","Funnel Display",sans-serif;font-size:16px;',
       'border-top:3px solid #46288B;',
     '}',
-    '#crc-consent-banner .crc-cb-text{flex:1;min-width:220px;line-height:1.6;}',
-    '#crc-consent-banner .crc-cb-text .en{display:block;font-family:"Funnel Display",sans-serif;font-size:12px;letter-spacing:.05em;color:#9a9aa2;margin-top:3px;}',
+    '#crc-consent-banner .crc-cb-text{flex:1;min-width:220px;line-height:1.65;}',
     '#crc-consent-banner .crc-cb-btns{display:flex;gap:10px;flex-shrink:0;}',
     '#crc-consent-banner .crc-btn-accept{',
       'background:#B7D32D;color:#46288B;border:2px solid #B7D32D;',
-      'padding:8px 16px;border-radius:10px;cursor:pointer;',
-      'font-family:"Funnel Display","Noto Sans TC",sans-serif;font-weight:600;font-size:13px;',
+      'padding:8px 16px;border-radius:10px;cursor:pointer;min-height:44px;line-height:1.65;',
+      'font-family:"Funnel Display","Noto Sans TC",sans-serif;font-weight:600;font-size:16px;',
     '}',
     '#crc-consent-banner .crc-btn-decline{',
       'background:transparent;color:#ededf0;border:1.5px solid #6c6c74;',
-      'padding:9px 16px;border-radius:10px;cursor:pointer;',
-      'font-family:"Funnel Display","Noto Sans TC",sans-serif;font-weight:600;font-size:13px;',
+      'padding:9px 16px;border-radius:10px;cursor:pointer;min-height:44px;line-height:1.65;',
+      'font-family:"Funnel Display","Noto Sans TC",sans-serif;font-weight:600;font-size:16px;',
     '}',
     '#crc-consent-banner .crc-btn-accept:hover{background:#9BB61E;border-color:#9BB61E;}',
     '#crc-consent-banner .crc-btn-decline:hover{border-color:#ededf0;}'
@@ -49,17 +54,25 @@
   var banner = document.createElement('div');
   banner.id = 'crc-consent-banner';
   banner.setAttribute('role', 'dialog');
-  banner.setAttribute('aria-label', 'Cookie consent');
-  banner.innerHTML = [
-    '<div class="crc-cb-text">',
-      '本站使用 Cookie 進行匿名流量分析（Google Analytics）。',
-      '<span class="en">This site uses cookies for anonymous traffic analytics (Google Analytics).</span>',
-    '</div>',
-    '<div class="crc-cb-btns">',
-      '<button class="crc-btn-accept">接受 Accept</button>',
-      '<button class="crc-btn-decline">拒絕 Decline</button>',
-    '</div>'
-  ].join('');
+  banner.setAttribute('aria-label', copy.message);
+  var message = document.createElement('div');
+  message.className = 'crc-cb-text';
+  message.textContent = copy.message;
+
+  var buttons = document.createElement('div');
+  buttons.className = 'crc-cb-btns';
+  var accept = document.createElement('button');
+  accept.className = 'crc-btn-accept';
+  accept.type = 'button';
+  accept.textContent = copy.accept;
+  var reject = document.createElement('button');
+  reject.className = 'crc-btn-decline';
+  reject.type = 'button';
+  reject.textContent = copy.reject;
+  buttons.appendChild(accept);
+  buttons.appendChild(reject);
+  banner.appendChild(message);
+  banner.appendChild(buttons);
 
   function dismiss(value) {
     localStorage.setItem(STORAGE_KEY, value);
@@ -67,8 +80,8 @@
     banner.remove();
   }
 
-  banner.querySelector('.crc-btn-accept').addEventListener('click', function () { dismiss('granted'); });
-  banner.querySelector('.crc-btn-decline').addEventListener('click', function () { dismiss('denied'); });
+  accept.addEventListener('click', function () { dismiss('granted'); });
+  reject.addEventListener('click', function () { dismiss('denied'); });
 
   document.body.appendChild(banner);
 })();

@@ -38,9 +38,9 @@ The landing page's `styles.css` is the source of truth for tokens on generated
 section pages too (`--crc-purple:#46288B`, `--crc-lime:#B7D32D`, Funnel Display);
 the table above applies to the older event sub-pages.
 
-Fonts (Google Fonts): Space Grotesk (UI), Press Start 2P (pixel accents), Noto Sans TC (zh). Use a monospace stack for English secondary text.
+Fonts (Google Fonts): Funnel Display (UI), Noto Sans TC (body/zh), and Press Start 2P (pixel accents). The readable hierarchy is 18px body, 16px supporting text, and 14px labels.
 
-Bilingual pattern: **zh-Hant primary**, English in mono as secondary. Headings purple on white/lime, white on blue/purple bands. Section bands alternate white → blue → purple.
+Locale pattern: paired single-language static locales, with `zh-Hant` at existing routes and `en-US` under `/en/`. Headings are purple on white/lime and white on blue/purple bands. Section bands alternate white → blue → purple.
 
 ## Conventions
 
@@ -69,6 +69,24 @@ bundle exec jekyll serve   # full site incl. generated sections (http://127.0.0.
 python3 -m http.server 8000  # static-only work (landing page, event sub-pages)
 ```
 Needs Ruby 3.3 (see .ruby-version) — Ruby 3.4+ breaks the github-pages gem (removed csv default gem). On macOS: brew install ruby@3.3.
+
+## Locales
+
+- Existing routes are `zh-Hant`; the static `en-US` mirror lives under `/en/`.
+- Add paired content with the same filename to `_news`/`_news_en`, `_events`/`_events_en`, or `_records`/`_records_en`.
+- Keep shared dates, categories, source URLs, external URLs, and image paths identical.
+- Translate the full title, summary, body, headings, image alt text, and link labels; do not use runtime or machine translation.
+- `/events/hackathon-2026/` is the only translation exception and must not receive an `/en/` duplicate.
+- Preview locale work with Jekyll because locale pages use Liquid; `python3 -m http.server` is not sufficient.
+
+Run the complete locale and typography verification from the repository root:
+
+```sh
+node --test tests/locale-controller.test.mjs tests/i18n-structure.test.mjs tests/translation-parity.test.mjs tests/home-i18n.test.mjs tests/readable-typography.test.mjs tests/mobile-cube-layout.test.mjs tests/surveillance-hud.test.mjs
+PATH="/opt/homebrew/opt/ruby@3.3/bin:$PATH" bundle exec jekyll build
+node --test tests/built-site-i18n.test.mjs
+git diff --check
+```
 
 ## Deploy
 

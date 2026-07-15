@@ -3,7 +3,8 @@ permalink: /news/feed.xml
 ---
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-Hant">
-  <title>Cyborg Resilience Co-lab — News</title>
+  {% assign ui = site.data.i18n["zh-Hant"] %}
+  <title>Cyborg Resilience Co-lab — {{ ui.feed.news }}</title>
   <link href="{{ '/news/' | absolute_url }}"/>
   <link rel="self" href="{{ '/news/feed.xml' | absolute_url }}"/>
   <id>{{ '/news/' | absolute_url }}</id>

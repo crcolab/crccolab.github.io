@@ -23,14 +23,29 @@ collections:
   records:
     output: true
     permalink: /records/:name/
+  news_en:
+    output: true
+    permalink: /en/news/:name/
+  events_en:
+    output: true
+    permalink: /en/events/:name/
+  records_en:
+    output: true
+    permalink: /en/records/:name/
 
 defaults:
   - scope: { type: news }
-    values: { layout: item, section: news }
+    values: { layout: item, section: news, collection_name: news, locale: zh-Hant }
   - scope: { type: events }
-    values: { layout: item, section: events }
+    values: { layout: item, section: events, collection_name: events, locale: zh-Hant }
   - scope: { type: records }
-    values: { layout: item, section: records }
+    values: { layout: item, section: records, collection_name: records, locale: zh-Hant }
+  - scope: { type: news_en }
+    values: { layout: item, section: news, collection_name: news_en, locale: en-US }
+  - scope: { type: events_en }
+    values: { layout: item, section: events, collection_name: events_en, locale: en-US }
+  - scope: { type: records_en }
+    values: { layout: item, section: records, collection_name: records_en, locale: en-US }
 
 exclude:
   - README.md

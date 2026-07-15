@@ -1,18 +1,21 @@
 <!doctype html>
-<html lang="zh-Hant">
-<head>
-{% include head-seo.html %}
-</head>
+<html lang="{{ page.locale | default: site.lang }}">
+<head>{% include head-seo.html %}</head>
+{% assign locale = page.locale | default: site.lang %}
+{% assign ui = site.data.i18n[locale] %}
+{% assign prefix = "" %}{% if locale == "en-US" %}{% assign prefix = "/en" %}{% endif %}
 <body>
   <header class="topbar">
     <div class="topbar__inner">
-      <a class="topbar__home" href="/">
-        <span class="topbar__back">←</span>
+      <a class="topbar__home" href="{{ prefix }}/">
+        <span class="topbar__back" aria-hidden="true">←</span>
         <span>Cyborg Resilience Co-lab</span>
       </a>
-      <div class="topbar__crumb" lang="en">
-        {% if page.section %}<a href="/{{ page.section }}/">{{ page.section }}</a>{% endif %}{% if page.collection %} / <b>{{ page.slug | default: page.url | split: "/" | last }}</b>{% endif %}
+      <div class="topbar__crumb">
+        {% if page.section %}<a href="{{ prefix }}/{{ page.section }}/">{{ ui.sections[page.section] }}</a>{% endif %}
+        {% if page.collection %} / <b>{{ page.slug | default: page.url | split: "/" | last }}</b>{% endif %}
       </div>
+      {% unless page.translation_exempt %}{% include locale-switcher.html %}{% endunless %}
     </div>
   </header>
 
@@ -20,15 +23,20 @@
 
   <footer class="sections-footer">
     <div class="sections-footer__inner">
-      <span>© <span id="y"></span> CRC · Cyborg Resilience Co-lab · 賽伯格韌性實驗室</span>
-      <nav lang="en">
-        <a href="/news/">News</a>
-        <a href="/events/">Events</a>
-        <a href="/records/">Media</a>
-        <a href="/feed.xml">Atom</a>
+      <span>© <span id="y"></span> CRC · Cyborg Resilience Co-lab</span>
+      <nav aria-label="{{ ui.footer.navigate }}">
+        <a href="{{ prefix }}/news/">{{ ui.navigation.news }}</a>
+        <a href="{{ prefix }}/events/">{{ ui.navigation.events }}</a>
+        <a href="{{ prefix }}/records/">{{ ui.navigation.records }}</a>
+        <a href="{{ prefix }}/feed.xml">{{ ui.footer.atom }}</a>
       </nav>
     </div>
   </footer>
   <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+  {% unless page.translation_exempt %}<script type="module" src="/assets/locale.js"></script>{% endunless %}
+  <script src="/assets/consent.js" defer
+    data-message="{{ ui.consent.message | escape }}"
+    data-accept="{{ ui.consent.accept | escape }}"
+    data-reject="{{ ui.consent.reject | escape }}"></script>
 </body>
 </html>

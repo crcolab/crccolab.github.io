@@ -1,0 +1,14 @@
+---
+permalink: /en/records/feed.xml
+---
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US">
+  {% assign ui = site.data.i18n["en-US"] %}
+  <title>Cyborg Resilience Co-lab — {{ ui.feed.records }}</title>
+  <link href="{{ '/en/records/' | absolute_url }}"/>
+  <link rel="self" href="{{ '/en/records/feed.xml' | absolute_url }}"/>
+  <id>{{ '/en/records/' | absolute_url }}</id>
+  {% assign entries = site.records_en | sort: "date" | reverse %}
+  <updated>{{ entries.first.date | default: site.time | date_to_xmlschema }}</updated>
+  {% include atom-entries.html entries=entries %}
+</feed>
