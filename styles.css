@@ -463,6 +463,19 @@ img,svg,video{max-width:100%}
   z-index:-1;
 }
 
+/* The pixel-font "cyber" is wider than the Cyborg slot and centers within
+   .glitch-word, so its right edge (plus the -4% marker overhang) covers the
+   start of "Resilience Co-lab". Shift the rest segment right while .cyber is
+   active. Measured overhang is ~10.5% of .logotype-split; translateX(15%) of
+   .logotype-en--rest ≈ 10.5% of split, clearing both hero and header widths.
+   Transition matches sprayIn timing so the shift eases in with the pop-out. */
+.logotype-split .logotype-en--rest{
+  transition:transform 0.6s cubic-bezier(.22,1,.36,1);
+}
+.glitch-word.cyber ~ .logotype-en--rest{
+  transform:translateX(15%);
+}
+
 /* State: fade-back — brief blur-in as the vector restores */
 .glitch-word.fade-back{animation:cyborgFadeBack 0.4s ease forwards}
 @keyframes cyborgFadeBack{
