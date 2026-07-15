@@ -384,13 +384,16 @@ img,svg,video{max-width:100%}
 }
 
 /* Cyborg slot doubles as the glitch container. Container-type: size enables cqh
-   sizing for the pixel-font "cyber" alt in Task 4. */
+   sizing for the pixel-font "cyber" alt in Task 4. Also carries the shared
+   animated-noise data URI so both the Phase-1 overlay (::before) and the
+   .cyber-state text-fill can reference the same pattern via var(). */
 .glitch-word{
   position:relative;
   display:block;
   width:100%;
   height:100%;
   container-type:size;
+  --glitch-noise:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 18'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='1' seed='1'%3E%3Canimate attributeName='seed' values='1;7;13;23;37' dur='0.25s' calcMode='discrete' repeatCount='indefinite'/%3E%3C/feTurbulence%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='discrete' tableValues='0 .33 .67 1'/%3E%3CfeFuncG type='discrete' tableValues='0 .33 .67 1'/%3E%3CfeFuncB type='discrete' tableValues='0 .33 .67 1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 .glitch-word__alt{
   display:none;
@@ -411,6 +414,8 @@ img,svg,video{max-width:100%}
   50% {opacity:0.3}
   100%{opacity:1}
 }
+/* Phase-1 blink (glitch over the vector Cyborg): noise as full-slot overlay,
+   same as the pre-redesign cyborg-toggle behavior. */
 .glitch-word.glitch::before{
   content:"";
   position:absolute;
@@ -420,7 +425,20 @@ img,svg,video{max-width:100%}
   mix-blend-mode:multiply;
   image-rendering:pixelated;
   -ms-interpolation-mode:nearest-neighbor;
-  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 18'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='1' seed='1'%3E%3Canimate attributeName='seed' values='1;7;13;23;37' dur='0.25s' calcMode='discrete' repeatCount='indefinite'/%3E%3C/feTurbulence%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='discrete' tableValues='0 .33 .67 1'/%3E%3CfeFuncG type='discrete' tableValues='0 .33 .67 1'/%3E%3CfeFuncB type='discrete' tableValues='0 .33 .67 1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") center/cover;
+  background:var(--glitch-noise) center/cover;
+}
+/* Blink DURING .cyber (random blinks + Phase 3a): don't overlay the whole slot
+   — the noise rectangle spilled onto "Resilience Co-lab". Suppress the full
+   overlay and instead fill the pixel-font "cyber" glyphs themselves with the
+   animated noise via background-clip:text. Result: cyber briefly appears made
+   of static, contained strictly within its own letter shapes. */
+.glitch-word.cyber.glitch::before{content:none}
+.glitch-word.cyber.glitch .glitch-word__alt{
+  background:var(--glitch-noise) center/cover;
+  -webkit-background-clip:text;
+          background-clip:text;
+  color:transparent;
+  -webkit-text-fill-color:transparent;
 }
 
 /* State: cyber — hide the vector, show the pixel-font alt in its place.
