@@ -118,6 +118,103 @@ export function isMappedRectEligible(rect, frame) {
   return visibleArea / (rect.width * rect.height) >= 0.5;
 }
 
+export function expandTouchRect(rect, minimumSize = 44) {
+  const width = Math.max(rect.width, minimumSize);
+  const height = Math.max(rect.height, minimumSize);
+  return {
+    x: rect.x - (width - rect.width) / 2,
+    y: rect.y - (height - rect.height) / 2,
+    width,
+    height,
+  };
+}
+
+const pointInRect = (point, rect) => (
+  point.x >= rect.x
+  && point.x <= rect.x + rect.width
+  && point.y >= rect.y
+  && point.y <= rect.y + rect.height
+);
+
+export function pickNearestTarget(point, candidates) {
+  let winner = null;
+  let winnerDistance = Infinity;
+
+  for (const candidate of candidates) {
+    if (!pointInRect(point, candidate.touchRect)) continue;
+
+    const centerX = candidate.visualRect.x + candidate.visualRect.width / 2;
+    const centerY = candidate.visualRect.y + candidate.visualRect.height / 2;
+    const distance = (point.x - centerX) ** 2 + (point.y - centerY) ** 2;
+
+    if (distance < winnerDistance) {
+      winner = candidate.id;
+      winnerDistance = distance;
+    }
+  }
+
+  return winner;
+}
+
+const clamp = (value, minimum, maximum) => (
+  Math.min(Math.max(value, minimum), maximum)
+);
+
+export function computePanelPlacement(
+  anchor,
+  panelSize,
+  frameSize,
+  gap = 12,
+  inset = 8,
+) {
+  const verticalCenter = anchor.y + (anchor.height - panelSize.height) / 2;
+  const horizontalCenter = anchor.x + (anchor.width - panelSize.width) / 2;
+  const candidates = [
+    {
+      side: 'right',
+      left: anchor.x + anchor.width + gap,
+      top: verticalCenter,
+    },
+    {
+      side: 'left',
+      left: anchor.x - panelSize.width - gap,
+      top: verticalCenter,
+    },
+    {
+      side: 'below',
+      left: horizontalCenter,
+      top: anchor.y + anchor.height + gap,
+    },
+    {
+      side: 'above',
+      left: horizontalCenter,
+      top: anchor.y - panelSize.height - gap,
+    },
+  ];
+
+  const fits = (candidate) => (
+    candidate.left >= inset
+    && candidate.top >= inset
+    && candidate.left + panelSize.width <= frameSize.width - inset
+    && candidate.top + panelSize.height <= frameSize.height - inset
+  );
+  const selected = candidates.find(fits) || candidates[0];
+
+  return {
+    left: clamp(
+      selected.left,
+      inset,
+      Math.max(inset, frameSize.width - panelSize.width - inset),
+    ),
+    top: clamp(
+      selected.top,
+      inset,
+      Math.max(inset, frameSize.height - panelSize.height - inset),
+    ),
+    side: selected.side,
+  };
+}
+
 export function initSurveillanceHUD(){
   const video = document.querySelector('.team__video');
   const targets = document.querySelectorAll('.face-target');

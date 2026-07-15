@@ -6,6 +6,9 @@ import {
   MEMBER_TRACKS,
 } from '../animations/team-member-tracks.js';
 import {
+  expandTouchRect,
+  pickNearestTarget,
+  computePanelPlacement,
   computeCoverTransform,
   getTrackedRectAtTime,
   isMappedRectEligible,
@@ -137,4 +140,57 @@ test('mapped eligibility requires center in frame and at least half visible area
     isMappedRectEligible({ x: 110, y: 10, width: 20, height: 20 }, frame),
     false,
   );
+});
+
+test('touch rectangles expand to 44px without moving the center', () => {
+  assert.deepEqual(
+    expandTouchRect({ x: 20, y: 30, width: 20, height: 30 }),
+    { x: 8, y: 23, width: 44, height: 44 },
+  );
+});
+
+test('overlapping touch targets choose the nearest visual center with stable ties', () => {
+  const candidates = [
+    {
+      id: 'lulu',
+      visualRect: { x: 10, y: 10, width: 10, height: 10 },
+      touchRect: { x: 0, y: 0, width: 44, height: 44 },
+    },
+    {
+      id: 'meichun',
+      visualRect: { x: 25, y: 10, width: 10, height: 10 },
+      touchRect: { x: 5, y: 0, width: 44, height: 44 },
+    },
+  ];
+
+  assert.equal(pickNearestTarget({ x: 29, y: 15 }, candidates), 'meichun');
+  assert.equal(pickNearestTarget({ x: 22.5, y: 15 }, candidates), 'lulu');
+  assert.equal(pickNearestTarget({ x: 90, y: 90 }, candidates), null);
+});
+
+test('panel placement prefers right, then left, and clamps with an 8px inset', () => {
+  assert.deepEqual(
+    computePanelPlacement(
+      { x: 20, y: 20, width: 20, height: 20 },
+      { width: 30, height: 20 },
+      { width: 100, height: 100 },
+    ),
+    { left: 52, top: 20, side: 'right' },
+  );
+
+  assert.deepEqual(
+    computePanelPlacement(
+      { x: 70, y: 20, width: 20, height: 20 },
+      { width: 30, height: 20 },
+      { width: 100, height: 100 },
+    ),
+    { left: 28, top: 20, side: 'left' },
+  );
+
+  const clamped = computePanelPlacement(
+    { x: 45, y: 45, width: 10, height: 10 },
+    { width: 95, height: 95 },
+    { width: 100, height: 100 },
+  );
+  assert.deepEqual(clamped, { left: 8, top: 8, side: 'right' });
 });
