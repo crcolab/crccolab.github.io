@@ -6,8 +6,11 @@ import {
   MEMBER_TRACKS,
 } from '../animations/team-member-tracks.js';
 import {
+  computeCoverTransform,
   getTrackedRectAtTime,
+  isMappedRectEligible,
   isValidMemberTrack,
+  mapNormalizedRect,
 } from '../animations/surveillance-hud.js';
 
 const approx = (actual, expected, epsilon = 1e-9) => {
@@ -82,5 +85,56 @@ test('tracking returns null outside segments and never crosses a cut or loop', (
   assert.deepEqual(
     getTrackedRectAtTime(track, 1.136667),
     track.segments[0].keyframes[0].rect,
+  );
+});
+
+test('cover transforms center-crop 1920x1044 into desktop and mobile HUDs', () => {
+  const desktop = computeCoverTransform(
+    { width: 1920, height: 1044 },
+    { width: 1176, height: 504 },
+  );
+  approx(desktop.renderedWidth, 1176);
+  approx(desktop.offsetX, 0);
+  assert.ok(desktop.offsetY < 0);
+
+  const mobile = computeCoverTransform(
+    { width: 1920, height: 1044 },
+    { width: 390, height: 219.375 },
+  );
+  approx(mobile.renderedHeight, 219.375);
+  approx(mobile.offsetY, 0);
+  assert.ok(mobile.offsetX < 0);
+});
+
+test('normalized rectangles map through the cover transform', () => {
+  const transform = computeCoverTransform(
+    { width: 100, height: 100 },
+    { width: 200, height: 100 },
+  );
+  const mapped = mapNormalizedRect(
+    { x: .25, y: .25, width: .5, height: .5 },
+    transform,
+  );
+
+  assert.deepEqual(mapped, { x: 50, y: 0, width: 100, height: 100 });
+});
+
+test('mapped eligibility requires center in frame and at least half visible area', () => {
+  const frame = { width: 100, height: 100 };
+  assert.equal(
+    isMappedRectEligible({ x: 10, y: 10, width: 40, height: 40 }, frame),
+    true,
+  );
+  assert.equal(
+    isMappedRectEligible({ x: -10, y: 10, width: 30, height: 30 }, frame),
+    true,
+  );
+  assert.equal(
+    isMappedRectEligible({ x: -30, y: 10, width: 40, height: 40 }, frame),
+    false,
+  );
+  assert.equal(
+    isMappedRectEligible({ x: 110, y: 10, width: 20, height: 20 }, frame),
+    false,
   );
 });

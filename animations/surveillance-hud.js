@@ -59,6 +59,65 @@ export function getTrackedRectAtTime(track, time) {
   };
 }
 
+export function computeCoverTransform(source, frame) {
+  if (
+    !source
+    || !frame
+    || source.width <= 0
+    || source.height <= 0
+    || frame.width <= 0
+    || frame.height <= 0
+  ) return null;
+
+  const scale = Math.max(frame.width / source.width, frame.height / source.height);
+  const renderedWidth = source.width * scale;
+  const renderedHeight = source.height * scale;
+
+  return {
+    scale,
+    renderedWidth,
+    renderedHeight,
+    offsetX: (frame.width - renderedWidth) / 2,
+    offsetY: (frame.height - renderedHeight) / 2,
+    frameWidth: frame.width,
+    frameHeight: frame.height,
+  };
+}
+
+export function mapNormalizedRect(rect, transform) {
+  return {
+    x: transform.offsetX + rect.x * transform.renderedWidth,
+    y: transform.offsetY + rect.y * transform.renderedHeight,
+    width: rect.width * transform.renderedWidth,
+    height: rect.height * transform.renderedHeight,
+  };
+}
+
+export function isMappedRectEligible(rect, frame) {
+  if (!rect || rect.width <= 0 || rect.height <= 0) return false;
+
+  const centerX = rect.x + rect.width / 2;
+  const centerY = rect.y + rect.height / 2;
+  const centerInside = (
+    centerX >= 0
+    && centerX <= frame.width
+    && centerY >= 0
+    && centerY <= frame.height
+  );
+  if (!centerInside) return false;
+
+  const intersectionWidth = Math.max(
+    0,
+    Math.min(rect.x + rect.width, frame.width) - Math.max(rect.x, 0),
+  );
+  const intersectionHeight = Math.max(
+    0,
+    Math.min(rect.y + rect.height, frame.height) - Math.max(rect.y, 0),
+  );
+  const visibleArea = intersectionWidth * intersectionHeight;
+  return visibleArea / (rect.width * rect.height) >= 0.5;
+}
+
 export function initSurveillanceHUD(){
   const video = document.querySelector('.team__video');
   const targets = document.querySelectorAll('.face-target');
