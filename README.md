@@ -33,8 +33,26 @@ Sub-pages should reuse the same palette / type / vocabulary; see `events/hackath
 ## Local preview
 
 ```sh
-python3 -m http.server 8000
-# open http://localhost:8000
+PATH="/opt/homebrew/opt/ruby@3.3/bin:$PATH" bundle exec jekyll serve --host 127.0.0.1 --port 4000
+# open http://127.0.0.1:4000
+```
+
+## Locales
+
+- Existing routes are `zh-Hant`; the static `en-US` mirror lives under `/en/`.
+- Add paired content with the same filename to `_news`/`_news_en`, `_events`/`_events_en`, or `_records`/`_records_en`.
+- Keep shared dates, categories, source URLs, external URLs, and image paths identical.
+- Translate the full title, summary, body, headings, image alt text, and link labels; do not use runtime or machine translation.
+- `/events/hackathon-2026/` is the only translation exception and must not receive an `/en/` duplicate.
+- Preview locale work with Jekyll because locale pages use Liquid; `python3 -m http.server` is not sufficient.
+
+Verify locale and typography work from the repository root:
+
+```sh
+node --test tests/locale-controller.test.mjs tests/i18n-structure.test.mjs tests/translation-parity.test.mjs tests/home-i18n.test.mjs tests/readable-typography.test.mjs tests/mobile-cube-layout.test.mjs tests/surveillance-hud.test.mjs
+PATH="/opt/homebrew/opt/ruby@3.3/bin:$PATH" bundle exec jekyll build
+node --test tests/built-site-i18n.test.mjs
+git diff --check
 ```
 
 ## Deploy
