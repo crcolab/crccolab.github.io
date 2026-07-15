@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 
 import {
   MEMBER_IDS,
@@ -295,4 +296,54 @@ test('playback lease can release ownership without resuming while hidden', async
   lease.pauseForInteraction();
   assert.equal(await lease.resumeIfOwned(false), false);
   assert.equal(lease.ownsPause(), false);
+});
+
+test('team markup has five semantic targets linked to the existing roster copy', async () => {
+  const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+  const ids = ['lulu', 'meichun', 'cheng', 'tzu-tung', 'sean'];
+
+  assert.equal((html.match(/class="team-member-target"/g) || []).length, 5);
+  assert.doesNotMatch(html, /class="face-target"/);
+  assert.match(html, /data-team-member-overlay[^>]*hidden/);
+  assert.match(html, /data-team-member-panel[^>]*hidden[^>]*aria-hidden="true"/);
+
+  for (const id of ids) {
+    const labelIds = [
+      'team-member-' + id + '-name-zh',
+      'team-member-' + id + '-name-en',
+      'team-member-' + id + '-role-zh',
+      'team-member-' + id + '-role-en',
+    ];
+    for (const labelId of labelIds) {
+      assert.match(html, new RegExp('id="' + labelId + '"'));
+    }
+
+    const openingTag = html.match(
+      new RegExp('<button[^>]*data-member-id="' + id + '"[^>]*>'),
+    )?.[0];
+    assert.ok(openingTag, 'missing target for ' + id);
+    assert.match(openingTag, /type="button"/);
+    assert.match(openingTag, /disabled/);
+    assert.match(
+      openingTag,
+      new RegExp('aria-labelledby="' + labelIds.join(' ') + '"'),
+    );
+  }
+
+  for (const field of ['name-zh', 'name-en', 'role-zh', 'role-en']) {
+    assert.match(html, new RegExp('data-panel-field="' + field + '"'));
+  }
+});
+
+test('team target CSS is invisible by default and exposes teaser, active, focus, and reduced-motion states', async () => {
+  const css = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
+
+  assert.match(css, /\.team-member-overlay\{[^}]*pointer-events:none/s);
+  assert.match(css, /\.team-member-target\[disabled\]\{display:none\}/);
+  assert.match(css, /\.team-member-target\.is-teasing/);
+  assert.match(css, /\.team-member-target\.is-active/);
+  assert.match(css, /\.team-member-target:focus-visible/);
+  assert.match(css, /\.team-member-panel\{[^}]*pointer-events:none/s);
+  assert.match(css, /prefers-reduced-motion:reduce/);
+  assert.doesNotMatch(css, /\.face-target/);
 });
