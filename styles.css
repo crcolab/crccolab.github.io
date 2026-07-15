@@ -385,9 +385,10 @@ button.team-card__names:focus-visible{outline:2px solid var(--crc-purple);outlin
 .crc-tag,.crc-news__date,.crc-news__cat,.modal__meta,.footer__col h4,
 .footer__base,.crc-hud__bar{font-size:var(--fs-label)}
 
-.crc-btn,.theme-toggle,.locale-switcher a,button.team-card__names{
+.crc-btn,.theme-toggle,.locale-switcher a{
   min-height:var(--control-min)
 }
+button.team-card__names{min-height:var(--control-min);min-width:var(--control-min)}
 .theme-toggle,.locale-switcher a{min-width:var(--control-min)}
 .site-nav__link,.footer__col a,.modal__close{min-height:var(--control-min)}
 .modal__close{min-width:var(--control-min)}
@@ -544,6 +545,8 @@ button.team-card__names:focus-visible{outline:2px solid var(--crc-purple);outlin
   .hero__title .crc-mark{width:min(280px,60vw);height:auto;aspect-ratio:385.35/162.34}
 }
 @media (max-width:520px){
+  .site-header{flex-wrap:wrap;gap:8px 12px}
+  .site-header__latest{display:none}
   .hero__cubes{flex-wrap:nowrap;gap:12px}
   .hero__cubes .crc-cube{width:72px;flex:none}
   .about__content{position:relative}
@@ -553,6 +556,13 @@ button.team-card__names:focus-visible{outline:2px solid var(--crc-purple);outlin
   .team__grid{grid-template-columns:1fr 1fr;gap:14px}
   .crc-hud{aspect-ratio:16/9}
   .site-header__brand .logotype-split{display:none}
+}
+@media (max-width:360px){
+  .site-header{padding-inline:8px;gap:8px}
+  .site-header__brand{width:100%}
+  .site-header__actions{width:100%;justify-content:space-between;gap:0}
+  .site-header .locale-switcher{gap:0}
+  .site-header .locale-switcher span{display:none}
 }
 
 /* ---------- homepage latest-3 section blocks ---------- */

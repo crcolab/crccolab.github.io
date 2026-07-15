@@ -58,7 +58,14 @@ test('meaningful shared components consume readable tokens', () => {
   }
   assert.match(sections, /\.item__body[^}]*font-size:var\(--fs-body\)/);
   assert.match(sections, /\.item__body[^}]*max-width:65ch/);
-  assert.match(css, /min-height:var\(--control-min\)/);
+  assert.match(css, /button\.team-card__names\{[^}]*min-height:var\(--control-min\)[^}]*min-width:var\(--control-min\)/);
+});
+
+test('shared headers reflow at narrow effective viewports without shrinking controls', () => {
+  assert.match(css, /@media \(max-width:520px\)\{[\s\S]*?\.site-header\{[^}]*flex-wrap:wrap[^}]*\}[\s\S]*?\.site-header__latest\{display:none\}/);
+  assert.match(css, /@media \(max-width:360px\)\{[\s\S]*?\.site-header\{[^}]*padding-inline:8px[^}]*\}[\s\S]*?\.site-header__actions\{[^}]*width:100%[^}]*\}/);
+  assert.match(sections, /@media \(max-width:360px\)\{[\s\S]*?\.topbar__inner\{[^}]*padding-inline:8px[^}]*\}[\s\S]*?\.topbar__home\{[^}]*min-width:var\(--control-min\)[^}]*\}/);
+  assert.match(sections, /\.topbar__home,\.locale-switcher a[^}]*min-height:var\(--control-min\)/);
 });
 
 test('consent receives one locale and uses readable control sizes', () => {

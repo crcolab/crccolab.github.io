@@ -3,7 +3,8 @@ permalink: /en/events/feed.xml
 ---
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US">
-  <title>Cyborg Resilience Co-lab — Events</title>
+  {% assign ui = site.data.i18n["en-US"] %}
+  <title>Cyborg Resilience Co-lab — {{ ui.feed.events }}</title>
   <link href="{{ '/en/events/' | absolute_url }}"/>
   <link rel="self" href="{{ '/en/events/feed.xml' | absolute_url }}"/>
   <id>{{ '/en/events/' | absolute_url }}</id>

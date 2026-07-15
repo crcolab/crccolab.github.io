@@ -65,3 +65,9 @@
 @media (max-width:640px){
   .topbar__crumb{display:none}
 }
+@media (max-width:360px){
+  .topbar__inner{padding-inline:8px;gap:8px}
+  .topbar__home{min-width:var(--control-min);justify-content:center}
+  .topbar__home span:last-child,.topbar .locale-switcher span{display:none}
+  .topbar .locale-switcher{gap:0}
+}

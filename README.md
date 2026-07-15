@@ -8,7 +8,7 @@ CRC is a research and co-lab practice exploring digital resilience under contemp
 
 ```
 .
-├── index.html               # Landing page (zh-Hant primary, EN mono secondary)
+├── index.html               # zh-Hant landing page; paired en-US page lives in en/
 ├── styles.css               # Site-wide styles
 ├── script.js                # Landing page interactions
 ├── animations/              # Visual modules (cyborg toggle, news modal, HUD)
@@ -24,8 +24,8 @@ CRC is a research and co-lab practice exploring digital resilience under contemp
 ## Design vocabulary
 
 - **Colors:** Lime `#c1ff72`, Purple `#5e17eb`, Ink `#1a2123`, BG-Blue `#7b87f3`
-- **Type:** Space Grotesk (body/headings), Press Start 2P (pixel accents), Noto Sans TC (Chinese), monospace for English subtitles
-- **Patterns:** dotted dividers, cube SVG decorations, 2px purple-bordered cards (radius `18px`), bilingual zh/EN-mono pairing, surveillance-HUD aesthetic
+- **Type:** Noto Sans TC and Funnel Display, with a readable 18px body / 16px supporting / 14px label hierarchy; Press Start 2P is reserved for pixel accents
+- **Patterns:** dotted dividers, cube SVG decorations, 2px purple-bordered cards (radius `18px`), paired single-language static locales, surveillance-HUD aesthetic
 - **Layout:** `--max: 1100px` container, section banding (white → blue → purple)
 
 Sub-pages should reuse the same palette / type / vocabulary; see `events/hackathon-2026/styles.css` for an example that adapts the system to a schedule layout.

@@ -6,6 +6,7 @@
 {% assign desc = page.summary | default: page.description | default: site.description | strip_newlines | truncate: 300 %}
 <meta name="description" content="{{ desc | escape }}">
 {% assign locale = page.locale | default: site.lang %}
+{% assign ui = site.data.i18n[locale] %}
 {% if locale == "en-US" %}
   {% assign zh_url = page.url | remove_first: "/en" %}
   {% assign en_url = page.url %}
@@ -34,10 +35,10 @@
 <meta name="twitter:title" content="{{ page_title | escape }}">
 <meta name="twitter:description" content="{{ desc | escape }}">
 {% if page.image and page.image != "" %}<meta name="twitter:image" content="{{ page.image | absolute_url }}">{% endif %}
-<link rel="alternate" type="application/atom+xml" title="CRC — All updates" href="{{ feed_prefix }}/feed.xml">
-<link rel="alternate" type="application/atom+xml" title="CRC — News" href="{{ feed_prefix }}/news/feed.xml">
-<link rel="alternate" type="application/atom+xml" title="CRC — Events" href="{{ feed_prefix }}/events/feed.xml">
-<link rel="alternate" type="application/atom+xml" title="CRC — Media" href="{{ feed_prefix }}/records/feed.xml">
+<link rel="alternate" type="application/atom+xml" title="CRC — {{ ui.feed.all }}" href="{{ feed_prefix }}/feed.xml">
+<link rel="alternate" type="application/atom+xml" title="CRC — {{ ui.feed.news }}" href="{{ feed_prefix }}/news/feed.xml">
+<link rel="alternate" type="application/atom+xml" title="CRC — {{ ui.feed.events }}" href="{{ feed_prefix }}/events/feed.xml">
+<link rel="alternate" type="application/atom+xml" title="CRC — {{ ui.feed.records }}" href="{{ feed_prefix }}/records/feed.xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Noto+Sans+TC:wght@400;500;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">

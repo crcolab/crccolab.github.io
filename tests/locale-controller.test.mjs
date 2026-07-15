@@ -3,10 +3,30 @@ import test from 'node:test';
 import {
   detectBrowserLocale,
   getRedirectTarget,
+  initLocaleController,
   persistLocale,
   readStoredLocale,
   selectPreferredLocale,
 } from '../assets/locale.js';
+
+function localeDocument(lang = 'zh-Hant') {
+  return {
+    documentElement: { lang },
+    querySelector: () => null,
+    querySelectorAll: () => [],
+  };
+}
+
+function withWindow(windowValue, callback) {
+  const original = Object.getOwnPropertyDescriptor(globalThis, 'window');
+  Object.defineProperty(globalThis, 'window', { configurable: true, value: windowValue });
+  try {
+    return callback();
+  } finally {
+    if (original) Object.defineProperty(globalThis, 'window', original);
+    else delete globalThis.window;
+  }
+}
 
 test('browser locale chooses Chinese for any zh variant and English otherwise', () => {
   assert.equal(detectBrowserLocale(['zh-TW', 'en-US'], ''), 'zh-Hant');
@@ -50,4 +70,32 @@ test('redirect requires a different locale and an advertised counterpart', () =>
 test('persisting a locale never throws when storage is blocked', () => {
   assert.equal(persistLocale({ setItem: () => {} }, 'en-US'), true);
   assert.equal(persistLocale({ setItem: () => { throw new Error('blocked'); } }, 'en-US'), false);
+});
+
+test('controller initialization survives a throwing window.localStorage getter on a static route', () => {
+  const blockedWindow = {};
+  Object.defineProperty(blockedWindow, 'localStorage', {
+    get() { throw new Error('SecurityError: storage blocked'); },
+  });
+
+  const result = withWindow(blockedWindow, () => initLocaleController({
+    document: localeDocument(),
+    location: { href: 'https://crcolab.art/events/hackathon-2026/', replace: () => assert.fail('unexpected redirect') },
+    navigator: { languages: ['zh-TW'], language: 'zh-TW' },
+  }));
+
+  assert.deepEqual(result, { currentLocale: 'zh-Hant', preferredLocale: 'zh-Hant', target: null });
+});
+
+test('controller initialization preserves explicitly injected storage', () => {
+  const result = withWindow({
+    get localStorage() { throw new Error('must not read window storage'); },
+  }, () => initLocaleController({
+    document: localeDocument(),
+    location: { href: 'https://crcolab.art/', replace: () => {} },
+    navigator: { languages: ['zh-TW'], language: 'zh-TW' },
+    storage: { getItem: () => 'en-US' },
+  }));
+
+  assert.equal(result.preferredLocale, 'en-US');
 });

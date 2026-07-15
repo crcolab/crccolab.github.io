@@ -3,8 +3,9 @@ permalink: /feed.xml
 ---
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-Hant">
-  <title>Cyborg Resilience Co-lab — All updates</title>
-  <subtitle>News, events and media appearances from CRC 賽伯格韌性實驗室</subtitle>
+  {% assign ui = site.data.i18n["zh-Hant"] %}
+  <title>Cyborg Resilience Co-lab — {{ ui.feed.all }}</title>
+  <subtitle>{{ ui.feed.subtitle }}</subtitle>
   <link href="{{ '/' | absolute_url }}"/>
   <link rel="self" href="{{ '/feed.xml' | absolute_url }}"/>
   <id>{{ '/' | absolute_url }}</id>

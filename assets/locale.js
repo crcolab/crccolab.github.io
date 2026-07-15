@@ -37,14 +37,24 @@ export function getRedirectTarget({ currentLocale, preferredLocale, alternateHre
   return target === new URL(currentHref).href ? null : target;
 }
 
+function resolveStorage(storage) {
+  if (storage !== undefined) return storage;
+  try {
+    return window.localStorage;
+  } catch {
+    return null;
+  }
+}
+
 export function initLocaleController({
   document: doc = document,
   location: loc = window.location,
   navigator: nav = window.navigator,
-  storage = window.localStorage,
+  storage,
 } = {}) {
+  const resolvedStorage = resolveStorage(storage);
   const currentLocale = doc.documentElement.lang;
-  const preferredLocale = selectPreferredLocale({ storage, languages: nav.languages, language: nav.language });
+  const preferredLocale = selectPreferredLocale({ storage: resolvedStorage, languages: nav.languages, language: nav.language });
   const alternate = doc.querySelector(`link[rel="alternate"][hreflang="${preferredLocale}"]`);
   const target = getRedirectTarget({
     currentLocale,
@@ -54,7 +64,7 @@ export function initLocaleController({
   });
 
   doc.querySelectorAll('[data-locale-option]').forEach(link => {
-    link.addEventListener('click', () => persistLocale(storage, link.dataset.localeOption));
+    link.addEventListener('click', () => persistLocale(resolvedStorage, link.dataset.localeOption));
   });
 
   if (target) loc.replace(target);

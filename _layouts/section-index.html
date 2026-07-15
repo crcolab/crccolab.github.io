@@ -3,7 +3,6 @@ layout: default
 ---
 {% assign ui = site.data.i18n[page.locale] %}
 {% assign items = site[page.collection_name] | sort: "date" | reverse %}
-{% assign listing_title_key = "listing_title_" | append: "en" %}
 {% if page.locale == "en-US" and page.section == "events" %}
   {% assign exemptions = site.events | where: "translation_exempt", true %}
   {% assign items = items | concat: exemptions | sort: "date" | reverse %}
@@ -13,14 +12,14 @@ layout: default
     <div class="section__head">
       <h1 class="crc-heading"><span class="crc-heading__title">{{ page.title }}</span></h1>
       <p class="index-page__desc">{{ page.description }}</p>
-      <p class="index-page__feed"><a href="{% if page.locale == 'en-US' %}/en{% endif %}/{{ page.section }}/feed.xml">Atom feed ↗</a></p>
+      <p class="index-page__feed"><a href="{% if page.locale == 'en-US' %}/en{% endif %}/{{ page.section }}/feed.xml">{{ ui.feed.label }} ↗</a></p>
     </div>
     {{ content }}
     <div class="index-page__list">
       {% for item in items %}
       {% assign item_title = item.title %}{% assign item_summary = item.summary %}
       {% if page.locale == "en-US" and item.translation_exempt %}
-        {% assign item_title = item[listing_title_key] %}{% assign item_summary = item.listing_summary_en %}
+        {% assign item_title = item.listing_title_en %}{% assign item_summary = item.listing_summary_en %}
       {% endif %}
       <a class="crc-news crc-news--link{% if forloop.index <= 3 %} crc-news--featured{% endif %}" href="{{ item.link | default: item.url }}">
         <div class="crc-news__meta">

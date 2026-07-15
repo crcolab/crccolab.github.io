@@ -38,9 +38,9 @@ The landing page's `styles.css` is the source of truth for tokens on generated
 section pages too (`--crc-purple:#46288B`, `--crc-lime:#B7D32D`, Funnel Display);
 the table above applies to the older event sub-pages.
 
-Fonts (Google Fonts): Space Grotesk (UI), Press Start 2P (pixel accents), Noto Sans TC (zh). Use a monospace stack for English secondary text.
+Fonts (Google Fonts): Funnel Display (UI), Noto Sans TC (body/zh), and Press Start 2P (pixel accents). The readable hierarchy is 18px body, 16px supporting text, and 14px labels.
 
-Bilingual pattern: **zh-Hant primary**, English in mono as secondary. Headings purple on white/lime, white on blue/purple bands. Section bands alternate white → blue → purple.
+Locale pattern: paired single-language static locales, with `zh-Hant` at existing routes and `en-US` under `/en/`. Headings are purple on white/lime and white on blue/purple bands. Section bands alternate white → blue → purple.
 
 ## Conventions
 

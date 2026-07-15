@@ -8,6 +8,15 @@ const [config, copy] = await Promise.all([
   read('_data/i18n.yml').catch(() => ''),
 ]);
 
+function localeBlock(yaml, locale) {
+  const startMarker = `${locale}:\n`;
+  const start = yaml.indexOf(startMarker);
+  assert.notEqual(start, -1, `missing ${locale} dictionary`);
+  const remainder = yaml.slice(start + startMarker.length);
+  const nextLocale = remainder.search(/^\S[^\n]*:\s*$/m);
+  return nextLocale === -1 ? remainder : remainder.slice(0, nextLocale);
+}
+
 test('Jekyll declares parallel English collections and locale defaults', () => {
   for (const collection of ['news_en', 'events_en', 'records_en']) {
     assert.match(config, new RegExp(`\\n  ${collection}:\\n    output: true`));
@@ -20,13 +29,13 @@ test('Jekyll declares parallel English collections and locale defaults', () => {
 
 test('both locale dictionaries expose the shared interface contract', () => {
   for (const locale of ['zh-Hant', 'en-US']) {
-    assert.match(copy, new RegExp(`^${locale}:`, 'm'));
-  }
-  for (const key of [
-    'language_switcher_label', 'navigation', 'sections', 'view_source',
-    'back_to', 'footer', 'consent',
-  ]) {
-    assert.match(copy, new RegExp(`  ${key}:`));
+    const dictionary = localeBlock(copy, locale);
+    for (const key of [
+      'language_switcher_label', 'navigation', 'sections', 'view_source',
+      'back_to', 'feed', 'footer', 'consent',
+    ]) {
+      assert.match(dictionary, new RegExp(`^  ${key}:`, 'm'), `${locale} is missing ${key}`);
+    }
   }
 });
 
@@ -79,8 +88,35 @@ test('section and item layouts use locale copy instead of bilingual labels', asy
     read('_layouts/section-index.html'), read('_layouts/item.html'),
   ]);
   assert.match(indexLayout, /site\[page\.collection_name\]/);
-  assert.doesNotMatch(indexLayout, /title_en/);
+  assert.match(indexLayout, /item\.listing_title_en/);
+  assert.match(indexLayout, /ui\.feed\.label/);
+  assert.doesNotMatch(indexLayout, /page\.title_en|listing_title_key|crc-heading__en|crc-heading__zh/);
   assert.match(itemLayout, /ui\.view_source/);
   assert.match(itemLayout, /ui\.back_to\[page\.section\]/);
   assert.doesNotMatch(itemLayout, /閱讀原文 View source|所有訊息 All news/);
+});
+
+test('feed discovery and feed documents source locale-specific copy', async () => {
+  const [head, ...feeds] = await Promise.all([
+    read('_includes/head-seo.html'),
+    read('feed.xml'), read('news/feed.xml'), read('events/feed.xml'), read('records/feed.xml'),
+    read('en/feed.xml'), read('en/news/feed.xml'), read('en/events/feed.xml'), read('en/records/feed.xml'),
+  ]);
+  assert.match(head, /ui\.feed\.all/);
+  assert.match(head, /ui\.feed\.news/);
+  assert.match(head, /ui\.feed\.events/);
+  assert.match(head, /ui\.feed\.records/);
+  for (const feed of feeds) assert.match(feed, /site\.data\.i18n/);
+  for (const feed of feeds.slice(0, 4)) {
+    assert.doesNotMatch(feed, />[^<{]*(?:All updates|News|Events|As Seen on Media)[^<{]*</);
+  }
+});
+
+test('project guidance describes paired static locales and the readable type hierarchy', async () => {
+  const [readme, claude] = await Promise.all([read('README.md'), read('CLAUDE.md')]);
+  for (const doc of [readme, claude]) {
+    assert.match(doc, /paired single-language static locales/i);
+    assert.match(doc, /18px[^\n]*16px[^\n]*14px/);
+    assert.doesNotMatch(doc, /zh-Hant primary[^\n]*EN mono secondary|bilingual zh\/EN-mono pairing|English secondary text/);
+  }
 });

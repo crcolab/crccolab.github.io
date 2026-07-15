@@ -25,6 +25,9 @@ test('homepages are reciprocal, single-language static pages', () => {
   assert.match(en, /data-api-url="\/en\/api\/latest\.json"/);
   assert.doesNotMatch(zh, /class="(?:about__en|team-card__role-en|crc-heading__en)"/);
   assert.doesNotMatch(en, /class="(?:about__zh|team-card__role-zh|crc-heading__zh)"/);
+  for (const home of [zh, en]) {
+    assert.match(home, /class="crc-btn crc-btn--primary crc-btn--sm site-header__latest"/);
+  }
 });
 
 test('Chinese homepage localizes generic interface copy', () => {
