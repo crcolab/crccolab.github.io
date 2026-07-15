@@ -10,6 +10,7 @@ import {
   shuffleMemberIds,
   takeNextVisibleMember,
   getTeaserDelay,
+  getFirstTrackedTime,
   createPlaybackLease,
   expandTouchRect,
   pickNearestTarget,
@@ -95,6 +96,13 @@ test('tracking returns null outside segments and never crosses a cut or loop', (
     getTrackedRectAtTime(track, 1.136667),
     track.segments[0].keyframes[0].rect,
   );
+});
+
+test('first tracked time comes from the first valid segment', () => {
+  assert.equal(getFirstTrackedTime(MEMBER_TRACKS.lulu), 1.136667);
+  assert.equal(getFirstTrackedTime(MEMBER_TRACKS.sean), 1.136667);
+  assert.equal(getFirstTrackedTime(null), null);
+  assert.equal(getFirstTrackedTime({ id: 'empty', segments: [] }), null);
 });
 
 test('cover transforms center-crop 1920x1044 into desktop and mobile HUDs', () => {

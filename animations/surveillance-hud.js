@@ -231,6 +231,11 @@ export function computePanelPlacement(
   };
 }
 
+export function getFirstTrackedTime(track) {
+  if (!isValidMemberTrack(track)) return null;
+  return track.segments[0].keyframes[0].time;
+}
+
 export function shuffleMemberIds(ids, random = Math.random) {
   const shuffled = [...ids];
 
