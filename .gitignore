@@ -23,6 +23,9 @@ lerna-debug.log*
 .temp
 .tmp
 
+# Local feature worktrees
+.worktrees/
+=======
 # Jekyll
 _site/
 .jekyll-cache/

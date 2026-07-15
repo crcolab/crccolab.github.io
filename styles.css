@@ -271,20 +271,61 @@ img,svg,video{max-width:100%}
 @keyframes crc-blink{50%{opacity:.15}}
 .crc-hud__scan{position:absolute;inset:0;z-index:1;pointer-events:none;
   background:repeating-linear-gradient(to bottom,rgba(70,40,139,.05) 0 2px,transparent 2px 4px)}
-@media (prefers-reduced-motion:reduce){.crc-hud__dot{animation:none}}
 
-/* face-recognition targets (synced to video by surveillance-hud.js) */
-.face-target{position:absolute;left:var(--tx);top:var(--ty);width:var(--tw);height:var(--th);
-  z-index:2;opacity:0;transform:scale(1.3)}
-.face-target.pop-in{animation:facePopIn .5s cubic-bezier(.34,1.56,.64,1) forwards;animation-delay:var(--delay,0s)}
-.face-target.active{opacity:1;transform:scale(1);animation:facePulse 2.4s ease-in-out infinite}
-@keyframes facePopIn{0%{opacity:0;transform:scale(1.3)}60%{opacity:1;transform:scale(.95)}100%{opacity:1;transform:scale(1)}}
-@keyframes facePulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.03);opacity:.88}}
-.ft-bracket{position:absolute;inset:0;width:100%;height:100%}
-.ft-bracket path{fill:none;stroke:rgba(183,211,45,.8);stroke-width:2.5;stroke-dasharray:60;stroke-dashoffset:60}
-.face-target.pop-in .ft-bracket path,
-.face-target.active .ft-bracket path{animation:drawBracket .6s ease forwards;animation-delay:var(--delay,0s)}
-@keyframes drawBracket{to{stroke-dashoffset:0}}
+/* interactive member targets (synced to video by surveillance-hud.js) */
+.team-member-overlay{position:absolute;inset:0;z-index:3;pointer-events:none}
+.team-member-target{position:absolute;margin:0;padding:0;border:0;background:transparent;color:var(--crc-lime);
+  pointer-events:auto;cursor:default}
+.team-member-target[disabled]{display:none}
+.team-member-target:focus{outline:none}
+.team-member-target__bracket{display:block;width:100%;height:100%;overflow:visible;
+  opacity:0;transform:scale(1.18);
+  transition:opacity 120ms var(--ease-out),transform 180ms var(--ease-out)}
+.team-member-target__bracket path{fill:none;stroke:currentColor;stroke-width:2.5;
+  vector-effect:non-scaling-stroke;stroke-dasharray:60;stroke-dashoffset:60;
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,.65))}
+.team-member-target.is-teasing .team-member-target__bracket,
+.team-member-target.is-active .team-member-target__bracket,
+.team-member-target:focus-visible .team-member-target__bracket{
+  opacity:1;transform:scale(1);animation:memberBracketPop 180ms var(--ease-out) both}
+.team-member-target.is-teasing .team-member-target__bracket path,
+.team-member-target.is-active .team-member-target__bracket path,
+.team-member-target:focus-visible .team-member-target__bracket path{
+  animation:memberBracketDraw 320ms ease forwards}
+.team-member-target:focus-visible .team-member-target__bracket{
+  filter:drop-shadow(0 0 6px rgba(183,211,45,.9))}
+@keyframes memberBracketPop{
+  from{opacity:0;transform:scale(1.18)}
+  to{opacity:1;transform:scale(1)}
+}
+@keyframes memberBracketDraw{to{stroke-dashoffset:0}}
+
+.team-member-panel{position:absolute;z-index:4;width:min(260px,calc(100% - 16px));padding:12px 14px;
+  pointer-events:none;background:rgba(27,18,38,.94);color:#fff;border-left:3px solid var(--crc-lime);
+  border-radius:var(--radius-sm);box-shadow:0 10px 28px rgba(0,0,0,.34);
+  animation:memberPanelIn 180ms var(--ease-out) both}
+.team-member-panel[hidden]{display:none}
+.team-member-panel__names{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.team-member-panel__name-zh{font-family:var(--font-body);font-size:17px;font-weight:700;color:var(--crc-lime)}
+.team-member-panel__name-en{font-family:var(--font-display);font-size:12px;font-weight:600;letter-spacing:.04em}
+.team-member-panel__role-zh{margin-top:5px;font-size:13px;line-height:1.45}
+.team-member-panel__role-en{margin-top:2px;font-family:var(--font-display);font-size:10px;line-height:1.4;
+  letter-spacing:var(--ls-wide);text-transform:uppercase;color:rgba(255,255,255,.72)}
+@keyframes memberPanelIn{
+  from{opacity:0;transform:translateY(4px)}
+  to{opacity:1;transform:none}
+}
+
+@media (pointer:coarse){
+  .team-member-target{pointer-events:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .crc-hud__dot{animation:none}
+  .team-member-target__bracket,.team-member-target__bracket path,.team-member-panel{
+    animation:none!important;transition:none!important}
+  .team-member-target.is-active .team-member-target__bracket path,
+  .team-member-target:focus-visible .team-member-target__bracket path{stroke-dashoffset:0}
+}
 
 /* ---------- News / partner ---------- */
 .news__grid{display:grid;grid-template-columns:1fr 1.1fr;gap:40px;align-items:start}
