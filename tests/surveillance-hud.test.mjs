@@ -328,6 +328,50 @@ test('playback lease can release ownership without resuming while hidden', async
   assert.equal(lease.ownsPause(), false);
 });
 
+test('team grid renders six names-only cards and five external HUD controls', async () => {
+  const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+  const gridStart = html.indexOf('<div class="team__grid">');
+  const featureStart = html.indexOf('<div class="team__feature">');
+  assert.ok(gridStart >= 0 && featureStart > gridStart);
+  const grid = html.slice(gridStart, featureStart);
+  const trackedIds = ['lulu', 'meichun', 'cheng', 'tzu-tung', 'sean'];
+
+  assert.equal((grid.match(/<article class="team-card">/g) || []).length, 6);
+  assert.doesNotMatch(grid, /team-card__photo|team-card__ph|<figure|<figcaption/);
+
+  for (const id of trackedIds) {
+    const control = grid.match(
+      new RegExp('<button[^>]*class="team-card__names"[^>]*data-member-id="' + id + '"[^>]*>'),
+    )?.[0];
+    assert.ok(control, 'missing external name control for ' + id);
+    assert.match(control, /type="button"/);
+    assert.match(control, /aria-pressed="false"/);
+  }
+
+  assert.match(grid, /<div class="team-card__names">[\s\S]*?郭景晏[\s\S]*?Rosa Kuo[\s\S]*?<\/div>/);
+  assert.match(grid, />CRC Coordinator</);
+  assert.match(grid, />Digital Rights Activist</);
+  assert.doesNotMatch(grid, /data-member-id="rosa"/);
+});
+
+test('team grid CSS is compact, responsive, and keyboard-visible', async () => {
+  const css = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
+
+  assert.match(
+    css,
+    /\.team__grid\{[^}]*grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/,
+  );
+  assert.match(css, /button\.team-card__names\{[^}]*appearance:none/);
+  assert.match(css, /button\.team-card__names:hover/);
+  assert.match(css, /button\.team-card__names:focus-visible/);
+  assert.match(css, /button\.team-card__names\[aria-pressed="true"\]/);
+  assert.match(
+    css,
+    /@media \(max-width:900px\)\{[\s\S]*?\.team__grid\{grid-template-columns:repeat\(2,1fr\)\}/,
+  );
+  assert.doesNotMatch(css, /\.team-card__photo|\.team-card__ph/);
+});
+
 test('team markup has five semantic targets linked to the existing roster copy', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
   const ids = ['lulu', 'meichun', 'cheng', 'tzu-tung', 'sean'];
@@ -349,7 +393,10 @@ test('team markup has five semantic targets linked to the existing roster copy',
     }
 
     const openingTag = html.match(
-      new RegExp('<button[^>]*data-member-id="' + id + '"[^>]*>'),
+      new RegExp(
+        '<button[^>]*class="team-member-target"[^>]*data-member-id="'
+          + id + '"[^>]*>',
+      ),
     )?.[0];
     assert.ok(openingTag, 'missing target for ' + id);
     assert.match(openingTag, /type="button"/);
