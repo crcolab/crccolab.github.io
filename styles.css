@@ -403,6 +403,74 @@ img,svg,video{max-width:100%}
   pointer-events:none;
 }
 
+/* State: TV-static flicker */
+.glitch-word.glitch{
+  animation:staticFlicker 0.1s steps(2) 5;
+}
+@keyframes staticFlicker{
+  0%  {opacity:1}
+  50% {opacity:0.3}
+  100%{opacity:1}
+}
+.glitch-word.glitch::before{
+  content:"";
+  position:absolute;
+  inset:-4px -6px;
+  z-index:1;
+  pointer-events:none;
+  mix-blend-mode:multiply;
+  image-rendering:pixelated;
+  -ms-interpolation-mode:nearest-neighbor;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 18'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='1' seed='1'%3E%3Canimate attributeName='seed' values='1;7;13;23;37' dur='0.25s' calcMode='discrete' repeatCount='indefinite'/%3E%3C/feTurbulence%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='discrete' tableValues='0 .33 .67 1'/%3E%3CfeFuncG type='discrete' tableValues='0 .33 .67 1'/%3E%3CfeFuncB type='discrete' tableValues='0 .33 .67 1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") center/cover;
+}
+
+/* State: cyber — hide the vector, show the pixel-font alt in its place */
+.glitch-word.cyber .logotype-en--cyborg{visibility:hidden}
+.glitch-word.cyber .glitch-word__alt{
+  display:flex;
+  font-family:"Press Start 2P", cursive;
+  font-size:clamp(0.5rem, 90cqh, 4rem);
+  letter-spacing:-0.02em;
+  animation:sprayIn 0.6s cubic-bezier(.22,1,.36,1) both;
+  filter:url(#spraypaint);
+  -webkit-text-stroke:1.5px var(--crc-lime);
+  paint-order:stroke fill;
+  text-shadow:
+    -1px -1px 0 #000,
+     1px -1px 0 #000,
+    -1px  1px 0 #000,
+     1px  1px 0 #000,
+     0   -1px 0 #000,
+     0    1px 0 #000,
+    -1px  0   0 #000,
+     1px  0   0 #000;
+  z-index:1;
+}
+@keyframes sprayIn{
+  0%  {letter-spacing:0.15em; opacity:0.4; transform:scale(1.08)}
+  40% {letter-spacing:0.02em; opacity:0.9}
+  100%{letter-spacing:-0.02em; opacity:1; transform:scale(1)}
+}
+/* Marker highlight box behind "cyber" */
+.glitch-word.cyber .glitch-word__alt::before{
+  content:"";
+  position:absolute;
+  top:20%;
+  left:-4%;
+  right:-4%;
+  bottom:-6%;
+  background:#000;
+  transform:rotate(-2deg);
+  z-index:-1;
+}
+
+/* State: fade-back — brief blur-in as the vector restores */
+.glitch-word.fade-back{animation:cyborgFadeBack 0.4s ease forwards}
+@keyframes cyborgFadeBack{
+  0%  {opacity:0.6; filter:blur(1px)}
+  100%{opacity:1;   filter:none}
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width:900px){
   .about__body,.news__grid{grid-template-columns:1fr}
