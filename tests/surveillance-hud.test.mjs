@@ -1196,6 +1196,27 @@ test('visibility reset clears external state without reactivation', () => {
   }
 });
 
+test('late hidden seek preserves pending external pause ownership until restore', () => {
+  const harness = installControllerHarness({ currentTime: 8 });
+
+  try {
+    harness.externalControls.get('lulu').dispatch('click');
+    assert.equal(harness.video.paused, true);
+
+    harness.document.hidden = true;
+    harness.document.dispatch('visibilitychange');
+    harness.video.dispatch('seeked');
+    assert.equal(harness.video.playCalls, 0);
+
+    harness.document.hidden = false;
+    harness.document.dispatch('visibilitychange');
+    assert.equal(harness.video.playCalls, 1);
+    assert.equal(harness.video.paused, false);
+  } finally {
+    harness.restore();
+  }
+});
+
 test('hiding cancels a visible teaser and visible playback starts a fresh wait', () => {
   const harness = installControllerHarness();
 

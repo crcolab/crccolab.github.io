@@ -535,7 +535,7 @@ export function initSurveillanceHUD() {
   function dismissMember() {
     const clearedActiveMember = clearActiveMember();
     if (!clearedActiveMember && !playback.ownsPause()) return;
-    void playback.resumeIfOwned(!document.hidden);
+    if (!document.hidden) void playback.resumeIfOwned();
     scheduleTeaser();
   }
 
