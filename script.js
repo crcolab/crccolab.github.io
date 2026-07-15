@@ -1,6 +1,7 @@
 import { items } from './news/index.js';
 import { initSurveillanceHUD } from './animations/surveillance-hud.js';
 import { openNewsModal, initNewsModal } from './animations/news-modal.js';
+import { initCyborgGlitch } from './animations/cyborg-glitch.js';
 
 function loadNews(){
   const container = document.getElementById('news-list');
@@ -59,4 +60,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initSurveillanceHUD();
   initNewsModal();
   initThemeToggle();
+  initCyborgGlitch();
 });
