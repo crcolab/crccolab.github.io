@@ -10,6 +10,7 @@ import {
   shuffleMemberIds,
   takeNextVisibleMember,
   getTeaserDelay,
+  getFirstTrackedTime,
   createPlaybackLease,
   expandTouchRect,
   pickNearestTarget,
@@ -126,6 +127,13 @@ test('tracking returns null outside segments and never crosses a cut or loop', (
     getTrackedRectAtTime(track, 1.136667),
     track.segments[0].keyframes[0].rect,
   );
+});
+
+test('first tracked time comes from the first valid segment', () => {
+  assert.equal(getFirstTrackedTime(MEMBER_TRACKS.lulu), 1.136667);
+  assert.equal(getFirstTrackedTime(MEMBER_TRACKS.sean), 1.136667);
+  assert.equal(getFirstTrackedTime(null), null);
+  assert.equal(getFirstTrackedTime({ id: 'empty', segments: [] }), null);
 });
 
 test('cover transforms center-crop 1920x1044 into desktop and mobile HUDs', () => {
@@ -359,6 +367,50 @@ test('playback lease can release ownership without resuming while hidden', async
   assert.equal(lease.ownsPause(), false);
 });
 
+test('team grid renders six names-only cards and five external HUD controls', async () => {
+  const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+  const gridStart = html.indexOf('<div class="team__grid">');
+  const featureStart = html.indexOf('<div class="team__feature">');
+  assert.ok(gridStart >= 0 && featureStart > gridStart);
+  const grid = html.slice(gridStart, featureStart);
+  const trackedIds = ['lulu', 'meichun', 'cheng', 'tzu-tung', 'sean'];
+
+  assert.equal((grid.match(/<article class="team-card">/g) || []).length, 6);
+  assert.doesNotMatch(grid, /team-card__photo|team-card__ph|<figure|<figcaption/);
+
+  for (const id of trackedIds) {
+    const control = grid.match(
+      new RegExp('<button[^>]*class="team-card__names"[^>]*data-member-id="' + id + '"[^>]*>'),
+    )?.[0];
+    assert.ok(control, 'missing external name control for ' + id);
+    assert.match(control, /type="button"/);
+    assert.match(control, /aria-pressed="false"/);
+  }
+
+  assert.match(grid, /<div class="team-card__names">[\s\S]*?郭景晏[\s\S]*?Rosa Kuo[\s\S]*?<\/div>/);
+  assert.match(grid, />CRC Coordinator</);
+  assert.match(grid, />Digital Rights Activist</);
+  assert.doesNotMatch(grid, /data-member-id="rosa"/);
+});
+
+test('team grid CSS is compact, responsive, and keyboard-visible', async () => {
+  const css = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
+
+  assert.match(
+    css,
+    /\.team__grid\{[^}]*grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/,
+  );
+  assert.match(css, /button\.team-card__names\{[^}]*appearance:none/);
+  assert.match(css, /button\.team-card__names:hover/);
+  assert.match(css, /button\.team-card__names:focus-visible/);
+  assert.match(css, /button\.team-card__names\[aria-pressed="true"\]/);
+  assert.match(
+    css,
+    /@media \(max-width:900px\)\{[\s\S]*?\.team__grid\{grid-template-columns:repeat\(2,1fr\)\}/,
+  );
+  assert.doesNotMatch(css, /\.team-card__photo|\.team-card__ph/);
+});
+
 test('team markup has five semantic targets linked to the existing roster copy', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
   const ids = ['lulu', 'meichun', 'cheng', 'tzu-tung', 'sean'];
@@ -380,7 +432,10 @@ test('team markup has five semantic targets linked to the existing roster copy',
     }
 
     const openingTag = html.match(
-      new RegExp('<button[^>]*data-member-id="' + id + '"[^>]*>'),
+      new RegExp(
+        '<button[^>]*class="team-member-target"[^>]*data-member-id="'
+          + id + '"[^>]*>',
+      ),
     )?.[0];
     assert.ok(openingTag, 'missing target for ' + id);
     assert.match(openingTag, /type="button"/);
@@ -616,10 +671,15 @@ class FakeDocument extends FakeEventTarget {
     this.hidden = false;
     this.ids = new Map();
     this.queryResults = new Map();
+    this.queryAllResults = new Map();
   }
 
   querySelector(selector) {
     return this.queryResults.get(selector) || null;
+  }
+
+  querySelectorAll(selector) {
+    return this.queryAllResults.get(selector) || [];
   }
 
   getElementById(id) {
@@ -636,11 +696,33 @@ class FakeVideo extends FakeHTMLElement {
     this.readyState = 1;
     this.videoWidth = 1920;
     this.videoHeight = 1044;
-    this.currentTime = 3;
+    this._currentTime = 3;
+    this.seeking = false;
+    this.seekGeneration = 0;
     this.pauseCalls = 0;
     this.playCalls = 0;
     this.frameCallbacks = new Map();
     this.nextFrameHandle = 1;
+  }
+
+  get currentTime() {
+    return this._currentTime;
+  }
+
+  set currentTime(value) {
+    this._currentTime = value;
+    this.seeking = true;
+    this.seekGeneration += 1;
+  }
+
+  setCurrentTime(value) {
+    this._currentTime = value;
+    this.seeking = false;
+  }
+
+  completeSeek(generation = this.seekGeneration) {
+    if (generation === this.seekGeneration) this.seeking = false;
+    this.dispatch('seeked', { seekGeneration: generation });
   }
 
   pause() {
@@ -686,6 +768,7 @@ const installControllerHarness = ({
   const video = new FakeVideo(document, paused);
   const outside = new FakeHTMLElement(document);
   const targets = new Map();
+  const externalControls = new Map();
   const panelFields = new Map();
   let nextAnimationFrame = 1;
   let nextTimer = 1;
@@ -715,10 +798,11 @@ const installControllerHarness = ({
   panel.offsetHeight = 110;
   panel.parentNode = overlay;
   video.parentNode = hud;
-  video.currentTime = currentTime;
+  video.setCurrentTime(currentTime);
   video.ended = ended;
   video.seeking = seeking;
   video.readyState = readyState;
+  
   video.closestResults.set('.crc-hud', hud);
 
   for (const field of ['name-zh', 'name-en', 'role-zh', 'role-en']) {
@@ -746,6 +830,18 @@ const installControllerHarness = ({
       document.ids.set('team-member-' + id + '-' + suffix, rosterField);
     }
   }
+
+  for (const id of MEMBER_IDS) {
+    const control = new FakeHTMLElement(document);
+    control.dataset.memberId = id;
+    control.setAttribute('aria-pressed', 'false');
+    externalControls.set(id, control);
+  }
+
+  document.queryAllResults.set(
+    '.team-card__names[data-member-id]',
+    [...externalControls.values()],
+  );
 
   overlay.queryResults.set('[data-team-member-panel]', panel);
   overlay.queryAllResults.set('.team-member-target', [...targets.values()]);
@@ -807,6 +903,7 @@ const installControllerHarness = ({
 
   return {
     document,
+    externalControls,
     outside,
     overlay,
     panel,
@@ -879,14 +976,14 @@ test('teaser bag skips target-free frames without consuming a member', () => {
 
   try {
     harness.video.currentTime = 8;
-    harness.video.dispatch('seeked');
+    harness.video.completeSeek();
     harness.runTimer(2500);
 
     assert.deepEqual(harness.teasingIds(), []);
     assert.deepEqual(harness.timerDelays(), [2500]);
 
     harness.video.currentTime = 3;
-    harness.video.dispatch('seeked');
+    harness.video.completeSeek();
     const shown = [];
 
     for (let index = 0; index < MEMBER_IDS.length; index += 1) {
@@ -1138,6 +1235,301 @@ test('direct activation cancels teasers and dismissal starts a fresh wait', asyn
   }
 });
 
+test('external name hover reuses active HUD state and dismisses on leave', async () => {
+  const harness = installControllerHarness();
+  const control = harness.externalControls.get('lulu');
+
+  try {
+    control.dispatch('pointerenter', { pointerType: 'mouse' });
+    assert.equal(harness.activeId(), 'lulu');
+    assert.equal(harness.panel.hidden, false);
+    assert.equal(harness.video.paused, true);
+
+    control.dispatch('pointerleave', { pointerType: 'mouse' });
+    await Promise.resolve();
+    assert.equal(harness.activeId(), null);
+    assert.equal(harness.panel.hidden, true);
+    assert.equal(harness.video.playCalls, 1);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('external activation seeks when the selected member is unavailable', async () => {
+  const harness = installControllerHarness({ currentTime: 8 });
+  const control = harness.externalControls.get('lulu');
+
+  try {
+    control.dispatch('pointerenter', { pointerType: 'mouse' });
+    assert.equal(harness.video.paused, true);
+    assert.equal(harness.video.currentTime, 1.136667);
+    assert.equal(harness.panel.hidden, true);
+
+    harness.video.completeSeek();
+    assert.equal(harness.activeId(), 'lulu');
+    assert.equal(harness.panel.hidden, false);
+
+    control.dispatch('pointerleave', { pointerType: 'mouse' });
+    await Promise.resolve();
+    assert.equal(harness.video.playCalls, 1);
+    assert.equal(harness.video.currentTime, 1.136667);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('pause rendering cannot resolve a pending external seek', () => {
+  const harness = installControllerHarness({ currentTime: 8 });
+
+  try {
+    harness.externalControls.get('lulu').dispatch('click');
+    assert.equal(harness.video.seeking, true);
+
+    harness.video.dispatch('pause');
+    assert.equal(harness.activeId(), null);
+    assert.equal(harness.panel.hidden, true);
+
+    harness.video.completeSeek();
+    assert.equal(harness.activeId(), 'lulu');
+    assert.equal(harness.panel.hidden, false);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('same-time external switch stays pending while video is seeking', () => {
+  const harness = installControllerHarness({ currentTime: 8 });
+
+  try {
+    harness.externalControls.get('lulu').dispatch('click');
+    const seekGeneration = harness.video.seekGeneration;
+    harness.externalControls.get('meichun').dispatch('click');
+
+    assert.equal(harness.video.seekGeneration, seekGeneration);
+    assert.equal(harness.video.seeking, true);
+    assert.equal(harness.activeId(), null);
+    assert.equal(harness.panel.hidden, true);
+
+    harness.video.completeSeek(seekGeneration);
+    assert.equal(harness.activeId(), 'meichun');
+  } finally {
+    harness.restore();
+  }
+});
+
+test('stale external seek completion cannot resolve a newer request', () => {
+  const harness = installControllerHarness({ currentTime: 8 });
+
+  try {
+    harness.externalControls.get('lulu').dispatch('click');
+    const staleGeneration = harness.video.seekGeneration;
+
+    harness.video.currentTime = 8;
+    harness.externalControls.get('meichun').dispatch('click');
+    const latestGeneration = harness.video.seekGeneration;
+    assert.notEqual(latestGeneration, staleGeneration);
+
+    harness.video.completeSeek(staleGeneration);
+    assert.equal(harness.video.seeking, true);
+    assert.equal(harness.activeId(), null);
+    assert.equal(harness.panel.hidden, true);
+
+    harness.video.completeSeek(latestGeneration);
+    assert.equal(harness.activeId(), 'meichun');
+    assert.equal(harness.panel.hidden, false);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('leaving before seek completion cancels stale external activation', async () => {
+  const harness = installControllerHarness({ currentTime: 8 });
+  const control = harness.externalControls.get('lulu');
+
+  try {
+    control.dispatch('pointerenter', { pointerType: 'mouse' });
+    control.dispatch('pointerleave', { pointerType: 'mouse' });
+    await Promise.resolve();
+    assert.equal(harness.video.playCalls, 1);
+
+    harness.video.completeSeek();
+    assert.equal(harness.activeId(), null);
+    assert.equal(harness.panel.hidden, true);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('external click pins, switches, and toggles without releasing playback', () => {
+  const harness = installControllerHarness();
+  const lulu = harness.externalControls.get('lulu');
+  const meichun = harness.externalControls.get('meichun');
+
+  try {
+    lulu.dispatch('click');
+    assert.equal(harness.activeId(), 'lulu');
+    assert.equal(lulu.attributes.get('aria-pressed'), 'true');
+
+    lulu.dispatch('pointerleave', { pointerType: 'mouse' });
+    assert.equal(harness.activeId(), 'lulu');
+
+    meichun.dispatch('click');
+    assert.equal(harness.activeId(), 'meichun');
+    assert.equal(lulu.attributes.get('aria-pressed'), 'false');
+    assert.equal(meichun.attributes.get('aria-pressed'), 'true');
+    assert.equal(harness.video.pauseCalls, 1);
+    assert.equal(harness.video.playCalls, 0);
+
+    meichun.dispatch('click');
+    assert.equal(harness.activeId(), null);
+    assert.equal(meichun.attributes.get('aria-pressed'), 'false');
+    assert.equal(harness.video.playCalls, 1);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('external hover and click supersede sticky direct touch without playback churn', () => {
+  const harness = installControllerHarness();
+  const luluPoint = targetCenter(harness.targets.get('lulu'));
+  const meichun = harness.externalControls.get('meichun');
+
+  try {
+    harness.document.dispatch('pointerdown', {
+      pointerType: 'touch',
+      clientX: luluPoint.x,
+      clientY: luluPoint.y,
+    });
+    assert.equal(harness.activeId(), 'lulu');
+    assert.equal(harness.video.pauseCalls, 1);
+
+    meichun.dispatch('pointerenter', { pointerType: 'mouse' });
+    assert.equal(harness.activeId(), 'meichun');
+
+    harness.document.dispatch('pointerdown', {
+      pointerType: 'touch',
+      clientX: luluPoint.x,
+      clientY: luluPoint.y,
+    });
+    assert.equal(harness.activeId(), 'lulu');
+
+    meichun.dispatch('click');
+    assert.equal(harness.activeId(), 'meichun');
+    assert.equal(meichun.attributes.get('aria-pressed'), 'true');
+    assert.equal(harness.video.pauseCalls, 1);
+    assert.equal(harness.video.playCalls, 0);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('outside pointer and Escape clear an external pin', () => {
+  const harness = installControllerHarness();
+  const control = harness.externalControls.get('lulu');
+
+  try {
+    control.dispatch('click');
+    harness.document.dispatch('pointerdown', {
+      pointerType: 'mouse',
+      target: harness.outside,
+    });
+    assert.equal(harness.activeId(), null);
+    assert.equal(control.attributes.get('aria-pressed'), 'false');
+
+    control.dispatch('click');
+    const escape = harness.document.dispatch('keydown', { key: 'Escape' });
+    assert.equal(escape.defaultPrevented, true);
+    assert.equal(harness.activeId(), null);
+    assert.equal(control.attributes.get('aria-pressed'), 'false');
+  } finally {
+    harness.restore();
+  }
+});
+
+test('Escape cancels a pending external seek and releases its owned pause', () => {
+  const harness = installControllerHarness({ currentTime: 8 });
+  const control = harness.externalControls.get('lulu');
+
+  try {
+    control.dispatch('click');
+    assert.equal(harness.activeId(), null);
+    assert.equal(harness.video.paused, true);
+
+    const escape = harness.document.dispatch('keydown', { key: 'Escape' });
+    assert.equal(escape.defaultPrevented, true);
+    assert.equal(control.attributes.get('aria-pressed'), 'false');
+    assert.equal(harness.video.playCalls, 1);
+
+    harness.video.completeSeek();
+    assert.equal(harness.activeId(), null);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('a newer external selection supersedes a pending seek', () => {
+  const harness = installControllerHarness({ currentTime: 8 });
+
+  try {
+    harness.externalControls.get('lulu').dispatch('click');
+    harness.externalControls.get('meichun').dispatch('click');
+    harness.video.completeSeek();
+
+    assert.equal(harness.activeId(), 'meichun');
+    assert.equal(
+      harness.externalControls.get('lulu').attributes.get('aria-pressed'),
+      'false',
+    );
+    assert.equal(
+      harness.externalControls.get('meichun').attributes.get('aria-pressed'),
+      'true',
+    );
+  } finally {
+    harness.restore();
+  }
+});
+
+test('visibility reset clears external state without reactivation', () => {
+  const harness = installControllerHarness();
+  const control = harness.externalControls.get('lulu');
+
+  try {
+    control.dispatch('click');
+    harness.document.hidden = true;
+    harness.document.dispatch('visibilitychange');
+    assert.equal(harness.activeId(), null);
+    assert.equal(control.attributes.get('aria-pressed'), 'false');
+
+    harness.document.hidden = false;
+    harness.document.dispatch('visibilitychange');
+    assert.equal(harness.activeId(), null);
+    assert.equal(harness.video.playCalls, 1);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('late hidden seek preserves pending external pause ownership until restore', () => {
+  const harness = installControllerHarness({ currentTime: 8 });
+
+  try {
+    harness.externalControls.get('lulu').dispatch('click');
+    assert.equal(harness.video.paused, true);
+
+    harness.document.hidden = true;
+    harness.document.dispatch('visibilitychange');
+    harness.video.completeSeek();
+    assert.equal(harness.video.playCalls, 0);
+
+    harness.document.hidden = false;
+    harness.document.dispatch('visibilitychange');
+    assert.equal(harness.video.playCalls, 1);
+    assert.equal(harness.video.paused, false);
+  } finally {
+    harness.restore();
+  }
+});
+
 test('hiding cancels a visible teaser and visible playback starts a fresh wait', () => {
   const harness = installControllerHarness();
 
@@ -1295,7 +1687,7 @@ test('visible eligibility invalidation resumes an interaction-owned pause', () =
       pointerType: 'mouse',
     });
     harness.video.currentTime = 8;
-    harness.video.dispatch('seeked');
+    harness.video.completeSeek();
 
     assert.equal(harness.panel.hidden, true);
     assert.equal(harness.video.playCalls, 1);

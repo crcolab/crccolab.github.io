@@ -231,6 +231,11 @@ export function computePanelPlacement(
   };
 }
 
+export function getFirstTrackedTime(track) {
+  if (!isValidMemberTrack(track)) return null;
+  return track.segments[0].keyframes[0].time;
+}
+
 export function shuffleMemberIds(ids, random = Math.random) {
   const shuffled = [...ids];
 
@@ -310,6 +315,10 @@ export function initSurveillanceHUD() {
     [...overlay.querySelectorAll('.team-member-target')]
       .map((target) => [target.dataset.memberId, target]),
   );
+  const externalControls = new Map(
+    [...document.querySelectorAll('.team-card__names[data-member-id]')]
+      .map((control) => [control.dataset.memberId, control]),
+  );
   const roster = new Map();
 
   for (const id of MEMBER_IDS) {
@@ -330,6 +339,12 @@ export function initSurveillanceHUD() {
     }
   }
 
+  for (const [id, control] of externalControls) {
+    if (roster.has(id)) continue;
+    control.disabled = true;
+    externalControls.delete(id);
+  }
+
   const validIds = MEMBER_IDS.filter((id) => roster.has(id));
   if (!validIds.length) return;
 
@@ -344,6 +359,11 @@ export function initSurveillanceHUD() {
   let pointerId = null;
   let focusedId = null;
   let touchId = null;
+  let externalHoverId = null;
+  let externalPinnedId = null;
+  let pendingExternalId = null;
+  let pendingExternalGeneration = null;
+  let externalRequestGeneration = 0;
   let started = false;
   let isPresenting = false;
   const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -376,6 +396,30 @@ export function initSurveillanceHUD() {
     panelFields.nameEn.textContent = rosterEntry.nameEn.textContent.trim();
     panelFields.roleZh.textContent = rosterEntry.roleZh.textContent.trim();
     panelFields.roleEn.textContent = rosterEntry.roleEn.textContent.trim();
+  }
+
+  function getDesiredExternalId() {
+    return externalPinnedId || externalHoverId;
+  }
+
+  function syncExternalPressedState() {
+    for (const [id, control] of externalControls) {
+      control.setAttribute('aria-pressed', String(id === externalPinnedId));
+    }
+  }
+
+  function clearPendingExternalRequest(id = null) {
+    if (id !== null && pendingExternalId !== id) return false;
+    pendingExternalId = null;
+    pendingExternalGeneration = null;
+    return true;
+  }
+
+  function clearExternalSelection(id) {
+    if (externalHoverId === id) externalHoverId = null;
+    if (externalPinnedId === id) externalPinnedId = null;
+    clearPendingExternalRequest(id);
+    syncExternalPressedState();
   }
 
   function positionActivePanel() {
@@ -505,8 +549,9 @@ export function initSurveillanceHUD() {
   }
 
   function dismissMember() {
-    if (!clearActiveMember()) return;
-    void playback.resumeIfOwned(!document.hidden);
+    const clearedActiveMember = clearActiveMember();
+    if (!clearedActiveMember && !playback.ownsPause()) return;
+    if (!document.hidden) void playback.resumeIfOwned();
     scheduleTeaser();
   }
 
@@ -514,6 +559,10 @@ export function initSurveillanceHUD() {
     pointerId = null;
     focusedId = null;
     touchId = null;
+    externalHoverId = null;
+    externalPinnedId = null;
+    clearPendingExternalRequest();
+    syncExternalPressedState();
 
     const focusedTarget = document.activeElement;
     if (
@@ -525,15 +574,78 @@ export function initSurveillanceHUD() {
   }
 
   function reconcileActiveMember() {
-    const nextId = [touchId, focusedId, pointerId]
+    const desiredExternalId = getDesiredExternalId();
+    const readyExternalId = pendingExternalId ? null : desiredExternalId;
+    const nextId = [touchId, focusedId, pointerId, readyExternalId]
       .find((id) => id && layouts.has(id)) || null;
+
+    if (!nextId && desiredExternalId && pendingExternalId === desiredExternalId) {
+      clearActiveMember();
+      return;
+    }
 
     if (!nextId) {
       dismissMember();
     } else if (nextId === activeId) {
+      clearPendingExternalRequest(nextId);
       positionActivePanel();
     } else {
+      clearPendingExternalRequest(nextId);
       activateMember(nextId);
+    }
+  }
+
+  function completePendingExternalRequest(id, generation) {
+    if (
+      pendingExternalId !== id
+      || pendingExternalGeneration !== generation
+      || externalRequestGeneration !== generation
+      || video.seeking
+    ) return false;
+
+    clearPendingExternalRequest(id);
+    renderAt();
+
+    if (!layouts.has(id)) {
+      clearExternalSelection(id);
+      reconcileActiveMember();
+    }
+    return true;
+  }
+
+  function requestExternalActivation(id) {
+    if (!started || !externalControls.has(id)) return;
+
+    const requestGeneration = ++externalRequestGeneration;
+
+    if (layouts.has(id) && !video.seeking) {
+      clearPendingExternalRequest();
+      reconcileActiveMember();
+      return;
+    }
+
+    const firstTrackedTime = getFirstTrackedTime(MEMBER_TRACKS[id]);
+    if (firstTrackedTime === null) {
+      clearExternalSelection(id);
+      reconcileActiveMember();
+      return;
+    }
+
+    pendingExternalId = id;
+    pendingExternalGeneration = requestGeneration;
+    suspendTeasers();
+    playback.pauseForInteraction();
+    clearActiveMember();
+
+    try {
+      if (Math.abs(video.currentTime - firstTrackedTime) <= 0.000001) {
+        completePendingExternalRequest(id, requestGeneration);
+      } else {
+        video.currentTime = firstTrackedTime;
+      }
+    } catch {
+      clearExternalSelection(id);
+      dismissMember();
     }
   }
 
@@ -653,6 +765,16 @@ export function initSurveillanceHUD() {
   }
 
   function handleSeeked() {
+    const requestedId = pendingExternalId;
+    const requestedGeneration = pendingExternalGeneration;
+
+    if (
+      requestedId
+      && requestedGeneration !== null
+      && completePendingExternalRequest(requestedId, requestedGeneration)
+    ) {
+      return;
+    }
     renderAt();
     reconcilePresentationSnapshot();
   }
@@ -675,14 +797,35 @@ export function initSurveillanceHUD() {
   }
 
   function handleDocumentKeydown(event) {
-    if (event.key !== 'Escape' || !activeId) return;
+    if (event.key !== 'Escape') return;
+    if (
+      !activeId
+      && !externalHoverId
+      && !externalPinnedId
+      && !pendingExternalId
+      && !playback.ownsPause()
+    ) return;
     event.preventDefault();
     clearInteractionState();
     dismissMember();
   }
 
-  function handleTouchPointerDown(event) {
-    if (event.pointerType !== 'touch') return;
+  function handleDocumentPointerDown(event) {
+    const insideExternalControl = [...externalControls.values()]
+      .some((control) => control.contains(event.target));
+    if (insideExternalControl) return;
+
+    if (event.pointerType !== 'touch') {
+      const insideHudTarget = [...targets.values()]
+        .some((target) => target.contains(event.target));
+      if (externalPinnedId && !insideHudTarget) {
+        externalPinnedId = null;
+        clearPendingExternalRequest();
+        syncExternalPressedState();
+        reconcileActiveMember();
+      }
+      return;
+    }
 
     const panelBounds = panel.getBoundingClientRect();
     const insidePanel = !panel.hidden && pointInRect(
@@ -726,7 +869,7 @@ export function initSurveillanceHUD() {
         touchId = selectedId;
         reconcileActiveMember();
       }
-    } else if (activeId) {
+    } else if (activeId || playback.ownsPause()) {
       clearInteractionState();
       dismissMember();
     }
@@ -764,6 +907,49 @@ export function initSurveillanceHUD() {
     });
   }
 
+  for (const [id, control] of externalControls) {
+    control.addEventListener('pointerenter', (event) => {
+      if (event.pointerType === 'touch') return;
+      touchId = null;
+      externalHoverId = id;
+      requestExternalActivation(getDesiredExternalId());
+    });
+
+    control.addEventListener('pointerleave', (event) => {
+      if (event.pointerType === 'touch' || externalHoverId !== id) return;
+      externalHoverId = null;
+      if (pendingExternalId === id && externalPinnedId !== id) {
+        clearPendingExternalRequest(id);
+      }
+      queueMicrotask(() => {
+        if (externalHoverId !== null) return;
+        const desiredId = getDesiredExternalId();
+        if (desiredId && !layouts.has(desiredId)) {
+          requestExternalActivation(desiredId);
+        } else {
+          reconcileActiveMember();
+        }
+      });
+    });
+
+    control.addEventListener('click', () => {
+      touchId = null;
+      if (externalPinnedId === id) {
+        externalPinnedId = null;
+        externalHoverId = null;
+        clearPendingExternalRequest(id);
+        syncExternalPressedState();
+        reconcileActiveMember();
+        return;
+      }
+
+      externalPinnedId = id;
+      clearPendingExternalRequest();
+      syncExternalPressedState();
+      requestExternalActivation(id);
+    });
+  }
+
   function start() {
     if (started || !video.videoWidth || !video.videoHeight) return;
     started = true;
@@ -779,7 +965,7 @@ export function initSurveillanceHUD() {
   const resizeObserver = new ResizeObserver(invalidateGeometry);
   resizeObserver.observe(hud);
   document.addEventListener('keydown', handleDocumentKeydown);
-  document.addEventListener('pointerdown', handleTouchPointerDown, true);
+  document.addEventListener('pointerdown', handleDocumentPointerDown, true);
   document.addEventListener('visibilitychange', handleVisibilityChange);
   window.addEventListener('orientationchange', invalidateGeometry);
   motionQuery.addEventListener('change', handleMotionPreferenceChange);
