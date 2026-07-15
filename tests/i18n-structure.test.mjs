@@ -29,3 +29,17 @@ test('both locale dictionaries expose the shared interface contract', () => {
     assert.match(copy, new RegExp(`  ${key}:`));
   }
 });
+
+test('shared shell advertises reciprocal locales and uses normal switcher links', async () => {
+  const [head, switcher, layout] = await Promise.all([
+    read('_includes/head-seo.html'), read('_includes/locale-switcher.html'), read('_layouts/default.html'),
+  ]);
+  assert.match(head, /hreflang="zh-Hant"/);
+  assert.match(head, /hreflang="en-US"/);
+  assert.match(head, /hreflang="x-default"/);
+  assert.match(head, /inLanguage/);
+  assert.match(switcher, /data-locale-option="zh-Hant"/);
+  assert.match(switcher, /data-locale-option="en-US"/);
+  assert.match(layout, /src="\/assets\/locale\.js"/);
+  assert.match(layout, /translation_exempt/);
+});
