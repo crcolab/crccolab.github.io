@@ -1,13 +1,48 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
+import { runInNewContext } from 'node:vm';
 
-const [css, sections, consent, hackathon] = await Promise.all([
+const [css, sections, consent, hackathonCss, hackathonPage] = await Promise.all([
   readFile(new URL('../styles.css', import.meta.url), 'utf8'),
   readFile(new URL('../sections.css', import.meta.url), 'utf8'),
   readFile(new URL('../assets/consent.js', import.meta.url), 'utf8'),
   readFile(new URL('../events/hackathon-2026/styles.css', import.meta.url), 'utf8'),
+  readFile(new URL('../events/hackathon-2026/index.html', import.meta.url), 'utf8'),
 ]);
+
+function runConsent(dataset = {}) {
+  const makeElement = tagName => ({
+    tagName,
+    children: [],
+    attributes: {},
+    listeners: {},
+    style: {},
+    appendChild(child) { this.children.push(child); },
+    setAttribute(name, value) { this.attributes[name] = value; },
+    addEventListener(type, listener) { this.listeners[type] = listener; },
+    remove() { this.removed = true; },
+  });
+  const document = {
+    currentScript: { dataset },
+    head: makeElement('head'),
+    body: makeElement('body'),
+    createElement: makeElement,
+  };
+  const writes = [];
+  const updates = [];
+  const localStorage = {
+    getItem: () => null,
+    setItem: (key, value) => writes.push([key, value]),
+  };
+  const gtag = (...args) => updates.push(args);
+
+  runInNewContext(consent, { document, localStorage, gtag });
+  const banner = document.body.children[0];
+  const message = banner.children[0];
+  const [accept, reject] = banner.children[1].children;
+  return { accept, banner, message, reject, updates, writes };
+}
 
 test('shared CSS defines the approved readable hierarchy', () => {
   assert.match(css, /--fs-body:1\.125rem/);
@@ -33,6 +68,45 @@ test('consent receives one locale and uses readable control sizes', () => {
   assert.doesNotMatch(consent, /class="en"|font-size:12px|font-size:13px/);
 });
 
-test('Hackathon 2026 stylesheet stays outside the shared token rollout', () => {
-  assert.doesNotMatch(hackathon, /--fs-body|--control-min/);
+test('dataset-provided consent renders exactly the supplied locale', () => {
+  const rendered = runConsent({ message: 'English message', accept: 'Accept', reject: 'Decline' });
+  assert.equal(rendered.message.textContent, 'English message');
+  assert.equal(rendered.accept.textContent, 'Accept');
+  assert.equal(rendered.reject.textContent, 'Decline');
+});
+
+test('dataset-free consent renders meaningful legacy copy', () => {
+  const rendered = runConsent();
+  assert.equal(rendered.message.textContent, '本站使用 Cookie 進行匿名流量分析（Google Analytics）。 This site uses cookies for anonymous traffic analytics (Google Analytics).');
+  assert.equal(rendered.accept.textContent, '接受 Accept');
+  assert.equal(rendered.reject.textContent, '拒絕 Decline');
+});
+
+test('dataset-free consent actions preserve storage and Consent Mode behavior', () => {
+  const accepted = runConsent();
+  accepted.accept.listeners.click();
+  assert.deepEqual(accepted.writes, [['crc-consent', 'granted']]);
+  assert.deepEqual(JSON.parse(JSON.stringify(accepted.updates)), [[
+    'consent', 'update', {
+      analytics_storage: 'granted', ad_storage: 'granted',
+      ad_user_data: 'granted', ad_personalization: 'granted',
+    },
+  ]]);
+  assert.equal(accepted.banner.removed, true);
+
+  const rejected = runConsent();
+  rejected.reject.listeners.click();
+  assert.deepEqual(rejected.writes, [['crc-consent', 'denied']]);
+  assert.deepEqual(JSON.parse(JSON.stringify(rejected.updates)), [[
+    'consent', 'update', {
+      analytics_storage: 'denied', ad_storage: 'denied',
+      ad_user_data: 'denied', ad_personalization: 'denied',
+    },
+  ]]);
+  assert.equal(rejected.banner.removed, true);
+});
+
+test('Hackathon 2026 stays outside the token rollout and uses legacy consent invocation', () => {
+  assert.doesNotMatch(hackathonCss, /--fs-body|--control-min/);
+  assert.match(hackathonPage, /<script src="\/assets\/consent\.js" defer><\/script>/);
 });

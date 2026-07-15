@@ -1,5 +1,10 @@
 (function () {
-  var copy = document.currentScript.dataset;
+  var localized = document.currentScript.dataset;
+  var copy = {
+    message: localized.message || '本站使用 Cookie 進行匿名流量分析（Google Analytics）。 This site uses cookies for anonymous traffic analytics (Google Analytics).',
+    accept: localized.accept || '接受 Accept',
+    reject: localized.reject || '拒絕 Decline'
+  };
   var STORAGE_KEY = 'crc-consent';
 
   function update(value) {
