@@ -34,5 +34,9 @@
   </footer>
   <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
   {% unless page.translation_exempt %}<script type="module" src="/assets/locale.js"></script>{% endunless %}
+  <script src="/assets/consent.js" defer
+    data-message="{{ ui.consent.message | escape }}"
+    data-accept="{{ ui.consent.accept | escape }}"
+    data-reject="{{ ui.consent.reject | escape }}"></script>
 </body>
 </html>
