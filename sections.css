@@ -55,7 +55,8 @@
   display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between;
   font-family:var(--font-display);letter-spacing:.05em;color:var(--text-secondary)}
 .sections-footer__inner nav{display:flex;gap:16px;flex-wrap:wrap}
-.sections-footer__inner a{display:inline-flex;align-items:center;color:var(--crc-purple);text-decoration:none;text-transform:uppercase}
+.sections-footer__inner a{display:inline-flex;align-items:center;color:var(--crc-purple);text-decoration:none;text-transform:uppercase;
+  min-width:var(--control-min);justify-content:center}
 .sections-footer__inner a:hover{text-decoration:underline}
 
 .topbar__home,.topbar__crumb,.index-page__feed,.sections-footer{font-size:var(--fs-label)}

@@ -173,7 +173,7 @@ img,svg,video{max-width:100%}
   background:color-mix(in srgb,var(--surface-page) 82%,transparent);
   backdrop-filter:blur(10px);border-bottom:1.5px solid var(--border-default)}
 @supports not (background:color-mix(in srgb,#fff 82%,transparent)){.site-header{background:var(--surface-page)}}
-.site-header__brand{text-decoration:none;display:inline-flex;align-items:center;gap:.85em;color:var(--text-brand)}
+.site-header__brand{text-decoration:none;display:inline-flex;align-items:center;gap:.85em;color:var(--text-brand);min-height:var(--control-min)}
 .site-header__brand .crc-mark{height:34px;width:81px}
 .site-header__brand .logotype-split{width:208px}
 .site-nav{display:flex;gap:8px;margin-left:auto}

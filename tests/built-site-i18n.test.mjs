@@ -36,6 +36,24 @@ test('built home and section headers retain narrow-viewport reflow rules in both
   assert.match(sections, /@media \(max-width:360px\)[\s\S]*\.topbar__home\{[^}]*min-width:var\(--control-min\)/);
 });
 
+test('built locale homepages retain a 44px header-brand target', async () => {
+  const [zhHome, enHome, css] = await Promise.all([
+    read('_site/index.html'), read('_site/en/index.html'), read('_site/styles.css'),
+  ]);
+  for (const home of [zhHome, enHome]) assert.match(home, /class="site-header__brand"/);
+  assert.match(css, /\.site-header__brand\{[^}]*min-height:var\(--control-min\)/);
+});
+
+test('built locale section footers retain 44px link targets', async () => {
+  const [zhSection, enSection, sections] = await Promise.all([
+    read('_site/news/index.html'), read('_site/en/news/index.html'), read('_site/sections.css'),
+  ]);
+  for (const section of [zhSection, enSection]) {
+    assert.match(section, /<footer class="sections-footer">[\s\S]*<nav/);
+  }
+  assert.match(sections, /\.sections-footer__inner a\{[^}]*min-width:var\(--control-min\)[^}]*justify-content:center/);
+});
+
 test('built feed UI and metadata are localized independently', async () => {
   const [zhNews, enNews, zhFeed, enFeed, zhNewsFeed, enNewsFeed] = await Promise.all([
     read('_site/news/index.html'), read('_site/en/news/index.html'),

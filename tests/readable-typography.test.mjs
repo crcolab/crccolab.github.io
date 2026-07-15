@@ -68,6 +68,15 @@ test('shared headers reflow at narrow effective viewports without shrinking cont
   assert.match(sections, /\.topbar__home,\.locale-switcher a[^}]*min-height:var\(--control-min\)/);
 });
 
+test('homepage header brand retains a 44px minimum target height', () => {
+  assert.match(css, /\.site-header__brand\{[^}]*min-height:var\(--control-min\)/);
+});
+
+test('section footer links retain 44px minimum target dimensions', () => {
+  assert.match(sections, /\.sections-footer__inner a\{[^}]*min-width:var\(--control-min\)[^}]*justify-content:center/);
+  assert.match(sections, /\.topbar__home,\.locale-switcher a,\.sections-footer a\{min-height:var\(--control-min\)\}/);
+});
+
 test('consent receives one locale and uses readable control sizes', () => {
   assert.match(consent, /currentScript\.dataset/);
   assert.match(consent, /font-size:16px/);
