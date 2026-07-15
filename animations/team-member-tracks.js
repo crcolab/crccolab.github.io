@@ -7,8 +7,8 @@ export const MEMBER_IDS = Object.freeze([
 ]);
 
 export const MEMBER_TRACKS = Object.freeze({
-  lulu: {
-    id: 'lulu',
+  cheng: {
+    id: 'cheng',
     segments: [
       {
         start: 1.136667,
@@ -46,8 +46,8 @@ export const MEMBER_TRACKS = Object.freeze({
       },
     ],
   },
-  meichun: {
-    id: 'meichun',
+  lulu: {
+    id: 'lulu',
     segments: [
       {
         start: 1.136667,
@@ -85,8 +85,8 @@ export const MEMBER_TRACKS = Object.freeze({
       },
     ],
   },
-  cheng: {
-    id: 'cheng',
+  meichun: {
+    id: 'meichun',
     segments: [
       {
         start: 1.136667,

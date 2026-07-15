@@ -353,6 +353,7 @@ export function initSurveillanceHUD() {
   let transform = null;
   let frameHandle = null;
   let frameKind = null;
+  let frameGeneration = 0;
   let panelPlacementFrame = null;
   let activeId = null;
   let pointerId = null;
@@ -364,6 +365,7 @@ export function initSurveillanceHUD() {
   let pendingExternalGeneration = null;
   let externalRequestGeneration = 0;
   let started = false;
+  let isPresenting = false;
   const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
   let teaserBag = [];
   let teaserWaitTimer = null;
@@ -460,13 +462,18 @@ export function initSurveillanceHUD() {
     clearVisibleTeaser();
   }
 
+  function suspendPresentation() {
+    isPresenting = false;
+    suspendTeasers();
+    stopFrameLoop();
+  }
+
   function teasersBlocked() {
     return (
       !started
+      || !isPresenting
       || motionQuery.matches
       || document.hidden
-      || video.paused
-      || video.ended
       || activeId !== null
     );
   }
@@ -504,7 +511,7 @@ export function initSurveillanceHUD() {
   function handleMotionPreferenceChange() {
     if (motionQuery.matches) {
       suspendTeasers();
-    } else if (!video.paused && !activeId) {
+    } else if (isPresenting && !activeId) {
       scheduleTeaser();
     }
   }
@@ -512,7 +519,7 @@ export function initSurveillanceHUD() {
   function activateMember(id) {
     if (!layouts.has(id) || activeId === id) return;
 
-    suspendTeasers();
+    suspendPresentation();
     const switching = activeId !== null;
     if (!switching) playback.pauseForInteraction();
 
@@ -682,6 +689,7 @@ export function initSurveillanceHUD() {
   }
 
   function stopFrameLoop() {
+    frameGeneration += 1;
     if (frameHandle === null) return;
 
     if (
@@ -698,21 +706,26 @@ export function initSurveillanceHUD() {
   }
 
   function requestNextFrame() {
-    if (frameHandle !== null || video.paused || document.hidden) return;
+    if (frameHandle !== null || !isPresenting || document.hidden) return;
+    const generation = frameGeneration;
 
     if (typeof video.requestVideoFrameCallback === 'function') {
       frameKind = 'video';
       frameHandle = video.requestVideoFrameCallback(() => {
+        if (generation !== frameGeneration) return;
         frameHandle = null;
         frameKind = null;
+        if (!isPresenting || document.hidden) return;
         renderAt();
         requestNextFrame();
       });
     } else {
       frameKind = 'raf';
       frameHandle = requestAnimationFrame(() => {
+        if (generation !== frameGeneration) return;
         frameHandle = null;
         frameKind = null;
+        if (!isPresenting || document.hidden) return;
         renderAt();
         requestNextFrame();
       });
@@ -725,8 +738,9 @@ export function initSurveillanceHUD() {
   }
 
   function handlePlaying() {
+    isPresenting = true;
     if (activeId || playback.ownsPause()) {
-      suspendTeasers();
+      suspendPresentation();
       playback.pauseForInteraction();
       return;
     }
@@ -735,9 +749,19 @@ export function initSurveillanceHUD() {
   }
 
   function handlePause() {
-    suspendTeasers();
-    stopFrameLoop();
+    suspendPresentation();
     renderAt();
+  }
+
+  function reconcilePresentationSnapshot() {
+    if (
+      video.paused
+      || video.ended
+      || video.seeking
+      || video.readyState < 3
+    ) return;
+
+    handlePlaying();
   }
 
   function handleSeeked() {
@@ -752,6 +776,7 @@ export function initSurveillanceHUD() {
       return;
     }
     renderAt();
+    reconcilePresentationSnapshot();
   }
 
   function handleVisibilityChange() {
@@ -764,7 +789,7 @@ export function initSurveillanceHUD() {
       renderAt();
       if (playback.ownsPause()) {
         void playback.resumeIfOwned();
-      } else if (!video.paused) {
+      } else if (isPresenting) {
         requestNextFrame();
         scheduleTeaser();
       }
@@ -865,6 +890,9 @@ export function initSurveillanceHUD() {
         reconcileActiveMember();
       });
     });
+    target.addEventListener('click', (event) => {
+      if (event.detail === 0 && document.activeElement !== target) target.focus();
+    });
     target.addEventListener('focus', () => {
       touchId = null;
       focusedId = id;
@@ -928,7 +956,7 @@ export function initSurveillanceHUD() {
     rebuildTransform();
     renderAt();
     overlay.hidden = false;
-    if (!video.paused) {
+    if (isPresenting) {
       requestNextFrame();
       scheduleTeaser();
     }
@@ -943,8 +971,13 @@ export function initSurveillanceHUD() {
   motionQuery.addEventListener('change', handleMotionPreferenceChange);
   video.addEventListener('loadedmetadata', start);
   video.addEventListener('playing', handlePlaying);
+  video.addEventListener('waiting', suspendPresentation);
+  video.addEventListener('stalled', suspendPresentation);
+  video.addEventListener('seeking', suspendPresentation);
   video.addEventListener('pause', handlePause);
+  video.addEventListener('ended', suspendPresentation);
   video.addEventListener('seeked', handleSeeked);
 
   if (video.readyState >= 1) start();
+  reconcilePresentationSnapshot();
 }
