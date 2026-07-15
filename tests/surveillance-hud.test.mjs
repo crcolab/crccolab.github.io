@@ -59,6 +59,37 @@ test('calibrated tracks are normalized, ordered, and sampled at most 0.5s apart'
   }
 });
 
+test('calibrated tracks preserve verified member identities at both segment starts', () => {
+  const landmarks = [
+    {
+      time: 1.136667,
+      expected: {
+        lulu: { x: .386, y: .319, width: .047, height: .172 },
+        meichun: { x: .541, y: .319, width: .050, height: .202 },
+        cheng: { x: .292, y: .452, width: .064, height: .218 },
+      },
+    },
+    {
+      time: 9.166667,
+      expected: {
+        lulu: { x: .386, y: .316, width: .046, height: .180 },
+        meichun: { x: .535, y: .321, width: .053, height: .199 },
+        cheng: { x: .292, y: .452, width: .062, height: .215 },
+      },
+    },
+  ];
+
+  for (const { time, expected } of landmarks) {
+    for (const [id, rect] of Object.entries(expected)) {
+      assert.deepEqual(
+        getTrackedRectAtTime(MEMBER_TRACKS[id], time),
+        rect,
+        id + ' identity mismatch at ' + time,
+      );
+    }
+  }
+});
+
 test('tracked rectangles return exact frames and interpolate within one segment', () => {
   const track = {
     id: 'sample',
