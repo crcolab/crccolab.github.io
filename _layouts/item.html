@@ -1,0 +1,23 @@
+---
+layout: default
+---
+<main class="item-page">
+  <article class="item container">
+    <div class="crc-news__meta">
+      <span class="crc-news__date">{{ page.date | date: "%Y-%b-%d" | upcase }}</span>
+      <span class="crc-news__cat">{{ page.category }}</span>
+      {% if page.source %}<span class="crc-news__cat" lang="en">{{ page.source }}</span>{% endif %}
+    </div>
+    <h1 class="item__title">{{ page.title }}</h1>
+    {% if page.image and page.image != "" %}
+    <img class="item__image" src="{{ page.image }}" alt="{{ page.title | escape }}">
+    {% endif %}
+    <div class="item__body">
+      {{ content }}
+    </div>
+    {% if page.external_url %}
+    <p><a class="crc-btn crc-btn--primary crc-btn--md" href="{{ page.external_url }}" target="_blank" rel="noopener">閱讀原文 View source<span class="crc-btn__arrow" aria-hidden="true">↗</span></a></p>
+    {% endif %}
+    <p class="item__backlink"><a href="/{{ page.section }}/">← {% if page.section == "news" %}所有訊息 All news{% elsif page.section == "events" %}所有活動 All events{% else %}所有媒體報導 All media{% endif %}</a></p>
+  </article>
+</main>

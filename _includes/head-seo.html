@@ -1,0 +1,60 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{% assign page_title = page.title | default: site.title %}
+<title>{{ page_title }}｜Cyborg Resilience Co-lab</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+{% assign desc = page.summary | default: page.description | default: site.description | strip_newlines | truncate: 300 %}
+<meta name="description" content="{{ desc | escape }}">
+<link rel="canonical" href="{{ page.url | absolute_url }}">
+<link rel="alternate" hreflang="zh-Hant" href="{{ page.url | absolute_url }}">
+<link rel="alternate" hreflang="x-default" href="{{ page.url | absolute_url }}">
+<meta property="og:site_name" content="Cyborg Resilience Co-lab">
+<meta property="og:type" content="{% if page.collection %}article{% else %}website{% endif %}">
+<meta property="og:url" content="{{ page.url | absolute_url }}">
+<meta property="og:title" content="{{ page_title | escape }}">
+<meta property="og:description" content="{{ desc | escape }}">
+<meta property="og:locale" content="zh_TW">
+{% if page.image and page.image != "" %}<meta property="og:image" content="{{ page.image | absolute_url }}">{% endif %}
+<meta name="twitter:card" content="{% if page.image and page.image != '' %}summary_large_image{% else %}summary{% endif %}">
+<meta name="twitter:title" content="{{ page_title | escape }}">
+<meta name="twitter:description" content="{{ desc | escape }}">
+{% if page.image and page.image != "" %}<meta name="twitter:image" content="{{ page.image | absolute_url }}">{% endif %}
+<link rel="alternate" type="application/atom+xml" title="CRC — All updates" href="/feed.xml">
+<link rel="alternate" type="application/atom+xml" title="CRC — News" href="/news/feed.xml">
+<link rel="alternate" type="application/atom+xml" title="CRC — Events" href="/events/feed.xml">
+<link rel="alternate" type="application/atom+xml" title="CRC — Media" href="/media/feed.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Noto+Sans+TC:wght@400;500;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/sections.css">
+{% if page.collection %}
+<script type="application/ld+json">
+{% if page.section == "events" %}
+{
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": {{ page.title | jsonify }},
+  "startDate": "{{ page.start_date | default: page.date | date: '%Y-%m-%d' }}",
+  {% if page.end_date %}"endDate": "{{ page.end_date | date: '%Y-%m-%d' }}",{% endif %}
+  {% if page.location_name %}"location": { "@type": "Place", "name": {{ page.location_name | jsonify }} },{% endif %}
+  "eventStatus": "https://schema.org/EventScheduled",
+  "description": {{ desc | jsonify }},
+  "url": "{{ page.url | absolute_url }}",
+  "organizer": { "@type": "Organization", "name": "Cyborg Resilience Co-lab", "url": "{{ site.url }}" }
+}
+{% else %}
+{
+  "@context": "https://schema.org",
+  "@type": "{% if page.section == 'news' %}NewsArticle{% else %}Article{% endif %}",
+  "headline": {{ page.title | jsonify }},
+  "datePublished": "{{ page.date | date: '%Y-%m-%d' }}",
+  "inLanguage": "zh-Hant",
+  "url": "{{ page.url | absolute_url }}",
+  {% if page.image and page.image != "" %}"image": "{{ page.image | absolute_url }}",{% endif %}
+  "publisher": { "@type": "Organization", "name": "Cyborg Resilience Co-lab", "url": "{{ site.url }}" },
+  "description": {{ desc | jsonify }}
+}
+{% endif %}
+</script>
+{% endif %}
