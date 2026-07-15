@@ -328,6 +328,11 @@ export function initSurveillanceHUD() {
   let focusedId = null;
   let touchId = null;
   let started = false;
+  const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let teaserBag = [];
+  let teaserWaitTimer = null;
+  let teaserHideTimer = null;
+  let teaserId = null;
 
   function rebuildTransform() {
     transform = computeCoverTransform(
@@ -375,9 +380,79 @@ export function initSurveillanceHUD() {
     });
   }
 
+  function clearVisibleTeaser() {
+    if (teaserHideTimer !== null) {
+      clearTimeout(teaserHideTimer);
+      teaserHideTimer = null;
+    }
+    if (teaserId) targets.get(teaserId)?.classList.remove('is-teasing');
+    teaserId = null;
+  }
+
+  function cancelTeaserWait() {
+    if (teaserWaitTimer === null) return;
+    clearTimeout(teaserWaitTimer);
+    teaserWaitTimer = null;
+  }
+
+  function suspendTeasers() {
+    cancelTeaserWait();
+    clearVisibleTeaser();
+  }
+
+  function teasersBlocked() {
+    return (
+      !started
+      || motionQuery.matches
+      || document.hidden
+      || video.paused
+      || video.ended
+      || activeId !== null
+    );
+  }
+
+  function scheduleTeaser() {
+    cancelTeaserWait();
+    if (teasersBlocked()) return;
+    teaserWaitTimer = setTimeout(showNextTeaser, getTeaserDelay());
+  }
+
+  function showNextTeaser() {
+    teaserWaitTimer = null;
+    if (teasersBlocked()) return;
+
+    if (!teaserBag.length) teaserBag = shuffleMemberIds(validIds);
+    const selection = takeNextVisibleMember(teaserBag, new Set(layouts.keys()));
+    teaserBag = selection.remaining;
+
+    if (!selection.memberId) {
+      scheduleTeaser();
+      return;
+    }
+
+    clearVisibleTeaser();
+    teaserId = selection.memberId;
+    targets.get(teaserId).classList.add('is-teasing');
+    teaserHideTimer = setTimeout(() => {
+      teaserHideTimer = null;
+      if (teaserId) targets.get(teaserId)?.classList.remove('is-teasing');
+      teaserId = null;
+    }, 700);
+    scheduleTeaser();
+  }
+
+  function handleMotionPreferenceChange() {
+    if (motionQuery.matches) {
+      suspendTeasers();
+    } else if (!video.paused && !activeId) {
+      scheduleTeaser();
+    }
+  }
+
   function activateMember(id) {
     if (!layouts.has(id) || activeId === id) return;
 
+    suspendTeasers();
     const switching = activeId !== null;
     if (!switching) playback.pauseForInteraction();
 
@@ -409,6 +484,7 @@ export function initSurveillanceHUD() {
   function dismissMember() {
     if (!clearActiveMember()) return;
     void playback.resumeIfOwned(!document.hidden);
+    scheduleTeaser();
   }
 
   function clearInteractionState() {
@@ -466,6 +542,7 @@ export function initSurveillanceHUD() {
     }
 
     reconcileActiveMember();
+    if (teaserId && !layouts.has(teaserId)) clearVisibleTeaser();
   }
 
   function stopFrameLoop() {
@@ -513,13 +590,16 @@ export function initSurveillanceHUD() {
 
   function handlePlaying() {
     if (activeId) {
+      suspendTeasers();
       playback.pauseForInteraction();
       return;
     }
     requestNextFrame();
+    scheduleTeaser();
   }
 
   function handlePause() {
+    suspendTeasers();
     stopFrameLoop();
     renderAt();
   }
@@ -532,6 +612,7 @@ export function initSurveillanceHUD() {
     if (document.hidden) {
       clearInteractionState();
       clearActiveMember();
+      suspendTeasers();
       stopFrameLoop();
     } else {
       renderAt();
@@ -539,6 +620,7 @@ export function initSurveillanceHUD() {
         void playback.resumeIfOwned();
       } else if (!video.paused) {
         requestNextFrame();
+        scheduleTeaser();
       }
     }
   }
@@ -620,7 +702,10 @@ export function initSurveillanceHUD() {
     rebuildTransform();
     renderAt();
     overlay.hidden = false;
-    if (!video.paused) requestNextFrame();
+    if (!video.paused) {
+      requestNextFrame();
+      scheduleTeaser();
+    }
   }
 
   const resizeObserver = new ResizeObserver(invalidateGeometry);
@@ -629,6 +714,7 @@ export function initSurveillanceHUD() {
   document.addEventListener('pointerdown', handleTouchPointerDown, true);
   document.addEventListener('visibilitychange', handleVisibilityChange);
   window.addEventListener('orientationchange', invalidateGeometry);
+  motionQuery.addEventListener('change', handleMotionPreferenceChange);
   video.addEventListener('loadedmetadata', start);
   video.addEventListener('playing', handlePlaying);
   video.addEventListener('pause', handlePause);

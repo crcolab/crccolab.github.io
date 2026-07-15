@@ -382,6 +382,35 @@ test('HUD controller wires direct input without duplicating roster HTML', async 
   assert.doesNotMatch(source, /\.innerHTML\s*=/);
 });
 
+test('HUD source wires a bounded reduced-motion-aware teaser lifecycle', async () => {
+  const source = await readFile(
+    new URL('../animations/surveillance-hud.js', import.meta.url),
+    'utf8',
+  );
+
+  assert.match(
+    source,
+    /matchMedia\('\(prefers-reduced-motion: reduce\)'\)/,
+  );
+  assert.match(
+    source,
+    /setTimeout\(showNextTeaser, getTeaserDelay\(\)\)/,
+  );
+  assert.match(
+    source,
+    /teaserHideTimer = setTimeout\(\(\) => \{[\s\S]*?\}, 700\)/,
+  );
+  assert.match(
+    source,
+    /takeNextVisibleMember\(teaserBag, new Set\(layouts\.keys\(\)\)\)/,
+  );
+  assert.match(source, /classList\.add\('is-teasing'\)/);
+  assert.match(
+    source,
+    /motionQuery\.addEventListener\('change', handleMotionPreferenceChange\)/,
+  );
+});
+
 class FakeEventTarget {
   constructor() {
     this.listeners = new Map();
@@ -566,9 +595,14 @@ class FakeVideo extends FakeHTMLElement {
   }
 }
 
-const installControllerHarness = ({ paused = false } = {}) => {
+const installControllerHarness = ({
+  paused = false,
+  reducedMotion = false,
+  randomValues = [0],
+} = {}) => {
   const document = new FakeDocument();
   const window = new FakeEventTarget();
+  const motionQuery = new FakeEventTarget();
   const hud = new FakeHTMLElement(document);
   const overlay = new FakeHTMLElement(document);
   const panel = new FakeHTMLElement(document);
@@ -577,7 +611,23 @@ const installControllerHarness = ({ paused = false } = {}) => {
   const targets = new Map();
   const panelFields = new Map();
   let nextAnimationFrame = 1;
+  let nextTimer = 1;
+  let randomIndex = 0;
   const animationFrames = new Map();
+  const timers = new Map();
+  const fakeMath = Object.create(globalThis.Math);
+
+  fakeMath.random = () => {
+    const fallback = randomValues.at(-1) ?? 0;
+    const value = randomValues[randomIndex] ?? fallback;
+    randomIndex += 1;
+    return value;
+  };
+  motionQuery.matches = reducedMotion;
+  window.matchMedia = (query) => {
+    motionQuery.media = query;
+    return motionQuery;
+  };
 
   hud.clientWidth = 1176;
   hud.clientHeight = 504;
@@ -625,8 +675,18 @@ const installControllerHarness = ({ paused = false } = {}) => {
     document,
     window,
     HTMLElement: FakeHTMLElement,
+    Math: fakeMath,
     ResizeObserver: class {
       observe() {}
+    },
+    setTimeout(callback, delay) {
+      const handle = nextTimer;
+      nextTimer += 1;
+      timers.set(handle, { callback, delay });
+      return handle;
+    },
+    clearTimeout(handle) {
+      timers.delete(handle);
     },
     requestAnimationFrame(callback) {
       const handle = nextAnimationFrame;
@@ -672,6 +732,28 @@ const installControllerHarness = ({ paused = false } = {}) => {
     targets,
     video,
     restore,
+    setReducedMotion(matches) {
+      motionQuery.matches = matches;
+      motionQuery.dispatch('change', { matches });
+    },
+    runTimer(delay) {
+      const timerEntry = [...timers]
+        .find(([, timer]) => timer.delay === delay);
+      assert.ok(timerEntry, 'missing timer with delay ' + delay);
+      const [handle, timer] = timerEntry;
+      timers.delete(handle);
+      timer.callback();
+    },
+    timerDelays() {
+      return [...timers.values()]
+        .map((timer) => timer.delay)
+        .sort((left, right) => left - right);
+    },
+    teasingIds() {
+      return MEMBER_IDS.filter(
+        (id) => targets.get(id).classList.contains('is-teasing'),
+      );
+    },
     activeId() {
       return MEMBER_IDS.find(
         (id) => targets.get(id).classList.contains('is-active'),
@@ -679,6 +761,159 @@ const installControllerHarness = ({ paused = false } = {}) => {
     },
   };
 };
+
+test('teasers use fresh endpoint delays and stay visible for 700ms without opening or pausing', () => {
+  const harness = installControllerHarness({
+    randomValues: [0, 0, 0, 0, 0, 0.999999],
+  });
+
+  try {
+    assert.deepEqual(harness.timerDelays(), [2500]);
+
+    harness.runTimer(2500);
+    assert.equal(harness.teasingIds().length, 1);
+    assert.equal(harness.panel.hidden, true);
+    assert.equal(harness.video.paused, false);
+    assert.equal(harness.video.pauseCalls, 0);
+    assert.deepEqual(harness.timerDelays(), [700, 5000]);
+
+    harness.runTimer(700);
+    assert.deepEqual(harness.teasingIds(), []);
+    assert.deepEqual(harness.timerDelays(), [5000]);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('teaser bag skips target-free frames without consuming a member', () => {
+  const harness = installControllerHarness();
+
+  try {
+    harness.video.currentTime = 8;
+    harness.video.dispatch('seeked');
+    harness.runTimer(2500);
+
+    assert.deepEqual(harness.teasingIds(), []);
+    assert.deepEqual(harness.timerDelays(), [2500]);
+
+    harness.video.currentTime = 3;
+    harness.video.dispatch('seeked');
+    const shown = [];
+
+    for (let index = 0; index < MEMBER_IDS.length; index += 1) {
+      harness.runTimer(2500);
+      shown.push(harness.teasingIds()[0]);
+      harness.runTimer(700);
+    }
+
+    assert.deepEqual(shown, [
+      'meichun',
+      'cheng',
+      'tzu-tung',
+      'sean',
+      'lulu',
+    ]);
+    assert.equal(new Set(shown).size, MEMBER_IDS.length);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('reduced motion blocks teasers and preference changes cancel or restart them', () => {
+  const harness = installControllerHarness({ reducedMotion: true });
+
+  try {
+    assert.deepEqual(harness.timerDelays(), []);
+
+    harness.setReducedMotion(false);
+    assert.deepEqual(harness.timerDelays(), [2500]);
+    harness.runTimer(2500);
+    assert.equal(harness.teasingIds().length, 1);
+
+    harness.setReducedMotion(true);
+    assert.deepEqual(harness.teasingIds(), []);
+    assert.deepEqual(harness.timerDelays(), []);
+
+    harness.targets.get('lulu').dispatch('pointerenter', {
+      pointerType: 'mouse',
+    });
+    assert.equal(harness.activeId(), 'lulu');
+    assert.equal(harness.panel.hidden, false);
+
+    harness.targets.get('lulu').dispatch('pointerleave', {
+      pointerType: 'mouse',
+    });
+    harness.setReducedMotion(false);
+    assert.deepEqual(harness.timerDelays(), [2500]);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('pause cancels a visible teaser and playing starts a fresh wait', () => {
+  const harness = installControllerHarness();
+
+  try {
+    harness.runTimer(2500);
+    assert.equal(harness.teasingIds().length, 1);
+
+    harness.video.paused = true;
+    harness.video.dispatch('pause');
+    assert.deepEqual(harness.teasingIds(), []);
+    assert.deepEqual(harness.timerDelays(), []);
+
+    harness.video.paused = false;
+    harness.video.dispatch('playing');
+    assert.deepEqual(harness.timerDelays(), [2500]);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('direct activation cancels teasers and dismissal starts a fresh wait', () => {
+  const harness = installControllerHarness();
+  const target = harness.targets.get('lulu');
+
+  try {
+    harness.runTimer(2500);
+    assert.equal(harness.teasingIds().length, 1);
+
+    target.dispatch('pointerenter', { pointerType: 'mouse' });
+    assert.deepEqual(harness.teasingIds(), []);
+    assert.deepEqual(harness.timerDelays(), []);
+    assert.equal(harness.activeId(), 'lulu');
+    assert.equal(harness.panel.hidden, false);
+    assert.equal(harness.video.paused, true);
+
+    target.dispatch('pointerleave', { pointerType: 'mouse' });
+    assert.equal(harness.activeId(), null);
+    assert.equal(harness.panel.hidden, true);
+    assert.equal(harness.video.paused, false);
+    assert.deepEqual(harness.timerDelays(), [2500]);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('hiding cancels a visible teaser and visible playback starts a fresh wait', () => {
+  const harness = installControllerHarness();
+
+  try {
+    harness.runTimer(2500);
+    assert.equal(harness.teasingIds().length, 1);
+
+    harness.document.hidden = true;
+    harness.document.dispatch('visibilitychange');
+    assert.deepEqual(harness.teasingIds(), []);
+    assert.deepEqual(harness.timerDelays(), []);
+
+    harness.document.hidden = false;
+    harness.document.dispatch('visibilitychange');
+    assert.deepEqual(harness.timerDelays(), [2500]);
+  } finally {
+    harness.restore();
+  }
+});
 
 test('hidden interaction clears UI then resumes its owned pause when visible', () => {
   const harness = installControllerHarness();
