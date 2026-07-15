@@ -43,3 +43,32 @@ test('shared shell advertises reciprocal locales and uses normal switcher links'
   assert.match(layout, /src="\/assets\/locale\.js"/);
   assert.match(layout, /translation_exempt/);
 });
+
+test('English indexes, feeds, and latest API declare exact routes and collections', async () => {
+  const cases = [
+    ['en/news/index.html', '/en/news/', 'news_en'],
+    ['en/events/index.html', '/en/events/', 'events_en'],
+    ['en/records/index.html', '/en/records/', 'records_en'],
+    ['en/feed.xml', '/en/feed.xml', 'site.news_en'],
+    ['en/news/feed.xml', '/en/news/feed.xml', 'site.news_en'],
+    ['en/events/feed.xml', '/en/events/feed.xml', 'site.events_en'],
+    ['en/records/feed.xml', '/en/records/feed.xml', 'site.records_en'],
+    ['en/api/latest.json', '/en/api/latest.json', 'news_en,events_en,records_en'],
+  ];
+  for (const [path, permalink, source] of cases) {
+    const content = await read(path).catch(() => '');
+    assert.match(content, new RegExp(`permalink: ${permalink.replaceAll('/', '\\/')}`));
+    assert.match(content, new RegExp(source));
+  }
+});
+
+test('section and item layouts use locale copy instead of bilingual labels', async () => {
+  const [indexLayout, itemLayout] = await Promise.all([
+    read('_layouts/section-index.html'), read('_layouts/item.html'),
+  ]);
+  assert.match(indexLayout, /site\[page\.collection_name\]/);
+  assert.doesNotMatch(indexLayout, /title_en/);
+  assert.match(itemLayout, /ui\.view_source/);
+  assert.match(itemLayout, /ui\.back_to\[page\.section\]/);
+  assert.doesNotMatch(itemLayout, /閱讀原文 View source|所有訊息 All news/);
+});
