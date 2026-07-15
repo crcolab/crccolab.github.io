@@ -641,8 +641,20 @@ export function initSurveillanceHUD() {
     renderAt();
   }
 
+  function reconcilePresentationSnapshot() {
+    if (
+      video.paused
+      || video.ended
+      || video.seeking
+      || video.readyState < 3
+    ) return;
+
+    handlePlaying();
+  }
+
   function handleSeeked() {
     renderAt();
+    reconcilePresentationSnapshot();
   }
 
   function handleVisibilityChange() {
@@ -781,4 +793,5 @@ export function initSurveillanceHUD() {
   video.addEventListener('seeked', handleSeeked);
 
   if (video.readyState >= 1) start();
+  reconcilePresentationSnapshot();
 }

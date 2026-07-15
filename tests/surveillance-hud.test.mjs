@@ -632,6 +632,7 @@ class FakeVideo extends FakeHTMLElement {
     super(ownerDocument);
     this.paused = paused;
     this.ended = false;
+    this.seeking = false;
     this.readyState = 1;
     this.videoWidth = 1920;
     this.videoHeight = 1044;
@@ -666,6 +667,10 @@ class FakeVideo extends FakeHTMLElement {
 
 const installControllerHarness = ({
   paused = false,
+  ended = false,
+  seeking = false,
+  readyState = 1,
+  dispatchPlaying = !paused,
   reducedMotion = false,
   randomValues = [0],
   frameWidth = 1176,
@@ -711,6 +716,9 @@ const installControllerHarness = ({
   panel.parentNode = overlay;
   video.parentNode = hud;
   video.currentTime = currentTime;
+  video.ended = ended;
+  video.seeking = seeking;
+  video.readyState = readyState;
   video.closestResults.set('.crc-hud', hud);
 
   for (const field of ['name-zh', 'name-en', 'role-zh', 'role-en']) {
@@ -791,7 +799,7 @@ const installControllerHarness = ({
 
   try {
     initSurveillanceHUD();
-    if (!paused) video.dispatch('playing');
+    if (dispatchPlaying) video.dispatch('playing');
   } catch (error) {
     restore();
     throw error;
@@ -951,6 +959,66 @@ test('pause cancels a visible teaser and playing starts a fresh wait', () => {
     assert.deepEqual(harness.timerDelays(), [2500]);
   } finally {
     harness.restore();
+  }
+});
+
+test('presentation snapshot bootstraps cached autoplay after a missed playing event', () => {
+  const harness = installControllerHarness({
+    readyState: 3,
+    dispatchPlaying: false,
+  });
+
+  try {
+    assert.equal(harness.overlay.hidden, false);
+    assert.deepEqual(harness.timerDelays(), [2500]);
+    assert.equal(harness.video.frameCallbacks.size, 1);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('presentation snapshot resumes a fully buffered seek without playing', () => {
+  const harness = installControllerHarness({ readyState: 4 });
+
+  try {
+    harness.video.seeking = true;
+    harness.video.dispatch('seeking');
+    assert.deepEqual(harness.timerDelays(), []);
+    assert.equal(harness.video.frameCallbacks.size, 0);
+
+    harness.video.seeking = false;
+    harness.video.dispatch('seeked');
+    assert.deepEqual(harness.timerDelays(), [2500]);
+    assert.equal(harness.video.frameCallbacks.size, 1);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('presentation snapshot rejects incomplete bootstrap media states', () => {
+  const states = [
+    { paused: true, readyState: 4 },
+    { ended: true, readyState: 4 },
+    { seeking: true, readyState: 4 },
+    { readyState: 2 },
+  ];
+
+  for (const state of states) {
+    const harness = installControllerHarness({
+      ...state,
+      dispatchPlaying: false,
+    });
+
+    try {
+      assert.deepEqual(harness.timerDelays(), [], JSON.stringify(state));
+      assert.equal(
+        harness.video.frameCallbacks.size,
+        0,
+        JSON.stringify(state),
+      );
+    } finally {
+      harness.restore();
+    }
   }
 });
 
