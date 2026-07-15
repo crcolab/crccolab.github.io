@@ -444,21 +444,36 @@ img,svg,video{max-width:100%}
 /* State: cyber — hide the vector, show the pixel-font alt in its place.
    Text color inherits from the wordmark's currentColor (purple on light theme,
    lime on purple theme) so "cyber" reads as a font-swap of the same lettering
-   rather than a foreign overlay. Font-size (55cqh) is empirically calibrated
-   so the pixel-font "cyber" fits within the .glitch-word slot at both hero
-   and header scales (measured ratio ≈ 1.02 — near-exact fit). Because cyber
-   no longer overhangs its slot, the earlier justify-content and .rest
-   translateX workarounds are unnecessary and were removed. */
+   rather than a foreign overlay. */
 .glitch-word.cyber .logotype-en--cyborg{visibility:hidden}
 .glitch-word.cyber .glitch-word__alt{
   display:flex;
   font-family:"Press Start 2P", cursive;
-  font-size:clamp(0.5rem, 55cqh, 4rem);
+  font-size:clamp(0.5rem, 90cqh, 4rem);
   letter-spacing:-0.02em;
   animation:sprayIn 0.6s cubic-bezier(.22,1,.36,1) both;
   filter:url(#spraypaint);
   z-index:1;
 }
+
+/* At original font-size the pixel-font "cyber" is ~1.54x the .glitch-word
+   content width, so it overhangs the Cyborg slot into .crc-mark on the left
+   and "Resilience Co-lab" on the right. Instead of shrinking the text or
+   transform-shifting the rest segment, pad the .glitch-word itself so its
+   layout box grows to fit cyber, pushing .rest right naturally via flex.
+   Requires:
+     - box-sizing: content-box so padding adds to (not eats from) width
+     - flex-shrink: 0 on both children so total flex-basis > 100% overflows
+       instead of squeezing back to fit
+   With ~9% padding-inline, .glitch-word grows from 30.28% to ~48% of split;
+   cyber fits centered with ~4px each-side breathing room; mark→cyber gap
+   opens to ~47px (hero) / ~15px (header). */
+.glitch-word.cyber{
+  box-sizing:content-box;
+  padding-inline:9%;
+  flex-shrink:0;
+}
+.logotype-split .logotype-en--rest{flex-shrink:0}
 @keyframes sprayIn{
   0%  {letter-spacing:0.15em; opacity:0.4; transform:scale(1.08)}
   40% {letter-spacing:0.02em; opacity:0.9}
