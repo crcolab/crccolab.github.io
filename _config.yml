@@ -7,6 +7,8 @@ url: "https://crcolab.art"
 lang: zh-Hant
 timezone: Asia/Taipei
 
+future: true
+
 plugins:
   - jekyll-sitemap
 
