@@ -664,11 +664,33 @@ class FakeVideo extends FakeHTMLElement {
     this.readyState = 1;
     this.videoWidth = 1920;
     this.videoHeight = 1044;
-    this.currentTime = 3;
+    this._currentTime = 3;
+    this.seeking = false;
+    this.seekGeneration = 0;
     this.pauseCalls = 0;
     this.playCalls = 0;
     this.frameCallbacks = new Map();
     this.nextFrameHandle = 1;
+  }
+
+  get currentTime() {
+    return this._currentTime;
+  }
+
+  set currentTime(value) {
+    this._currentTime = value;
+    this.seeking = true;
+    this.seekGeneration += 1;
+  }
+
+  setCurrentTime(value) {
+    this._currentTime = value;
+    this.seeking = false;
+  }
+
+  completeSeek(generation = this.seekGeneration) {
+    if (generation === this.seekGeneration) this.seeking = false;
+    this.dispatch('seeked', { seekGeneration: generation });
   }
 
   pause() {
@@ -740,7 +762,7 @@ const installControllerHarness = ({
   panel.offsetHeight = 110;
   panel.parentNode = overlay;
   video.parentNode = hud;
-  video.currentTime = currentTime;
+  video.setCurrentTime(currentTime);
   video.closestResults.set('.crc-hud', hud);
 
   for (const field of ['name-zh', 'name-en', 'role-zh', 'role-en']) {
@@ -913,14 +935,14 @@ test('teaser bag skips target-free frames without consuming a member', () => {
 
   try {
     harness.video.currentTime = 8;
-    harness.video.dispatch('seeked');
+    harness.video.completeSeek();
     harness.runTimer(2500);
 
     assert.deepEqual(harness.teasingIds(), []);
     assert.deepEqual(harness.timerDelays(), [2500]);
 
     harness.video.currentTime = 3;
-    harness.video.dispatch('seeked');
+    harness.video.completeSeek();
     const shown = [];
 
     for (let index = 0; index < MEMBER_IDS.length; index += 1) {
@@ -1050,7 +1072,7 @@ test('external activation seeks when the selected member is unavailable', async 
     assert.equal(harness.video.currentTime, 1.136667);
     assert.equal(harness.panel.hidden, true);
 
-    harness.video.dispatch('seeked');
+    harness.video.completeSeek();
     assert.equal(harness.activeId(), 'lulu');
     assert.equal(harness.panel.hidden, false);
 
@@ -1058,6 +1080,70 @@ test('external activation seeks when the selected member is unavailable', async 
     await Promise.resolve();
     assert.equal(harness.video.playCalls, 1);
     assert.equal(harness.video.currentTime, 1.136667);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('pause rendering cannot resolve a pending external seek', () => {
+  const harness = installControllerHarness({ currentTime: 8 });
+
+  try {
+    harness.externalControls.get('lulu').dispatch('click');
+    assert.equal(harness.video.seeking, true);
+
+    harness.video.dispatch('pause');
+    assert.equal(harness.activeId(), null);
+    assert.equal(harness.panel.hidden, true);
+
+    harness.video.completeSeek();
+    assert.equal(harness.activeId(), 'lulu');
+    assert.equal(harness.panel.hidden, false);
+  } finally {
+    harness.restore();
+  }
+});
+
+test('same-time external switch stays pending while video is seeking', () => {
+  const harness = installControllerHarness({ currentTime: 8 });
+
+  try {
+    harness.externalControls.get('lulu').dispatch('click');
+    const seekGeneration = harness.video.seekGeneration;
+    harness.externalControls.get('meichun').dispatch('click');
+
+    assert.equal(harness.video.seekGeneration, seekGeneration);
+    assert.equal(harness.video.seeking, true);
+    assert.equal(harness.activeId(), null);
+    assert.equal(harness.panel.hidden, true);
+
+    harness.video.completeSeek(seekGeneration);
+    assert.equal(harness.activeId(), 'meichun');
+  } finally {
+    harness.restore();
+  }
+});
+
+test('stale external seek completion cannot resolve a newer request', () => {
+  const harness = installControllerHarness({ currentTime: 8 });
+
+  try {
+    harness.externalControls.get('lulu').dispatch('click');
+    const staleGeneration = harness.video.seekGeneration;
+
+    harness.video.currentTime = 8;
+    harness.externalControls.get('meichun').dispatch('click');
+    const latestGeneration = harness.video.seekGeneration;
+    assert.notEqual(latestGeneration, staleGeneration);
+
+    harness.video.completeSeek(staleGeneration);
+    assert.equal(harness.video.seeking, true);
+    assert.equal(harness.activeId(), null);
+    assert.equal(harness.panel.hidden, true);
+
+    harness.video.completeSeek(latestGeneration);
+    assert.equal(harness.activeId(), 'meichun');
+    assert.equal(harness.panel.hidden, false);
   } finally {
     harness.restore();
   }
@@ -1073,7 +1159,7 @@ test('leaving before seek completion cancels stale external activation', async (
     await Promise.resolve();
     assert.equal(harness.video.playCalls, 1);
 
-    harness.video.dispatch('seeked');
+    harness.video.completeSeek();
     assert.equal(harness.activeId(), null);
     assert.equal(harness.panel.hidden, true);
   } finally {
@@ -1147,7 +1233,7 @@ test('Escape cancels a pending external seek and releases its owned pause', () =
     assert.equal(control.attributes.get('aria-pressed'), 'false');
     assert.equal(harness.video.playCalls, 1);
 
-    harness.video.dispatch('seeked');
+    harness.video.completeSeek();
     assert.equal(harness.activeId(), null);
   } finally {
     harness.restore();
@@ -1160,7 +1246,7 @@ test('a newer external selection supersedes a pending seek', () => {
   try {
     harness.externalControls.get('lulu').dispatch('click');
     harness.externalControls.get('meichun').dispatch('click');
-    harness.video.dispatch('seeked');
+    harness.video.completeSeek();
 
     assert.equal(harness.activeId(), 'meichun');
     assert.equal(
@@ -1205,7 +1291,7 @@ test('late hidden seek preserves pending external pause ownership until restore'
 
     harness.document.hidden = true;
     harness.document.dispatch('visibilitychange');
-    harness.video.dispatch('seeked');
+    harness.video.completeSeek();
     assert.equal(harness.video.playCalls, 0);
 
     harness.document.hidden = false;
@@ -1339,7 +1425,7 @@ test('visible eligibility invalidation resumes an interaction-owned pause', () =
       pointerType: 'mouse',
     });
     harness.video.currentTime = 8;
-    harness.video.dispatch('seeked');
+    harness.video.completeSeek();
 
     assert.equal(harness.panel.hidden, true);
     assert.equal(harness.video.playCalls, 1);

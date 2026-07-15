@@ -361,6 +361,8 @@ export function initSurveillanceHUD() {
   let externalHoverId = null;
   let externalPinnedId = null;
   let pendingExternalId = null;
+  let pendingExternalGeneration = null;
+  let externalRequestGeneration = 0;
   let started = false;
   const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
   let teaserBag = [];
@@ -404,10 +406,17 @@ export function initSurveillanceHUD() {
     }
   }
 
+  function clearPendingExternalRequest(id = null) {
+    if (id !== null && pendingExternalId !== id) return false;
+    pendingExternalId = null;
+    pendingExternalGeneration = null;
+    return true;
+  }
+
   function clearExternalSelection(id) {
     if (externalHoverId === id) externalHoverId = null;
     if (externalPinnedId === id) externalPinnedId = null;
-    if (pendingExternalId === id) pendingExternalId = null;
+    clearPendingExternalRequest(id);
     syncExternalPressedState();
   }
 
@@ -545,7 +554,7 @@ export function initSurveillanceHUD() {
     touchId = null;
     externalHoverId = null;
     externalPinnedId = null;
-    pendingExternalId = null;
+    clearPendingExternalRequest();
     syncExternalPressedState();
 
     const focusedTarget = document.activeElement;
@@ -559,7 +568,8 @@ export function initSurveillanceHUD() {
 
   function reconcileActiveMember() {
     const desiredExternalId = getDesiredExternalId();
-    const nextId = [touchId, focusedId, pointerId, desiredExternalId]
+    const readyExternalId = pendingExternalId ? null : desiredExternalId;
+    const nextId = [touchId, focusedId, pointerId, readyExternalId]
       .find((id) => id && layouts.has(id)) || null;
 
     if (!nextId && desiredExternalId && pendingExternalId === desiredExternalId) {
@@ -570,19 +580,39 @@ export function initSurveillanceHUD() {
     if (!nextId) {
       dismissMember();
     } else if (nextId === activeId) {
-      if (pendingExternalId === nextId) pendingExternalId = null;
+      clearPendingExternalRequest(nextId);
       positionActivePanel();
     } else {
-      if (pendingExternalId === nextId) pendingExternalId = null;
+      clearPendingExternalRequest(nextId);
       activateMember(nextId);
     }
+  }
+
+  function completePendingExternalRequest(id, generation) {
+    if (
+      pendingExternalId !== id
+      || pendingExternalGeneration !== generation
+      || externalRequestGeneration !== generation
+      || video.seeking
+    ) return false;
+
+    clearPendingExternalRequest(id);
+    renderAt();
+
+    if (!layouts.has(id)) {
+      clearExternalSelection(id);
+      reconcileActiveMember();
+    }
+    return true;
   }
 
   function requestExternalActivation(id) {
     if (!started || !externalControls.has(id)) return;
 
-    if (layouts.has(id)) {
-      pendingExternalId = null;
+    const requestGeneration = ++externalRequestGeneration;
+
+    if (layouts.has(id) && !video.seeking) {
+      clearPendingExternalRequest();
       reconcileActiveMember();
       return;
     }
@@ -595,17 +625,14 @@ export function initSurveillanceHUD() {
     }
 
     pendingExternalId = id;
+    pendingExternalGeneration = requestGeneration;
     suspendTeasers();
     playback.pauseForInteraction();
     clearActiveMember();
 
     try {
       if (Math.abs(video.currentTime - firstTrackedTime) <= 0.000001) {
-        renderAt(firstTrackedTime);
-        if (pendingExternalId === id) {
-          clearExternalSelection(id);
-          dismissMember();
-        }
+        completePendingExternalRequest(id, requestGeneration);
       } else {
         video.currentTime = firstTrackedTime;
       }
@@ -715,12 +742,16 @@ export function initSurveillanceHUD() {
 
   function handleSeeked() {
     const requestedId = pendingExternalId;
-    renderAt();
+    const requestedGeneration = pendingExternalGeneration;
 
-    if (requestedId && pendingExternalId === requestedId) {
-      clearExternalSelection(requestedId);
-      reconcileActiveMember();
+    if (
+      requestedId
+      && requestedGeneration !== null
+      && completePendingExternalRequest(requestedId, requestedGeneration)
+    ) {
+      return;
     }
+    renderAt();
   }
 
   function handleVisibilityChange() {
@@ -764,7 +795,7 @@ export function initSurveillanceHUD() {
         .some((target) => target.contains(event.target));
       if (externalPinnedId && !insideHudTarget) {
         externalPinnedId = null;
-        pendingExternalId = null;
+        clearPendingExternalRequest();
         syncExternalPressedState();
         reconcileActiveMember();
       }
@@ -859,7 +890,7 @@ export function initSurveillanceHUD() {
       if (event.pointerType === 'touch' || externalHoverId !== id) return;
       externalHoverId = null;
       if (pendingExternalId === id && externalPinnedId !== id) {
-        pendingExternalId = null;
+        clearPendingExternalRequest(id);
       }
       queueMicrotask(() => {
         if (externalHoverId !== null) return;
@@ -876,14 +907,14 @@ export function initSurveillanceHUD() {
       if (externalPinnedId === id) {
         externalPinnedId = null;
         externalHoverId = null;
-        if (pendingExternalId === id) pendingExternalId = null;
+        clearPendingExternalRequest(id);
         syncExternalPressedState();
         reconcileActiveMember();
         return;
       }
 
       externalPinnedId = id;
-      pendingExternalId = null;
+      clearPendingExternalRequest();
       syncExternalPressedState();
       requestExternalActivation(id);
     });
