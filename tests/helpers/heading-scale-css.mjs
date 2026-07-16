@@ -6,6 +6,10 @@ const SECTION_SELECTORS = [
   '.crc-heading__title',
 ];
 const NEWS_SELECTOR = '.news__section-title';
+const SECTION_TOKEN = '--fs-section-heading';
+const SUBSECTION_TOKEN = '--fs-subsection-heading';
+const CANONICAL_SECTION_VALUE = 'clamp(2.5rem,5vw,4rem)';
+const CANONICAL_SUBSECTION_VALUE = 'clamp(1.5rem,2vw,1.75rem)';
 
 function maskComments(css) {
   return css.replace(/\/\*[\s\S]*?\*\//g, comment => comment.replace(/[^\n]/g, ' '));
@@ -154,10 +158,70 @@ function parseRules(css, start = 0, end = css.length, insideMaxWidth = false, ru
   return rules;
 }
 
+function rightmostCompound(selector) {
+  let boundary = 0;
+  let parentheses = 0;
+  let brackets = 0;
+  let quote = '';
+
+  for (let index = 0; index < selector.length; index += 1) {
+    const character = selector[index];
+    if (quote) {
+      if (character === '\\') index += 1;
+      else if (character === quote) quote = '';
+      continue;
+    }
+    if (character === '"' || character === "'") quote = character;
+    else if (character === '(') parentheses += 1;
+    else if (character === ')') parentheses -= 1;
+    else if (character === '[') brackets += 1;
+    else if (character === ']') brackets -= 1;
+    else if (parentheses === 0 && brackets === 0 && /[\s>+~]/.test(character)) boundary = index + 1;
+  }
+
+  return selector.slice(boundary).trim();
+}
+
+function compoundHasClass(compound, selector) {
+  const className = selector.slice(1).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return new RegExp(`(?:^|[^\\w-])\\.${className}(?![\\w-])`).test(compound);
+}
+
+function selectorTargets(selector) {
+  const compound = rightmostCompound(selector);
+  return [...SECTION_SELECTORS, NEWS_SELECTOR].filter(target => compoundHasClass(compound, target));
+}
+
+function targetSelectors(rule, candidates) {
+  const found = new Set();
+  for (const selector of rule.selectors) {
+    for (const target of selectorTargets(selector)) {
+      if (candidates.includes(target)) found.add(target);
+    }
+  }
+  return [...found];
+}
+
+function targetsInheritedRoot(selector) {
+  const compound = rightmostCompound(selector);
+  return /(?:^|[^\w-]):root(?![\w-])/.test(compound)
+    || /^(?:html|body)(?:$|[.#:\[])/i.test(compound);
+}
+
+function normalizeValue(value) {
+  return value.trim().toLowerCase().replace(/\s+/g, '');
+}
+
 function minimumRem(value, customProperties, seen = new Set()) {
   const normalized = value.trim().toLowerCase();
   const rem = normalized.match(/^(-?(?:\d+\.?\d*|\.\d+))rem$/);
   if (rem) return Number.parseFloat(rem[1]);
+
+  const pixels = normalized.match(/^(-?(?:\d+\.?\d*|\.\d+))px$/);
+  if (pixels) return Number.parseFloat(pixels[1]) / 16;
+
+  const nonNegativeFluidLength = normalized.match(/^(?:\d+\.?\d*|\.\d+)(?:vw|vh|vmin|vmax|%)$/);
+  if (nonNegativeFluidLength) return 0;
 
   const variable = normalized.match(/^var\(\s*(--[\w-]+)\s*\)$/);
   if (variable) {
@@ -170,6 +234,25 @@ function minimumRem(value, customProperties, seen = new Set()) {
   if (clamp) {
     const [minimum] = splitTopLevel(clamp[1], ',');
     return minimum === undefined ? null : minimumRem(minimum, customProperties, seen);
+  }
+
+  const maximum = normalized.match(/^max\(([\s\S]*)\)$/);
+  if (maximum) {
+    const candidates = splitTopLevel(maximum[1], ',').map(candidate => (
+      minimumRem(candidate, customProperties, seen)
+    ));
+    if (candidates.length < 2 || candidates.some(candidate => candidate === null)) return null;
+    return Math.max(...candidates);
+  }
+
+  const calculation = normalized.match(/^calc\(([\s\S]*)\)$/);
+  if (calculation) {
+    if (splitTopLevel(calculation[1], '-').length > 1) return null;
+    const terms = splitTopLevel(calculation[1], '+');
+    if (terms.length < 2) return null;
+    const minima = terms.map(term => minimumRem(term, customProperties, seen));
+    if (minima.some(minimum => minimum === null) || minima.slice(1).some(minimum => minimum < 0)) return null;
+    return minima[0];
   }
 
   return null;
@@ -196,11 +279,22 @@ export function assertApprovedHeadingScale(css, context = 'stylesheet') {
   const rules = parseRules(maskComments(css));
   const customProperties = new Map();
   for (const rule of rules) {
-    if (!rule.selectors.includes(':root')) continue;
+    if (rule.insideMaxWidth || !rule.selectors.includes(':root')) continue;
     for (const [property, value] of rule.declarations) {
       if (property.startsWith('--')) customProperties.set(property, value);
     }
   }
+
+  assert.equal(
+    normalizeValue(customProperties.get(SECTION_TOKEN) ?? ''),
+    CANONICAL_SECTION_VALUE,
+    `${context}: canonical ${SECTION_TOKEN} must equal ${CANONICAL_SECTION_VALUE}`,
+  );
+  assert.equal(
+    normalizeValue(customProperties.get(SUBSECTION_TOKEN) ?? ''),
+    CANONICAL_SUBSECTION_VALUE,
+    `${context}: canonical ${SUBSECTION_TOKEN} must equal ${CANONICAL_SUBSECTION_VALUE}`,
+  );
 
   const sharedIndex = rules.findIndex(rule => (
     containsEvery(rule.selectors, SECTION_SELECTORS)
@@ -210,28 +304,30 @@ export function assertApprovedHeadingScale(css, context = 'stylesheet') {
   assert.notEqual(sharedIndex, -1, `${context}: missing shared locale/title heading rule`);
 
   const sharedRule = rules[sharedIndex];
-  assertMinimumFontSize(
-    sharedRule.declarations.get('font-size'),
-    2.5,
-    SECTION_SELECTORS.join(','),
-    customProperties,
-    context,
+  assert.equal(
+    normalizeValue(sharedRule.declarations.get('font-size')),
+    `var(${SECTION_TOKEN})`,
+    `${context}: canonical grouped heading font-size must consume var(${SECTION_TOKEN})`,
+  );
+  assert.equal(
+    normalizeValue(sharedRule.declarations.get('font-weight')),
+    '700',
+    `${context}: canonical grouped heading font-weight must equal 700`,
   );
 
   const newsIndex = rules.findIndex(rule => (
     rule.selectors.includes(NEWS_SELECTOR) && rule.declarations.has('font-size')
   ));
   assert.notEqual(newsIndex, -1, `${context}: missing ${NEWS_SELECTOR} font-size`);
-  assertMinimumFontSize(
-    rules[newsIndex].declarations.get('font-size'),
-    1.5,
-    NEWS_SELECTOR,
-    customProperties,
-    context,
+  assert.equal(
+    normalizeValue(rules[newsIndex].declarations.get('font-size')),
+    `var(${SUBSECTION_TOKEN})`,
+    `${context}: canonical ${NEWS_SELECTOR} font-size must consume var(${SUBSECTION_TOKEN})`,
   );
 
   for (const [index, rule] of rules.entries()) {
-    const sectionSelectors = SECTION_SELECTORS.filter(selector => rule.selectors.includes(selector));
+    const sectionSelectors = targetSelectors(rule, SECTION_SELECTORS);
+    const newsSelectors = targetSelectors(rule, [NEWS_SELECTOR]);
     const declaresSectionTypography = rule.declarations.has('font-size')
       || rule.declarations.has('font-weight');
 
@@ -242,15 +338,29 @@ export function assertApprovedHeadingScale(css, context = 'stylesheet') {
       );
     }
 
-    if (!rule.insideMaxWidth || !rule.declarations.has('font-size')) continue;
-    for (const selector of sectionSelectors) {
+    if (!rule.insideMaxWidth) continue;
+    if (rule.declarations.has('font-size')) {
+      for (const selector of sectionSelectors) {
+        assertMinimumFontSize(
+          rule.declarations.get('font-size'), 2.5, selector, customProperties, `${context} max-width media`,
+        );
+      }
+      for (const selector of newsSelectors) {
+        assertMinimumFontSize(
+          rule.declarations.get('font-size'), 1.5, selector, customProperties, `${context} max-width media`,
+        );
+      }
+    }
+
+    const affectsInheritedHeadings = rule.selectors.some(targetsInheritedRoot);
+    if (rule.declarations.has(SECTION_TOKEN) && (affectsInheritedHeadings || sectionSelectors.length > 0)) {
       assertMinimumFontSize(
-        rule.declarations.get('font-size'), 2.5, selector, customProperties, `${context} max-width media`,
+        rule.declarations.get(SECTION_TOKEN), 2.5, SECTION_TOKEN, customProperties, `${context} max-width media`,
       );
     }
-    if (rule.selectors.includes(NEWS_SELECTOR)) {
+    if (rule.declarations.has(SUBSECTION_TOKEN) && (affectsInheritedHeadings || newsSelectors.length > 0)) {
       assertMinimumFontSize(
-        rule.declarations.get('font-size'), 1.5, NEWS_SELECTOR, customProperties, `${context} max-width media`,
+        rule.declarations.get(SUBSECTION_TOKEN), 1.5, SUBSECTION_TOKEN, customProperties, `${context} max-width media`,
       );
     }
   }
