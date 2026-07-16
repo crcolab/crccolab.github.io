@@ -131,6 +131,29 @@ test('heading scale guard rejects later locale-specific size or weight declarati
   }
 });
 
+test('heading scale guard rejects a bad later grouped section-heading override', () => {
+  const override = `
+    .crc-heading__en,.crc-heading__zh,.crc-heading__title{
+      font-size:1rem;font-weight:400
+    }
+  `;
+
+  assert.throws(
+    () => assertApprovedHeadingScale(canonicalHeadingFixture(override), 'grouped cascade fixture'),
+    /later section heading font-size must consume var\(--fs-section-heading\)/,
+  );
+});
+
+test('heading scale guard rejects a bad later non-media news-title override', () => {
+  assert.throws(
+    () => assertApprovedHeadingScale(
+      canonicalHeadingFixture('.news__section-title{font-size:1rem}'),
+      'news cascade fixture',
+    ),
+    /later news title font-size must consume var\(--fs-subsection-heading\)/,
+  );
+});
+
 test('heading scale guard requires the exact canonical token and selector contracts', () => {
   const fixedMinimumFixture = `
     :root{
@@ -229,6 +252,21 @@ test('heading scale guard still rejects undersized or non-demonstrable responsiv
       /falls below|no demonstrable/,
     );
   }
+});
+
+test('heading scale guard keeps responsive section-heading weight at 700', () => {
+  const override = `
+    @media (max-width:480px){
+      .crc-heading__en,.crc-heading__zh,.crc-heading__title{
+        font-size:40px;font-weight:400
+      }
+    }
+  `;
+
+  assert.throws(
+    () => assertApprovedHeadingScale(canonicalHeadingFixture(override), 'responsive weight fixture'),
+    /later section heading font-weight must remain 700/,
+  );
 });
 
 test('meaningful shared components consume readable tokens', () => {

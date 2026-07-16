@@ -332,9 +332,38 @@ export function assertApprovedHeadingScale(css, context = 'stylesheet') {
       || rule.declarations.has('font-weight');
 
     if (index > sharedIndex && sectionSelectors.length > 0 && declaresSectionTypography) {
-      assert.ok(
-        containsEvery(rule.selectors, SECTION_SELECTORS),
+      assert.equal(
+        sectionSelectors.length,
+        SECTION_SELECTORS.length,
         `${context}: later font-size/font-weight rule must treat locale/title headings equally: ${sectionSelectors.join(',')}`,
+      );
+
+      if (!rule.insideMaxWidth && rule.declarations.has('font-size')) {
+        assert.equal(
+          normalizeValue(rule.declarations.get('font-size')),
+          `var(${SECTION_TOKEN})`,
+          `${context}: later section heading font-size must consume var(${SECTION_TOKEN})`,
+        );
+      }
+      if (rule.declarations.has('font-weight')) {
+        assert.equal(
+          normalizeValue(rule.declarations.get('font-weight')),
+          '700',
+          `${context}: later section heading font-weight must remain 700`,
+        );
+      }
+    }
+
+    if (
+      index > newsIndex
+      && !rule.insideMaxWidth
+      && newsSelectors.length > 0
+      && rule.declarations.has('font-size')
+    ) {
+      assert.equal(
+        normalizeValue(rule.declarations.get('font-size')),
+        `var(${SUBSECTION_TOKEN})`,
+        `${context}: later news title font-size must consume var(${SUBSECTION_TOKEN})`,
       );
     }
 
