@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import { runInNewContext } from 'node:vm';
+import { assertApprovedHeadingScale } from './helpers/heading-scale-css.mjs';
 
 const [css, sections, consent, hackathonCss, hackathonPage] = await Promise.all([
   readFile(new URL('../styles.css', import.meta.url), 'utf8'),
@@ -53,16 +54,75 @@ test('shared CSS defines the approved readable hierarchy', () => {
 });
 
 test('shared headings use the approved elderly-friendly responsive scale', () => {
-  assert.match(css, /--fs-section-heading:clamp\(2\.5rem,5vw,4rem\)/);
-  assert.match(css, /--fs-subsection-heading:clamp\(1\.5rem,2vw,1\.75rem\)/);
-  assert.match(css, /\.crc-heading__en,\.crc-heading__zh,\.crc-heading__title\{[^}]*font-size:var\(--fs-section-heading\)/);
-  assert.match(css, /\.news__section-title\{[^}]*font-size:var\(--fs-subsection-heading\)/);
+  assertApprovedHeadingScale(css, 'source styles.css');
+});
 
-  const responsive = css.slice(
-    css.indexOf('/* ---------- Responsive ---------- */'),
-    css.indexOf('/* ---------- homepage latest-3 section blocks ---------- */'),
+test('heading scale guard catches max-width overrides outside the comment-delimited slice', () => {
+  const fixture = `
+    :root{
+      --fs-section-heading:clamp(2.5rem,5vw,4rem);
+      --fs-subsection-heading:clamp(1.5rem,2vw,1.75rem)
+    }
+    .crc-heading__en,.crc-heading__zh,.crc-heading__title{
+      font-size:var(--fs-section-heading);font-weight:700
+    }
+    .news__section-title{font-size:var(--fs-subsection-heading)}
+    /* ---------- Responsive ---------- */
+    @media (max-width:900px){.unrelated{margin:0}}
+    /* ---------- homepage latest-3 section blocks ---------- */
+    @media (max-width:480px){
+      .unrelated{display:grid}
+      .crc-heading__en,.crc-heading__zh,.crc-heading__title{font-size:1rem}
+    }
+  `;
+
+  assert.throws(
+    () => assertApprovedHeadingScale(fixture, 'late media fixture'),
+    /max-width media: \.crc-heading__en font-size 1rem falls below 2\.5rem/,
   );
-  assert.doesNotMatch(responsive, /\.crc-heading__(?:en|zh|title)|\.news__section-title/);
+});
+
+test('heading scale guard allows harmless responsive changes and safe font-size minima', () => {
+  const fixture = `
+    :root{
+      --fs-section-heading:clamp(2.5rem,5vw,4rem);
+      --fs-subsection-heading:clamp(1.5rem,2vw,1.75rem)
+    }
+    .crc-heading__en,.crc-heading__zh,.crc-heading__title{
+      font-size:var(--fs-section-heading);font-weight:700
+    }
+    .news__section-title{font-size:var(--fs-subsection-heading)}
+    @media (max-width:600px){
+      .crc-heading__en{margin-block:1rem;line-height:1.1}
+      .news__section-title{margin:0;line-height:1.2}
+    }
+    @media (max-width:480px){
+      .crc-heading__en,.crc-heading__zh,.crc-heading__title{font-size:2.75rem}
+      .news__section-title{font-size:clamp(1.5rem,4vw,2rem)}
+    }
+  `;
+
+  assert.doesNotThrow(() => assertApprovedHeadingScale(fixture, 'safe media fixture'));
+});
+
+test('heading scale guard rejects later locale-specific size or weight declarations', () => {
+  const fixture = `
+    :root{--fs-section-heading:clamp(2.5rem,5vw,4rem)}
+    .crc-heading__en,.crc-heading__zh,.crc-heading__title{
+      font-size:var(--fs-section-heading);font-weight:700
+    }
+    .news__section-title{font-size:1.5rem}
+  `;
+
+  for (const override of [
+    '.crc-heading__en{font-size:3rem}',
+    '.crc-heading__title{font-weight:600}',
+  ]) {
+    assert.throws(
+      () => assertApprovedHeadingScale(`${fixture}${override}`, 'divergent cascade fixture'),
+      /later font-size\/font-weight rule must treat locale\/title headings equally/,
+    );
+  }
 });
 
 test('meaningful shared components consume readable tokens', () => {

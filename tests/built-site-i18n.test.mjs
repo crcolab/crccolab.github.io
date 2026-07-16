@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
+import { assertApprovedHeadingScale } from './helpers/heading-scale-css.mjs';
 
 const read = path => readFile(new URL(`../${path}`, import.meta.url), 'utf8');
 
@@ -60,10 +61,7 @@ test('built locale homepages retain the approved heading scale', async () => {
   ]);
   assert.match(zhHome, /class="crc-heading__zh"/);
   assert.match(enHome, /class="crc-heading__en"/);
-  assert.match(css, /--fs-section-heading:clamp\(2\.5rem,5vw,4rem\)/);
-  assert.match(css, /--fs-subsection-heading:clamp\(1\.5rem,2vw,1\.75rem\)/);
-  assert.match(css, /\.crc-heading__en,\.crc-heading__zh,\.crc-heading__title\{[^}]*font-size:var\(--fs-section-heading\)/);
-  assert.match(css, /\.news__section-title\{[^}]*font-size:var\(--fs-subsection-heading\)/);
+  assertApprovedHeadingScale(css, 'generated _site/styles.css');
 });
 
 test('built feed UI and metadata are localized independently', async () => {
