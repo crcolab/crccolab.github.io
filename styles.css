@@ -53,6 +53,8 @@
   --font-display:"Funnel Display","Noto Sans TC",system-ui,sans-serif;
   --font-body:"Noto Sans TC","Funnel Display",system-ui,sans-serif;
   --fs-display:clamp(2rem,4vw,3.5rem);
+  --fs-section-heading:clamp(2.5rem,5vw,4rem);
+  --fs-subsection-heading:clamp(1.5rem,2vw,1.75rem);
   --fs-body:1.125rem;
   --fs-supporting:1rem;
   --fs-label:.875rem;
@@ -164,7 +166,7 @@ img,svg,video{max-width:100%}
 /* ---------- Bilingual heading ---------- */
 .crc-heading{margin:0}
 .crc-heading__en,.crc-heading__zh,.crc-heading__title{display:block;font-family:var(--font-body);font-weight:700;
-  font-size:var(--fs-display);line-height:1.2;letter-spacing:var(--ls-cjk);color:var(--text-primary);
+  font-size:var(--fs-section-heading);line-height:1.2;letter-spacing:var(--ls-cjk);color:var(--text-primary);
   overflow-wrap:anywhere}
 
 /* ---------- Header ---------- */
@@ -570,8 +572,8 @@ button.team-card__names{min-height:var(--control-min);min-width:var(--control-mi
 .news__section:last-child{margin-bottom:0}
 .news__section-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;
   border-bottom:2px solid var(--crc-lime);padding-bottom:8px;margin-bottom:6px}
-.news__section-title{margin:0;font-family:var(--font-body);font-weight:700;font-size:var(--fs-body);color:var(--text-primary);
-  overflow-wrap:anywhere}
+.news__section-title{margin:0;font-family:var(--font-body);font-weight:700;
+  font-size:var(--fs-subsection-heading);color:var(--text-primary);overflow-wrap:anywhere}
 .news__section-title span{font-family:var(--font-display);font-size:var(--fs-label);letter-spacing:.12em;
   text-transform:uppercase;color:var(--text-mono);margin-left:8px}
 .news__section-more{display:inline-flex;align-items:center;min-height:var(--control-min);font-family:var(--font-display);

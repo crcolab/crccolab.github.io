@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import { runInNewContext } from 'node:vm';
+import { assertApprovedHeadingScale } from './helpers/heading-scale-css.mjs';
 
 const [css, sections, consent, hackathonCss, hackathonPage] = await Promise.all([
   readFile(new URL('../styles.css', import.meta.url), 'utf8'),
@@ -44,12 +45,279 @@ function runConsent(dataset = {}) {
   return { accept, banner, message, reject, updates, writes };
 }
 
+function canonicalHeadingFixture(extraCss = '') {
+  return `
+    :root{
+      --fs-section-heading:clamp(2.5rem,5vw,4rem);
+      --fs-subsection-heading:clamp(1.5rem,2vw,1.75rem)
+    }
+    .crc-heading__en,.crc-heading__zh,.crc-heading__title{
+      font-size:var(--fs-section-heading);font-weight:700
+    }
+    .news__section-title{font-size:var(--fs-subsection-heading)}
+    ${extraCss}
+  `;
+}
+
 test('shared CSS defines the approved readable hierarchy', () => {
   assert.match(css, /--fs-body:1\.125rem/);
   assert.match(css, /--fs-supporting:1rem/);
   assert.match(css, /--fs-label:\.875rem/);
   assert.match(css, /--control-min:44px/);
   assert.match(css, /body\{[\s\S]*font-size:var\(--fs-body\)/);
+});
+
+test('shared headings use the approved elderly-friendly responsive scale', () => {
+  assertApprovedHeadingScale(css, 'source styles.css');
+});
+
+test('heading scale guard catches max-width overrides outside the comment-delimited slice', () => {
+  const fixture = `
+    :root{
+      --fs-section-heading:clamp(2.5rem,5vw,4rem);
+      --fs-subsection-heading:clamp(1.5rem,2vw,1.75rem)
+    }
+    .crc-heading__en,.crc-heading__zh,.crc-heading__title{
+      font-size:var(--fs-section-heading);font-weight:700
+    }
+    .news__section-title{font-size:var(--fs-subsection-heading)}
+    /* ---------- Responsive ---------- */
+    @media (max-width:900px){.unrelated{margin:0}}
+    /* ---------- homepage latest-3 section blocks ---------- */
+    @media (max-width:480px){
+      .unrelated{display:grid}
+      .crc-heading__en,.crc-heading__zh,.crc-heading__title{font-size:1rem}
+    }
+  `;
+
+  assert.throws(
+    () => assertApprovedHeadingScale(fixture, 'late media fixture'),
+    /max-width media: \.crc-heading__en font-size 1rem falls below 2\.5rem/,
+  );
+});
+
+test('heading scale guard allows harmless responsive changes and safe font-size minima', () => {
+  const fixture = `
+    :root{
+      --fs-section-heading:clamp(2.5rem,5vw,4rem);
+      --fs-subsection-heading:clamp(1.5rem,2vw,1.75rem)
+    }
+    .crc-heading__en,.crc-heading__zh,.crc-heading__title{
+      font-size:var(--fs-section-heading);font-weight:700
+    }
+    .news__section-title{font-size:var(--fs-subsection-heading)}
+    @media (max-width:600px){
+      .crc-heading__en{margin-block:1rem;line-height:1.1}
+      .news__section-title{margin:0;line-height:1.2}
+    }
+    @media (max-width:480px){
+      .crc-heading__en,.crc-heading__zh,.crc-heading__title{font-size:2.75rem}
+      .news__section-title{font-size:clamp(1.5rem,4vw,2rem)}
+    }
+  `;
+
+  assert.doesNotThrow(() => assertApprovedHeadingScale(fixture, 'safe media fixture'));
+});
+
+test('heading scale guard rejects later locale-specific size or weight declarations', () => {
+  for (const override of [
+    '.crc-heading__en{font-size:3rem}',
+    '.crc-heading__title{font-weight:600}',
+  ]) {
+    assert.throws(
+      () => assertApprovedHeadingScale(canonicalHeadingFixture(override), 'divergent cascade fixture'),
+      /later font-size\/font-weight rule must treat locale\/title headings equally/,
+    );
+  }
+});
+
+test('heading scale guard rejects higher-specificity typography before the canonical rule', () => {
+  const fixture = `
+    .theme .crc-heading__en{font-size:1rem}
+    ${canonicalHeadingFixture()}
+  `;
+
+  assert.throws(
+    () => assertApprovedHeadingScale(fixture, 'pre-canonical fixture'),
+    /later font-size\/font-weight rule must treat locale\/title headings equally|section heading font-size/,
+  );
+});
+
+test('heading scale guard rejects font shorthand on target heading rules', () => {
+  const override = `
+    .crc-heading__en,.crc-heading__zh,.crc-heading__title{
+      font:400 1rem sans-serif
+    }
+  `;
+
+  assert.throws(
+    () => assertApprovedHeadingScale(canonicalHeadingFixture(override), 'font shorthand fixture'),
+    /font shorthand/,
+  );
+});
+
+test('heading scale guard rejects non-canonical heading token shadow declarations', () => {
+  assert.throws(
+    () => assertApprovedHeadingScale(
+      canonicalHeadingFixture('body{--fs-section-heading:1rem}'),
+      'token shadow fixture',
+    ),
+    /--fs-section-heading must be declared only in the canonical :root contract/,
+  );
+});
+
+test('heading scale guard preserves and rejects important target typography', () => {
+  for (const override of [
+    `.crc-heading__en,.crc-heading__zh,.crc-heading__title{
+      font-size:var(--fs-section-heading)!important;font-weight:700
+    }`,
+    `.crc-heading__en,.crc-heading__zh,.crc-heading__title{
+      font-size:1rem!important;font-size:var(--fs-section-heading);font-weight:700
+    }`,
+  ]) {
+    assert.throws(
+      () => assertApprovedHeadingScale(canonicalHeadingFixture(override), 'important fixture'),
+      /target typography declarations must not use !important/,
+    );
+  }
+});
+
+test('heading scale guard rejects a bad later grouped section-heading override', () => {
+  const override = `
+    .crc-heading__en,.crc-heading__zh,.crc-heading__title{
+      font-size:1rem;font-weight:400
+    }
+  `;
+
+  assert.throws(
+    () => assertApprovedHeadingScale(canonicalHeadingFixture(override), 'grouped cascade fixture'),
+    /later section heading font-size must consume var\(--fs-section-heading\)/,
+  );
+});
+
+test('heading scale guard rejects a bad later non-media news-title override', () => {
+  assert.throws(
+    () => assertApprovedHeadingScale(
+      canonicalHeadingFixture('.news__section-title{font-size:1rem}'),
+      'news cascade fixture',
+    ),
+    /later news title font-size must consume var\(--fs-subsection-heading\)/,
+  );
+});
+
+test('heading scale guard requires the exact canonical token and selector contracts', () => {
+  const fixedMinimumFixture = `
+    :root{
+      --fs-section-heading:2.5rem;
+      --fs-subsection-heading:1.5rem
+    }
+    .crc-heading__en,.crc-heading__zh,.crc-heading__title{
+      font-size:2.5rem;font-weight:400
+    }
+    .news__section-title{font-size:1.5rem}
+  `;
+
+  assert.throws(
+    () => assertApprovedHeadingScale(fixedMinimumFixture, 'fixed minimum fixture'),
+    /canonical/,
+  );
+
+  for (const [label, fixture, expected] of [
+    [
+      'subsection token',
+      canonicalHeadingFixture().replace('clamp(1.5rem,2vw,1.75rem)', '1.5rem'),
+      /canonical --fs-subsection-heading/,
+    ],
+    [
+      'grouped heading size',
+      canonicalHeadingFixture().replace('font-size:var(--fs-section-heading)', 'font-size:2.5rem'),
+      /canonical grouped heading font-size/,
+    ],
+    [
+      'grouped heading weight',
+      canonicalHeadingFixture().replace('font-weight:700', 'font-weight:400'),
+      /canonical grouped heading font-weight/,
+    ],
+    [
+      'news title size',
+      canonicalHeadingFixture().replace('font-size:var(--fs-subsection-heading)', 'font-size:1.5rem'),
+      /canonical \.news__section-title font-size/,
+    ],
+  ]) {
+    assert.throws(
+      () => assertApprovedHeadingScale(fixture, `${label} fixture`),
+      expected,
+    );
+  }
+});
+
+test('heading scale guard catches contextual and compound heading overrides', () => {
+  for (const override of [
+    '.theme .crc-heading__en{font-size:1rem}',
+    '.crc-heading__title.featured{font-weight:400}',
+  ]) {
+    assert.throws(
+      () => assertApprovedHeadingScale(canonicalHeadingFixture(override), 'compound selector fixture'),
+      /later font-size\/font-weight rule must treat locale\/title headings equally/,
+    );
+  }
+});
+
+test('heading scale guard catches responsive token overrides in inherited and target scopes', () => {
+  for (const override of [
+    '@media (max-width:480px){:root{--fs-section-heading:1rem}}',
+    '@media (max-width:480px){html.theme{--fs-subsection-heading:1rem}}',
+    '@media (max-width:480px){body{--fs-section-heading:1rem}}',
+    '@media (max-width:480px){.theme .crc-heading__en{--fs-section-heading:1rem}}',
+    '@media (max-width:480px){.theme .news__section-title{--fs-subsection-heading:1rem}}',
+  ]) {
+    assert.throws(
+      () => assertApprovedHeadingScale(canonicalHeadingFixture(override), 'responsive token fixture'),
+      /max-width media.*falls below/,
+    );
+  }
+});
+
+for (const [label, override] of [
+  ['40px section size', '@media (max-width:480px){.crc-heading__en,.crc-heading__zh,.crc-heading__title{font-size:40px}}'],
+  ['24px subsection size', '@media (max-width:480px){.news__section-title{font-size:24px}}'],
+  ['max() floor', '@media (max-width:480px){.crc-heading__en,.crc-heading__zh,.crc-heading__title{font-size:max(2.5rem,5vw)}}'],
+  ['positive calc() floor', '@media (max-width:480px){.crc-heading__en,.crc-heading__zh,.crc-heading__title{font-size:calc(2.5rem + 1vw)}}'],
+]) {
+  test(`heading scale guard accepts a demonstrably safe ${label}`, () => {
+    assert.doesNotThrow(
+      () => assertApprovedHeadingScale(canonicalHeadingFixture(override), `${label} fixture`),
+    );
+  });
+}
+
+test('heading scale guard still rejects undersized or non-demonstrable responsive values', () => {
+  for (const override of [
+    '@media (max-width:480px){.news__section-title{font-size:23px}}',
+    '@media (max-width:480px){.news__section-title{font-size:min(1.5rem,5vw)}}',
+    '@media (max-width:480px){.crc-heading__en,.crc-heading__zh,.crc-heading__title{font-size:calc(2rem + 1rem)}}',
+    '@media (max-width:480px){.crc-heading__en,.crc-heading__zh,.crc-heading__title{font-size:calc(2.5rem - 1vw)}}',
+  ]) {
+    assert.throws(
+      () => assertApprovedHeadingScale(canonicalHeadingFixture(override), 'unsafe value fixture'),
+      /falls below|no demonstrable/,
+    );
+  }
+});
+
+test('heading scale guard keeps responsive section-heading weight at 700', () => {
+  const override = `
+    @media (max-width:480px){
+      .crc-heading__en,.crc-heading__zh,.crc-heading__title{
+        font-size:40px;font-weight:400
+      }
+    }
+  `;
+
+  assert.throws(
+    () => assertApprovedHeadingScale(canonicalHeadingFixture(override), 'responsive weight fixture'),
+    /later section heading font-weight must remain 700/,
+  );
 });
 
 test('meaningful shared components consume readable tokens', () => {
@@ -75,6 +343,18 @@ test('homepage header brand retains a 44px minimum target height', () => {
 test('section footer links retain 44px minimum target dimensions', () => {
   assert.match(sections, /\.sections-footer__inner a\{[^}]*min-width:var\(--control-min\)[^}]*justify-content:center/);
   assert.match(sections, /\.topbar__home,\.locale-switcher a,\.sections-footer a\{min-height:var\(--control-min\)\}/);
+});
+
+test('section navigation uses supporting text and standalone 44px link targets', () => {
+  assert.match(
+    sections,
+    /\.topbar__home,\.topbar__crumb a,\.index-page__feed,\.index-page__feed a,\.sections-footer__inner a,\.item__backlink\{font-size:var\(--fs-supporting\)\}/,
+  );
+  assert.match(
+    sections,
+    /\.topbar__crumb a,\.index-page__feed a,\.item__backlink a\{display:inline-flex;align-items:center;min-height:var\(--control-min\)\}/,
+  );
+  assert.doesNotMatch(sections, /\.item__body a\{[^}]*min-height:var\(--control-min\)/);
 });
 
 test('consent receives one locale and uses readable control sizes', () => {

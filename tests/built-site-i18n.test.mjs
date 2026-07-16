@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
+import { assertApprovedHeadingScale } from './helpers/heading-scale-css.mjs';
 
 const read = path => readFile(new URL(`../${path}`, import.meta.url), 'utf8');
 
@@ -52,6 +53,43 @@ test('built locale section footers retain 44px link targets', async () => {
     assert.match(section, /<footer class="sections-footer">[\s\S]*<nav/);
   }
   assert.match(sections, /\.sections-footer__inner a\{[^}]*min-width:var\(--control-min\)[^}]*justify-content:center/);
+});
+
+test('built locale section navigation retains supporting text and standalone targets', async () => {
+  const [zhIndex, enIndex, zhItem, enItem, sections] = await Promise.all([
+    read('_site/news/index.html'), read('_site/en/news/index.html'),
+    read('_site/news/2026-06-29-c-lab-residency/index.html'),
+    read('_site/en/news/2026-06-29-c-lab-residency/index.html'),
+    read('_site/sections.css'),
+  ]);
+  for (const index of [zhIndex, enIndex]) {
+    assert.match(index, /class="topbar__home"/);
+    assert.match(index, /class="topbar__crumb"/);
+    assert.match(index, /class="index-page__feed"/);
+    assert.match(index, /<footer class="sections-footer">/);
+  }
+  for (const item of [zhItem, enItem]) {
+    assert.match(item, /class="topbar__crumb"/);
+    assert.match(item, /class="item__backlink"/);
+  }
+  assert.match(
+    sections,
+    /\.topbar__home,\.topbar__crumb a,\.index-page__feed,\.index-page__feed a,\.sections-footer__inner a,\.item__backlink\{font-size:var\(--fs-supporting\)\}/,
+  );
+  assert.match(
+    sections,
+    /\.topbar__crumb a,\.index-page__feed a,\.item__backlink a\{display:inline-flex;align-items:center;min-height:var\(--control-min\)\}/,
+  );
+  assert.doesNotMatch(sections, /\.item__body a\{[^}]*min-height:var\(--control-min\)/);
+});
+
+test('built locale homepages retain the approved heading scale', async () => {
+  const [zhHome, enHome, css] = await Promise.all([
+    read('_site/index.html'), read('_site/en/index.html'), read('_site/styles.css'),
+  ]);
+  assert.match(zhHome, /class="crc-heading__zh"/);
+  assert.match(enHome, /class="crc-heading__en"/);
+  assertApprovedHeadingScale(css, 'generated _site/styles.css');
 });
 
 test('built feed UI and metadata are localized independently', async () => {
