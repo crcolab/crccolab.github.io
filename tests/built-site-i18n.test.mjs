@@ -54,6 +54,18 @@ test('built locale section footers retain 44px link targets', async () => {
   assert.match(sections, /\.sections-footer__inner a\{[^}]*min-width:var\(--control-min\)[^}]*justify-content:center/);
 });
 
+test('built locale homepages retain the approved heading scale', async () => {
+  const [zhHome, enHome, css] = await Promise.all([
+    read('_site/index.html'), read('_site/en/index.html'), read('_site/styles.css'),
+  ]);
+  assert.match(zhHome, /class="crc-heading__zh"/);
+  assert.match(enHome, /class="crc-heading__en"/);
+  assert.match(css, /--fs-section-heading:clamp\(2\.5rem,5vw,4rem\)/);
+  assert.match(css, /--fs-subsection-heading:clamp\(1\.5rem,2vw,1\.75rem\)/);
+  assert.match(css, /\.crc-heading__en,\.crc-heading__zh,\.crc-heading__title\{[^}]*font-size:var\(--fs-section-heading\)/);
+  assert.match(css, /\.news__section-title\{[^}]*font-size:var\(--fs-subsection-heading\)/);
+});
+
 test('built feed UI and metadata are localized independently', async () => {
   const [zhNews, enNews, zhFeed, enFeed, zhNewsFeed, enNewsFeed] = await Promise.all([
     read('_site/news/index.html'), read('_site/en/news/index.html'),

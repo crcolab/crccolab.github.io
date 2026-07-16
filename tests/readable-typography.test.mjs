@@ -52,6 +52,19 @@ test('shared CSS defines the approved readable hierarchy', () => {
   assert.match(css, /body\{[\s\S]*font-size:var\(--fs-body\)/);
 });
 
+test('shared headings use the approved elderly-friendly responsive scale', () => {
+  assert.match(css, /--fs-section-heading:clamp\(2\.5rem,5vw,4rem\)/);
+  assert.match(css, /--fs-subsection-heading:clamp\(1\.5rem,2vw,1\.75rem\)/);
+  assert.match(css, /\.crc-heading__en,\.crc-heading__zh,\.crc-heading__title\{[^}]*font-size:var\(--fs-section-heading\)/);
+  assert.match(css, /\.news__section-title\{[^}]*font-size:var\(--fs-subsection-heading\)/);
+
+  const responsive = css.slice(
+    css.indexOf('/* ---------- Responsive ---------- */'),
+    css.indexOf('/* ---------- homepage latest-3 section blocks ---------- */'),
+  );
+  assert.doesNotMatch(responsive, /\.crc-heading__(?:en|zh|title)|\.news__section-title/);
+});
+
 test('meaningful shared components consume readable tokens', () => {
   for (const selector of ['crc-btn', 'site-nav__link', 'crc-news__excerpt', 'footer__col a', 'team-member-panel__role']) {
     assert.match(css, new RegExp(`\\.${selector.replace(' ', '\\s+')}[^}]*font-size:var\\(--fs-(?:body|supporting|label)\\)`));
