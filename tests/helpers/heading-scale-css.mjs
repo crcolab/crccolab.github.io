@@ -87,14 +87,18 @@ function declarationColon(declaration) {
 
 function parseDeclarations(body) {
   const declarations = new Map();
+  const importantProperties = new Set();
   for (const chunk of splitTopLevel(body, ';')) {
     const colon = declarationColon(chunk);
     if (colon === -1) continue;
     const property = chunk.slice(0, colon).trim().toLowerCase();
-    const value = chunk.slice(colon + 1).trim().replace(/\s*!important\s*$/i, '');
-    if (property && value) declarations.set(property, value);
+    const value = chunk.slice(colon + 1).trim();
+    if (property && value) {
+      declarations.set(property, value);
+      if (isImportant(value)) importantProperties.add(property);
+    }
   }
-  return declarations;
+  return { declarations, importantProperties };
 }
 
 function nextBlockDelimiter(css, start, end) {
@@ -143,8 +147,10 @@ function parseRules(css, start = 0, end = css.length, insideMaxWidth = false, ru
         || (/^@media\b/i.test(prelude) && /\bmax-width\s*:/i.test(prelude));
       parseRules(css, delimiter.index + 1, closeIndex, nestedMaxWidth, rules);
     } else if (prelude) {
+      const parsedDeclarations = parseDeclarations(css.slice(delimiter.index + 1, closeIndex));
       rules.push({
-        declarations: parseDeclarations(css.slice(delimiter.index + 1, closeIndex)),
+        declarations: parsedDeclarations.declarations,
+        importantProperties: parsedDeclarations.importantProperties,
         insideMaxWidth,
         offset: delimiter.index,
         selectors: splitTopLevel(prelude, ',').map(selector => selector.trim()).filter(Boolean),
@@ -210,6 +216,10 @@ function targetsInheritedRoot(selector) {
 
 function normalizeValue(value) {
   return value.trim().toLowerCase().replace(/\s+/g, '');
+}
+
+function isImportant(value) {
+  return /!important\s*$/i.test(value);
 }
 
 function minimumRem(value, customProperties, seen = new Set()) {
@@ -328,10 +338,24 @@ export function assertApprovedHeadingScale(css, context = 'stylesheet') {
   for (const [index, rule] of rules.entries()) {
     const sectionSelectors = targetSelectors(rule, SECTION_SELECTORS);
     const newsSelectors = targetSelectors(rule, [NEWS_SELECTOR]);
+    const hasTargetSelector = sectionSelectors.length > 0 || newsSelectors.length > 0;
+    const targetTypographyProperties = ['font', 'font-size', 'font-weight'].filter(property => (
+      rule.declarations.has(property)
+    ));
     const declaresSectionTypography = rule.declarations.has('font-size')
       || rule.declarations.has('font-weight');
 
-    if (index > sharedIndex && sectionSelectors.length > 0 && declaresSectionTypography) {
+    assert.ok(
+      !hasTargetSelector || !rule.declarations.has('font'),
+      `${context}: font shorthand is not allowed on target heading rules`,
+    );
+    assert.ok(
+      !hasTargetSelector
+        || !targetTypographyProperties.some(property => rule.importantProperties.has(property)),
+      `${context}: target typography declarations must not use !important`,
+    );
+
+    if (index !== sharedIndex && sectionSelectors.length > 0 && declaresSectionTypography) {
       assert.equal(
         sectionSelectors.length,
         SECTION_SELECTORS.length,
@@ -354,17 +378,20 @@ export function assertApprovedHeadingScale(css, context = 'stylesheet') {
       }
     }
 
-    if (
-      index > newsIndex
-      && !rule.insideMaxWidth
-      && newsSelectors.length > 0
-      && rule.declarations.has('font-size')
-    ) {
-      assert.equal(
-        normalizeValue(rule.declarations.get('font-size')),
-        `var(${SUBSECTION_TOKEN})`,
-        `${context}: later news title font-size must consume var(${SUBSECTION_TOKEN})`,
-      );
+    if (index !== newsIndex && newsSelectors.length > 0 && rule.declarations.has('font-size')) {
+      if (rule.insideMaxWidth) {
+        for (const selector of newsSelectors) {
+          assertMinimumFontSize(
+            rule.declarations.get('font-size'), 1.5, selector, customProperties, `${context} max-width media`,
+          );
+        }
+      } else {
+        assert.equal(
+          normalizeValue(rule.declarations.get('font-size')),
+          `var(${SUBSECTION_TOKEN})`,
+          `${context}: later news title font-size must consume var(${SUBSECTION_TOKEN})`,
+        );
+      }
     }
 
     if (!rule.insideMaxWidth) continue;
@@ -372,11 +399,6 @@ export function assertApprovedHeadingScale(css, context = 'stylesheet') {
       for (const selector of sectionSelectors) {
         assertMinimumFontSize(
           rule.declarations.get('font-size'), 2.5, selector, customProperties, `${context} max-width media`,
-        );
-      }
-      for (const selector of newsSelectors) {
-        assertMinimumFontSize(
-          rule.declarations.get('font-size'), 1.5, selector, customProperties, `${context} max-width media`,
         );
       }
     }
@@ -390,6 +412,23 @@ export function assertApprovedHeadingScale(css, context = 'stylesheet') {
     if (rule.declarations.has(SUBSECTION_TOKEN) && (affectsInheritedHeadings || newsSelectors.length > 0)) {
       assertMinimumFontSize(
         rule.declarations.get(SUBSECTION_TOKEN), 1.5, SUBSECTION_TOKEN, customProperties, `${context} max-width media`,
+      );
+    }
+  }
+
+  for (const rule of rules) {
+    for (const token of [SECTION_TOKEN, SUBSECTION_TOKEN]) {
+      if (!rule.declarations.has(token)) continue;
+      const isCanonicalRoot = !rule.insideMaxWidth
+        && rule.selectors.length === 1
+        && rule.selectors[0] === ':root';
+      assert.ok(
+        isCanonicalRoot,
+        `${context}: ${token} must be declared only in the canonical :root contract`,
+      );
+      assert.ok(
+        !rule.importantProperties.has(token),
+        `${context}: ${token} must not use !important`,
       );
     }
   }

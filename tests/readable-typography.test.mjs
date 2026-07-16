@@ -131,6 +131,57 @@ test('heading scale guard rejects later locale-specific size or weight declarati
   }
 });
 
+test('heading scale guard rejects higher-specificity typography before the canonical rule', () => {
+  const fixture = `
+    .theme .crc-heading__en{font-size:1rem}
+    ${canonicalHeadingFixture()}
+  `;
+
+  assert.throws(
+    () => assertApprovedHeadingScale(fixture, 'pre-canonical fixture'),
+    /later font-size\/font-weight rule must treat locale\/title headings equally|section heading font-size/,
+  );
+});
+
+test('heading scale guard rejects font shorthand on target heading rules', () => {
+  const override = `
+    .crc-heading__en,.crc-heading__zh,.crc-heading__title{
+      font:400 1rem sans-serif
+    }
+  `;
+
+  assert.throws(
+    () => assertApprovedHeadingScale(canonicalHeadingFixture(override), 'font shorthand fixture'),
+    /font shorthand/,
+  );
+});
+
+test('heading scale guard rejects non-canonical heading token shadow declarations', () => {
+  assert.throws(
+    () => assertApprovedHeadingScale(
+      canonicalHeadingFixture('body{--fs-section-heading:1rem}'),
+      'token shadow fixture',
+    ),
+    /--fs-section-heading must be declared only in the canonical :root contract/,
+  );
+});
+
+test('heading scale guard preserves and rejects important target typography', () => {
+  for (const override of [
+    `.crc-heading__en,.crc-heading__zh,.crc-heading__title{
+      font-size:var(--fs-section-heading)!important;font-weight:700
+    }`,
+    `.crc-heading__en,.crc-heading__zh,.crc-heading__title{
+      font-size:1rem!important;font-size:var(--fs-section-heading);font-weight:700
+    }`,
+  ]) {
+    assert.throws(
+      () => assertApprovedHeadingScale(canonicalHeadingFixture(override), 'important fixture'),
+      /target typography declarations must not use !important/,
+    );
+  }
+});
+
 test('heading scale guard rejects a bad later grouped section-heading override', () => {
   const override = `
     .crc-heading__en,.crc-heading__zh,.crc-heading__title{
@@ -292,6 +343,18 @@ test('homepage header brand retains a 44px minimum target height', () => {
 test('section footer links retain 44px minimum target dimensions', () => {
   assert.match(sections, /\.sections-footer__inner a\{[^}]*min-width:var\(--control-min\)[^}]*justify-content:center/);
   assert.match(sections, /\.topbar__home,\.locale-switcher a,\.sections-footer a\{min-height:var\(--control-min\)\}/);
+});
+
+test('section navigation uses supporting text and standalone 44px link targets', () => {
+  assert.match(
+    sections,
+    /\.topbar__home,\.topbar__crumb a,\.index-page__feed,\.index-page__feed a,\.sections-footer__inner a,\.item__backlink\{font-size:var\(--fs-supporting\)\}/,
+  );
+  assert.match(
+    sections,
+    /\.topbar__crumb a,\.index-page__feed a,\.item__backlink a\{display:inline-flex;align-items:center;min-height:var\(--control-min\)\}/,
+  );
+  assert.doesNotMatch(sections, /\.item__body a\{[^}]*min-height:var\(--control-min\)/);
 });
 
 test('consent receives one locale and uses readable control sizes', () => {
