@@ -124,6 +124,7 @@ test('feed discovery and feed documents source locale-specific copy', async () =
   assert.match(head, /ui\.feed\.news/);
   assert.match(head, /ui\.feed\.events/);
   assert.match(head, /ui\.feed\.records/);
+  assert.match(head, /ui\.feed\.ideas/);
   for (const feed of feeds) assert.match(feed, /site\.data\.i18n/);
   for (const feed of feeds.slice(0, 4)) {
     assert.doesNotMatch(feed, />[^<{]*(?:All updates|News|Events|As Seen on Media)[^<{]*</);

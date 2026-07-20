@@ -1,6 +1,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-{% assign page_title = page.title | default: site.title %}
+{% if page.section == "team" and page.name and page.name != "" %}
+  {% assign page_title = page.name %}
+{% else %}
+  {% assign page_title = page.title | default: site.title %}
+{% endif %}
 <title>{{ page_title }}｜Cyborg Resilience Co-lab</title>
 <link rel="icon" type="image/png" href="/favicon.png">
 {% assign desc = page.summary | default: page.description | default: site.description | strip_newlines | truncate: 300 %}
@@ -18,7 +22,7 @@
   {% assign og_locale = "zh_TW" %}
   {% assign feed_prefix = "" %}
 {% endif %}
-<link rel="canonical" href="{{ page.url | absolute_url }}">
+<link rel="canonical" href="{{ page.canonical_url | default: page.url | absolute_url }}">
 {% unless page.translation_exempt %}
 <link rel="alternate" hreflang="zh-Hant" href="{{ zh_url | absolute_url }}">
 <link rel="alternate" hreflang="en-US" href="{{ en_url | absolute_url }}">
@@ -39,6 +43,7 @@
 <link rel="alternate" type="application/atom+xml" title="CRC — {{ ui.feed.news }}" href="{{ feed_prefix }}/news/feed.xml">
 <link rel="alternate" type="application/atom+xml" title="CRC — {{ ui.feed.events }}" href="{{ feed_prefix }}/events/feed.xml">
 <link rel="alternate" type="application/atom+xml" title="CRC — {{ ui.feed.records }}" href="{{ feed_prefix }}/records/feed.xml">
+<link rel="alternate" type="application/atom+xml" title="CRC — {{ ui.feed.ideas }}" href="{{ feed_prefix }}/ideas/feed.xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Noto+Sans+TC:wght@400;500;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -59,6 +64,50 @@
   "description": {{ desc | jsonify }},
   "url": "{{ page.url | absolute_url }}",
   "organizer": { "@type": "Organization", "name": "Cyborg Resilience Co-lab", "url": "{{ site.url }}" }
+}
+{% elsif page.section == "ideas" %}
+{% if page.locale == "en-US" %}{% assign team_pool = site.team_en %}{% else %}{% assign team_pool = site.team %}{% endif %}
+{% assign author_target = null %}
+{% if page.author_slug and page.author_slug != "" %}
+  {% for member in team_pool %}{% if member.slug == page.author_slug %}{% assign author_target = member %}{% endif %}{% endfor %}
+{% endif %}
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": {{ page.title | jsonify }},
+  "datePublished": "{{ page.date | date: '%Y-%m-%d' }}",
+  "inLanguage": "{{ locale }}",
+  "url": "{{ page.url | absolute_url }}",
+  {% if page.image and page.image != "" %}"image": "{{ page.image | absolute_url }}",{% endif %}
+  {% if page.tags %}"keywords": {{ page.tags | join: ',' | jsonify }},{% endif %}
+  "mainEntityOfPage": "{{ page.url | absolute_url }}",
+  "isPartOf": { "@type": "CollectionPage", "url": "{{ feed_prefix | append: '/ideas/' | absolute_url }}" },
+  "author": {% if author_target %}{
+    "@type": "Person",
+    "name": {{ author_target.name | jsonify }},
+    "url": "{{ feed_prefix | append: '/team/' | append: page.author_slug | append: '/' | absolute_url }}"
+  }{% else %}{
+    "@type": "Organization",
+    "name": "Cyborg Resilience Co-lab",
+    "url": "{{ site.url }}"
+  }{% endif %},
+  "publisher": { "@type": "Organization", "name": "Cyborg Resilience Co-lab", "url": "{{ site.url }}" },
+  "description": {{ desc | jsonify }}
+}
+{% elsif page.section == "team" %}
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": {{ page.name | jsonify }},
+  "jobTitle": {{ page.role | jsonify }},
+  {% if page.bio_short and page.bio_short != "" %}"description": {{ page.bio_short | jsonify }},{% endif %}
+  {% assign image_url = page.photo | default: "/assets/team-video-poster.jpg" %}
+  "image": "{{ image_url | absolute_url }}",
+  {% if page.links %}
+  "sameAs": [{% assign first_link = true %}{% for pair in page.links %}{% assign key = pair[0] %}{% assign href = pair[1] %}{% unless key == 'email' %}{% if href and href != "" %}{% unless first_link %},{% endunless %}{{ href | jsonify }}{% assign first_link = false %}{% endif %}{% endunless %}{% endfor %}],
+  {% endif %}
+  "worksFor": { "@type": "Organization", "name": "Cyborg Resilience Co-lab", "url": "{{ site.url }}" },
+  "url": "{{ page.url | absolute_url }}"
 }
 {% else %}
 {

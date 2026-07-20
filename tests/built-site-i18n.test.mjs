@@ -131,3 +131,49 @@ test('root feeds and latest-json include ideas entries', async () => {
   assert.ok(Array.isArray(zhLatest.ideas) && zhLatest.ideas.length >= 1, 'zh latest.json missing ideas[]');
   assert.ok(Array.isArray(enLatest.ideas) && enLatest.ideas.length >= 1, 'en latest.json missing ideas[]');
 });
+
+test('idea pages carry Article JSON-LD with resolved author', async () => {
+  const zh = await read('_site/ideas/2026-03-25-crc-march-25-decks/index.html');
+  assert.match(zh, /"@type"\s*:\s*"Article"/);
+  assert.match(zh, /"author"\s*:\s*\{\s*"@type"\s*:\s*"Person"[\s\S]*?"name"\s*:\s*"彭宬"/);
+  assert.match(zh, /"inLanguage"\s*:\s*"zh-Hant"/);
+});
+
+test('team profile pages carry Person JSON-LD', async () => {
+  const zh = await read('_site/team/cheng/index.html');
+  assert.match(zh, /"@type"\s*:\s*"Person"/);
+  assert.match(zh, /"name"\s*:\s*"彭宬"/);
+  assert.match(zh, /"sameAs"\s*:\s*\[[\s\S]*?"https:\/\/github\.com\/paulpengtw"/);
+});
+
+test('every built page advertises the ideas Atom feed', async () => {
+  const [home, section, item] = await Promise.all([
+    read('_site/index.html'),
+    read('_site/news/index.html'),
+    read('_site/records/2026-05-24-g0v-summit-panel-slides/index.html'),
+  ]);
+  for (const html of [home, section, item]) {
+    assert.match(html, /rel="alternate" type="application\/atom\+xml" title="CRC — 提點子" href="\/ideas\/feed\.xml"/);
+  }
+});
+
+test('every built subpage footer nav includes Ideas and Team', async () => {
+  const section = await read('_site/news/index.html');
+  assert.match(section, /<footer class="sections-footer">[\s\S]*href="\/ideas\/"[\s\S]*href="\/team\/"[\s\S]*<\/footer>/);
+});
+
+test('llms.txt documents ideas and team', async () => {
+  const llms = await read('llms.txt');
+  assert.match(llms, /\/ideas\//);
+  assert.match(llms, /\/team\//);
+  assert.match(llms, /\/ideas\/feed\.xml/);
+});
+
+test('team profile pages use the member name in <title>, not the humanized slug', async () => {
+  const [zh, en] = await Promise.all([
+    read('_site/team/cheng/index.html'),
+    read('_site/en/team/cheng/index.html'),
+  ]);
+  assert.match(zh, /<title>彭宬｜Cyborg Resilience Co-lab<\/title>/);
+  assert.match(en, /<title>CHENG PENG｜Cyborg Resilience Co-lab<\/title>/);
+});
