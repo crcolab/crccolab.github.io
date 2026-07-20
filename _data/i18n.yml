@@ -6,17 +6,22 @@ zh-Hant:
     news: 訊息
     events: 活動
     records: 記錄／報導
+    ideas: 提點子
     latest: 最新消息
   sections:
     news: 最新訊息
     events: 活動
     records: 記錄／報導
+    ideas: 提點子
+    team: 團隊
   view_all: 查看全部
   view_source: 閱讀原文
   back_to:
     news: 所有訊息
     events: 所有活動
     records: 所有記錄／報導
+    ideas: 所有提點子
+    team: 所有成員
   bilingual_event: 雙語活動頁
   feed:
     label: Atom 訂閱
@@ -24,6 +29,7 @@ zh-Hant:
     news: 最新訊息
     events: 活動
     records: 記錄／報導
+    ideas: 提點子
     subtitle: CRC 賽伯格韌性實驗室的最新訊息、活動與媒體報導
   footer:
     navigate: 導覽
@@ -34,6 +40,14 @@ zh-Hant:
     message: 我們使用匿名分析資料改善網站。只有在你同意後才會啟用分析。
     accept: 同意
     reject: 不同意
+  member:
+    ideas_by: 由本成員撰寫的提點子
+    links:
+      email: Email
+      github: GitHub
+      mastodon: Mastodon
+      orcid: ORCID
+      homepage: 個人網站
 
 en-US:
   language_switcher_label: Choose language
@@ -43,17 +57,22 @@ en-US:
     news: News
     events: Events
     records: Media
+    ideas: Ideas
     latest: Latest updates
   sections:
     news: Latest News
     events: Events
     records: As Seen in the Media
+    ideas: Ideas
+    team: Team
   view_all: View all
   view_source: View source
   back_to:
     news: All news
     events: All events
     records: All media
+    ideas: All ideas
+    team: All members
   bilingual_event: Bilingual event page
   feed:
     label: Atom feed
@@ -61,6 +80,7 @@ en-US:
     news: News
     events: Events
     records: Media
+    ideas: Ideas
     subtitle: News, events, and media appearances from Cyborg Resilience Co-lab
   footer:
     navigate: Navigate
@@ -71,3 +91,11 @@ en-US:
     message: We use anonymous analytics to improve this website. Analytics starts only after you consent.
     accept: Accept
     reject: Decline
+  member:
+    ideas_by: Ideas by this member
+    links:
+      email: Email
+      github: GitHub
+      mastodon: Mastodon
+      orcid: ORCID
+      homepage: Homepage

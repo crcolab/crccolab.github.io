@@ -18,7 +18,7 @@ function localeBlock(yaml, locale) {
 }
 
 test('Jekyll declares parallel English collections and locale defaults', () => {
-  for (const collection of ['news_en', 'events_en', 'records_en']) {
+  for (const collection of ['news_en', 'events_en', 'records_en', 'ideas_en', 'team_en']) {
     assert.match(config, new RegExp(`\\n  ${collection}:\\n    output: true`));
     assert.match(config, new RegExp(`permalink: /en/${collection.replace('_en', '')}/:name/`));
     assert.match(config, new RegExp(`scope: \\{ type: ${collection} \\}`));
@@ -35,6 +35,21 @@ test('both locale dictionaries expose the shared interface contract', () => {
       'back_to', 'feed', 'footer', 'consent',
     ]) {
       assert.match(dictionary, new RegExp(`^  ${key}:`, 'm'), `${locale} is missing ${key}`);
+    }
+    for (const nested of [
+      ['navigation', 'ideas'], ['sections', 'ideas'], ['sections', 'team'],
+      ['back_to', 'ideas'], ['back_to', 'team'], ['feed', 'ideas'],
+      ['member', 'ideas_by'],
+    ]) {
+      const [outer, inner] = nested;
+      // Note: `$` under the /m flag matches end-of-LINE, which is trivially true
+      // right after "<outer>:" itself (immediately before its own newline) — that
+      // made the lazy quantifier stop with zero characters consumed every time,
+      // so the block never actually reached nested keys. `(?![\s\S])` asserts
+      // true end-of-string instead, so the block only closes at the next
+      // top-level key or the real end of the dictionary.
+      const outerBlock = dictionary.match(new RegExp(`^  ${outer}:[\\s\\S]*?(?=^  \\S|(?![\\s\\S]))`, 'm'))?.[0] ?? '';
+      assert.match(outerBlock, new RegExp(`^    ${inner}:`, 'm'), `${locale}.${outer}.${inner} missing`);
     }
   }
 });
@@ -62,7 +77,10 @@ test('English indexes, feeds, and latest API declare exact routes and collection
     ['en/news/feed.xml', '/en/news/feed.xml', 'site.news_en'],
     ['en/events/feed.xml', '/en/events/feed.xml', 'site.events_en'],
     ['en/records/feed.xml', '/en/records/feed.xml', 'site.records_en'],
-    ['en/api/latest.json', '/en/api/latest.json', 'news_en,events_en,records_en'],
+    ['en/ideas/index.html', '/en/ideas/', 'ideas_en'],
+    ['en/ideas/feed.xml', '/en/ideas/feed.xml', 'site.ideas_en'],
+    ['en/team/index.html', '/en/team/', 'team_en'],
+    ['en/api/latest.json', '/en/api/latest.json', 'news_en,events_en,records_en,ideas_en'],
   ];
   for (const [path, permalink, source] of cases) {
     const content = await read(path).catch(() => '');

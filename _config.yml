@@ -32,6 +32,18 @@ collections:
   records_en:
     output: true
     permalink: /en/records/:name/
+  ideas:
+    output: true
+    permalink: /ideas/:name/
+  ideas_en:
+    output: true
+    permalink: /en/ideas/:name/
+  team:
+    output: true
+    permalink: /team/:name/
+  team_en:
+    output: true
+    permalink: /en/team/:name/
 
 defaults:
   - scope: { type: news }
@@ -46,6 +58,14 @@ defaults:
     values: { layout: item, section: events, collection_name: events_en, locale: en-US }
   - scope: { type: records_en }
     values: { layout: item, section: records, collection_name: records_en, locale: en-US }
+  - scope: { type: ideas }
+    values: { layout: idea, section: ideas, collection_name: ideas, locale: zh-Hant }
+  - scope: { type: ideas_en }
+    values: { layout: idea, section: ideas, collection_name: ideas_en, locale: en-US }
+  - scope: { type: team }
+    values: { layout: member, section: team, collection_name: team, locale: zh-Hant }
+  - scope: { type: team_en }
+    values: { layout: member, section: team, collection_name: team_en, locale: en-US }
 
 exclude:
   - README.md
