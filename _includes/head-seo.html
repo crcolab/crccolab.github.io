@@ -1,6 +1,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-{% if page.section == "team" and page.name and page.name != "" %}
+{% if page.section == "team" and page.collection and page.name and page.name != "" %}
   {% assign page_title = page.name %}
 {% else %}
   {% assign page_title = page.title | default: site.title %}

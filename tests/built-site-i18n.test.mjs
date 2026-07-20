@@ -177,3 +177,14 @@ test('team profile pages use the member name in <title>, not the humanized slug'
   assert.match(zh, /<title>彭宬｜Cyborg Resilience Co-lab<\/title>/);
   assert.match(en, /<title>CHENG PENG｜Cyborg Resilience Co-lab<\/title>/);
 });
+
+test('team INDEX pages use the page.title, not Jekyll built-in page.name (filename)', async () => {
+  const [zh, en] = await Promise.all([
+    read('_site/team/index.html'),
+    read('_site/en/team/index.html'),
+  ]);
+  assert.match(zh, /<title>團隊｜Cyborg Resilience Co-lab<\/title>/);
+  assert.match(en, /<title>Team｜Cyborg Resilience Co-lab<\/title>/);
+  assert.doesNotMatch(zh, /<title>index\.html/);
+  assert.doesNotMatch(en, /<title>index\.html/);
+});
