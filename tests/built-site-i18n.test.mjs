@@ -118,3 +118,16 @@ test('idea pages resolve author_slug to a linked team profile', async () => {
   assert.match(zh, /<p class="item__byline"><a href="\/team\/cheng\/">彭宬<\/a><\/p>/);
   assert.match(en, /<p class="item__byline"><a href="\/en\/team\/cheng\/">CHENG PENG<\/a><\/p>/);
 });
+
+test('root feeds and latest-json include ideas entries', async () => {
+  const [zhFeed, enFeed, zhLatest, enLatest] = await Promise.all([
+    read('_site/feed.xml'),
+    read('_site/en/feed.xml'),
+    read('_site/api/latest.json').then(JSON.parse),
+    read('_site/en/api/latest.json').then(JSON.parse),
+  ]);
+  assert.match(zhFeed, /\/ideas\/2026-03-25-crc-march-25-decks\//);
+  assert.match(enFeed, /\/en\/ideas\/2026-03-25-crc-march-25-decks\//);
+  assert.ok(Array.isArray(zhLatest.ideas) && zhLatest.ideas.length >= 1, 'zh latest.json missing ideas[]');
+  assert.ok(Array.isArray(enLatest.ideas) && enLatest.ideas.length >= 1, 'en latest.json missing ideas[]');
+});

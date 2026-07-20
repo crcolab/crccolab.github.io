@@ -9,7 +9,7 @@ permalink: /en/feed.xml
   <link href="{{ '/en/' | absolute_url }}"/>
   <link rel="self" href="{{ '/en/feed.xml' | absolute_url }}"/>
   <id>{{ '/en/' | absolute_url }}</id>
-  {% assign all = site.news_en | concat: site.events_en | concat: site.records_en | sort: "date" | reverse %}
+  {% assign all = site.news_en | concat: site.events_en | concat: site.records_en | concat: site.ideas_en | where_exp: "item", "item.draft != true" | sort: "date" | reverse %}
   <updated>{{ all.first.date | default: site.time | date_to_xmlschema }}</updated>
   {% include atom-entries.html entries=all %}
 </feed>

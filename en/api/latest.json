@@ -1,7 +1,7 @@
 ---
 permalink: /en/api/latest.json
 ---
-{% assign sections = "news_en,events_en,records_en" | split: "," %}
+{% assign sections = "news_en,events_en,records_en,ideas_en" | split: "," %}
 {
 {% for collection in sections %}
   {% assign key = collection | remove: "_en" %}
