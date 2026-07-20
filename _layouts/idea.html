@@ -11,8 +11,13 @@ layout: default
   <h1 class="item__title">{{ page.title }}</h1>
   {% assign author_name = page.author | default: "Cyborg Resilience Co-lab" %}
   {% if page.author_slug and page.author_slug != "" %}
+    {% if page.locale == "en-US" %}
+      {% assign team_pool = site.team_en %}
+    {% else %}
+      {% assign team_pool = site.team %}
+    {% endif %}
     {% assign author_target = null %}
-    {% for member in site[page.collection_name | replace: "ideas", "team"] %}
+    {% for member in team_pool %}
       {% if member.slug == page.author_slug %}{% assign author_target = member %}{% endif %}
     {% endfor %}
     {% if author_target %}

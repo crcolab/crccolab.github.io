@@ -109,3 +109,12 @@ test('built feed UI and metadata are localized independently', async () => {
   assert.match(zhNewsFeed, /<title>Cyborg Resilience Co-lab — 最新訊息<\/title>/);
   assert.match(enNewsFeed, /<title>Cyborg Resilience Co-lab — News<\/title>/);
 });
+
+test('idea pages resolve author_slug to a linked team profile', async () => {
+  const [zh, en] = await Promise.all([
+    read('_site/ideas/2026-03-25-crc-march-25-decks/index.html'),
+    read('_site/en/ideas/2026-03-25-crc-march-25-decks/index.html'),
+  ]);
+  assert.match(zh, /<p class="item__byline"><a href="\/team\/cheng\/">彭宬<\/a><\/p>/);
+  assert.match(en, /<p class="item__byline"><a href="\/en\/team\/cheng\/">CHENG PENG<\/a><\/p>/);
+});
