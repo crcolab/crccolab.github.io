@@ -78,3 +78,8 @@ test('every team card exposes a profile link to /team/<slug>/', () => {
     assert.match(en, new RegExp(`<a class="team-card__profile" href="/en/team/${slug}/"`), `en missing profile link for ${slug}`);
   }
 });
+
+test('header site-nav includes an Ideas link in both locales', () => {
+  assert.match(zh, /<nav class="site-nav">[\s\S]*?<a href="\/ideas\/" class="site-nav__link">提點子<\/a>[\s\S]*?<\/nav>/);
+  assert.match(en, /<nav class="site-nav">[\s\S]*?<a href="\/en\/ideas\/" class="site-nav__link">Ideas<\/a>[\s\S]*?<\/nav>/);
+});
