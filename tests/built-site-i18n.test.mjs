@@ -188,3 +188,8 @@ test('team INDEX pages use the page.title, not Jekyll built-in page.name (filena
   assert.doesNotMatch(zh, /<title>index\.html/);
   assert.doesNotMatch(en, /<title>index\.html/);
 });
+
+test('idea pages without tags omit the keywords JSON-LD field', async () => {
+  const zh = await read('_site/ideas/2026-03-25-crc-march-25-decks/index.html');
+  assert.doesNotMatch(zh, /"keywords"\s*:\s*""/);
+});

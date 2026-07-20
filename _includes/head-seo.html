@@ -79,7 +79,7 @@
   "inLanguage": "{{ locale }}",
   "url": "{{ page.url | absolute_url }}",
   {% if page.image and page.image != "" %}"image": "{{ page.image | absolute_url }}",{% endif %}
-  {% if page.tags %}"keywords": {{ page.tags | join: ',' | jsonify }},{% endif %}
+  {% if page.tags and page.tags.size > 0 %}"keywords": {{ page.tags | join: ',' | jsonify }},{% endif %}
   "mainEntityOfPage": "{{ page.url | absolute_url }}",
   "isPartOf": { "@type": "CollectionPage", "url": "{{ feed_prefix | append: '/ideas/' | absolute_url }}" },
   "author": {% if author_target %}{
