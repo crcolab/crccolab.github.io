@@ -76,3 +76,5 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - vendor/
+  - digiresi.g0v.tw/
+  - multi-claude-code-discord/
