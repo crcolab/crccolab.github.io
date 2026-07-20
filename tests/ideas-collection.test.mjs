@@ -61,3 +61,12 @@ test('author_slug, when set, resolves to an existing _team profile', async () =>
     }
   }
 });
+
+test('the seed idea has a real body (not the stub placeholder)', async () => {
+  for (const path of ['_ideas/2026-03-25-crc-march-25-decks.md', '_ideas_en/2026-03-25-crc-march-25-decks.md']) {
+    const source = await readFile(path, 'utf8');
+    const body = source.split('\n---\n')[1] ?? '';
+    assert.ok(body.length >= 600, `${path}: body too short (${body.length} chars) — expand from source repo`);
+    assert.doesNotMatch(body, /暫存正文|Placeholder body|TODO|TBD/i, `${path}: still contains placeholder`);
+  }
+});
