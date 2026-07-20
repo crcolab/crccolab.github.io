@@ -3,7 +3,12 @@ import { readdir, readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 const EXEMPT_EVENTS = new Set(['2026-05-23-hackathon-2026.md']);
-const pairs = [['_news', '_news_en', new Set()], ['_events', '_events_en', EXEMPT_EVENTS], ['_records', '_records_en', new Set()]];
+const pairs = [
+  ['_news', '_news_en', new Set()],
+  ['_events', '_events_en', EXEMPT_EVENTS],
+  ['_records', '_records_en', new Set()],
+  ['_ideas', '_ideas_en', new Set()],
+];
 
 function parseDocument(source) {
   const match = source.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
@@ -31,7 +36,7 @@ test('locale pairs preserve shared metadata and contain finished English copy', 
         readFile(`${zhDir}/${name}`, 'utf8').then(parseDocument),
         readFile(`${enDir}/${name}`, 'utf8').then(parseDocument),
       ]);
-      for (const key of ['date', 'category', 'source', 'external_url', 'image', 'start_date', 'end_date']) {
+      for (const key of ['date', 'category', 'source', 'external_url', 'image', 'start_date', 'end_date', 'author_slug', 'draft', 'canonical_url']) {
         assert.equal(en.metadata[key] || '', zh.metadata[key] || '', `${name}: ${key}`);
       }
       assert.equal(en.metadata.locale, 'en-US', `${name}: locale`);
