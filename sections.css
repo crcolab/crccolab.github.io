@@ -74,3 +74,23 @@
   .topbar__home span:last-child,.topbar .locale-switcher span{display:none}
   .topbar .locale-switcher{gap:0}
 }
+
+.member-profile__body{padding-block:32px}
+.member-profile__hero{position:relative;aspect-ratio:16/9;max-width:640px;margin-bottom:24px;background:#000;overflow:hidden}
+.member-profile__photo{width:100%;height:100%;object-fit:cover;display:block}
+.member-profile__name{font-family:"Funnel Display",system-ui,sans-serif;font-size:32px;margin:0 0 8px}
+.member-profile__role{font-size:var(--fs-supporting);color:var(--text-secondary);margin:0 0 16px}
+.member-profile__bio-short{font-size:var(--fs-body);line-height:1.6;margin:0 0 24px}
+.member-profile__links{list-style:none;padding:0;margin:0 0 32px;display:flex;flex-wrap:wrap;gap:12px}
+.member-profile__links a{display:inline-flex;align-items:center;min-height:var(--control-min);padding:0 12px;border:1px solid currentColor;border-radius:8px;text-decoration:none;font-size:var(--fs-supporting)}
+.member-profile__long{margin-bottom:32px;line-height:1.7}
+.member-profile__ideas h2{font-family:"Funnel Display",system-ui,sans-serif;font-size:20px;margin:0 0 12px}
+.member-profile__ideas ul{list-style:none;padding:0;margin:0 0 32px}
+.member-profile__ideas li{margin-bottom:8px}
+.member-profile__ideas a{text-decoration:none;color:inherit}
+
+.team-index__grid{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.team-index__card a{display:block;padding:16px;border:1px solid rgba(0,0,0,.15);border-radius:var(--radius-lg);text-decoration:none;color:inherit;background:#fff}
+.team-index__name{font-family:"Funnel Display",system-ui,sans-serif;font-size:20px;margin:0 0 4px}
+.team-index__role{font-size:var(--fs-supporting);opacity:.75;margin:0 0 8px}
+.team-index__bio{font-size:var(--fs-supporting);line-height:1.5;margin:0}

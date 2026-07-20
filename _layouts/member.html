@@ -1,0 +1,45 @@
+---
+layout: default
+---
+{% assign ui = site.data.i18n[page.locale] %}
+{% assign prefix = "" %}{% if page.locale == "en-US" %}{% assign prefix = "/en" %}{% endif %}
+{% assign ideas_collection_name = page.collection_name | replace: "team", "ideas" %}
+{% assign ideas_by_member = site[ideas_collection_name] | where: "author_slug", page.slug | sort: "date" | reverse %}
+<main class="member-profile"><article class="member-profile__body container">
+  <div class="member-profile__hero crc-hud">
+    {% if page.photo and page.photo != "" %}
+      <img class="member-profile__photo" src="{{ page.photo }}" alt="{{ page.name | escape }}">
+    {% else %}
+      <img class="member-profile__photo" src="/assets/team-video-poster.jpg" alt="{{ page.name | escape }}">
+    {% endif %}
+    <span class="crc-hud__corner tl" aria-hidden="true"></span>
+    <span class="crc-hud__corner tr" aria-hidden="true"></span>
+    <span class="crc-hud__corner bl" aria-hidden="true"></span>
+    <span class="crc-hud__corner br" aria-hidden="true"></span>
+  </div>
+  <h1 class="member-profile__name">{{ page.name }}</h1>
+  <p class="member-profile__role">{{ page.role }}</p>
+  {% if page.bio_short and page.bio_short != "" %}<p class="member-profile__bio-short">{{ page.bio_short }}</p>{% endif %}
+  {% if page.links %}
+  <ul class="member-profile__links">
+    {% for pair in page.links %}
+      {% assign key = pair[0] %}{% assign href = pair[1] %}
+      {% if href and href != "" %}
+        <li><a href="{{ href }}"{% unless key == 'email' %} target="_blank" rel="noopener"{% endunless %}>{{ ui.member.links[key] | default: key }}</a></li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% if content and content != "" %}<div class="member-profile__long">{{ content }}</div>{% endif %}
+  {% if ideas_by_member.size > 0 %}
+  <section class="member-profile__ideas">
+    <h2>{{ ui.member.ideas_by }}</h2>
+    <ul>
+      {% for idea in ideas_by_member %}
+      <li><a href="{{ idea.url }}"><span class="crc-news__date">{{ idea.date | date: "%Y-%b-%d" | upcase }}</span> {{ idea.title }}</a></li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+  <p class="item__backlink"><a href="{{ prefix }}/team/">← {{ ui.back_to[page.section] }}</a></p>
+</article></main>

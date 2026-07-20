@@ -1,0 +1,25 @@
+---
+layout: default
+---
+{% assign ui = site.data.i18n[page.locale] %}
+{% assign members = site[page.collection_name] | sort: "slug" %}
+{% assign featured = members | where: "featured", true %}
+{% assign rest = members | where_exp: "m", "m.featured != true" %}
+{% assign ordered = featured | concat: rest %}
+<main class="team-index"><div class="container">
+  <div class="section__head">
+    <h1 class="crc-heading"><span class="crc-heading__title">{{ page.title }}</span></h1>
+    <p class="index-page__desc">{{ page.description }}</p>
+  </div>
+  <ul class="team-index__grid">
+    {% for member in ordered %}
+    <li class="team-index__card">
+      <a href="{{ member.url }}">
+        <h2 class="team-index__name">{{ member.name }}</h2>
+        <p class="team-index__role">{{ member.role }}</p>
+        {% if member.bio_short and member.bio_short != "" %}<p class="team-index__bio">{{ member.bio_short }}</p>{% endif %}
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+</div></main>

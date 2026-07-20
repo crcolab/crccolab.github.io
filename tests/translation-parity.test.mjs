@@ -8,6 +8,7 @@ const pairs = [
   ['_events', '_events_en', EXEMPT_EVENTS],
   ['_records', '_records_en', new Set()],
   ['_ideas', '_ideas_en', new Set()],
+  ['_team', '_team_en', new Set()],
 ];
 
 function parseDocument(source) {
@@ -36,14 +37,23 @@ test('locale pairs preserve shared metadata and contain finished English copy', 
         readFile(`${zhDir}/${name}`, 'utf8').then(parseDocument),
         readFile(`${enDir}/${name}`, 'utf8').then(parseDocument),
       ]);
-      for (const key of ['date', 'category', 'source', 'external_url', 'image', 'start_date', 'end_date', 'author_slug', 'draft', 'canonical_url']) {
-        assert.equal(en.metadata[key] || '', zh.metadata[key] || '', `${name}: ${key}`);
+      const isTeam = zhDir === '_team';
+      if (!isTeam) {
+        for (const key of ['date', 'category', 'source', 'external_url', 'image', 'start_date', 'end_date', 'author_slug', 'draft', 'canonical_url']) {
+          assert.equal(en.metadata[key] || '', zh.metadata[key] || '', `${name}: ${key}`);
+        }
+        assert.ok(en.metadata.title?.length >= 4, `${name}: title`);
+        assert.ok(en.metadata.summary?.length >= 30, `${name}: summary`);
+        assert.ok(en.body.length >= 40, `${name}: body`);
+        assert.doesNotMatch(`${en.metadata.title}\n${en.metadata.summary}\n${en.body}`, /\b(?:TODO|TBD|FIXME)\b|\[placeholder\]/i, `${name}: unfinished copy`);
+      } else {
+        for (const key of ['photo', 'photo_hud_target', 'featured']) {
+          assert.equal(en.metadata[key] || '', zh.metadata[key] || '', `${name}: ${key}`);
+        }
+        assert.ok(en.metadata.name?.length >= 2, `${name}: name`);
+        assert.ok(en.metadata.role?.length >= 2, `${name}: role`);
       }
       assert.equal(en.metadata.locale, 'en-US', `${name}: locale`);
-      assert.ok(en.metadata.title?.length >= 4, `${name}: title`);
-      assert.ok(en.metadata.summary?.length >= 30, `${name}: summary`);
-      assert.ok(en.body.length >= 40, `${name}: body`);
-      assert.doesNotMatch(`${en.metadata.title}\n${en.metadata.summary}\n${en.body}`, /\b(?:TODO|TBD|FIXME)\b|\[placeholder\]/i, `${name}: unfinished copy`);
     }
   }
 });
