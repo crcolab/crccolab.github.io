@@ -583,3 +583,7 @@ button.team-card__names{min-height:var(--control-min);min-width:var(--control-mi
 .crc-news--link:hover .crc-news__title{color:var(--text-brand)}
 .crc-news--link:hover .crc-news__arrow{transform:translate(2px,-2px)}
 .news__fallback a{font-family:var(--font-display);color:var(--crc-purple);text-decoration:none}
+
+/* ---------- team card profile chevron ---------- */
+.team-card__profile{display:inline-flex;align-items:center;justify-content:center;min-width:var(--control-min);min-height:var(--control-min);margin-top:8px;text-decoration:none;font-size:var(--fs-supporting);color:currentColor;border:1px solid currentColor;border-radius:8px;padding:0 10px;align-self:flex-start}
+.team-card__profile:hover,.team-card__profile:focus-visible{color:var(--crc-lime);border-color:var(--crc-lime);outline:none}

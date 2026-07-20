@@ -65,3 +65,16 @@ test('HUD target accessible names reference only the current locale', () => {
     assert.doesNotMatch(enTarget, new RegExp(`team-member-${id}-(?:name|role)-zh`));
   }
 });
+
+test('home pages advertise a 4th latest block for ideas', () => {
+  assert.match(zh, /"key":"ideas","label":"提點子"/);
+  assert.match(en, /"key":"ideas","label":"Ideas"/);
+});
+
+test('every team card exposes a profile link to /team/<slug>/', () => {
+  const slugs = ['lulu', 'meichun', 'cheng', 'tzu-tung', 'sean', 'rosa-kuo'];
+  for (const slug of slugs) {
+    assert.match(zh, new RegExp(`<a class="team-card__profile" href="/team/${slug}/"`), `zh missing profile link for ${slug}`);
+    assert.match(en, new RegExp(`<a class="team-card__profile" href="/en/team/${slug}/"`), `en missing profile link for ${slug}`);
+  }
+});
