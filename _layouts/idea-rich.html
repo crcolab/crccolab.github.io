@@ -1,0 +1,46 @@
+---
+layout: default
+---
+{% assign ui = site.data.i18n[page.locale] %}
+{% assign prefix = "" %}{% if page.locale == "en-US" %}{% assign prefix = "/en" %}{% endif %}
+<main class="item-page"><article class="item item--rich container">
+  <div class="crc-news__meta">
+    <span class="crc-news__date">{{ page.date | date: "%Y-%b-%d" | upcase }}</span>
+    <span class="crc-news__cat">{{ page.category | upcase }}</span>
+  </div>
+  <h1 class="item__title">{{ page.title }}</h1>
+  {% assign author_name = page.author | default: "Cyborg Resilience Co-lab" %}
+  {% if page.author_slug and page.author_slug != "" %}
+    {% if page.locale == "en-US" %}
+      {% assign team_pool = site.team_en %}
+    {% else %}
+      {% assign team_pool = site.team %}
+    {% endif %}
+    {% assign author_target = null %}
+    {% for member in team_pool %}
+      {% if member.slug == page.author_slug %}{% assign author_target = member %}{% endif %}
+    {% endfor %}
+    {% if author_target %}
+      <p class="item__byline"><a href="{{ prefix }}/team/{{ page.author_slug }}/">{{ author_name }}</a></p>
+    {% else %}
+      <p class="item__byline">{{ author_name }}</p>
+    {% endif %}
+  {% else %}
+    <p class="item__byline">{{ author_name }}</p>
+  {% endif %}
+  {% if page.deck_url %}
+  <div class="deck-embed">
+    <div class="deck-embed__wrapper">
+      <iframe src="{{ page.deck_url }}" allowfullscreen loading="lazy" title="{{ page.title | escape }}"></iframe>
+    </div>
+    <p class="deck-embed__hint">{{ page.deck_label_navigate }} · <a href="{{ page.deck_url }}" target="_blank" rel="noopener">{{ page.deck_label_fullscreen }}</a></p>
+    <div class="deck-embed__mobile-link">
+      <p>{{ page.deck_label_mobile_hint }}</p>
+      <a href="{{ page.deck_url }}" target="_blank" rel="noopener">{{ page.deck_label_mobile }}</a>
+    </div>
+  </div>
+  {% endif %}
+  {% if page.image and page.image != "" %}<img class="item__image" src="{{ page.image }}" alt="{{ page.title | escape }}">{% endif %}
+  <div class="item__body">{{ content }}</div>
+  <p class="item__backlink"><a href="{{ prefix }}/{{ page.section }}/">← {{ ui.back_to[page.section] }}</a></p>
+</article></main>

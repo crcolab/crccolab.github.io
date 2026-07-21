@@ -2,8 +2,8 @@
 title: DSET 報導：比較台灣與烏克蘭資安防衛經驗
 date: 2026-04-10
 category: MEDIA
-source: DSET 民主社會與經濟研究院
-summary: DSET 兼任研究員張仁瑋出席 CRC 主辦「數位韌性論壇」，分享烏克蘭戰時資安與通訊維運經驗——全國漫遊、衛星橋接、緊急頻譜、備援供電與持續搶修的組合式應變。Starlink 雖重要，但台灣當務之急是建立多層次、多供應商、可分級調度的國家網路架構。
+source: DSET 科技、民主與社會研究中心
+summary: DSET 兼任研究員張仁瑋出席 CRC 主辦「數位韌性論壇」，分享烏克蘭戰時資安與通訊維運經驗，全國漫遊、衛星橋接、緊急頻譜、備援供電與持續搶修的組合式應變。Starlink 雖重要，但台灣當務之急是建立多層次、多供應商、可分級調度的國家網路架構。
 external_url: https://dset.tw/event-news/481/
 image: /assets/2026-APR-10-dset-forum-coverage.jpg
 ---

@@ -94,3 +94,49 @@
 .team-index__name{font-family:"Funnel Display",system-ui,sans-serif;font-size:20px;margin:0 0 4px}
 .team-index__role{font-size:var(--fs-supporting);opacity:.75;margin:0 0 8px}
 .team-index__bio{font-size:var(--fs-supporting);line-height:1.5;margin:0}
+
+/* ---------- rich ideas page ---------- */
+.item--rich{max-width:1100px}
+
+.deck-embed{margin:32px 0 40px}
+.deck-embed__wrapper{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;
+  border-radius:var(--radius-lg);box-shadow:0 2px 16px rgba(0,0,0,.12)}
+.deck-embed__wrapper iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+.deck-embed__hint{text-align:center;font-size:var(--fs-label);color:var(--text-secondary);
+  margin-top:12px;font-family:var(--font-display)}
+.deck-embed__hint a{color:var(--crc-purple);text-decoration:none}
+.deck-embed__hint a:hover{text-decoration:underline}
+
+.deck-embed__mobile-link{display:none;background:var(--surface-muted);border:1px solid var(--border-default);
+  border-radius:var(--radius-lg);padding:24px;text-align:center;margin-top:16px}
+.deck-embed__mobile-link p{margin:0 0 12px;color:var(--text-secondary);font-size:var(--fs-supporting)}
+.deck-embed__mobile-link a{display:inline-flex;align-items:center;justify-content:center;
+  background:var(--crc-purple);color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;
+  font-family:var(--font-display);font-weight:600;min-height:var(--control-min)}
+
+@media(max-width:480px){
+  .deck-embed__wrapper,.deck-embed__hint{display:none}
+  .deck-embed__mobile-link{display:block}
+}
+
+.phase-header{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:2em 0 .8em}
+.phase-header h2{margin:0}
+.phase-badge{display:inline-block;padding:4px 12px;border-radius:var(--radius-pill);
+  font-family:var(--font-display);font-size:var(--fs-label);font-weight:600;white-space:nowrap;color:#fff}
+.phase-badge--1{background:var(--crc-purple)}
+.phase-badge--2{background:var(--purple-500)}
+.phase-badge--3{background:var(--purple-400)}
+.phase-badge--4{background:var(--ink-500)}
+
+.pressure-card{background:var(--surface-muted);border-radius:var(--radius-lg);padding:16px 20px;margin:16px 0}
+.pressure-card__title{font-family:var(--font-display);font-weight:700;color:var(--crc-purple);
+  margin:0 0 8px;font-size:var(--fs-supporting)}
+.pressure-card__list{list-style:none;padding:0;margin:0}
+.pressure-card__list li{padding:4px 0;display:flex;gap:8px;flex-wrap:wrap}
+.pressure-card__who{font-weight:700;color:var(--crc-purple);min-width:80px}
+
+.phase-table{width:100%;border-collapse:collapse;font-size:var(--fs-supporting);margin:24px 0}
+.phase-table th{text-align:left;padding:10px 12px;border-bottom:2px solid var(--crc-purple);
+  font-family:var(--font-display);color:var(--crc-purple)}
+.phase-table td{padding:10px 12px;border-bottom:1px solid var(--ink-100);vertical-align:top}
+.phase-table tr:last-child td{border-bottom:none}

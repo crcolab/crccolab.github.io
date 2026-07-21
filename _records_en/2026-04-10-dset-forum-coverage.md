@@ -2,7 +2,7 @@
 title: "DSET Coverage: Comparing Taiwan’s and Ukraine’s Cyber Defense Experience"
 date: 2026-04-10
 category: MEDIA
-source: DSET 民主社會與經濟研究院
+source: DSET Research Institute for Democracy, Society and Emerging Technology
 summary: "DSET Adjunct Research Fellow Jen-Wei Chang attended CRC’s Digital Resilience Forum and shared Ukraine’s wartime experience maintaining cybersecurity and communications: a combined response using national roaming, satellite bridging, emergency spectrum, backup power, and continuous repairs. Although Starlink is important, Taiwan’s urgent priority is to build a national network architecture that is multilayered, uses multiple providers, and can allocate resources by priority level."
 external_url: https://dset.tw/event-news/481/
 image: /assets/2026-APR-10-dset-forum-coverage.jpg
