@@ -48,6 +48,9 @@ zh-Hant:
       mastodon: Mastodon
       orcid: ORCID
       homepage: 個人網站
+  seo:
+    author_label: 作者
+    topics_label: 主題
 
 en-US:
   language_switcher_label: Choose language
@@ -99,3 +102,6 @@ en-US:
       mastodon: Mastodon
       orcid: ORCID
       homepage: Homepage
+  seo:
+    author_label: Author
+    topics_label: Topics

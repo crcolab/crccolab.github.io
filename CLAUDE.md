@@ -17,9 +17,18 @@ plus Jekyll (built by GitHub Pages on push from `main`) for the content sections
 - `_news/`, `_events/`, `_records/`, `_ideas/` — content collections, one Markdown file per item
   (front-matter: `title`, `date`, `category`, `summary`, optional `image`,
   `source`/`external_url` for media, `start_date`/`end_date`/`location_name` for
-  events, `link` to point listings at another URL; `_ideas/` additionally supports
+  events, `link` to point listings at another URL; all collections also accept the
+  SEO keys `tags` (list, becomes keywords/`article:tag`), `og_image` (social-card
+  fallback after `image`), `image_alt` (alt text for the `image`/`og_image`/`photo`
+  actually served — ignored when the page falls back to the site-wide cover, which
+  carries its own fixed alt) and `last_modified_at` (else the item date);
+  `_records/` items with `external_url` also emit it as JSON-LD `isBasedOn`;
+  `_ideas/` additionally supports
   `author`, `author_slug` (must match a `_team/<slug>.md` when set), `draft`,
-  `canonical_url`, `tags`)
+  `canonical_url`, plus JSON-LD `about`, `mentions` and `citations` — each a list of
+  strings or `{name, url}` mappings, entries without a name are dropped; `mentions`
+  entries may set `type` (default `Organization`), `citations` entries a `publisher`
+  and may use `title` in place of `name`)
 - `_team/` — member profiles (front-matter: `name`, `role`, optional
   `bio_short`, `photo`, `photo_hud_target` (must match a landing-page
   `data-member-id`), `links` (email/github/mastodon/orcid/homepage), `featured`)
@@ -85,6 +94,8 @@ Needs Ruby 3.3 (see .ruby-version) — Ruby 3.4+ breaks the github-pages gem (re
 - Translate the full title, summary, body, headings, image alt text, and link labels; do not use runtime or machine translation.
 - `/events/hackathon-2026/` is the only translation exception and must not receive an `/en/` duplicate.
 - Preview locale work with Jekyll because locale pages use Liquid; `python3 -m http.server` is not sufficient.
+- All user-visible shell copy lives in `_data/i18n.yml`, including the SEO card labels
+  (`seo.author_label` / `seo.topics_label`, rendered into `twitter:label1`/`label2`).
 
 Run the complete locale and typography verification from the repository root:
 

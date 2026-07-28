@@ -7,7 +7,9 @@
 {% endif %}
 <title>{{ page_title }}｜Cyborg Resilience Co-lab</title>
 <link rel="icon" type="image/png" href="/favicon.png">
-{% assign desc = page.summary | default: page.description | default: site.description | strip_newlines | truncate: 300 %}
+{%- comment -%} Team profiles are Person documents, not articles: no article:* / dcterms.date. {%- endcomment -%}
+{% assign is_article = false %}{% if page.collection and page.section != "team" %}{% assign is_article = true %}{% endif %}
+{% assign desc = page.summary | default: page.bio_short | default: page.description | default: site.description | strip_newlines | truncate: 300 %}
 <meta name="description" content="{{ desc | escape }}">
 {% assign locale = page.locale | default: site.lang %}
 {% assign ui = site.data.i18n[locale] %}
@@ -15,30 +17,83 @@
   {% assign zh_url = page.url | remove_first: "/en" %}
   {% assign en_url = page.url %}
   {% assign og_locale = "en_US" %}
+  {% assign og_locale_alt = "zh_TW" %}
   {% assign feed_prefix = "/en" %}
 {% else %}
   {% assign zh_url = page.url %}
   {% assign en_url = "/en" | append: page.url %}
   {% assign og_locale = "zh_TW" %}
+  {% assign og_locale_alt = "en_US" %}
   {% assign feed_prefix = "" %}
 {% endif %}
-<link rel="canonical" href="{{ page.canonical_url | default: page.url | absolute_url }}">
-{% unless page.translation_exempt %}
+{%- comment -%} One canonical URL for <link rel=canonical>, og:url and the JSON-LD url / mainEntityOfPage. {%- endcomment -%}
+{% assign canonical_url = page.canonical_url | default: page.url | absolute_url %}
+{%- comment -%} Shared social image: page.image → page.og_image → (team) page.photo → site-wide 1200x630 cover. {%- endcomment -%}
+{% assign custom_image = page.image | default: page.og_image %}
+{% if page.section == "team" %}{% assign custom_image = custom_image | default: page.photo %}{% endif %}
+{% assign seo_image = custom_image | default: "/assets/og-cover.png" %}
+{%- comment -%} Alt text: the shared site cover gets a fixed CRC string; a page-supplied image uses page.image_alt, falling back to the page title. {%- endcomment -%}
+{% if custom_image and custom_image != "" %}
+  {% assign seo_image_alt = page.image_alt | default: page_title %}
+{% else %}
+  {% assign seo_image_alt = "Cyborg Resilience Co-lab 賽伯格韌性實驗室" %}
+{% endif %}
+{%- comment -%} Resolve a display author once; reused by meta, OG, Twitter and JSON-LD. {%- endcomment -%}
+{% if locale == "en-US" %}{% assign team_pool = site.team_en %}{% else %}{% assign team_pool = site.team %}{% endif %}
+{% assign author_target = null %}
+{% if page.author_slug and page.author_slug != "" %}
+  {% for member in team_pool %}{% if member.slug == page.author_slug %}{% assign author_target = member %}{% endif %}{% endfor %}
+{% endif %}
+{% if page.author and page.author != "" %}
+  {% assign author_name = page.author %}
+{% elsif author_target %}
+  {% assign author_name = author_target.name %}
+{% else %}
+  {% assign author_name = "Cyborg Resilience Co-lab" %}
+{% endif %}
+{% assign section_label = ui.sections[page.section] | default: page.section %}
+<link rel="canonical" href="{{ canonical_url }}">
+{% if page.draft or page.sitemap == false %}<meta name="robots" content="noindex, nofollow">{% else %}<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">{% endif %}
+<meta name="author" content="{{ author_name | escape }}">
+{% if page.tags and page.tags.size > 0 %}<meta name="keywords" content="{{ page.tags | join: ', ' | escape }}">{% endif %}
+{% unless page.translation_exempt or page.draft %}
 <link rel="alternate" hreflang="zh-Hant" href="{{ zh_url | absolute_url }}">
 <link rel="alternate" hreflang="en-US" href="{{ en_url | absolute_url }}">
 <link rel="alternate" hreflang="x-default" href="{{ zh_url | absolute_url }}">
 {% endunless %}
 <meta property="og:site_name" content="Cyborg Resilience Co-lab">
-<meta property="og:type" content="{% if page.collection %}article{% else %}website{% endif %}">
-<meta property="og:url" content="{{ page.url | absolute_url }}">
+<meta property="og:type" content="{% if page.collection and page.section == 'team' %}profile{% elsif page.collection %}article{% else %}website{% endif %}">
+<meta property="og:url" content="{{ canonical_url }}">
 <meta property="og:title" content="{{ page_title | escape }}">
 <meta property="og:description" content="{{ desc | escape }}">
 <meta property="og:locale" content="{{ og_locale }}">
-{% if page.image and page.image != "" %}<meta property="og:image" content="{{ page.image | absolute_url }}">{% endif %}
-<meta name="twitter:card" content="{% if page.image and page.image != '' %}summary_large_image{% else %}summary{% endif %}">
+{% unless page.translation_exempt or page.draft %}<meta property="og:locale:alternate" content="{{ og_locale_alt }}">{% endunless %}
+<meta property="og:image" content="{{ seo_image | absolute_url }}">
+<meta property="og:image:alt" content="{{ seo_image_alt | escape }}">
+{% unless custom_image and custom_image != "" %}<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">{% endunless %}
+{% if is_article %}
+{% if page.date %}<meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">
+<meta property="article:modified_time" content="{{ page.last_modified_at | default: page.date | date_to_xmlschema }}">{% endif %}
+<meta property="article:author" content="{{ author_name | escape }}">
+{% if section_label and section_label != "" %}<meta property="article:section" content="{{ section_label | escape }}">{% endif %}
+{% if page.tags and page.tags.size > 0 %}{% for tag in page.tags %}<meta property="article:tag" content="{{ tag | escape }}">
+{% endfor %}{% endif %}
+{% endif %}
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{{ page_title | escape }}">
 <meta name="twitter:description" content="{{ desc | escape }}">
-{% if page.image and page.image != "" %}<meta name="twitter:image" content="{{ page.image | absolute_url }}">{% endif %}
+<meta name="twitter:image" content="{{ seo_image | absolute_url }}">
+<meta name="twitter:image:alt" content="{{ seo_image_alt | escape }}">
+<meta name="twitter:label1" content="{{ ui.seo.author_label | escape }}">
+<meta name="twitter:data1" content="{{ author_name | escape }}">
+{% if page.tags and page.tags.size > 0 %}<meta name="twitter:label2" content="{{ ui.seo.topics_label | escape }}">
+<meta name="twitter:data2" content="{{ page.tags | join: ', ' | escape }}">{% endif %}
+{% if page.collection %}
+{% if is_article and page.date %}<meta name="dcterms.date" content="{{ page.date | date_to_xmlschema }}">{% endif %}
+<meta name="dcterms.language" content="{{ locale }}">
+<link rel="schema.DCTERMS" href="http://purl.org/dc/terms/">
+{% endif %}
 <link rel="alternate" type="application/atom+xml" title="CRC — {{ ui.feed.all }}" href="{{ feed_prefix }}/feed.xml">
 <link rel="alternate" type="application/atom+xml" title="CRC — {{ ui.feed.news }}" href="{{ feed_prefix }}/news/feed.xml">
 <link rel="alternate" type="application/atom+xml" title="CRC — {{ ui.feed.events }}" href="{{ feed_prefix }}/events/feed.xml">
@@ -61,26 +116,71 @@
   {% if page.location_name %}"location": { "@type": "Place", "name": {{ page.location_name | jsonify }} },{% endif %}
   "eventStatus": "https://schema.org/EventScheduled",
   "inLanguage": "{{ locale }}",
+  "image": {{ seo_image | absolute_url | jsonify }},
   "description": {{ desc | jsonify }},
-  "url": "{{ page.url | absolute_url }}",
+  "url": {{ canonical_url | jsonify }},
   "organizer": { "@type": "Organization", "name": "Cyborg Resilience Co-lab", "url": "{{ site.url }}" }
 }
 {% elsif page.section == "ideas" %}
-{% if page.locale == "en-US" %}{% assign team_pool = site.team_en %}{% else %}{% assign team_pool = site.team %}{% endif %}
-{% assign author_target = null %}
-{% if page.author_slug and page.author_slug != "" %}
-  {% for member in team_pool %}{% if member.slug == page.author_slug %}{% assign author_target = member %}{% endif %}{% endfor %}
-{% endif %}
+{%- comment -%}
+  about / mentions / citations entries may be plain strings or mappings.
+  A mapping with no `name` cannot become a schema.org name string, so it is skipped;
+  the jsonify-first-character probe tells a string entry (") apart from a mapping ({).
+{%- endcomment -%}
+{%- capture about_json -%}
+  {%- assign about_written = false -%}
+  {%- for about_entry in page.about -%}
+    {%- assign about_name = about_entry.name -%}
+    {%- if about_name == nil -%}{%- assign about_probe = about_entry | jsonify | slice: 0 -%}{%- if about_probe == '"' -%}{%- assign about_name = about_entry -%}{%- endif -%}{%- endif -%}
+    {%- if about_name and about_name != "" -%}
+      {%- if about_written %}, {% endif -%}
+      { "@type": "Thing", "name": {{ about_name | jsonify }}{% if about_entry.url and about_entry.url != "" %}, "url": {{ about_entry.url | absolute_url | jsonify }}{% endif %} }
+      {%- assign about_written = true -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+{%- capture mentions_json -%}
+  {%- assign mention_written = false -%}
+  {%- for mention_entry in page.mentions -%}
+    {%- assign mention_name = mention_entry.name -%}
+    {%- if mention_name == nil -%}{%- assign mention_probe = mention_entry | jsonify | slice: 0 -%}{%- if mention_probe == '"' -%}{%- assign mention_name = mention_entry -%}{%- endif -%}{%- endif -%}
+    {%- if mention_name and mention_name != "" -%}
+      {%- if mention_written %}, {% endif -%}
+      { "@type": {{ mention_entry.type | default: 'Organization' | jsonify }}, "name": {{ mention_name | jsonify }}{% if mention_entry.url and mention_entry.url != "" %}, "url": {{ mention_entry.url | absolute_url | jsonify }}{% endif %} }
+      {%- assign mention_written = true -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+{%- capture citation_json -%}
+  {%- assign citation_written = false -%}
+  {%- for citation_entry in page.citations -%}
+    {%- assign citation_name = citation_entry.name | default: citation_entry.title -%}
+    {%- if citation_name == nil -%}{%- assign citation_probe = citation_entry | jsonify | slice: 0 -%}{%- if citation_probe == '"' -%}{%- assign citation_name = citation_entry -%}{%- endif -%}{%- endif -%}
+    {%- if citation_name and citation_name != "" -%}
+      {%- assign citation_publisher = citation_entry.publisher.name | default: citation_entry.publisher -%}
+      {%- if citation_publisher -%}{%- assign citation_publisher_probe = citation_publisher | jsonify | slice: 0 -%}{%- unless citation_publisher_probe == '"' -%}{%- assign citation_publisher = nil -%}{%- endunless -%}{%- endif -%}
+      {%- if citation_written %}, {% endif -%}
+      { "@type": "CreativeWork", "name": {{ citation_name | jsonify }}{% if citation_entry.url and citation_entry.url != "" %}, "url": {{ citation_entry.url | absolute_url | jsonify }}{% endif %}{% if citation_publisher and citation_publisher != "" %}, "publisher": { "@type": "Organization", "name": {{ citation_publisher | jsonify }} }{% endif %} }
+      {%- assign citation_written = true -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
 {
   "@context": "https://schema.org",
   "@type": "Article",
   "headline": {{ page.title | jsonify }},
   "datePublished": "{{ page.date | date: '%Y-%m-%d' }}",
+  {% assign date_modified = page.last_modified_at | default: page.date %}{% if date_modified %}"dateModified": "{{ date_modified | date: '%Y-%m-%d' }}",{% endif %}
   "inLanguage": "{{ locale }}",
-  "url": "{{ page.url | absolute_url }}",
-  {% if page.image and page.image != "" %}"image": "{{ page.image | absolute_url }}",{% endif %}
+  "url": {{ canonical_url | jsonify }},
+  "image": {{ seo_image | absolute_url | jsonify }},
+  {% if section_label and section_label != "" %}"articleSection": {{ section_label | jsonify }},{% endif %}
   {% if page.tags and page.tags.size > 0 %}"keywords": {{ page.tags | join: ',' | jsonify }},{% endif %}
-  "mainEntityOfPage": "{{ page.url | absolute_url }}",
+  {% if about_json != "" %}"about": [{{ about_json }}],{% endif %}
+  {% if mentions_json != "" %}"mentions": [{{ mentions_json }}],{% endif %}
+  {% if citation_json != "" %}"citation": [{{ citation_json }}],{% endif %}
+  "isAccessibleForFree": true,
+  "mainEntityOfPage": {{ canonical_url | jsonify }},
   "isPartOf": { "@type": "CollectionPage", "url": "{{ feed_prefix | append: '/ideas/' | absolute_url }}" },
   "author": {% if author_target %}{
     "@type": "Person",
@@ -91,23 +191,33 @@
     "name": "Cyborg Resilience Co-lab",
     "url": "{{ site.url }}"
   }{% endif %},
-  "publisher": { "@type": "Organization", "name": "Cyborg Resilience Co-lab", "url": "{{ site.url }}" },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Cyborg Resilience Co-lab",
+    "url": "{{ site.url }}"
+  },
   "description": {{ desc | jsonify }}
 }
 {% elsif page.section == "team" %}
+{%- capture same_as_json -%}
+  {%- assign first_link = true -%}
+  {%- for pair in page.links -%}
+    {%- assign key = pair[0] -%}{%- assign href = pair[1] -%}
+    {%- unless key == 'email' -%}{%- if href and href != "" -%}{%- unless first_link %}, {% endunless -%}{{ href | jsonify }}{%- assign first_link = false -%}{%- endif -%}{%- endunless -%}
+  {%- endfor -%}
+{%- endcapture -%}
 {
   "@context": "https://schema.org",
   "@type": "Person",
   "name": {{ page.name | jsonify }},
   "jobTitle": {{ page.role | jsonify }},
   {% if page.bio_short and page.bio_short != "" %}"description": {{ page.bio_short | jsonify }},{% endif %}
-  {% assign image_url = page.photo | default: "/assets/team-video-poster.jpg" %}
-  "image": "{{ image_url | absolute_url }}",
-  {% if page.links %}
-  "sameAs": [{% assign first_link = true %}{% for pair in page.links %}{% assign key = pair[0] %}{% assign href = pair[1] %}{% unless key == 'email' %}{% if href and href != "" %}{% unless first_link %},{% endunless %}{{ href | jsonify }}{% assign first_link = false %}{% endif %}{% endunless %}{% endfor %}],
+  {% if page.photo and page.photo != "" %}"image": {{ page.photo | absolute_url | jsonify }},
+  {% endif %}
+  {% if same_as_json != "" %}"sameAs": [{{ same_as_json }}],
   {% endif %}
   "worksFor": { "@type": "Organization", "name": "Cyborg Resilience Co-lab", "url": "{{ site.url }}" },
-  "url": "{{ page.url | absolute_url }}"
+  "url": {{ canonical_url | jsonify }}
 }
 {% else %}
 {
@@ -116,11 +226,25 @@
   "headline": {{ page.title | jsonify }},
   "datePublished": "{{ page.date | date: '%Y-%m-%d' }}",
   "inLanguage": "{{ locale }}",
-  "url": "{{ page.url | absolute_url }}",
-  {% if page.image and page.image != "" %}"image": "{{ page.image | absolute_url }}",{% endif %}
+  "url": {{ canonical_url | jsonify }},
+  "image": {{ seo_image | absolute_url | jsonify }},
+  {% if page.external_url and page.external_url != "" %}"isBasedOn": {{ page.external_url | absolute_url | jsonify }},{% endif %}
   "publisher": { "@type": "Organization", "name": "Cyborg Resilience Co-lab", "url": "{{ site.url }}" },
   "description": {{ desc | jsonify }}
 }
 {% endif %}
+</script>
+{% endif %}
+{% if page.section and page.section != "" %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Cyborg Resilience Co-lab", "item": "{{ feed_prefix | append: '/' | absolute_url }}" },
+    { "@type": "ListItem", "position": 2, "name": {{ section_label | jsonify }}, "item": "{{ feed_prefix | append: '/' | append: page.section | append: '/' | absolute_url }}" }{% if page.collection %},
+    { "@type": "ListItem", "position": 3, "name": {{ page_title | jsonify }}, "item": {{ canonical_url | jsonify }} }{% endif %}
+  ]
+}
 </script>
 {% endif %}

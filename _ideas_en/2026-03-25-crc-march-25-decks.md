@@ -3,8 +3,9 @@ title: "CRC Digital Resilience Forum: Simulating a Drastic Drop in Taiwan's Inte
 date: 2026-03-25
 category: NOTE
 summary: "Speakers and further reading from CRC's March 2026 Digital Resilience Forum."
-author: Cheng Peng
+author: CHENG PENG
 author_slug: cheng
+locale: en-US
 layout: idea-rich
 deck_url: "https://paulpengtw.github.io/crc-march-25-decks/"
 deck_label_navigate: "← → to switch slides"
