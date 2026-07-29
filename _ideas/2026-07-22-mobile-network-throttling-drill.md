@@ -1,8 +1,10 @@
 ---
 title: "為什麼要進行「行動網路降速」演習？有意義嗎？"
-date: 2026-07-28
+date: 2026-07-22
 category: NOTE
 summary: "2026 城鎮韌性演習首度納入「行動網路降速」：8 月 10 日與 8 月 13 日下午 2 時 30 分起降速 30 分鐘。從花蓮強震、丹娜絲颱風的基地台受損，到日、韓、北約與芬蘭的通訊演練，談把斷網情境納入防災演習的意義。"
+image: /assets/2026-JUL-22-mobile-network-throttling-drill.jpg
+image_alt: "一隻手拿著手機，螢幕顯示 4G 連線下的測速結果：下載 64 kbps、Ping 128 ms；上方的通知寫著「聽說行動網路降速演習還是可以正常傳簡訊欸」。"
 author: 彭宬
 author_slug: cheng
 tags:

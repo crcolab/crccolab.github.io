@@ -1,8 +1,10 @@
 ---
 title: "Why Run a Mobile-Network Throttling Drill? Is There Any Point?"
-date: 2026-07-28
+date: 2026-07-22
 category: NOTE
 summary: "Taiwan's 2026 Urban Resilience Exercise throttles mobile data for the first time: 30 minutes from 2:30 pm on August 10 and August 13. From quake- and typhoon-damaged base stations to drills in Japan, South Korea, NATO and Finland, this piece discusses the significance of bringing outage scenarios into disaster preparedness drills."
+image: /assets/2026-JUL-22-mobile-network-throttling-drill.jpg
+image_alt: "A hand holding a phone whose screen shows a speed-test result on a 4G connection: 64 kbps download, 128 ms ping. A notification above it reads, \"I heard you can still send texts normally during the mobile network throttling drill.\""
 author: CHENG PENG
 author_slug: cheng
 locale: en-US
