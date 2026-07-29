@@ -40,7 +40,7 @@ layout: default
     </div>
   </div>
   {% endif %}
-  {% if page.image and page.image != "" %}<img class="item__image" src="{{ page.image }}" alt="{{ page.title | escape }}">{% endif %}
+  {% if page.image and page.image != "" %}<img class="item__image" src="{{ page.image }}" alt="{{ page.image_alt | default: page.title | escape }}">{% endif %}
   <div class="item__body">{{ content }}</div>
   <p class="item__backlink"><a href="{{ prefix }}/{{ page.section }}/">← {{ ui.back_to[page.section] }}</a></p>
 </article></main>
