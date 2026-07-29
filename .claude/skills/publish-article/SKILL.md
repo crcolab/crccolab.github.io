@@ -15,6 +15,8 @@ Enriching an existing post: do the payload in step 2, then step 4.
 
 Date it by CRC's engagement — the day CRC announced, ran, or shared the thing — not the source's own publish date. `_events/` uses `start_date`.
 
+The filename date is the URL: `/ideas/<filename-without-.md>/`. Redating a published post therefore retires its live URL, so confirm that trade before renaming one.
+
 **Done when** the filename matches `YYYY-MM-DD-lowercase-slug.md` and neither the collection nor its `_en` twin already holds that name.
 
 ## 2. Write the Chinese file
@@ -31,9 +33,11 @@ Fill every payload key:
 | `mentions` | organisations named in the body, with URLs |
 | `citations` | every source in the reference list: `name` copied from its visible link text, plus `url` and `publisher` |
 | `author` + `author_slug` | the slug must match a `_team/<slug>.md` |
-| `image` / `og_image` / `image_alt` | only when a real asset exists — otherwise the 1200×630 site cover fills in automatically |
+| `image` + `image_alt` | the article's own hero picture — it drives the visible image, `og:image` and `twitter:image` alike. Give every article one it can honestly carry; the generic site cover only stands in. `image_alt` describes the picture, not the headline (`og_image` overrides the card alone) |
 
 `CLAUDE.md` holds the authoritative key catalogue; `_includes/head-seo.html` is what consumes them.
+
+Hero assets live in `assets/` as progressive JPEG named `YYYY-MON-DD-slug.jpg`, sized into the 75–400 KB band of their neighbours. ImageMagick is absent; convert with PIL.
 
 **Done when** every key above is present, and a diff of the body against the author's text shows only link markup.
 
