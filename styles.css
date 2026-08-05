@@ -233,8 +233,10 @@ img,svg,video{max-width:100%}
 .theme-purple .about__cubes .crc-cube{--cube-edge:var(--crc-lime);--cube-node:#fff}
 .about__body{max-width:65ch;margin:0 auto}
 .about__body p{margin:0}
+.about__body p+p{margin-top:1.4em}
 .about__copy{font-size:var(--fs-body);line-height:1.9;color:var(--text-primary);font-weight:500}
 .about__cta{display:flex;justify-content:center;margin-top:40px}
+.about__content+.section__head{margin-top:64px}
 
 /* ---------- Team ---------- */
 .team__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 28px}
