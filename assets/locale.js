@@ -33,8 +33,10 @@ export function selectPreferredLocale({ storage, languages = [], language = '' }
 export function getRedirectTarget({ currentLocale, preferredLocale, alternateHref, currentHref }) {
   if (!SUPPORTED_LOCALES.has(currentLocale) || !SUPPORTED_LOCALES.has(preferredLocale)) return null;
   if (currentLocale === preferredLocale || !alternateHref) return null;
-  const target = new URL(alternateHref, currentHref).href;
-  return target === new URL(currentHref).href ? null : target;
+  const current = new URL(currentHref);
+  const alternate = new URL(alternateHref, currentHref);
+  const target = new URL(alternate.pathname + alternate.search + alternate.hash, current.origin).href;
+  return target === current.href ? null : target;
 }
 
 function resolveStorage(storage) {

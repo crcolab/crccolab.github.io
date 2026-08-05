@@ -65,6 +65,11 @@ test('redirect requires a different locale and an advertised counterpart', () =>
     currentLocale: 'zh-Hant', preferredLocale: 'en-US',
     alternateHref: 'https://crcolab.art/', currentHref: 'https://crcolab.art/',
   }), null);
+  assert.equal(getRedirectTarget({
+    currentLocale: 'zh-Hant', preferredLocale: 'en-US',
+    alternateHref: 'https://crcolab.art/en/',
+    currentHref: 'http://127.0.0.1:4000/',
+  }), 'http://127.0.0.1:4000/en/');
 });
 
 test('persisting a locale never throws when storage is blocked', () => {
