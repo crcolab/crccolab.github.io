@@ -331,6 +331,18 @@ button.team-card__names:focus-visible{outline:2px solid var(--crc-purple);outlin
 .partner__tags{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
 .partner__logo{font-family:var(--font-display);font-weight:700;font-size:26px;color:var(--text-brand);margin:0 0 6px}
 .partner__body{color:var(--text-secondary);line-height:1.8;margin:0 0 18px}
+.news__aside{display:flex;flex-direction:column;gap:24px}
+.partner__grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.partner-tile{display:flex;align-items:center;justify-content:center;min-height:96px;padding:16px 18px;background:#fff;border-radius:var(--radius-md);transition:transform .18s ease}
+.partner-tile:hover{transform:translateY(-2px)}
+.partner-tile:focus-visible{outline:2px solid var(--text-brand);outline-offset:2px}
+.partner-tile img{max-width:100%;max-height:52px;width:auto;height:auto}
+.partner-tile--wide{grid-column:1/-1;min-height:72px}
+.partner-tile--wide img{max-height:38px;max-width:min(100%,340px)}
+.partner-tile--square{aspect-ratio:1/1}
+.partner-tile--square img{max-height:62%;max-width:74%}
+.partner-tile--lg img{max-height:64px;max-width:min(100%,380px)}
+@media (prefers-reduced-motion:reduce){.partner-tile{transition:none}.partner-tile:hover{transform:none}}
 
 .crc-news{display:block;border-top:1.5px dashed var(--border-default);padding:20px 0}
 .crc-news:last-child{border-bottom:1.5px dashed var(--border-default)}
