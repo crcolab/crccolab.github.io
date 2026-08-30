@@ -3,7 +3,7 @@ title: "Blackout Preparedness Kit: Slide Deck Download (Action! Grey-Zone Surviv
 date: 2026-08-30
 category: TALK
 source: Doublethink Lab ✕ Watchout ✕ CRC
-summary: "CHENG PENG spoke on behalf of CRC Cyborg Resilience Co-lab at the Action! Grey-Zone Survival Guide forum — Information Warfare Analysis ✕ Offline Communication — co-hosted by Doublethink Lab, Watchout, and CRC, sharing offline tools and practical fallbacks for when critical communications are disrupted. The Blackout Preparedness Kit slide deck is available for download."
+summary: "CHENG PENG spoke on behalf of CRC Cyborg Resilience Co-lab at the Action! Grey-Zone Survival Guide forum — Information Warfare Analysis ✕ Offline Communication — hosted by Doublethink Lab sharing offline tools and practical fallbacks for when critical communications are disrupted. The Blackout Preparedness Kit slide deck is available for download."
 tags:
   - blackout preparedness kit
   - grey-zone operations
