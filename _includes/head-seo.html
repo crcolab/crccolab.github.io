@@ -11,8 +11,8 @@
 {% assign is_article = false %}{% if page.collection and page.section != "team" %}{% assign is_article = true %}{% endif %}
 {% assign desc = page.summary | default: page.bio_short | default: page.description | default: site.description | strip_newlines | truncate: 300 %}
 <meta name="description" content="{{ desc | escape }}">
-{%- comment -%} Social cards may carry their own copy: og_title / og_description, else the page title and description. {%- endcomment -%}
-{% assign social_title = page.og_title | default: page_title %}
+{%- comment -%} Social cards may carry their own copy: og_title / og_description, else the page title and description; the title always names the site, like <title>. {%- endcomment -%}
+{% assign social_title = page.og_title | default: page_title | append: "｜Cyborg Resilience Co-lab" %}
 {% assign social_desc = page.og_description | default: desc %}
 {% assign locale = page.locale | default: site.lang %}
 {% assign ui = site.data.i18n[locale] %}

@@ -23,7 +23,8 @@ plus Jekyll (built by GitHub Pages on push from `main`) for the content sections
   {name, slug} with slug matching `_team/<slug>.md`), `link` to point listings at another URL; all collections also accept the
   SEO keys `tags` (list, becomes keywords/`article:tag`), `og_image` (social-card
   fallback after `image`), `og_title`/`og_description` (social-card copy for
-  `og:*`/`twitter:*`, else the title and summary), `image_alt` (alt text for the `image`/`og_image`/`photo`
+  `og:*`/`twitter:*`, else the title and summary; the site name is appended to
+  the title automatically, so keep it out of both), `image_alt` (alt text for the `image`/`og_image`/`photo`
   actually served — ignored when the page falls back to the site-wide cover, which
   carries its own fixed alt) and `last_modified_at` (else the item date);
   `_records/` items with `external_url` also emit it as JSON-LD `isBasedOn`;
