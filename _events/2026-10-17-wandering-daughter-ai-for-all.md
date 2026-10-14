@@ -6,6 +6,24 @@ end_date: 2026-10-25
 category: EXHIBITION
 location_name: 新北市美術館 地下三樓（B3）
 external_url: https://etat.com/archives/A20261010041312459
+event_type: ExhibitionEvent
+location_url: https://ntcart.museum/
+location_address:
+  street_address: 館前路300號
+  locality: 鶯歌區
+  region: 新北市
+  postal_code: "239005"
+  country: TW
+super_event:
+  name: AI萬物：起鼓，2026臺灣嘉年華
+  url: https://etat.com/archives/A20261010041312459
+creators:
+- { name: 李紫彤, slug: tzu-tung }
+- { name: 李梅君, slug: meichun }
+- { name: 彭宬, slug: cheng }
+- { name: 荊輔翔, slug: sean }
+- { name: 耿璐, slug: lulu }
+- { name: 郭景晏, slug: rosa-kuo }
 summary: 《孤娘的無人機藝》於新北市美術館 B3 展出，為「AI萬物：起鼓，2026臺灣嘉年華」特別展示。作品以臺灣民間信仰中的「孤娘」為隱喻，透過無人機、帳篷、Meshtastic 與無線電、電腦四組現場裝置，具象化數位灰戰中不可見的演算暴力。
 tags:
 - 孤娘的無人機藝

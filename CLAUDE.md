@@ -17,7 +17,10 @@ plus Jekyll (built by GitHub Pages on push from `main`) for the content sections
 - `_news/`, `_events/`, `_records/`, `_ideas/` — content collections, one Markdown file per item
   (front-matter: `title`, `date`, `category`, `summary`, optional `image`,
   `source`/`external_url` for media, `start_date`/`end_date`/`location_name` for
-  events, `link` to point listings at another URL; all collections also accept the
+  events (plus optional JSON-LD `event_type` such as `ExhibitionEvent`,
+  `location_address` {street_address, locality, region, postal_code, country},
+  `location_url`, `super_event` {name, url} and `creators` — a list of
+  {name, slug} with slug matching `_team/<slug>.md`), `link` to point listings at another URL; all collections also accept the
   SEO keys `tags` (list, becomes keywords/`article:tag`), `og_image` (social-card
   fallback after `image`), `image_alt` (alt text for the `image`/`og_image`/`photo`
   actually served — ignored when the page falls back to the site-wide cover, which

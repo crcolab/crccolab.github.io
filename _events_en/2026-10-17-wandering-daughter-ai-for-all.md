@@ -6,7 +6,25 @@ end_date: 2026-10-25
 category: EXHIBITION
 location_name: B3 (Basement Level 3), New Taipei City Art Museum
 external_url: https://etat.com/archives/A20261010041312459
-summary: "Wandering Daughter’s Warfaring is on view at B3 of the New Taipei City Art Museum as a special exhibition for AI for ALL: Opening Act, Taiwan Festival 2026. Drawing on the wandering daughters of Taiwanese folk religion, four on-site installations — drones, tents, Meshtastic and radio, and computers — give form to the invisible algorithmic violence of digital gray-zone warfare."
+event_type: ExhibitionEvent
+location_url: https://ntcart.museum/EN/
+location_address:
+  street_address: No. 300, Guanqian Road
+  locality: Yingge District
+  region: New Taipei City
+  postal_code: "239005"
+  country: TW
+super_event:
+  name: "AI for ALL: Opening Act, Taiwan Festival 2026"
+  url: https://etat.com/archives/A20261010041312459
+creators:
+- { name: Lee Tzu Tung, slug: tzu-tung }
+- { name: Meichun Lee, slug: meichun }
+- { name: Cheng Peng, slug: cheng }
+- { name: Fu-Shiang Ching, slug: sean }
+- { name: Lulu Keng, slug: lulu }
+- { name: Rosa Kuo, slug: rosa-kuo }
+summary: "Wandering Daughter’s Warfaring, a special exhibition for AI for ALL: Opening Act, Taiwan Festival 2026, at B3 of the New Taipei City Art Museum. Four installations — drones, tents, Meshtastic and radio, and computers — confront the algorithmic violence of gray-zone warfare."
 locale: en-US
 tags:
 - Wandering Daughter’s Warfaring
