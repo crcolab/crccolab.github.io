@@ -18,12 +18,12 @@ super_event:
   name: AI 萬物：起鼓，2026 臺灣嘉年華
   url: https://etat.com/archives/A20261010041312459
 creators:
-- { name: 李紫彤，slug: tzu-tung }
-- { name: 李梅君，slug: meichun }
-- { name: 彭宬，slug: cheng }
-- { name: 荊輔翔，slug: sean }
-- { name: 耿璐，slug: lulu }
-- { name: 郭景晏，slug: rosa-kuo }
+- { name: 李紫彤, slug: tzu-tung }
+- { name: 李梅君, slug: meichun }
+- { name: 彭宬, slug: cheng }
+- { name: 荊輔翔, slug: sean }
+- { name: 耿璐, slug: lulu }
+- { name: 郭景晏, slug: rosa-kuo }
 summary: 《孤娘的無人機藝》於新北市美術館 B3 展出，為「AI 萬物：起鼓，2026 臺灣嘉年華」特別展示。作品以臺灣民間信仰中的「孤娘」為隱喻，透過無人機、帳篷、Meshtastic 與無線電、電腦四組現場裝置，具象化數位灰戰中不可見的演算暴力。
 og_title: 孤娘的無人機藝・十月 17–25 日 新北市美術館 B3
 og_description: 「AI 萬物：起鼓，2026 臺灣嘉年華」特別展示。以民間信仰的「孤娘」為隱喻，透過無人機、帳篷、Meshtastic 與無線電、電腦，具象並抵抗數位灰戰中的演算暴力。十月 17–25 日，新北市美術館 B3。
