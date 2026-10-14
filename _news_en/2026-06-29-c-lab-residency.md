@@ -3,6 +3,9 @@ title: "CRC Begins Its C-LAB Residency: Two Public Talks and a Year-End Presenta
 date: 2026-06-29
 category: RELEASE
 summary: "CRC is beginning a residency at Taiwan Contemporary Culture Lab (C-LAB). Led by artist and curator Lee Tzu-Tung, the project will invite people to use art and hands-on making to understand Taiwan’s “Schrödinger’s state of war preparedness.” Two public talks and one year-end presentation will be held in the second half of the year."
+og_title: "CRC Begins Its C-LAB Residency: Two Talks and a Year-End Presentation"
+og_description: "AI accounts, aircraft incursions, war games, emergency handbooks: how do you make sense of Taiwan’s “Schrödinger” war readiness? CRC’s C-LAB residency, led by Lee Tzu-Tung, answers with art."
+image_alt: "A vertical banner hanging beside a yellow wall in a C-LAB stairwell, printed “2026 CREATORS” and listing resident creators’ names in Chinese and English across red, orange, blue, purple, green and brown blobs. A yellow circle in the middle rings the CRC members “李紫彤 LEE Tzu Tung”, “荊輔翔 CHING Fu-Shiang”, “耿璐 Lulu KENG”, “李梅君 LEE Mei-Chun” and “彭宬 PENG Cheng”."
 image: /assets/2026-JUN-29-c-lab-residency.jpg
 locale: en-US
 ---

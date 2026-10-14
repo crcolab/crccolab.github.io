@@ -3,6 +3,10 @@ title: "Presentation Slides: Digital Resilience Forum — Subsea Cables and Netw
 date: 2026-03-25
 category: EVENT
 summary: "The first Digital Resilience Forum examined every facet of the subsea cable issue. Alongside presentations on two technical projects, the Taiwan Subsea Cable Dynamic Map and Digital Service Resilience Testing, which helped us understand what exactly we should worry about when it comes to subsea cables, the forum examined their impact from the perspectives of policy, social security, and civic participation."
+og_title: "Slides: Digital Resilience Forum on Subsea Cables · Mar 25, Impact Hub 2F"
+og_description: "Missed the subsea cable forum? Slides from Cheng Peng, Li-Heng Yu, and Irvin Chen are here. The first Digital Resilience Forum (Mar 25, Impact Hub 2F) weighed cable risks from tech to policy."
+og_image: /assets/2026-MAR-25-past-events.jpg
+image_alt: "Purple social card over a lattice of lime square dots and white arcs. Top left, the CRC logo; in the centre the large white title “數位韌性論壇・簡報連結” above the lime English title “Digital Resilience Forum · Presentation Slides”; bottom left a lime tag reading “三月 MAR 25”; bottom right “Impact Hub 2F｜Taipei” and “地緣政治下海纜與網路基礎設施” (Subsea Cables and Network Infrastructure under Geopolitical Pressure)."
 locale: en-US
 ---
 

@@ -4,6 +4,9 @@ date: 2026-05-24
 category: RECAP
 source: g0v Summit 2026
 summary: "More than 180 participant turns, 67 minutes of relay pedaling, and a total distance of 9.2 km on a flywheel generator sent a steady stream of resilience messages to the Meshbridge message board. Reticulum robots exchanged 6,759 messages over two days—enough to make us wonder whether they were secretly developing a social circle of their own."
+og_title: "Offline Mission Accomplished: On-Site Report from g0v Summit 2026"
+og_description: "Pedal power, mesh messages: 180-plus participant turns and 67 minutes of relay pedaling (9.2 km) kept the Meshbridge message board fed, while Reticulum robots swapped 6,759 messages in two days."
+image_alt: "In a venue lobby, a smiling long-haired man in glasses and a light blue T-shirt pedals an exercise bike partly wrapped in aluminium foil, with a blue cable attached. To the left, two men stand looking at a phone one of them holds; floor-to-ceiling windows and trees are behind them."
 image: /assets/2026-MAY-24-offline-mission-1.jpg
 locale: en-US
 ---

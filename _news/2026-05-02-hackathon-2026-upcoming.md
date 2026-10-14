@@ -3,6 +3,10 @@ title: 即將登場：數位韌性國際黑客松 2026 · CRC × OpenFun
 date: 2026-05-02
 category: UPCOMING
 summary: 5月23日暖身行動、5月24日一日黑客松。三場主題座談 + Off-the-grid 通訊突圍挑戰賽，中央研究院人文社會科學館。烏克蘭、緬甸與台灣實作者齊聚，探討斷網情境下的通訊韌性。
+og_title: "即將登場：數位韌性國際黑客松 2026・五月 23–24 日 中研院人文社會科學館"
+og_description: "當網路消失，訊息還傳得出去嗎？烏克蘭、緬甸與台灣實作者齊聚，分享 Meshtastic、Reticulum 等斷網通訊；三場座談加 Off-the-grid 通訊突圍挑戰賽。五月 23 日暖身行動、24 日黑客松，中研院人文館。"
+og_image: /assets/2026-MAY-02-hackathon-2026-upcoming.jpg
+image_alt: "紫色社群分享圖，背景是萊姆綠方點與白色弧線交織的格紋。左上角為 CRC 標誌，中央白色大字「數位韌性國際黑客松 2026」，下方萊姆綠英文「Digital Resilience International Hackathon 2026」；左下萊姆綠標籤寫「五月 MAY 23 – 24」，右下寫「中研院人文社會科學館｜Academia Sinica」與「CRC × OpenFun」。"
 ---
 
 連結網路的海底纜線，近期成為熱門焦點。被海圍繞的台灣，對於海纜的各種變化更是格外敏感、易受影響，在不穩定的地緣政治下更顯脆弱。當網路真的消失，我們還能把訊息傳出去嗎？

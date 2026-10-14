@@ -4,6 +4,10 @@ date: 2026-04-20
 category: MEDIA
 source: 黑熊學院 Kuma Academy
 summary: 黑熊學院整理荊輔翔於 CRC Mesh 工作坊的分享，為什麼需要離網通訊備案、Mesh 在都市與開闊地的通訊距離、台灣社群經驗（MESHTW 頻道、Meshtastic Taiwan Community），以及最新開發的「Meshbridge 留言板」，讓沒有硬體裝置的使用者也能透過 Wi-Fi 連上 Mesh 網絡。
+og_title: "黑熊學院文章：「網路斷掉的時候，沒有人準備好備用方案」"
+og_description: "斷網時要的不是台北到高雄的通訊，而是確認家人平安。黑熊學院整理荊輔翔在 CRC Mesh 工作坊的分享：都市 3 至 5 公里、開闊地 30 公里的通訊距離、MESHTW 頻道，以及免硬體也能連上的 Meshbridge 留言板。"
+og_image: /assets/2026-APR-20-kuma-academy-mesh-workshop.jpg
+image_alt: "紫色社群分享圖，背景是萊姆綠方點與白色弧線交織的格紋。左上角為 CRC 標誌，中央白色大字「網路斷掉的時候，沒有人準備好備用方案」，下方萊姆綠英文「When the Internet Goes Down, No One Has a Backup Plan」；左下萊姆綠標籤寫「四月 APR 20」，右下寫「黑熊學院｜Kuma Academy」與「荊輔翔 Mesh 工作坊｜Mesh workshop by Sean Ching」。"
 external_url: https://kuma-academy.org/article/292
 ---
 

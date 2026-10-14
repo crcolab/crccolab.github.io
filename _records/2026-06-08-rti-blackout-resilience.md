@@ -4,6 +4,10 @@ date: 2026-06-08
 category: MEDIA
 source: Rti 中央廣播電臺
 summary: 「當電網中斷導致電信基地台停擺，家中又如何供電給 Wi-Fi 路由器？路由器電壓通常只需要 10 至 28 伏特之間，所以車用電池模組即為緊急時刻相當便利且容易取得的電力來源。」CRC @ g0v summit 2026 數位韌性軌議程之一。
+og_title: "Rti 報導：斷網與斷電情境下的通訊韌性"
+og_description: "停電時，家裡的 Wi-Fi 路由器靠什麼供電？路由器只需 10 至 28 伏特，車用電池模組就是現成的緊急電源。Rti 報導 CRC 在 g0v Summit 2026 數位韌性軌的議程，從烏克蘭、緬甸經驗談到 LINE 與 PTT。"
+og_image: /assets/2026-JUN-08-rti-blackout-resilience.jpg
+image_alt: "紫色社群分享圖，背景是萊姆綠方點與白色弧線交織的格紋。左上角為 CRC 標誌，中央白色大字「斷網與斷電情境下的通訊韌性」，下方萊姆綠英文「Communications Resilience During Internet and Power Outages」；左下萊姆綠標籤寫「六月 JUN 8」，右下寫「Rti 中央廣播電臺」與「g0v Summit 2026 數位韌性軌｜Digital resilience track」。"
 external_url: https://www.rti.org.tw/news?uid=3&pid=212792
 ---
 

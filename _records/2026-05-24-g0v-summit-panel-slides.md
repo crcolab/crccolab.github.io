@@ -4,6 +4,10 @@ date: 2026-05-24
 category: PANEL
 source: g0v Summit 2026
 summary: 「簡報連結」數位韌性系列活動 (at) g0v Summit 2026
+og_title: "數位韌性系列活動簡報（g0v Summit 2026）"
+og_description: "「數位生命線：關於網路海纜你該知道的一切」與「斷網之後：打造烏克蘭、緬甸與台灣的通訊韌性網絡」，兩場 g0v Summit 2026 座談、六位講者的簡報一次收齊。"
+og_image: /assets/2026-MAY-24-g0v-summit-panel-slides.jpg
+image_alt: "紫色社群分享圖，背景是萊姆綠方點與白色弧線交織的格紋。左上角為 CRC 標誌，中央白色大字「數位韌性系列活動簡報」，下方萊姆綠英文「Slides from Our Panel Discussion」；左下萊姆綠標籤寫「五月 MAY 24」，右下寫「g0v Summit 2026」與「數位生命線 ✕ 斷網之後｜Digital Lifeline ✕ After the Blackout」。"
 ---
 
 數位韌性系列活動 (at) g0v Summit 2026 的簡報連結：

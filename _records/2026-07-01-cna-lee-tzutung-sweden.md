@@ -4,6 +4,10 @@ date: 2026-07-01
 category: MEDIA
 source: 中央社 CNA
 summary: CRC 藝術家李紫彤日前於瑞典展出個展《Mercy and Vengeance in the Bardo》，透過作品與工作坊，思考從性別暴力到後人類戰爭的各種暴力形式。《姑娘廟的無人機藝》延續 CRC 對後人類戰爭、無人機與科技政治的共同探索。
+og_title: "中央社報導：李紫彤瑞典個展《中陰裡的慈悲與復仇》"
+og_description: "從性別暴力到後人類戰爭，CRC 藝術家李紫彤在瑞典個展《中陰裡的慈悲與復仇》中，以作品與工作坊尋找療癒與抵抗的可能；《姑娘廟的無人機藝》延續 CRC 對無人機與科技政治的探索。"
+og_image: /assets/2026-JUL-01-cna-lee-tzutung-sweden.jpg
+image_alt: "紫色社群分享圖，背景是萊姆綠方點與白色弧線交織的格紋。左上角為 CRC 標誌，中央白色大字「《中陰裡的慈悲與復仇》」，下方萊姆綠英文「Mercy and Vengeance in the Bardo」；左下萊姆綠標籤寫「七月 JUL 1」，右下寫「中央社 CNA」與「李紫彤瑞典個展｜Lee Tzu-Tung, solo exhibition in Sweden」。"
 external_url: https://www.cna.com.tw/news/acul/202605280035.aspx
 ---
 

@@ -4,6 +4,9 @@ date: 2026-04-10
 category: MEDIA
 source: DSET 科技、民主與社會研究中心
 summary: DSET 兼任研究員張仁瑋出席 CRC 主辦「數位韌性論壇」，分享烏克蘭戰時資安與通訊維運經驗，全國漫遊、衛星橋接、緊急頻譜、備援供電與持續搶修的組合式應變。Starlink 雖重要，但台灣當務之急是建立多層次、多供應商、可分級調度的國家網路架構。
+og_title: "DSET 報導：比較台灣與烏克蘭資安防衛經驗（數位韌性論壇）"
+og_description: "Starlink 不是單一解方。DSET 兼任研究員張仁瑋在三月 25 日數位韌性論壇，拆解烏克蘭戰時如何以全國漫遊、衛星橋接、緊急頻譜、備援供電與持續搶修維持通訊，並建議台灣建立多層次、多供應商的網路架構。"
+image_alt: "方形宣傳圖，淺灰底。左上為萊姆綠底的 CRC 標誌，右上為「DSET 科技、民主與社會研究中心」標誌，標題大字「DSET 出席數位韌性論壇　比較台灣與烏克蘭資安防衛經驗」。下方照片中，一名戴眼鏡的講者在筆電後持麥克風發言，右側螢幕投影標題為「觀察與討論」的簡報，前景是背對鏡頭的聽眾。底部深藍色條寫「國際交流 International Engagement」。"
 external_url: https://dset.tw/event-news/481/
 image: /assets/2026-APR-10-dset-forum-coverage.jpg
 ---

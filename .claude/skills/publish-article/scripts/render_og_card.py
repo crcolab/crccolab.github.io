@@ -79,7 +79,9 @@ def main():
         page = os.path.join(tmp, 'card.html')
         open(page, 'w', encoding='utf-8').write(build_html(a))
         png = os.path.join(tmp, 'card.png')
+        # A throwaway profile lets several renders run at once without fighting over Chrome's profile lock.
         subprocess.run([chrome, '--headless=new', '--disable-gpu', '--hide-scrollbars',
+                        f'--user-data-dir={os.path.join(tmp, "profile")}',
                         '--force-device-scale-factor=1', '--window-size=1200,630',
                         '--virtual-time-budget=8000', f'--screenshot={png}', f'file://{page}'],
                        check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)

@@ -3,6 +3,10 @@ title: "CRC 數位韌性論壇：台灣對外網路流量劇減模擬"
 date: 2026-03-25
 category: NOTE
 summary: "整理 CRC 於 2026 年三月數位韌性論壇的講者與延伸閱讀。"
+og_title: "CRC 數位韌性論壇：台灣對外網路流量劇減模擬・彭宬"
+og_description: "海纜因地震斷裂、台灣瞬間失去 50% 對外頻寬，接下來 6 小時會發生什麼？彭宬在三月數位韌性論壇逐段模擬：網路電話斷線、網頁卡住、App 接連故障、帳號登出，以及 Wi-Fi 滿格卻連不上的成因與減緩路徑。"
+og_image: /assets/2026-MAR-25-crc-march-25-decks.jpg
+image_alt: "紫色社群分享圖，背景是萊姆綠方點與白色弧線交織的格紋。左上角為 CRC 標誌，中央白色大字「台灣對外網路流量劇減模擬」，下方萊姆綠英文「Simulating a Drastic Drop in Taiwan's International Internet Traffic」；左下萊姆綠標籤寫「三月 MAR 25」，右下寫「CRC 數位韌性論壇｜CRC Digital Resilience Forum」與「彭宬 Cheng Peng」。"
 author: 彭宬
 author_slug: cheng
 layout: idea-rich

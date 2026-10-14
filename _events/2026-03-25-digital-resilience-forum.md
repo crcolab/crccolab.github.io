@@ -5,9 +5,17 @@ start_date: 2026-03-25
 end_date: 2026-03-25
 category: FORUM
 location_name: Impact Hub 2F（臺北市中正區重慶南路三段2號）
+event_type: EducationEvent
+location_address:
+  street_address: 重慶南路三段 2 號
+  locality: 中正區
+  region: 臺北市
+  country: TW
 summary: 數位韌性論壇第一場聚焦海纜議題：從「台灣海纜動態地圖」與「數位服務韌性檢測」兩個技術專案的分享出發，並從政策、社會安全與公民參與的角度，檢視地緣政治下海纜與網路基礎設施所面臨的挑戰。
+og_title: 【數位韌性論壇】地緣政治下海纜與網路基礎設施・三月 25 日 Impact Hub 2F
+og_description: 海纜斷光怎麼辦？CRC 首次辦理的公開活動，從「台灣海纜動態地圖」與「數位服務韌性檢測」兩個技術專案出發，再從政策、社會安全與公民參與的角度檢視地緣政治下的海纜議題。三月 25 日，Impact Hub 2F。
 image: /assets/2026-FEB-10-open-register-for-forum.jpg
-image_alt: 數位韌性論壇海報：灰底上有由綠、紫、白圓點組成的台灣地圖與波浪狀纜線線條，紫色大字寫著「地緣政治下海纜與網路基礎設施」與「3.25（三）1:30 / Impact Hub 2F」，下緣列出主辦單位 OCF 與歐噴、數位韌性松，執行團隊 CRC，指導單位 TWNIC 與 APNIC 基金會。
+image_alt: "數位韌性論壇海報：灰底上有由綠、紫、白圓點組成的台灣地圖，以及橫越畫面的白色與淺綠波浪纜線線條。右側紫字由上而下為「{ 數位韌性論壇 }」、大字「地緣政治下海纜與網路基礎設施」與「3.25 (三) 1:30 / Impact Hub 2F」；下緣列出主辦單位 OCF、歐噴 OPEN FUN 與數位韌性松 g0v digiresith0n，執行團隊 CRC，指導單位 TWNIC 與 APNIC Foundation（isif asia）。"
 tags:
 - 海纜
 - 海底電纜

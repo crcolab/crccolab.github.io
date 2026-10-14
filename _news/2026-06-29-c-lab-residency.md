@@ -3,6 +3,9 @@ title: 進駐 C-LAB！CRC 下半年 2 場公開講座、1 場年末展演
 date: 2026-06-29
 category: RELEASE
 summary: CRC 進駐臺灣當代文化實驗場 C-LAB，由藝術家與策展人李紫彤推動，將以藝術與手作方式邀請大家理解台灣「薛丁格」的備戰狀態。下半年將舉辦 2 場公開講座與 1 場年末展演。
+og_title: "進駐 C-LAB！CRC 下半年 2 場公開講座、1 場年末展演・臺灣當代文化實驗場"
+og_description: "AI 帳號、共機擾台、兵推、避難手冊⋯⋯台灣的「薛丁格」備戰狀態該怎麼感受？CRC 進駐 C-LAB，由藝術家與策展人李紫彤推動，以藝術與手作走進灰色戰爭下的日常。下半年 2 場公開講座、1 場年末展演。"
+image_alt: "C-LAB 樓梯間黃色牆邊垂掛的直式布條，印有「2026 CREATORS」，以紅、橘、藍、紫、綠、棕等彩色色塊排列進駐創作者的中英文姓名；中央黃色圓塊環繞著 CRC 成員「李紫彤 LEE Tzu Tung」、「荊輔翔 CHING Fu-Shiang」、「耿璐 Lulu KENG」、「李梅君 LEE Mei-Chun」、「彭宬 PENG Cheng」。"
 image: /assets/2026-JUN-29-c-lab-residency.jpg
 ---
 

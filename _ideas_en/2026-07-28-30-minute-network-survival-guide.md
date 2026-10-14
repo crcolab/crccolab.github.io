@@ -3,8 +3,10 @@ title: "The 2026 Urban Resilience Exercise: Your 30-Minute Network Survival Guid
 date: 2026-07-28
 category: NOTE
 summary: "Mobile data slows for 30 minutes from 2:30 pm on August 10 (central Taiwan) and August 13 (northern Taiwan). This guide gets you ready with 3 settings, 3 screenshots and 3 conversations, plus a 14:20 wrap-up checklist and what to do — and avoid — during the half hour."
+og_title: "The 2026 Urban Resilience Exercise: Your 30-Minute Network Survival Guide"
+og_description: "Ready for 30 minutes of throttled mobile data? From 2:30 pm on Aug 10 (central Taiwan) and Aug 13 (northern Taiwan): 3 settings, 3 screenshots, 3 conversations, and a 14:20 wrap-up checklist."
 image: /assets/2026-JUL-28-30-minute-network-survival-guide.jpg
-image_alt: "Claymation-style key visual: large orange lettering reads \"30-Minute Network Survival Guide\" and green lettering \"The mobile throttling drill is coming,\" with \"3 settings · 3 screenshots · 3 agreements\" below. An office worker in round glasses sits at a desk frowning at a phone, a speech bubble beside them spinning a loading indicator, a clock on the wall."
+image_alt: "Claymation-style key visual: large orange lettering reads \"30-Minute Network Survival Guide\" and green lettering \"The mobile throttling drill is coming,\" with \"3 settings · 3 screenshots · 3 agreements\" below. An office worker in round glasses sits at a desk frowning at a phone, a speech bubble beside them spinning a loading indicator, a clock on the wall. At the bottom, the CRC logo and the wordmark \"Cyborg Resilience Co-lab 賽伯格韌性實驗室.\""
 author: CHENG PENG
 author_slug: cheng
 locale: en-US

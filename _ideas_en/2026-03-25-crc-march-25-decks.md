@@ -3,6 +3,10 @@ title: "CRC Digital Resilience Forum: Simulating a Drastic Drop in Taiwan's Inte
 date: 2026-03-25
 category: NOTE
 summary: "Speakers and further reading from CRC's March 2026 Digital Resilience Forum."
+og_title: "Simulating a Drastic Drop in Taiwan’s International Internet Traffic · Cheng Peng"
+og_description: "Subsea cables cut by an earthquake, half of Taiwan's international bandwidth gone: what fails in the next six hours? Cheng Peng's March 2026 forum simulation, from dropped calls to forced logouts."
+og_image: /assets/2026-MAR-25-crc-march-25-decks.jpg
+image_alt: "Purple social card over a lattice of lime square dots and white arcs. Top left, the CRC logo; in the centre the large white title “台灣對外網路流量劇減模擬” above the lime English title “Simulating a Drastic Drop in Taiwan's International Internet Traffic”; bottom left a lime tag reading “三月 MAR 25”; bottom right “CRC 數位韌性論壇｜CRC Digital Resilience Forum” and “彭宬 Cheng Peng”."
 author: CHENG PENG
 author_slug: cheng
 locale: en-US

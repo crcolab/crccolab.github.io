@@ -3,6 +3,10 @@ title: "Coming Soon: Digital Resilience International Hackathon 2026 · CRC × O
 date: 2026-05-02
 category: UPCOMING
 summary: "A warm-up action on May 23 and a one-day hackathon on May 24 at Academia Sinica’s Humanities and Social Sciences Building. Three themed panels plus an Off-grid Communications Breakthrough Challenge will bring practitioners from Ukraine, Myanmar, and Taiwan together to explore communications resilience when the internet goes down."
+og_title: "Coming Soon: Digital Resilience Hackathon 2026 · May 23–24, Academia Sinica"
+og_description: "When the internet disappears, can a message still get out? Practitioners from Ukraine, Myanmar, and Taiwan, three panels, and an off-grid communications challenge. May 23–24, Academia Sinica, Taipei."
+og_image: /assets/2026-MAY-02-hackathon-2026-upcoming.jpg
+image_alt: "Purple social card over a lattice of lime square dots and white arcs. Top left, the CRC logo; in the centre the large white title “數位韌性國際黑客松 2026” above the lime English title “Digital Resilience International Hackathon 2026”; bottom left a lime tag reading “五月 MAY 23 – 24”; bottom right “中研院人文社會科學館｜Academia Sinica” (Humanities and Social Sciences Building, Academia Sinica) and “CRC × OpenFun”."
 locale: en-US
 ---
 

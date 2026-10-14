@@ -5,9 +5,17 @@ start_date: 2026-03-25
 end_date: 2026-03-25
 category: FORUM
 location_name: "Impact Hub 2F, No. 2, Section 3, Chongqing South Road, Zhongzheng District, Taipei"
+event_type: EducationEvent
+location_address:
+  street_address: No. 2, Section 3, Chongqing South Road
+  locality: Zhongzheng District
+  region: Taipei City
+  country: TW
 summary: "The first Digital Resilience Forum examined every facet of the subsea cable issue: starting from presentations on two technical projects, the Taiwan Subsea Cable Dynamic Map and Digital Service Resilience Testing, it reviewed the challenges facing subsea cables and network infrastructure under geopolitical pressure from the perspectives of policy, social security, and civic participation."
+og_title: "Digital Resilience Forum: Subsea Cables and Network Infrastructure · Mar 25, Impact Hub 2F"
+og_description: "What happens when subsea cables go dark? CRC’s first public event: the Taiwan Subsea Cable Dynamic Map and Digital Service Resilience Testing, plus policy and civic perspectives. Mar 25, Impact Hub 2F."
 image: /assets/2026-FEB-10-open-register-for-forum.jpg
-image_alt: "Digital Resilience Forum poster: a map of Taiwan drawn in green, purple, and white dots on a gray background crossed by wavy cable-like lines, with large purple titles reading “Subsea Cables and Network Infrastructure under Geopolitics” and “3.25 (Wed) 1:30 / Impact Hub 2F”, above logos of hosts OCF and OpenFun, g0v digiresith0n, executing team CRC, and advisors TWNIC and the APNIC Foundation."
+image_alt: "Digital Resilience Forum poster: a map of Taiwan drawn in green, purple, and white dots on a gray background, crossed by white and pale-green wavy cable lines. On the right, in purple, top to bottom: “{ 數位韌性論壇 }” (Digital Resilience Forum), the large title “地緣政治下海纜與網路基礎設施” (Subsea Cables and Network Infrastructure under Geopolitics), and “3.25 (三) 1:30 / Impact Hub 2F” (Wednesday, March 25, 1:30). Along the bottom: hosts OCF, OpenFun (歐噴 OPEN FUN), and g0v digiresith0n (數位韌性松); executing team CRC; advisors TWNIC and the APNIC Foundation (isif asia)."
 locale: en-US
 tags:
 - subsea cables

@@ -4,6 +4,10 @@ date: 2026-06-15
 category: MEDIA
 source: Rti 中央廣播電臺
 summary: 「荊輔翔表示，社群初期僅有約 50 位成員，如今已達近 2 萬人，遍佈台北、台中、高雄、花蓮等全台各地，估計有超過 1,000 台裝置正在運作。」CRC @ g0v summit 2026 數位韌性軌議程之一的深度報導。
+og_title: "Rti 報導：台灣民間 Meshtastic 覆蓋率已達 80%"
+og_description: "從約 50 人到近 2 萬人：臺灣鏈網 Meshtastic 社群遍布全台，超過 1,000 台裝置運作、覆蓋率約八成。一千元、一個下午就能自建離線版 LINE？Rti 深度報導 CRC 在 g0v Summit 2026 的議程。"
+og_image: /assets/2026-JUN-15-rti-meshtastic.jpg
+image_alt: "紫色社群分享圖，背景是萊姆綠方點與白色弧線交織的格紋。左上角為 CRC 標誌，中央白色大字「台灣民間 Meshtastic 覆蓋率已達 80%」，下方萊姆綠英文「Taiwan’s Community Meshtastic Coverage Has Reached 80%」；左下萊姆綠標籤寫「六月 JUN 15」，右下寫「Rti 中央廣播電臺」與「g0v Summit 2026 數位韌性軌｜Digital resilience track」。"
 external_url: https://www.rti.org.tw/news?uid=3&pid=212793
 ---
 

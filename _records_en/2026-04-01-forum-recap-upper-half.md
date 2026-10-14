@@ -4,6 +4,10 @@ date: 2026-04-01
 category: RECAP
 source: CRC
 summary: "Highlights from the speakers in Section 1, Subsea Cable Topics and Technical Reports, at the March 25 Digital Resilience Forum. Three speakers and two projects addressed structural risks in Taiwan’s domestic internet—including routing and peering, the transparency of subsea cable information, and the inadequate inventory of essential digital services—as well as constraints imposed by governance beyond Taiwan on subsea cable issues and a disaster-prevention approach to managing them."
+og_title: "Event Recap: Digital Resilience Forum, First Session (Subsea Cables)"
+og_description: "A partial subsea cable cut can break services layer by layer. Mar 25 forum highlights: routing and peering, opaque cable data, 89% of top sites at risk, and a disaster-prevention mindset."
+og_image: /assets/2026-APR-01-forum-recap-upper-half.jpg
+image_alt: "Purple social card over a lattice of lime square dots and white arcs. Top left, the CRC logo; in the centre the large white title “數位韌性論壇（上半場）” above the lime English title “Digital Resilience Forum, First Session”; bottom left a lime tag reading “四月 APR 1”; bottom right “海纜專題與技術報告｜Subsea Cable Topics and Technical Reports” and “活動記錄｜Event Recap”."
 locale: en-US
 ---
 

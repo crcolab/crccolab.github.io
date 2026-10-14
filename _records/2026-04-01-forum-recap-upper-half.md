@@ -4,6 +4,10 @@ date: 2026-04-01
 category: RECAP
 source: CRC
 summary: 3/25 數位韌性論壇「Section 1 海纜專題與技術報告」講者精華彙整。三講者兩專案，談國內網路的結構性風險，路由與對接、海纜資訊透明度、重要數位服務盤點不足，以及海纜問題的境外治理牽制與防災思維管理。
+og_title: "活動記錄：數位韌性論壇（上半場）・海纜專題與技術報告"
+og_description: "海纜只斷一部分，網路服務也可能一層層壞掉。三月 25 日數位韌性論壇上半場精華：國內路由與對接、海纜資訊不透明、89% 常用網站首頁有風險，以及境外治理牽制與「防災」思維。"
+og_image: /assets/2026-APR-01-forum-recap-upper-half.jpg
+image_alt: "紫色社群分享圖，背景是萊姆綠方點與白色弧線交織的格紋。左上角為 CRC 標誌，中央白色大字「數位韌性論壇（上半場）」，下方萊姆綠英文「Digital Resilience Forum, First Session」；左下萊姆綠標籤寫「四月 APR 1」，右下寫「海纜專題與技術報告｜Subsea Cable Topics and Technical Reports」與「活動記錄｜Event Recap」。"
 ---
 
 小時候，以為海纜斷就是網路斷，我在這頭，世界在那頭。
