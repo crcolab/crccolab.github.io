@@ -1,0 +1,47 @@
+<!doctype html><html><head><meta charset="utf-8">
+<!-- CRC social card, 1200x630. Filled and rendered by scripts/render_og_card.py; placeholders are {{NAME}}. -->
+<link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@400..800&family=Noto+Sans+TC:wght@500;700;900&family=Press+Start+2P&display=block" rel="stylesheet">
+<style>
+*{margin:0;box-sizing:border-box}
+html,body{width:1200px;height:630px;overflow:hidden;background:#46288B}
+.bg{position:absolute;inset:0}
+.shade{position:absolute;inset:0;background:linear-gradient(90deg,#46288B 0%,rgba(70,40,139,.92) 50%,rgba(70,40,139,.1) 100%)}
+.card{position:absolute;inset:0;padding:64px 72px;display:flex;flex-direction:column;color:#fff}
+.top{display:flex;align-items:center;gap:20px}
+.top img{height:46px}
+.top span{font:12px/1 "Press Start 2P";color:#B7D32D;letter-spacing:.06em}
+.title{margin-top:52px;font:900 112px/1.05 "Noto Sans TC","Funnel Display";letter-spacing:.04em;max-width:1056px}
+.subtitle{margin-top:18px;font:600 50px/1.1 "Funnel Display","Noto Sans TC";color:#B7D32D;max-width:1056px}
+.subtitle:empty,.when:empty,.where-note:empty{display:none}
+.meta{margin-top:auto;display:flex;align-items:flex-end;justify-content:space-between;gap:32px}
+.when{font:16px/1 "Press Start 2P";background:#B7D32D;color:#1a2123;padding:14px 18px;border-radius:6px;white-space:nowrap}
+.when .zhm{font:900 24px/1 "Noto Sans TC";margin-right:14px;vertical-align:-3px}
+.when .zhm:empty{display:none}
+.where{margin-left:auto;text-align:right;font:500 22px/1.45 "Noto Sans TC","Funnel Display"}
+.where b{font-weight:700;color:#B7D32D}
+</style></head><body>
+<svg class="bg" id="bg" width="1200" height="630"></svg>
+<div class="shade"></div>
+<div class="card">
+ <div class="top"><img src="logo.svg" alt=""><span>CYBORG RESILIENCE CO-LAB</span></div>
+ <div class="title" id="title">{{TITLE}}</div>
+ <div class="subtitle" id="subtitle">{{SUBTITLE}}</div>
+ <div class="meta">
+  {{WHEN}}
+  <div class="where">{{WHERE}}</div>
+ </div>
+</div>
+<script>
+// Lattice from assets/og-cover.png: lime square dots on a 76px grid, white circles through them.
+const g=document.getElementById('bg'),d=76,ox=10,oy=-4;let h='';
+for(let x=ox-d;x<1200+d;x+=d)for(let y=oy-d;y<630+d;y+=d){
+ h+=`<circle cx="${x+d/2}" cy="${y+d/2}" r="${d/Math.SQRT2}" fill="none" stroke="#fff" stroke-opacity=".2" stroke-width="1.2"/>`;
+ h+=`<rect x="${x-3}" y="${y-3}" width="6" height="6" fill="#B7D32D"/>`;}
+g.innerHTML=h;
+// Shrink long titles until they fit two lines (title) / one line (subtitle) inside the text column.
+function fit(el,maxLines,min){
+ const lh=1.08;let size=parseFloat(getComputedStyle(el).fontSize);
+ while(size>min&&el.scrollHeight>size*lh*maxLines+2){size-=2;el.style.fontSize=size+'px';}
+}
+document.fonts.ready.then(()=>{fit(document.getElementById('title'),2,56);fit(document.getElementById('subtitle'),2,28);document.body.dataset.ready='1';});
+</script></body></html>
