@@ -25,6 +25,10 @@ creators:
 - { name: Lulu Keng, slug: lulu }
 - { name: Rosa Kuo, slug: rosa-kuo }
 summary: "Wandering Daughter’s Warfaring, a special exhibition for AI for ALL: Opening Act, Taiwan Festival 2026, at B3 of the New Taipei City Art Museum. Four installations — drones, tents, Meshtastic and radio, and computers — confront the algorithmic violence of gray-zone warfare."
+og_title: "Wandering Daughter’s Warfaring · New Taipei City Art Museum B3, Oct 17–25"
+og_description: "Cyborg Resilience Co-lab’s special exhibition for AI for ALL: Opening Act, Taiwan Festival 2026 — drones, tents, Meshtastic and radio, and computers confronting the algorithmic violence of gray-zone warfare. Oct 17–25, New Taipei City Art Museum B3."
+og_image: /assets/2026-OCT-17-wandering-daughter-ai-for-all.jpg
+image_alt: "Purple social card over a lattice of lime square dots and white arcs. Top left, the CRC logo and the pixel-type label “CYBORG RESILIENCE CO-LAB”; in the centre the large white title “孤娘的無人機藝” above the lime English title “Wandering Daughter’s Warfaring”; bottom left a lime tag reading “10.17 – 10.25”; bottom right “新北市美術館 B3｜New Taipei City Art Museum” and “AI萬物：起鼓，2026臺灣嘉年華 特別展示”."
 locale: en-US
 tags:
 - Wandering Daughter’s Warfaring

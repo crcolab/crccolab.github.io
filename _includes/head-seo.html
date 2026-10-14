@@ -11,6 +11,9 @@
 {% assign is_article = false %}{% if page.collection and page.section != "team" %}{% assign is_article = true %}{% endif %}
 {% assign desc = page.summary | default: page.bio_short | default: page.description | default: site.description | strip_newlines | truncate: 300 %}
 <meta name="description" content="{{ desc | escape }}">
+{%- comment -%} Social cards may carry their own copy: og_title / og_description, else the page title and description. {%- endcomment -%}
+{% assign social_title = page.og_title | default: page_title %}
+{% assign social_desc = page.og_description | default: desc %}
 {% assign locale = page.locale | default: site.lang %}
 {% assign ui = site.data.i18n[locale] %}
 {% if locale == "en-US" %}
@@ -64,8 +67,8 @@
 <meta property="og:site_name" content="Cyborg Resilience Co-lab">
 <meta property="og:type" content="{% if page.collection and page.section == 'team' %}profile{% elsif page.collection %}article{% else %}website{% endif %}">
 <meta property="og:url" content="{{ canonical_url }}">
-<meta property="og:title" content="{{ page_title | escape }}">
-<meta property="og:description" content="{{ desc | escape }}">
+<meta property="og:title" content="{{ social_title | escape }}">
+<meta property="og:description" content="{{ social_desc | escape }}">
 <meta property="og:locale" content="{{ og_locale }}">
 {% unless page.translation_exempt or page.draft %}<meta property="og:locale:alternate" content="{{ og_locale_alt }}">{% endunless %}
 <meta property="og:image" content="{{ seo_image | absolute_url }}">
@@ -81,8 +84,8 @@
 {% endfor %}{% endif %}
 {% endif %}
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="{{ page_title | escape }}">
-<meta name="twitter:description" content="{{ desc | escape }}">
+<meta name="twitter:title" content="{{ social_title | escape }}">
+<meta name="twitter:description" content="{{ social_desc | escape }}">
 <meta name="twitter:image" content="{{ seo_image | absolute_url }}">
 <meta name="twitter:image:alt" content="{{ seo_image_alt | escape }}">
 <meta name="twitter:label1" content="{{ ui.seo.author_label | escape }}">

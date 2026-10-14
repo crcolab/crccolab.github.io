@@ -25,6 +25,10 @@ creators:
 - { name: 耿璐, slug: lulu }
 - { name: 郭景晏, slug: rosa-kuo }
 summary: 《孤娘的無人機藝》於新北市美術館 B3 展出，為「AI萬物：起鼓，2026臺灣嘉年華」特別展示。作品以臺灣民間信仰中的「孤娘」為隱喻，透過無人機、帳篷、Meshtastic 與無線電、電腦四組現場裝置，具象化數位灰戰中不可見的演算暴力。
+og_title: 孤娘的無人機藝｜新北市美術館 B3・10/17–10/25
+og_description: 賽伯格韌性實驗室於「AI萬物：起鼓，2026臺灣嘉年華」的特別展示。以民間信仰的「孤娘」為隱喻，透過無人機、帳篷、Meshtastic 與無線電、電腦，具象並抵抗數位灰戰中的演算暴力。10/17–10/25，新北市美術館 B3。
+og_image: /assets/2026-OCT-17-wandering-daughter-ai-for-all.jpg
+image_alt: 紫色社群分享圖，背景是萊姆綠方點與白色弧線交織的格紋。左上角為 CRC 標誌與「CYBORG RESILIENCE CO-LAB」像素字，中央白色大字「孤娘的無人機藝」，下方萊姆綠英文「Wandering Daughter’s Warfaring」；左下萊姆綠標籤寫「10.17 – 10.25」，右下寫「新北市美術館 B3｜New Taipei City Art Museum」與「AI萬物：起鼓，2026臺灣嘉年華 特別展示」。
 tags:
 - 孤娘的無人機藝
 - 孤娘
