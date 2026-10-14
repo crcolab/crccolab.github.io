@@ -18,7 +18,7 @@ All content pages are static HTML — no JavaScript required to read them.
 
 ## Featured
 
-- [孤娘的無人機藝](https://crcolab.art/events/2026-10-17-wandering-daughter-ai-for-all/) / [Wandering Daughter’s Warfaring](https://crcolab.art/en/events/2026-10-17-wandering-daughter-ai-for-all/): CRC exhibition, Oct 17–25, 2026, B3, New Taipei City Art Museum; special exhibition for AI for ALL: Opening Act, Taiwan Festival 2026. Installations on drones, anti-surveillance tents, Meshtastic/radio, and computers, framed through the wandering daughters (孤娘) of Taiwanese folk religion.
+- [孤娘的無人機藝](https://crcolab.art/events/2026-10-17-wandering-daughter-ai-for-all/) / [Wandering Daughter’s Warfarring](https://crcolab.art/en/events/2026-10-17-wandering-daughter-ai-for-all/): CRC exhibition, Oct 17–25, 2026, B3, New Taipei City Art Museum; special exhibition for AI for ALL: Opening Act, Taiwan Festival 2026. Installations on drones, anti-surveillance tents, Meshtastic/radio, and computers, framed through the wandering daughters (孤娘) of Taiwanese folk religion.
 
 ## Feeds (Atom)
 

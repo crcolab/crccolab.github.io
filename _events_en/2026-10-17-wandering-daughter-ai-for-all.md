@@ -1,5 +1,5 @@
 ---
-title: Wandering Daughter’s Warfaring
+title: Wandering Daughter’s Warfarring
 date: 2026-10-17
 start_date: 2026-10-17
 end_date: 2026-10-25
@@ -24,14 +24,14 @@ creators:
 - { name: Fu-Shiang Ching, slug: sean }
 - { name: Lulu Keng, slug: lulu }
 - { name: Rosa Kuo, slug: rosa-kuo }
-summary: "Wandering Daughter’s Warfaring, a special exhibition for AI for ALL: Opening Act, Taiwan Festival 2026, at B3 of the New Taipei City Art Museum. Four installations — drones, tents, Meshtastic and radio, and computers — confront the algorithmic violence of gray-zone warfare."
-og_title: "Wandering Daughter’s Warfaring · Oct 17–25, New Taipei City Art Museum B3"
+summary: "Wandering Daughter’s Warfarring, a special exhibition for AI for ALL: Opening Act, Taiwan Festival 2026, at B3 of the New Taipei City Art Museum. Four installations — drones, tents, Meshtastic and radio, and computers — confront the algorithmic violence of gray-zone warfare."
+og_title: "Wandering Daughter’s Warfarring · Oct 17–25, New Taipei City Art Museum B3"
 og_description: "A special exhibition for AI for ALL: Opening Act, Taiwan Festival 2026 — drones, tents, Meshtastic and radio, and computers confronting the algorithmic violence of gray-zone warfare. Oct 17–25, New Taipei City Art Museum B3."
 og_image: /assets/2026-OCT-17-wandering-daughter-ai-for-all-v2.jpg
-image_alt: "Purple social card over a lattice of lime square dots and white arcs. Top left, the CRC logo; in the centre the large white title “孤娘的無人機藝” above the lime English title “Wandering Daughter’s Warfaring”; bottom left a lime tag reading “十月 OCT 17 – 25”; bottom right “新北市美術館 B3｜New Taipei City Art Museum” and “AI萬物：起鼓，2026臺灣嘉年華 特別展示”."
+image_alt: "Purple social card over a lattice of lime square dots and white arcs. Top left, the CRC logo; in the centre the large white title “孤娘的無人機藝” above the lime English title “Wandering Daughter’s Warfarring”; bottom left a lime tag reading “十月 OCT 17 – 25”; bottom right “新北市美術館 B3｜New Taipei City Art Museum” and “AI萬物：起鼓，2026臺灣嘉年華 特別展示”."
 locale: en-US
 tags:
-- Wandering Daughter’s Warfaring
+- Wandering Daughter’s Warfarring
 - wandering daughters
 - drones
 - AI for ALL
@@ -52,32 +52,6 @@ tags:
 
 Special Exhibition for “[AI for ALL: Opening Act, Taiwan Festival 2026](https://etat.com/archives/A20261010041312459)”
 
-## On-Site Devices
-
-### 01｜Drones
-
-**Surveillance / Manhunt / Remote Killing**
-
-Drones have become one of the primary weapons of contemporary warfare. They allow operators to conduct reconnaissance, identification, tracking, and attacks from a distance, far removed from the battlefield. By defining the external characteristics of a “target” and pairing with AI, target can be bombarded on a massive scale. “Who is the enemy?” and “How much collateral damage is acceptable?” become computational result.
-
-### 02｜Tents
-
-**Concealment / Camouflage / Anti-Surveillence**
-
-To avoid being detected by drones, tents serve not only as shelters but also as mobile forms of concealment. They obscure human silhouettes and prevent thermal signatures from being detected by infrared sensor.
-
-### 03｜Meshtastic & Radio
-
-**Decentralized Networks / Real-time Communication**
-
-During wartime, cellular towers and internet infrastructure may be cut off, rendering centralized communication systems obsolete. Meshtastic functions as a decentralized communication node, enabling critical information transmission across networks. Radio combined with antennas, can transmit locations and warnings across vast distances.
-
-### 04｜Computers
-
-**Intelligence / Collaboration / Counter-attack**
-
-Computers can be used to gather intelligence, analyze data, coordinate actions, and learn how to build countermeasures such as drones. They can also become tools for launching digital attacks and information warfare.
-
 ## Description
 
 Whether drone swarms,  AI targeting systems, cognitive warfare or cyberattacks – contemporary conflict has outgrown physical borders, and the speed at which human ethical cognition can process it, bleeding into an unseen algorithmic realm. This is the new frontline of war, choked by the miasma woven from AI computational power distributed by capital moguls and disinformation intertwined. Here, the binary between victors and victims no longer stands, the distinction has collapsed into tangled complicity.
@@ -93,3 +67,23 @@ We organize “Non-Visual Civil Defense Workshops” to push back against the vi
 Every artistic experiment, ethnographic research, technological intervention serve as a restorative act that reverses the unmaking of the world wrought by the simmering slow violence, reweaving the grey ruins  it leaves behind.
 
 At AI for All, our team presents fragments from this ongoing process of making. Just as water lanterns in Taiwanese folk rituals call out spirits lost in violent communal conflicts, the Wandering Daughter now accompanies us in confronting the slow violence that infiltrates our digital habitat. Together, by revealing the invisible spectacles of power operating in the gray zone, we create spaces of equilibrium from which to reimagine and resist them.
+
+## On-Site Devices
+
+### 01｜Tents
+
+**Concealment / Camouflage / Anti-Surveillence**
+
+To avoid being detected by drones, tents serve not only as shelters but also as mobile forms of concealment. They obscure human silhouettes and prevent thermal signatures from being detected by infrared sensor.
+
+### 02｜Meshtastic & Radio
+
+**Decentralized Networks / Real-time Communication**
+
+During wartime, cellular towers and internet infrastructure may be cut off, rendering centralized communication systems obsolete. Meshtastic functions as a decentralized communication node, enabling critical information transmission across networks. Radio combined with antennas, can transmit locations and warnings across vast distances.
+
+### 03｜Computers
+
+**Intelligence / Collaboration / Counter-attack**
+
+Computers can be used to gather intelligence, analyze data, coordinate actions, and learn how to build countermeasures such as drones. They can also become tools for launching digital attacks and information warfare.

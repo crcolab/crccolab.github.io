@@ -72,7 +72,7 @@ Render the card with the bundled script — it reproduces the cover's purple lat
 
 ```sh
 python3 .claude/skills/publish-article/scripts/render_og_card.py \
-  --title 孤娘的無人機藝 --subtitle "Wandering Daughter’s Warfaring" \
+  --title 孤娘的無人機藝 --subtitle "Wandering Daughter’s Warfarring" \
   --when-zh 十月 --when "OCT 17 – 25" \
   --where-strong "新北市美術館 B3" --where "New Taipei City Art Museum" \
   --where-note "AI萬物：起鼓，2026臺灣嘉年華 特別展示" \
