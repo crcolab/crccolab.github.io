@@ -4,6 +4,10 @@ date: 2026-03-27
 category: MEDIA
 source: Rti 中央廣播電臺
 summary: "Rti’s detailed coverage of CRC’s Digital Resilience Forum: internet access may fail even if not all subsea cables are severed; routing traffic overseas is less efficient and riskier but more profitable; the Ministry of Digital Affairs could publish more real-time subsea cable data for developers to access through APIs; and Taiwan should build more subsea cables, especially in the deeper waters off its east coast, where they would be less vulnerable to damage."
+og_title: "Rti Coverage: Digital Resilience Forum on Subsea Cables, Traffic, and Response Strategies"
+og_description: "If half the subsea cables go, does the internet survive? Congestion alone can halt it. Rti on CRC’s forum: ISPs choosing “whom to save,” open cable data via APIs, and new cables off Taiwan’s east coast."
+og_image: "/assets/2026-MAR-27-rti-forum-coverage.jpg"
+image_alt: "Purple social card over a lattice of lime square dots and white arcs. Top left, the CRC logo; in the centre the large white title “海纜、流量與應對方案” above the lime English title “Subsea Cables, Traffic, and Response Strategies”; bottom left a lime tag reading “三月 MAR 27”; bottom right “Rti 中央廣播電臺” and “數位韌性論壇｜Digital Resilience Forum”."
 external_url: https://www.rti.org.tw/news?uid=3&pid=199456
 locale: en-US
 ---
