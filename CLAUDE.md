@@ -41,8 +41,8 @@ plus Jekyll (built by GitHub Pages on push from `main`) for the content sections
 - `news/`, `events/`, `records/` — section index pages + per-section `feed.xml`
 - `ideas/` — section index + per-section `feed.xml`
 - `ideas/household-digital-go-bag/` — prebuilt Vite app from the `DTL-aug-site-lite` repo
-  (built with `VITE_BASE=/ideas/household-digital-go-bag/` and its `index.html` og URLs
-  pointed at crcolab.art). Its `index.html` lives in `_layouts/household-digital-go-bag.html`
+  (built with `VITE_BASE=/ideas/household-digital-go-bag/`; its build writes each route's
+  title, description, canonical and JSON-LD). Its `index.html` lives in `_layouts/household-digital-go-bag.html`
   (wrapped in `{% raw %}`) so the `_ideas` item can own the route; everything else in
   `dist/` except `index.html`/`404.html` goes in this folder. To update, rebuild and replace
   both, deleting the old hashed `assets/`. The `/en/` item is a translation-in-progress notice.

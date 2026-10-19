@@ -1,6 +1,7 @@
 ---
 title: "Household Digital Go-Bag: Keeping Your Home's Digital Life Running Through Outages"
-date: 2026-10-20
+date: 2026-08-30
+last_modified_at: 2026-10-20
 category: NOTE
 summary: "The English translation of the Household Digital Go-Bag is in progress. The guide turns CRC's workshop on internet outages into a why-and-how site for keeping a household's digital life running when the internet, international links or power go down."
 og_title: "Household Digital Go-Bag (English translation in progress)"
