@@ -19,6 +19,7 @@ All content pages are static HTML — no JavaScript required to read them.
 ## Featured
 
 - [孤娘的無人機藝](https://crcolab.art/events/2026-10-17-wandering-daughter-ai-for-all/) / [Wandering Daughter’s Warfarring](https://crcolab.art/en/events/2026-10-17-wandering-daughter-ai-for-all/): CRC exhibition, Oct 17–25, 2026, B3, New Taipei City Art Museum; special exhibition for AI for ALL: Opening Act, Taiwan Festival 2026. Installations on drones, anti-surveillance tents, Meshtastic/radio, and computers, framed through the wandering daughters (孤娘) of Taiwanese folk religion.
+- [家庭用數位防災包 Household Digital Go-Bag](https://crcolab.art/ideas/household-digital-go-bag/): a why-and-how guide, in Traditional Chinese, to keeping a household's digital life running when Taiwan loses subsea cables or international links, the ISP goes down, or the power goes out. Rebuilt from CRC's workshop 「斷網和牠們的產地」. Pages: [Why prepare a digital go-bag](https://crcolab.art/ideas/household-digital-go-bag/why/), [Simple version for family members](https://crcolab.art/ideas/household-digital-go-bag/family/), [About and sources](https://crcolab.art/ideas/household-digital-go-bag/about/). English translation in progress.
 
 ## Feeds (Atom)
 
