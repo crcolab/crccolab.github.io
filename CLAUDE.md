@@ -40,6 +40,12 @@ plus Jekyll (built by GitHub Pages on push from `main`) for the content sections
 - `_layouts/`, `_includes/` — Jekyll templates (item pages, section indexes, SEO head, Atom entries)
 - `news/`, `events/`, `records/` — section index pages + per-section `feed.xml`
 - `ideas/` — section index + per-section `feed.xml`
+- `ideas/household-digital-go-bag/` — prebuilt Vite app from the `DTL-aug-site-lite` repo
+  (built with `VITE_BASE=/ideas/household-digital-go-bag/` and its `index.html` og URLs
+  pointed at crcolab.art). Its `index.html` lives in `_layouts/household-digital-go-bag.html`
+  (wrapped in `{% raw %}`) so the `_ideas` item can own the route; everything else in
+  `dist/` except `index.html`/`404.html` goes in this folder. To update, rebuild and replace
+  both, deleting the old hashed `assets/`. The `/en/` item is a translation-in-progress notice.
 - `team/` — machine-readable member index (no Atom feed; team is not time-series)
 - `api/latest.json` — Liquid-generated JSON the homepage fetches for its latest-3 blocks
 - `sections.css` — shared styles for section pages (loads after `styles.css`)

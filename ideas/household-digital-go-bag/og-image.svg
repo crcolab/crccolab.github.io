@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#FBFAF6"/>
+  <rect x="0" y="0" width="1200" height="14" fill="#46288B"/>
+  <rect x="0" y="616" width="1200" height="14" fill="#B7D32D"/>
+  <g transform="translate(130 170) scale(9)">
+    <path d="M17 15V11a7 7 0 0 1 14 0v4" fill="none" stroke="#46288B" stroke-width="3.2" stroke-linecap="round"/>
+    <rect x="7" y="14" width="34" height="27" rx="7" fill="#46288B"/>
+    <path d="M24 22v11M18.5 27.5h11" stroke="#B7D32D" stroke-width="3.4" stroke-linecap="round"/>
+  </g>
+<text x="580" y="250" font-family="Noto Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" font-size="84" font-weight="900" fill="#1C1828">家庭用</text>
+  <text x="580" y="345" font-family="Noto Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" font-size="84" font-weight="900" fill="#46288B">數位防災包</text>
+  <text x="580" y="415" font-family="Noto Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" font-size="34" font-weight="500" fill="#48435A">斷網斷電時，</text>
+  <text x="580" y="465" font-family="Noto Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" font-size="34" font-weight="500" fill="#48435A">家裡的數位生活怎麼撐下去</text>
+  <text x="580" y="545" font-family="Space Grotesk, Noto Sans TC, sans-serif" font-size="26" font-weight="700" fill="#46288B">Cyborg Resilience Co-lab</text>
+</svg>
