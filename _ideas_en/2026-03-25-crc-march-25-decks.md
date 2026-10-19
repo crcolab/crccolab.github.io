@@ -961,6 +961,7 @@ How are the **submarine cables** doing right now?<br>
 
 Submarine cable and backbone network fragility are only half the story of a disconnection scenario; the other half is offline communication when bandwidth drops to zero. Over the past six months, one direction the Taiwanese open-source community has been working on is mesh networking with Meshtastic and Reticulum: see the [Mesh Workshop Record](/records/2026-04-20-kuma-academy-mesh-workshop/) and [Rti's Coverage of Taiwan's Civilian Meshtastic Efforts](/records/2026-06-15-rti-meshtastic/).
 
+- Household Digital Go-Bag, a checklist for keeping a household online-ready through internet outages, subsea-cable cuts and blackouts (in Traditional Chinese; English translation in progress): [/ideas/household-digital-go-bag/](/ideas/household-digital-go-bag/)
 - Original slide deck: <https://paulpengtw.github.io/crc-march-25-decks/>
 - CRC past records: [/records/](/records/)
 - CRC news & announcements: [/news/](/news/)

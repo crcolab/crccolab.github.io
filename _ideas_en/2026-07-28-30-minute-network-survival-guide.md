@@ -150,6 +150,6 @@ If the network doesn't come back on its own: **switch airplane mode on for 10 se
 
 Then spend two minutes asking yourself one question: **which thing just now was the most stuck?** Was it not being able to find someone's phone number, not being able to pay, or not being able to open a file? Write it down — because when the network is damaged by a real typhoon or earthquake, nobody announces the time in advance.
 
-Further reading: [Why Run a Mobile-Network Throttling Drill? Is There Any Point?](/en/ideas/2026-07-22-mobile-network-throttling-drill/)
+Further reading: [Why Run a Mobile-Network Throttling Drill? Is There Any Point?](/en/ideas/2026-07-22-mobile-network-throttling-drill/), and the [Household Digital Go-Bag](/ideas/household-digital-go-bag/) (in Traditional Chinese; English translation in progress), a checklist for keeping a household online-ready through internet outages, subsea-cable cuts and blackouts
 
 ※ For the actual dates, times and content of the exercise, please follow the announcements of the government authorities ※

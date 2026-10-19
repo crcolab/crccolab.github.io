@@ -83,6 +83,8 @@ We are glad to see this item added to this year's exercise, and we hope future e
 
 With half a month to go before the exercise, CRC will share next week how to prepare for the "mobile network throttling" drill. We'd love for all you brilliant people to leave a comment and share what you, your family, or your friends have already arranged for this one~~
 
+Further reading: the [Household Digital Go-Bag](/ideas/household-digital-go-bag/) (in Traditional Chinese; English translation in progress), a checklist for keeping a household online-ready through internet outages, subsea-cable cuts and blackouts.
+
 ## References
 
 1. Central News Agency, "[Strong quake affects 172 base stations across the three major telecom operators; NCC estimates repairs today](https://www.cna.com.tw/news/ahel/202404030090.aspx)," April 3, 2024.

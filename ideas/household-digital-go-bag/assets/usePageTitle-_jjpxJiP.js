@@ -1,1 +1,0 @@
-import{n as e}from"./rolldown-runtime-WkwZ5CU-.js";import{t}from"./vendor-i18n-DxEUVvUD.js";import{p as n}from"./vendor-react-95LfdIq-.js";var r=e(n(),1);function i(e){let{t:n}=t(),i=n(e);(0,r.useEffect)(()=>{document.title=n(`site.documentTitle`,{page:i,site:n(`site.name`)})},[n,i])}export{i as t};

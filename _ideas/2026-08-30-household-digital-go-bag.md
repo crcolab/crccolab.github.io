@@ -3,7 +3,7 @@ title: "家庭用數位防災包：斷網斷電時，家裡的數位生活怎麼
 date: 2026-08-30
 last_modified_at: 2026-10-20
 category: NOTE
-summary: "把 CRC 工作坊「斷網和牠們的產地」的內容，整理成回答「為什麼要備」與「怎麼做」的網站，讓家裡在斷網、斷國際線、斷到 ISP 或停電時，仍能撐住基本的數位生活。"
+summary: "海底電纜斷裂、網路中斷或停電時，家裡的數位生活怎麼撐下去？從斷網四部曲講起，整理離線打得開的檔案、離線地圖、二階段驗證備援碼、紙本 SOP 與物資防災包，給自己也給家人。"
 og_title: "家庭用數位防災包：斷網斷電時，家裡的數位生活怎麼撐下去"
 og_description: "把斷網斷電時的數位生活需求，整理成為什麼要備、怎麼動手做的家用防災指南。"
 image: /ideas/household-digital-go-bag/og-image.png
@@ -14,12 +14,16 @@ layout: household-digital-go-bag
 permalink: /ideas/household-digital-go-bag/
 tags:
   - 數位防災包
+  - 防災包清單
   - 斷網
+  - 網路中斷
+  - 海纜斷裂
+  - 海底電纜
   - 停電
-  - 海纜
+  - 離線地圖
+  - 二階段驗證
   - 離線準備
   - 數位韌性
-  - 防災
   - 台灣
 ---
 

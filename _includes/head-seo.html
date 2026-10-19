@@ -243,7 +243,9 @@
   "@context": "https://schema.org",
   "@type": "Person",
   "name": {{ page.name | jsonify }},
-  "jobTitle": {{ page.role | jsonify }},
+  {% if page.alternate_name and page.alternate_name != "" %}"alternateName": {{ page.alternate_name | jsonify }},{% endif %}
+  {%- comment -%} job_title is the occupation for search engines only; role stays the visible line on the page. {%- endcomment %}
+  "jobTitle": {{ page.job_title | default: page.role | jsonify }},
   {% if page.bio_short and page.bio_short != "" %}"description": {{ page.bio_short | jsonify }},{% endif %}
   {% if page.photo and page.photo != "" %}"image": {{ page.photo | absolute_url | jsonify }},
   {% endif %}

@@ -960,6 +960,7 @@ LINE 文字可能恢復了、可能一些網頁能看了，但 SaaS 工具和雲
 
 海纜與骨幹網路的脆弱性，只是斷網情境的一半；另一半是頻寬完全歸零時的離線通訊方案。台灣開源社群過去半年投入的其中一個實作方向是 Meshtastic 與 Reticulum 之類的網狀網路：可延伸閱讀 [Mesh 工作坊記錄](/records/2026-04-20-kuma-academy-mesh-workshop/)，以及 [Rti 中央廣播電臺對台灣民間 Meshtastic 的採訪](/records/2026-06-15-rti-meshtastic/)。
 
+- 家庭用數位防災包：斷網、海纜斷裂或停電時，家裡的數位準備清單：[/ideas/household-digital-go-bag/](/ideas/household-digital-go-bag/)
 - 原始簡報連結：<https://paulpengtw.github.io/crc-march-25-decks/>
 - CRC 過往記錄：[/records/](/records/)
 - CRC 訊息公告：[/news/](/news/)

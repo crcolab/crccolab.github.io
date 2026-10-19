@@ -35,7 +35,8 @@ plus Jekyll (built by GitHub Pages on push from `main`) for the content sections
   entries may set `type` (default `Organization`), `citations` entries a `publisher`
   and may use `title` in place of `name`)
 - `_team/` — member profiles (front-matter: `name`, `role`, optional
-  `bio_short`, `photo`, `photo_hud_target` (must match a landing-page
+  `job_title` (occupation for the Person JSON-LD `jobTitle` only, not shown; else `role`),
+  `alternate_name` (the name in the other locale, JSON-LD `alternateName`), `bio_short`, `photo`, `photo_hud_target` (must match a landing-page
   `data-member-id`), `links` (email/github/mastodon/orcid/homepage), `featured`)
 - `_layouts/`, `_includes/` — Jekyll templates (item pages, section indexes, SEO head, Atom entries)
 - `news/`, `events/`, `records/` — section index pages + per-section `feed.xml`
