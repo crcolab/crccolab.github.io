@@ -19,11 +19,11 @@ More than **180 participant turns**, **67 minutes** of relay pedaling, and a tot
 
 CRC hereby formally declares: this Offline Action was mission accomplished!
 
-![The Offline Action on site](/assets/2026-MAY-24-offline-mission-2.jpg)
+![The Offline Action on site](/assets/2026-MAY-24-offline-mission-2.jpg){: width="1080" height="1394"}
 
-![The Offline Action on site](/assets/2026-MAY-24-offline-mission-4.jpg)
+![The Offline Action on site](/assets/2026-MAY-24-offline-mission-4.jpg){: width="1542" height="2048"}
 
-![The Offline Action on site](/assets/2026-MAY-24-offline-mission-5.jpg)
+![The Offline Action on site](/assets/2026-MAY-24-offline-mission-5.jpg){: width="2048" height="946"}
 
 Follow us for more to come. CRC is still generating power and transmitting messages ⚡
 

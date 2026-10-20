@@ -1,0 +1,14 @@
+{%- comment -%}
+  Sets webp_path to the .webp sibling of include.src (the same path with .jpg/.jpeg/.png swapped
+  for .webp) when that file is among the site's static files, else to "". Used by item-hero.html
+  and webp-pictures.html. Static file paths carry a leading slash.
+{%- endcomment -%}
+{%- assign webp_path = "" -%}
+{%- assign webp_parts = include.src | split: "." -%}
+{%- assign webp_ext = webp_parts | last | downcase -%}
+{%- if webp_ext == "jpg" or webp_ext == "jpeg" or webp_ext == "png" -%}
+  {%- assign webp_stem_count = webp_parts | size | minus: 1 -%}
+  {%- assign webp_candidate = webp_parts | slice: 0, webp_stem_count | join: "." | append: ".webp" -%}
+  {%- assign webp_match = site.static_files | where: "path", webp_candidate | first -%}
+  {%- if webp_match -%}{%- assign webp_path = webp_candidate -%}{%- endif -%}
+{%- endif -%}

@@ -215,13 +215,52 @@ test('root feeds and latest-json include ideas entries', async () => {
 });
 
 test('item hero images serve WebP with a JPEG/PNG fallback and keep social cards on the original', async () => {
-  const { readdir, stat } = await import('node:fs/promises');
+  const { readdir, readFile: readBytes, stat } = await import('node:fs/promises');
   const repoFile = path => new URL(`../${path}`, import.meta.url);
   const exists = path => stat(repoFile(path)).then(() => true, () => false);
   const sizes = new Map();
   const sizeOf = async path => {
     if (!sizes.has(path)) sizes.set(path, (await stat(repoFile(path))).size);
     return sizes.get(path);
+  };
+  const imageSize = bytes => {
+    if (bytes.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) {
+      if (bytes.toString('ascii', 12, 16) !== 'IHDR') throw new Error('PNG does not start with IHDR');
+      return { width: bytes.readUInt32BE(16), height: bytes.readUInt32BE(20) };
+    }
+    if (bytes[0] !== 0xff || bytes[1] !== 0xd8) throw new Error('not a PNG or JPEG');
+    for (let i = 2; i + 9 < bytes.length;) {
+      if (bytes[i] !== 0xff) { i += 1; continue; }
+      const marker = bytes[i + 1];
+      if (marker === 0xff) { i += 1; continue; }
+      if (marker === 0xc0 || marker === 0xc2) {
+        return { height: bytes.readUInt16BE(i + 5), width: bytes.readUInt16BE(i + 7) };
+      }
+      if (marker === 0x01 || marker === 0xd8 || marker === 0xd9 || (marker >= 0xd0 && marker <= 0xd7)) {
+        i += 2;
+        continue;
+      }
+      i += 2 + bytes.readUInt16BE(i + 2);
+    }
+    throw new Error('no SOF0 or SOF2 marker');
+  };
+  // [start, end) offsets of each <div class="item__body"> content, found by balancing nested divs.
+  const bodyRanges = html => {
+    const ranges = [];
+    for (const open of html.matchAll(/<div class="item__body">/g)) {
+      const start = open.index + open[0].length;
+      const divs = /<(\/?)div\b[^>]*>/g;
+      divs.lastIndex = start;
+      let depth = 1;
+      for (let tag = divs.exec(html); tag; tag = divs.exec(html)) {
+        depth += tag[1] ? -1 : 1;
+        if (depth === 0) {
+          ranges.push([start, tag.index]);
+          break;
+        }
+      }
+    }
+    return ranges;
   };
   const skipDirs = new Set(['_site/ideas/household-digital-go-bag/assets']);
   const pages = [];
@@ -238,7 +277,9 @@ test('item hero images serve WebP with a JPEG/PNG fallback and keep social cards
   await walk('_site');
 
   const problems = [];
+  const standsFor = new Map(); // assets/*.webp -> the JPEG/PNG it stands in for, as the built pages use it
   let pictures = 0;
+  let bodyPictures = 0;
   for (const page of pages.sort()) {
     const html = await read(page);
     const isItemPage = /^_site\/(en\/)?(news|events|records|ideas)\//.test(page);
@@ -255,15 +296,24 @@ test('item hero images serve WebP with a JPEG/PNG fallback and keep social cards
         continue;
       }
       const file = src.slice(1);
-      const webp = file.replace(/\.(jpe?g|png)$/i, '.webp');
       const before = html.slice(0, match.index);
       const pictureOpen = before.lastIndexOf('<picture');
       const inPicture = pictureOpen > before.lastIndexOf('</picture>');
+      const sourceTags = inPicture ? html.slice(pictureOpen, match.index).match(/<source\b[^>]*>/g) ?? [] : [];
+      // The hero's WebP is its <picture> source: page.image_webp when set, else the .webp sibling.
+      const webpSrcset = sourceTags
+        .filter(source => /\stype="image\/webp"/.test(source))
+        .map(source => source.match(/\ssrcset="([^"]*)"/)?.[1])
+        .find(Boolean);
+      const webp = webpSrcset ? webpSrcset.slice(1) : file.replace(/\.(jpe?g|png)$/i, '.webp');
+      if (src === '/ideas/household-digital-go-bag/og-image.png'
+        && webpSrcset !== '/assets/2026-AUG-30-household-digital-go-bag.webp') {
+        problems.push(`${where}: must source its WebP from image_webp (got ${webpSrcset ?? 'none'})`);
+      }
       if (!(await exists(webp))) {
         if (inPicture) problems.push(`${where}: wrapped in <picture> although ${webp} does not exist`);
         continue;
       }
-      const sourceTags = inPicture ? html.slice(pictureOpen, match.index).match(/<source\b[^>]*>/g) ?? [] : [];
       const hasWebpSource = sourceTags.some(source => /\stype="image\/webp"/.test(source)
         && source.match(/\ssrcset="([^"]*)"/)?.[1] === `/${webp}`);
       const closeAt = html.indexOf('</picture>', match.index + tag.length);
@@ -276,6 +326,7 @@ test('item hero images serve WebP with a JPEG/PNG fallback and keep social cards
         problems.push(`${where}: lost its width/height`);
       }
       if ((await sizeOf(webp)) >= (await sizeOf(file))) problems.push(`${where}: /${webp} is not smaller than ${src}`);
+      standsFor.set(webp, file);
       pictures += 1;
     }
     let socialSeen = 0;
@@ -288,23 +339,66 @@ test('item hero images serve WebP with a JPEG/PNG fallback and keep social cards
       if (heroSrc && !content.endsWith(heroSrc)) problems.push(`${page}: ${key} must keep the original ${heroSrc} (got ${content})`);
     }
     if (heroSrc && socialSeen < 2) problems.push(`${page}: hero page is missing og:image or twitter:image`);
-  }
 
-  for (const dir of ['assets', 'ideas/household-digital-go-bag']) {
-    for (const entry of await readdir(new URL(`../${dir}/`, import.meta.url), { withFileTypes: true })) {
-      if (!entry.isFile() || !entry.name.endsWith('.webp')) continue;
-      const stem = `${dir}/${entry.name.replace(/\.webp$/, '')}`;
-      for (const ext of ['jpg', 'jpeg', 'png']) {
-        if (!(await exists(`${stem}.${ext}`))) continue;
-        if ((await sizeOf(`${dir}/${entry.name}`)) >= (await sizeOf(`${stem}.${ext}`))) {
-          problems.push(`${dir}/${entry.name} is not smaller than ${stem}.${ext}`);
+    // Body images: real width/height on every <img> in item__body; a WebP sibling wraps it in <picture>.
+    for (const [start, end] of isItemPage ? bodyRanges(html) : []) {
+      for (const match of html.slice(start, end).matchAll(/<img\b[^>]*>/g)) {
+        const at = start + match.index;
+        const tag = match[0];
+        const src = tag.match(/\ssrc="([^"]*)"/)?.[1] ?? '(no src)';
+        const where = `${page} <img src="${src}">`;
+        if (!/^\/[^?#]+\.(jpe?g|png)$/i.test(src)) {
+          problems.push(`${where}: body image must be a root-absolute JPEG or PNG`);
+          continue;
         }
-        break;
+        const file = src.slice(1);
+        const width = tag.match(/\swidth="([^"]*)"/)?.[1];
+        const height = tag.match(/\sheight="([^"]*)"/)?.[1];
+        const real = imageSize(await readBytes(repoFile(file)));
+        if (width !== String(real.width) || height !== String(real.height)) {
+          problems.push(`${where}: width/height must be the file's ${real.width}x${real.height} (got ${width ?? 'none'}x${height ?? 'none'})`);
+        }
+        const webp = file.replace(/\.(jpe?g|png)$/i, '.webp');
+        if (!(await exists(webp))) continue;
+        const before = html.slice(0, at);
+        const pictureOpen = before.lastIndexOf('<picture');
+        const inPicture = pictureOpen > before.lastIndexOf('</picture>');
+        const sourceTags = inPicture ? html.slice(pictureOpen, at).match(/<source\b[^>]*>/g) ?? [] : [];
+        const hasWebpSource = sourceTags.some(source => /\stype="image\/webp"/.test(source)
+          && source.match(/\ssrcset="([^"]*)"/)?.[1] === `/${webp}`);
+        const closeAt = html.indexOf('</picture>', at + tag.length);
+        if (!inPicture || !hasWebpSource || closeAt < 0 || html.slice(at + tag.length, closeAt).trim() !== '') {
+          problems.push(`${where}: must sit inside <picture> preceded by <source type="image/webp" srcset="/${webp}">`);
+        }
+        standsFor.set(webp, file);
+        bodyPictures += 1;
       }
     }
   }
-  assert.ok(problems.length === 0, `hero images must serve WebP with a JPEG/PNG fallback and keep social cards on the original:\n${problems.join('\n')}`);
+
+  if (await exists('ideas/household-digital-go-bag/og-image.webp')) {
+    problems.push('ideas/household-digital-go-bag/og-image.webp must be moved to assets/ (image_webp)');
+  }
+  for (const dir of ['assets', 'ideas/household-digital-go-bag']) {
+    for (const entry of await readdir(new URL(`../${dir}/`, import.meta.url), { withFileTypes: true })) {
+      if (!entry.isFile() || !entry.name.endsWith('.webp')) continue;
+      const webp = `${dir}/${entry.name}`;
+      const stem = `${dir}/${entry.name.replace(/\.webp$/, '')}`;
+      let original = null;
+      for (const ext of ['jpg', 'jpeg', 'png']) {
+        if (await exists(`${stem}.${ext}`)) {
+          original = `${stem}.${ext}`;
+          break;
+        }
+      }
+      original ??= standsFor.get(webp) ?? null;
+      if (!original) continue;
+      if ((await sizeOf(webp)) >= (await sizeOf(original))) problems.push(`${webp} is not smaller than ${original}`);
+    }
+  }
+  assert.ok(problems.length === 0, `hero and body images must serve WebP with a JPEG/PNG fallback and keep social cards on the original:\n${problems.join('\n')}`);
   assert.ok(pictures >= 15, `checked ${pictures} <picture> hero images; expected at least 15`);
+  assert.ok(pictures + bodyPictures >= 35, `checked ${pictures + bodyPictures} <picture> images (${pictures} heroes, ${bodyPictures} body); expected at least 35`);
 });
 
 test('idea pages carry Article JSON-LD with resolved author', async () => {

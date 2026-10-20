@@ -9,6 +9,7 @@ og_description: "The English translation of CRC's Household Digital Go-Bag is in
 image: /ideas/household-digital-go-bag/og-image.png
 image_width: 1200
 image_height: 630
+image_webp: /assets/2026-AUG-30-household-digital-go-bag.webp
 image_alt: "Household Digital Go-Bag: how to keep your home's digital life running through internet and power outages. On the right, a zipped emergency bag labelled \"packed\" with illustrations of six items laid out inside."
 author: CHENG PENG
 author_slug: cheng

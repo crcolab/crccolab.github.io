@@ -58,7 +58,7 @@ Three settings, three screenshots, three agreements and you will get through thi
 
 ※ For the actual dates, times and content of the exercise, please follow the announcements of the government authorities ※
 
-![Claymation-style card headed "It's not an outage, it's a slowdown." A map of Taiwan at the top has two pins: "Central 8/10 Mon" and "North 8/13 Thu," with an alarm clock and text beside it reading "2:30 - 3:00 pm, 30 minutes each." Bottom left, "Will get slow / phone 4G／5G · phone hotspot," with a snail crawling over a phone and a laptop spinning a loading icon; bottom right, "All normal / calls · SMS · landline · fixed-broadband Wi-Fi," with a landline phone, a message bubble, an envelope and a smiling router.](/assets/2026-JUL-28-30-minute-network-survival-guide-2.jpg)
+![Claymation-style card headed "It's not an outage, it's a slowdown." A map of Taiwan at the top has two pins: "Central 8/10 Mon" and "North 8/13 Thu," with an alarm clock and text beside it reading "2:30 - 3:00 pm, 30 minutes each." Bottom left, "Will get slow / phone 4G／5G · phone hotspot," with a snail crawling over a phone and a laptop spinning a loading icon; bottom right, "All normal / calls · SMS · landline · fixed-broadband Wi-Fi," with a landline phone, a message bubble, an envelope and a smiling router.](/assets/2026-JUL-28-30-minute-network-survival-guide-2.jpg){: width="1254" height="1254"}
 
 Check the time and place of the exercise first — 30 minutes each
 
@@ -68,7 +68,7 @@ Phone calls, text messages, disaster warning alerts, 110／119: all normal
 
 ※ For the actual dates, times and content of the exercise, please follow the announcements of the government authorities ※
 
-![Claymation-style card headed "Change 3 settings," with a three-tier shelf holding, from top to bottom: 1 offline maps (map app → profile picture → offline maps), a paper map and location pin unfolding out of a phone; 2 set files to offline (do it in the phone app too), a cloud dangling three document tags onto a phone with a check mark; 3 download media first (test it in airplane mode), a phone showing an airplane icon beside headphones and a music note. A clay figure in glasses gives a thumbs-up at the bottom left.](/assets/2026-JUL-28-30-minute-network-survival-guide-3.jpg)
+![Claymation-style card headed "Change 3 settings," with a three-tier shelf holding, from top to bottom: 1 offline maps (map app → profile picture → offline maps), a paper map and location pin unfolding out of a phone; 2 set files to offline (do it in the phone app too), a cloud dangling three document tags onto a phone with a check mark; 3 download media first (test it in airplane mode), a phone showing an airplane icon beside headphones and a music note. A clay figure in glasses gives a thumbs-up at the bottom left.](/assets/2026-JUL-28-30-minute-network-survival-guide-3.jpg){: width="1254" height="1254"}
 
 ## Change 3 settings
 
@@ -82,7 +82,7 @@ All of them are free features built into your phone or computer — a few taps a
 
 Once you are done, remember to turn off all Wi-Fi + switch on airplane mode, and test that these offline files really work.
 
-![Claymation-style corkboard card headed "Take 3 kinds of screenshots," in three rows: 1 phone numbers / you have their messaging app but not their number, beside a contact list, a paper note and two message bubbles marked with crosses; 2 that day's schedule / meeting time · place · their phone number, beside a calendar, a name card and a clock; 3 tickets and addresses / booking code · event QR · nearby shelters, beside a train ticket, a QR code and a shelter sign. A clay figure in glasses holds up a phone to take a photo at the bottom right.](/assets/2026-JUL-28-30-minute-network-survival-guide-4.jpg)
+![Claymation-style corkboard card headed "Take 3 kinds of screenshots," in three rows: 1 phone numbers / you have their messaging app but not their number, beside a contact list, a paper note and two message bubbles marked with crosses; 2 that day's schedule / meeting time · place · their phone number, beside a calendar, a name card and a clock; 3 tickets and addresses / booking code · event QR · nearby shelters, beside a train ticket, a QR code and a shelter sign. A clay figure in glasses holds up a phone to take a photo at the bottom right.](/assets/2026-JUL-28-30-minute-network-survival-guide-4.jpg){: width="1254" height="1254"}
 
 ## Take 3 kinds of screenshots
 
@@ -98,7 +98,7 @@ Note 1: Both the high speed rail and Taiwan Railway companies explicitly prohibi
 
 Note 2: For rules on screenshotting event QR codes, please follow the terms of each organization/company.
 
-![Claymation-style cubby-shelf card headed "Say 3 agreements out loud": 1 to family / a message not going through is the drill, not an emergency, showing an office worker at a desk and an elder making tea at home each holding a landline handset, their cords joined; 2 to colleagues / no online meetings in this half hour, a hand sliding the 14:30 meeting block down an arrow to after 15:30; 3 to whoever does pickups / if the call doesn't connect, go wait at the agreed spot, a mother waving to a child with a backpack at the school gate.](/assets/2026-JUL-28-30-minute-network-survival-guide-5.jpg)
+![Claymation-style cubby-shelf card headed "Say 3 agreements out loud": 1 to family / a message not going through is the drill, not an emergency, showing an office worker at a desk and an elder making tea at home each holding a landline handset, their cords joined; 2 to colleagues / no online meetings in this half hour, a hand sliding the 14:30 meeting block down an arrow to after 15:30; 3 to whoever does pickups / if the call doesn't connect, go wait at the agreed spot, a mother waving to a child with a backpack at the school gate.](/assets/2026-JUL-28-30-minute-network-survival-guide-5.jpg){: width="1254" height="1254"}
 
 ## Make 3 agreements
 
@@ -110,7 +110,7 @@ It doesn't cost a cent — you just have to say it out loud.
 
 **3. To colleagues out in the field and whoever picks up the children** Agree on a "check-in time ＋ meeting point," for example "I'll call you at 15:00; if you can't get through, wait for me in the ground-floor lobby." **Whenever you cannot reach each other at the agreed time, head instead for the fixed meeting point you settled on in advance.**
 
-![Claymation-style card headed "14:20, a three-minute wrap-up," subtitled "send off what's pending · log into systems first · carry cash and physical cards." An open wallet holds a NT$1,000 note, two cards and 50- and 10-dollar coins; an alarm clock in the middle points to 2:20; on the right a laptop is connected to Wi-Fi, with a paper plane and an opened envelope in front of it.](/assets/2026-JUL-28-30-minute-network-survival-guide-6.jpg)
+![Claymation-style card headed "14:20, a three-minute wrap-up," subtitled "send off what's pending · log into systems first · carry cash and physical cards." An open wallet holds a NT$1,000 note, two cards and 50- and 10-dollar coins; an alarm clock in the middle points to 2:20; on the right a laptop is connected to Wi-Fi, with a paper plane and an opened envelope in front of it.](/assets/2026-JUL-28-30-minute-network-survival-guide-6.jpg){: width="1254" height="1254"}
 
 ## 14:20 on the day: a 3-minute wrap-up
 
@@ -124,7 +124,7 @@ It doesn't cost a cent — you just have to say it out loud.
 
 - Check that your laptop is on the office Wi-Fi rather than your own phone hotspot
 
-![Claymation-style side-by-side card headed "How to spend this half hour." On the left, a green check mark: "make calls · do offline work · talk face to face," with a person in glasses proofreading a stack of paper by a desk lamp, phone lying quietly on the desk; on the right, an orange cross: "don't spam refresh · don't change network settings," with another person breaking into a sweat and jabbing at a phone, a router on the desk.](/assets/2026-JUL-28-30-minute-network-survival-guide-7.jpg)
+![Claymation-style side-by-side card headed "How to spend this half hour." On the left, a green check mark: "make calls · do offline work · talk face to face," with a person in glasses proofreading a stack of paper by a desk lamp, phone lying quietly on the desk; on the right, an orange cross: "don't spam refresh · don't change network settings," with another person breaking into a sweat and jabbing at a phone, a router on the desk.](/assets/2026-JUL-28-30-minute-network-survival-guide-7.jpg){: width="1254" height="1254"}
 
 ## 14:30–15:00: how to spend these 30 minutes
 
@@ -144,7 +144,7 @@ It doesn't cost a cent — you just have to say it out loud.
 
 - Don't rush to call your telecom's customer service
 
-![Claymation-style card whose text reads "After the drill ends at 3⋯", "Mobile data still down? Restart the phone", "Note down the thing that stalled the most and talk through backup plans with family and friends", "because a real disaster outage gives you no advance notice." On the right a clay figure in glasses writes notes with a pencil at a desk holding a pen pot, a plant and a propped-up phone; the wall clock points to 3.](/assets/2026-JUL-28-30-minute-network-survival-guide-8.jpg)
+![Claymation-style card whose text reads "After the drill ends at 3⋯", "Mobile data still down? Restart the phone", "Note down the thing that stalled the most and talk through backup plans with family and friends", "because a real disaster outage gives you no advance notice." On the right a clay figure in glasses writes notes with a pencil at a desk holding a pen pot, a plant and a propped-up phone; the wall clock points to 3.](/assets/2026-JUL-28-30-minute-network-survival-guide-8.jpg){: width="1254" height="1254"}
 
 ## After 15:00
 

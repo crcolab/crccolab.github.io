@@ -29,6 +29,6 @@ layout: default
     <p class="item__byline">{{ author_name }}</p>
   {% endif %}
   {% if page.image and page.image != "" %}{% include item-hero.html %}{% endif %}
-  <div class="item__body">{{ content }}</div>
+  <div class="item__body">{% include webp-pictures.html html=content %}</div>
   <p class="item__backlink"><a href="{{ prefix }}/{{ page.section }}/">← {{ ui.back_to[page.section] }}</a></p>
 </article></main>
