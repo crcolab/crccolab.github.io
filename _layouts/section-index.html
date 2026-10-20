@@ -11,7 +11,7 @@ layout: default
   <div class="container">
     <div class="section__head">
       <h1 class="crc-heading"><span class="crc-heading__title">{{ page.title }}</span></h1>
-      <p class="index-page__desc">{{ page.description }}</p>
+      <p class="index-page__desc">{{ ui.section_descriptions[page.section] }}</p>
       <p class="index-page__feed"><a href="{% if page.locale == 'en-US' %}/en{% endif %}/{{ page.section }}/feed.xml">{{ ui.feed.label }} ↗</a></p>
     </div>
     {{ content }}
