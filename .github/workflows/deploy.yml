@@ -24,6 +24,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # 沒有 front matter 的靜態頁，sitemap 的 lastmod 取自檔案時間；改成最後一次 commit 的時間，
+      # 否則每次部署都像是有更新
+      - name: Set HTML file times to their last commit
+        run: |
+          git ls-files -z '*.html' | while IFS= read -r -d '' f; do
+            touch -d "$(git log -1 --format=%cI -- "$f")" "$f"
+          done
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -40,6 +50,18 @@ jobs:
         with:
           path: './_site'
 
+      # 比對線上 sitemap，找出新增或 lastmod 有變的網址，部署後送給 IndexNow
+      - name: List URLs changed since the live deploy
+        id: changed
+        run: |
+          pairs() { awk '/<loc>/{gsub(/[ \t]*<\/?loc>[ \t]*/,""); loc=$0} /<lastmod>/{gsub(/[ \t]*<\/?lastmod>[ \t]*/,""); lm=$0} /<\/url>/{print loc, lm; loc=lm=""}' "$1" | sort; }
+          curl -fsS https://crcolab.art/sitemap.xml -o live-sitemap.xml || : > live-sitemap.xml
+          urls=$(comm -13 <(pairs live-sitemap.xml) <(pairs _site/sitemap.xml) | cut -d' ' -f1 | jq -Rcs 'split("\n") | map(select(length > 0))')
+          echo "$urls"
+          echo "urls=$urls" >> "$GITHUB_OUTPUT"
+    outputs:
+      indexnow_urls: ${{ steps.changed.outputs.urls }}
+
   deploy:
     environment:
       name: github-pages
@@ -51,3 +73,16 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      # IndexNow（Bing、Yandex、Naver 等共用）；金鑰檔在網站根目錄，失敗不影響部署
+      - name: Submit changed URLs to IndexNow
+        if: needs.build.outputs.indexnow_urls != '[]'
+        continue-on-error: true
+        env:
+          URLS: ${{ needs.build.outputs.indexnow_urls }}
+          KEY: 848743d002ec4902b69d1638bae65429
+        run: |
+          jq -n --argjson urls "$URLS" --arg key "$KEY" \
+            '{host: "crcolab.art", key: $key, keyLocation: "https://crcolab.art/\($key).txt", urlList: $urls}' |
+            curl -fsS -X POST https://api.indexnow.org/indexnow \
+              -H 'Content-Type: application/json; charset=utf-8' --data-binary @- -w 'IndexNow HTTP %{http_code}\n'

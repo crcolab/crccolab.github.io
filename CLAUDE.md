@@ -142,6 +142,12 @@ git diff --check
 
 `git push origin main` → GitHub Pages publishes. `CNAME` pins `crcolab.art`.
 
+After each deploy, `.github/workflows/deploy.yml` submits to IndexNow (Bing and the other
+IndexNow engines) every sitemap URL that is new or whose `<lastmod>` differs from the live
+sitemap. The key file `848743d002ec4902b69d1638bae65429.txt` at the root must stay there,
+named after and containing only the key. An edited post is only resubmitted if its
+`last_modified_at` changes.
+
 Agents push PR branches to the fork paulpengtw/crccolab.github.io and open PRs against crcolab/crccolab.github.io main, because the agent account has no push access here. paulpengtw-aiagent/crccolab.github.io is an unrelated copy, not a fork: PRs from it can't target this repo, so don't use it.
 
 ## When implementing design hand-offs
