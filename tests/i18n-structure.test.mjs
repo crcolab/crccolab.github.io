@@ -140,3 +140,43 @@ test('project guidance describes paired static locales and the readable type hie
     assert.doesNotMatch(doc, /zh-Hant primary[^\n]*EN mono secondary|bilingual zh\/EN-mono pairing|English secondary text/);
   }
 });
+
+test('section index descriptions come from i18n in both locales and stay out of front matter', async () => {
+  const sections = ['news', 'events', 'records', 'ideas'];
+  // Display width: CJK, Hangul and fullwidth code points take two columns, everything else one.
+  const columns = text => [...text].reduce((total, char) => {
+    const code = char.codePointAt(0);
+    const wide = (code >= 0x2E80 && code <= 0xA4CF) || (code >= 0xAC00 && code <= 0xD7A3)
+      || (code >= 0xF900 && code <= 0xFAFF) || (code >= 0xFE30 && code <= 0xFE4F)
+      || (code >= 0xFF01 && code <= 0xFF60) || (code >= 0xFFE0 && code <= 0xFFE6)
+      || (code >= 0x20000 && code <= 0x3FFFD);
+    return total + (wide ? 2 : 1);
+  }, 0);
+  const values = [];
+  for (const locale of ['zh-Hant', 'en-US']) {
+    const lines = localeBlock(copy, locale).split('\n');
+    const start = lines.indexOf('  section_descriptions:');
+    assert.notEqual(start, -1, `${locale} is missing section_descriptions`);
+    const entries = [];
+    for (const line of lines.slice(start + 1)) {
+      if (!/^    \S/.test(line)) break;
+      const match = line.match(/^    (\w+): "([^"]*)"$/);
+      assert.ok(match, `${locale} section_descriptions entry must be a double-quoted scalar: ${line}`);
+      entries.push([match[1], match[2]]);
+    }
+    assert.deepEqual(entries.map(([key]) => key).sort(), [...sections].sort(), `${locale} section_descriptions keys`);
+    for (const [key, text] of entries) {
+      const width = columns(text);
+      assert.ok(width >= 70 && width <= 160, `${locale}.section_descriptions.${key} is ${width} columns wide`);
+      values.push(text);
+    }
+  }
+  assert.equal(new Set(values).size, 8, 'section descriptions must be distinct across both locales');
+  for (const section of sections) {
+    for (const path of [`${section}/index.html`, `en/${section}/index.html`]) {
+      const frontMatter = (await read(path)).match(/^---\n([\s\S]*?)\n---\n/)?.[1];
+      assert.ok(frontMatter, `${path} has no front matter`);
+      assert.doesNotMatch(frontMatter, /^description:/m, `${path} still declares a front-matter description`);
+    }
+  }
+});

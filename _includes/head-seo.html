@@ -9,7 +9,8 @@
 <link rel="icon" type="image/png" href="/favicon.png">
 {%- comment -%} Team profiles are Person documents, not articles: no article:* / dcterms.date. {%- endcomment -%}
 {% assign is_article = false %}{% if page.collection and page.section != "team" %}{% assign is_article = true %}{% endif %}
-{% assign desc = page.summary | default: page.bio_short | default: page.description | default: site.description | strip_newlines | truncate: 300 %}
+{% if page.layout == "section-index" %}{% assign section_desc = site.data.i18n[page.locale].section_descriptions[page.section] %}{% else %}{% assign section_desc = nil %}{% endif %}
+{% assign desc = page.summary | default: page.bio_short | default: page.description | default: section_desc | default: site.description | strip_newlines | truncate: 300 %}
 <meta name="description" content="{{ desc | escape }}">
 {%- comment -%} Social cards may carry their own copy: og_title / og_description, else the page title and description; the title always names the site, like <title>. {%- endcomment -%}
 {% assign social_title = page.og_title | default: page_title | append: "｜Cyborg Resilience Co-lab" %}

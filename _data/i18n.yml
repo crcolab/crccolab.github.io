@@ -14,6 +14,11 @@ zh-Hant:
     records: 記錄／報導
     ideas: 提點子
     team: 團隊
+  section_descriptions:
+    news: "CRC 賽伯格韌性實驗室的公告與消息：論壇和工作坊報名、活動預告、駐村近況與專案發布。關心數位韌性與離線通訊的人，可以從這裡掌握我們的最新動態。"
+    events: "CRC 主辦與協辦的論壇、黑客松與工作坊，主題涵蓋海纜、斷網應變與離線通訊，歡迎公民、技術社群與研究者一起參與。"
+    records: "CRC 參與的座談、演講、工作坊紀錄與媒體報導，附簡報與原文連結，方便讀者與媒體回顧我們在海纜、斷網應變與離線通訊上做過的事。"
+    ideas: "CRC 成員正在發展的論述、隨筆與實用指南，從對外網路流量劇減模擬、行動網路降速演練到家庭數位防災包，寫給想在斷網前先準備好的你。"
   view_all: 查看全部
   view_source: 閱讀原文
   back_to:
@@ -78,6 +83,11 @@ en-US:
     records: As Seen in the Media
     ideas: Ideas
     team: Team
+  section_descriptions:
+    news: "CRC news: forum and workshop sign-ups, upcoming events, residencies, and project releases, for anyone following digital resilience and off-grid communication."
+    events: "Forums, hackathons, and workshops CRC hosts or co-hosts on subsea cables, outages, and off-grid communication, for citizens, technologists, and researchers."
+    records: "CRC talks, panels, workshop recaps, and press coverage on subsea cables, outages, and off-grid communication, with slides and sources for readers and reporters."
+    ideas: "Essays and guides from CRC members, from traffic-drop simulations and mobile throttling drills to a household digital go-bag, for anyone preparing for outages."
   view_all: View all
   view_source: View source
   back_to:
