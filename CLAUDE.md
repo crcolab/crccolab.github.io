@@ -49,6 +49,8 @@ plus Jekyll (built by GitHub Pages on push from `main`) for the content sections
   (wrapped in `{% raw %}`) so the `_ideas` item can own the route; everything else in
   `dist/` except `index.html`/`404.html` goes in this folder. To update, rebuild and replace
   both, deleting the old hashed `assets/`. The `/en/` item is a translation-in-progress notice.
+  Its build still requests Noto Sans TC from Google Fonts until upstream drops it; after a
+  rebuild, strip `family=Noto+Sans+TC:…&` from the font URLs (a typography test enforces this).
 - `team/` — machine-readable member index (no Atom feed; team is not time-series)
 - `api/latest.json` — Liquid-generated JSON the homepage fetches for its latest-3 blocks
 - `sections.css` — shared styles for section pages (loads after `styles.css`)
@@ -68,7 +70,7 @@ The landing page's `styles.css` is the source of truth for tokens on generated
 section pages too (`--crc-purple:#46288B`, `--crc-lime:#B7D32D`, Funnel Display);
 the table above applies to the older event sub-pages.
 
-Fonts (Google Fonts): Funnel Display (UI), Noto Sans TC (body/zh), and Press Start 2P (pixel accents). The readable hierarchy is 18px body, 16px supporting text, and 14px labels.
+Fonts: Funnel Display (UI) and Press Start 2P (pixel accents) from Google Fonts; body/zh text uses system CJK fonts (`--font-body` in `styles.css` — PingFang TC, Microsoft JhengHei, Noto Sans CJK TC). Do not add Noto Sans TC back as a web font: every page needed ~1 MB of its subsets. The readable hierarchy is 18px body, 16px supporting text, and 14px labels.
 
 Locale pattern: paired single-language static locales, with `zh-Hant` at existing routes and `en-US` under `/en/`. Headings are purple on white/lime and white on blue/purple bands. Section bands alternate white → blue → purple.
 

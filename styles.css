@@ -1,7 +1,7 @@
 /* ============================================================
    CRC — Cyborg Resilience Co-lab · crcolab.art
    Rebuilt on the CRC identity: violet #46288B + lime #B7D32D,
-   Funnel Display (EN/display) + Noto Sans TC (zh/body),
+   Funnel Display (EN/display) + system CJK sans (zh/body),
    the woven "net" motif with square nodes.
    ============================================================ */
 
@@ -50,8 +50,10 @@
   --mark-node:var(--crc-lime);
 
   /* typography */
-  --font-display:"Funnel Display","Noto Sans TC",system-ui,sans-serif;
-  --font-body:"Noto Sans TC","Funnel Display",system-ui,sans-serif;
+  /* zh uses system CJK fonts (no web font: a page needs ~1 MB of Noto Sans TC subsets);
+     a locally installed Noto Sans TC still wins */
+  --font-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Noto Sans CJK TC",system-ui,sans-serif;
+  --font-display:"Funnel Display",var(--font-body);
   --fs-display:clamp(2rem,4vw,3.5rem);
   --fs-section-heading:clamp(2.5rem,5vw,4rem);
   --fs-subsection-heading:clamp(1.5rem,2vw,1.75rem);

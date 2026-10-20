@@ -24,7 +24,7 @@ CRC is a research and co-lab practice exploring digital resilience under contemp
 ## Design vocabulary
 
 - **Colors:** Lime `#c1ff72`, Purple `#5e17eb`, Ink `#1a2123`, BG-Blue `#7b87f3`
-- **Type:** Noto Sans TC and Funnel Display, with a readable 18px body / 16px supporting / 14px label hierarchy; Press Start 2P is reserved for pixel accents
+- **Type:** system CJK fonts (no CJK web font) and Funnel Display, with a readable 18px body / 16px supporting / 14px label hierarchy; Press Start 2P is reserved for pixel accents
 - **Patterns:** dotted dividers, cube SVG decorations, 2px purple-bordered cards (radius `18px`), paired single-language static locales, surveillance-HUD aesthetic
 - **Layout:** `--max: 1100px` container, section banding (white → blue → purple)
 

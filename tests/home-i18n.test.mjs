@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
-import { readHomeConfig } from '../script.js';
+import { playWhenVisible, readHomeConfig } from '../script.js';
 
 const [zh, en] = await Promise.all([
   readFile(new URL('../index.html', import.meta.url), 'utf8'),
@@ -14,6 +14,42 @@ test('home config comes from the current page', () => {
     sections: '[{"key":"news","label":"Latest News","href":"/en/news/"}]',
   }});
   assert.deepEqual(config, { apiUrl: '/en/api/latest.json', sections: [{ key: 'news', label: 'Latest News', href: '/en/news/' }] });
+});
+
+test('team video waits until it nears the viewport, then plays once', () => {
+  let plays = 0;
+  const video = { play: async () => { plays++; } };
+  let observer;
+  class FakeObserver {
+    constructor(callback, options) { this.callback = callback; this.options = options; observer = this; }
+    observe(target) { this.target = target; }
+    disconnect() { this.disconnected = true; }
+  }
+
+  playWhenVisible(video, FakeObserver);
+  assert.equal(observer.target, video);
+  assert.equal(plays, 0);
+  observer.callback([{ isIntersecting: false }]);
+  assert.equal(plays, 0);
+  observer.callback([{ isIntersecting: true }]);
+  assert.equal(plays, 1);
+  assert.equal(observer.disconnected, true);
+});
+
+test('team video plays straight away without IntersectionObserver', () => {
+  let plays = 0;
+  playWhenVisible({ play: async () => { plays++; } }, undefined);
+  assert.equal(plays, 1);
+});
+
+test('homepages lazy-start a small team video and skip the poster-duplicate image', () => {
+  for (const home of [zh, en]) {
+    assert.match(home, /<video class="crc-hud__media team__video" muted loop playsinline preload="none"/);
+    assert.doesNotMatch(home, /team__video[^>]*autoplay/);
+    assert.ok(home.indexOf('team-video.webm') < home.indexOf('team-video.mp4'), 'WebM is listed before MP4');
+    assert.doesNotMatch(home, /\/assets\/team\.jpg/);
+    assert.match(home, /<script data-cfasync="false">\s*try \{\s*if \(localStorage\.getItem\('crc-theme'\)/);
+  }
 });
 
 test('homepages are reciprocal, single-language static pages', () => {
@@ -32,7 +68,7 @@ test('homepages are reciprocal, single-language static pages', () => {
 
 test('Chinese homepage localizes generic interface copy', () => {
   assert.match(zh, /id="theme-toggle" aria-label="切換淺色／紫色主題" title="切換主題"/);
-  assert.match(zh, /<img src="\/assets\/team\.jpg" alt="團隊合照">/);
+  assert.match(zh, /<source src="\/assets\/team-video\.mp4" type="video\/mp4">\s*團隊合照\s*<\/video>/);
   assert.match(zh, /<a href="mailto:mclee@gate\.sinica\.edu\.tw">電子郵件<\/a>/);
   assert.match(zh, />在台灣用心製作<\/span>/);
   assert.doesNotMatch(zh, /Switch light \/ purple theme|Switch theme|Team photo|>Email<|Made with ❤️ in Taiwan/);

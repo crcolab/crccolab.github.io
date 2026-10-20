@@ -29,8 +29,8 @@ permalink: /en/
   })(window,document,'script','dataLayer','GTM-58VP9F9K');</script>
   <!-- End Google Tag Manager -->
 
-  <!-- Restore saved theme before first paint -->
-  <script>
+  <!-- Restore saved theme before first paint; data-cfasync keeps Cloudflare Rocket Loader from deferring it -->
+  <script data-cfasync="false">
     try {
       if (localStorage.getItem('crc-theme') === 'purple') {
         document.documentElement.classList.add('theme-purple');
@@ -83,7 +83,7 @@ permalink: /en/
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Noto+Sans+TC:wght@400;500;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Press+Start+2P&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
@@ -303,11 +303,11 @@ permalink: /en/
 
       <div class="team__feature">
         <div class="crc-hud">
-          <video class="crc-hud__media team__video" autoplay muted loop playsinline
+          <video class="crc-hud__media team__video" muted loop playsinline preload="none"
                  poster="/assets/team-video-poster.jpg">
+            <source src="/assets/team-video.webm" type='video/webm; codecs="vp9"'>
             <source src="/assets/team-video.mp4" type="video/mp4">
-            <source src="/assets/team-video.webm" type="video/webm">
-            <img src="/assets/team.jpg" alt="Team photo">
+            Team photo
           </video>
 
           <div class="crc-hud__scan" aria-hidden="true"></div>
@@ -402,7 +402,7 @@ permalink: /en/
                 <img src="/assets/logo/ocf.svg" alt="Open Culture Foundation" loading="lazy" decoding="async">
               </a>
               <a class="partner-tile" href="https://digiresi.g0v.tw/" target="_blank" rel="noopener">
-                <img src="/assets/logo/digiresi.g0v.tw.png" alt="g0v DigiResiThon" loading="lazy" decoding="async">
+                <img src="/assets/logo/digiresi.g0v.tw.webp" alt="g0v DigiResiThon" loading="lazy" decoding="async">
               </a>
             </div>
           </div>

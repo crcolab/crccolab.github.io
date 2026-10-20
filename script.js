@@ -39,6 +39,19 @@ export function escapeHtml(str){
     .replaceAll("'",'&#039;');
 }
 
+// The team reel sits below the fold; with preload="none" nothing downloads until it nears the viewport.
+export function playWhenVisible(video, Observer = globalThis.IntersectionObserver){
+  if(!video) return;
+  const play = () => { video.play().catch(() => {}); };
+  if(typeof Observer !== 'function'){ play(); return; }
+  const observer = new Observer(entries => {
+    if(!entries.some(entry => entry.isIntersecting)) return;
+    observer.disconnect();
+    play();
+  }, { rootMargin: '400px 0px' });
+  observer.observe(video);
+}
+
 function initThemeToggle(){
   const btn = document.getElementById('theme-toggle');
   if(!btn) return;
@@ -56,6 +69,7 @@ if (typeof document !== 'undefined') {
   document.addEventListener('DOMContentLoaded', () => {
     loadNews();
     initSurveillanceHUD();
+    playWhenVisible(document.querySelector('.team__video'));
     initThemeToggle();
     import('./animations/cyborg-glitch.js').then(({ initCyborgGlitch }) => initCyborgGlitch());
   });

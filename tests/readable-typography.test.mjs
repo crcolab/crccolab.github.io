@@ -413,3 +413,18 @@ test('Hackathon 2026 stays outside the token rollout and uses legacy consent inv
   assert.doesNotMatch(hackathonCss, /--fs-body|--control-min/);
   assert.match(hackathonPage, /<script src="\/assets\/consent\.js" defer><\/script>/);
 });
+
+test('no page loads Noto Sans TC as a web font; Chinese text uses system CJK fonts', async () => {
+  const pages = [
+    'index.html', 'en/index.html', '404.html', '_includes/head-seo.html',
+    'events/hackathon-2026/index.html', '_layouts/household-digital-go-bag.html',
+    'ideas/household-digital-go-bag/why/index.html',
+    'ideas/household-digital-go-bag/about/index.html',
+    'ideas/household-digital-go-bag/family/index.html',
+  ];
+  for (const page of pages) {
+    const html = await readFile(new URL('../' + page, import.meta.url), 'utf8');
+    assert.doesNotMatch(html, /fonts\.googleapis\.com\/css2\?[^"']*Noto\+Sans\+TC/, page);
+  }
+  assert.match(css, /--font-body:[^;]*"PingFang TC"[^;]*"Microsoft JhengHei"/);
+});
