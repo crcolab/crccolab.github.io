@@ -119,3 +119,29 @@ test('header site-nav includes an Ideas link in both locales', () => {
   assert.match(zh, /<nav class="site-nav">[\s\S]*?<a href="\/ideas\/" class="site-nav__link">提點子<\/a>[\s\S]*?<\/nav>/);
   assert.match(en, /<nav class="site-nav">[\s\S]*?<a href="\/en\/ideas\/" class="site-nav__link">Ideas<\/a>[\s\S]*?<\/nav>/);
 });
+
+test('homepage Organization JSON-LD names a 112px+ square PNG logo and the footer Facebook page', async () => {
+  const organizationOf = html => [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)]
+    .map(([, json]) => JSON.parse(json))
+    .find(data => data['@type'] === 'Organization');
+  const blocks = [];
+  for (const [locale, html] of [['zh-Hant', zh], ['en-US', en]]) {
+    const org = organizationOf(html);
+    assert.ok(org, `${locale} homepage has an Organization block`);
+    assert.ok(org.logo.startsWith('https://crcolab.art/'), `${locale} logo is on crcolab.art`);
+    const png = await readFile(new URL(`../${org.logo.slice('https://crcolab.art/'.length)}`, import.meta.url));
+    assert.deepEqual([...png.subarray(0, 8)], [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a], `${locale} logo is a PNG`);
+    assert.equal(png.toString('ascii', 12, 16), 'IHDR');
+    assert.equal(png.readUInt32BE(16), png.readUInt32BE(20), `${locale} logo is square`);
+    assert.ok(png.readUInt32BE(16) >= 112, `${locale} logo is at least 112px`);
+    const footerFacebook = html.match(/<footer[\s\S]*?<\/footer>/)[0].match(/<a href="(https:\/\/www\.facebook\.com\/[^"]+)"/)[1];
+    assert.ok(Array.isArray(org.sameAs), `${locale} sameAs is a list`);
+    assert.ok(org.sameAs.includes('https://github.com/crcolab/'), `${locale} sameAs keeps GitHub`);
+    assert.ok(org.sameAs.includes(footerFacebook), `${locale} sameAs includes the footer Facebook page`);
+    blocks.push(org);
+  }
+  // url and description are the only keys localized today; everything else must match across locales.
+  const localized = new Set(['url', 'description']);
+  const [zhShared, enShared] = blocks.map(org => Object.fromEntries(Object.entries(org).filter(([key]) => !localized.has(key))));
+  assert.deepEqual(enShared, zhShared);
+});
