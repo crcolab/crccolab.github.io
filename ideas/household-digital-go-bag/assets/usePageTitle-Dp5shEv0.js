@@ -1,1 +1,0 @@
-import{n as e}from"./rolldown-runtime-WkwZ5CU-.js";import{t}from"./vendor-i18n-DxEUVvUD.js";import{p as n}from"./vendor-react-95LfdIq-.js";import{l as r}from"./index-UhLVghxT.js";var i=e(n(),1);function a(e,n){let{t:a,i18n:o}=t(),s=a(e),c=n&&o.exists(n)?a(n):``;(0,i.useEffect)(()=>{document.title=r(c||a(`site.documentTitle`,{page:s,site:a(`site.name`)}))},[a,s,c])}export{a as t};
