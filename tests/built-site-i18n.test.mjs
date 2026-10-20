@@ -770,10 +770,14 @@ test('built robots.txt names every documented answer-engine crawler and blocks n
   assert.doesNotMatch(robots, /^Disallow:\s*\S/m, 'robots.txt must not disallow any path');
   const tokens = [
     'Googlebot', 'bingbot', 'OAI-SearchBot', 'Claude-SearchBot', 'PerplexityBot', 'Applebot', 'Amzn-SearchBot', 'MistralAI-Index', 'meta-webindexer',
+    'PetalBot', 'Baiduspider', 'Terracotta', 'Terracotta-News',
     'ChatGPT-User', 'Claude-User', 'Perplexity-User', 'MistralAI-User', 'DuckAssistBot', 'Amzn-User', 'meta-externalfetcher',
+    'Manus-User', 'Novellum', 'CloudflareBrowserRenderingCrawler', 'TikTokSpider',
     'GPTBot', 'ClaudeBot', 'Google-Extended', 'Applebot-Extended', 'Amazonbot', 'MistralAI-Training', 'meta-externalagent', 'CCBot',
+    'Google-CloudVertexBot', 'FacebookBot', 'Bytespider', 'ProRataInc', 'Timpibot',
+    'archive.org_bot', 'Arquivo-web-crawler',
   ];
-  for (const token of tokens) assert.match(robots, new RegExp(`^User-agent: ${token}$`, 'm'), `robots.txt lost ${token}`);
+  for (const token of tokens) assert.match(robots, new RegExp(`^User-agent: ${token.replaceAll('.', '\\.')}$`, 'm'), `robots.txt lost ${token}`);
   // A crawler obeys only the most specific group naming it, so every group repeats the Content Signals line.
   const groups = robots.split(/\n\s*\n/).filter(group => /^User-agent:/m.test(group));
   for (const group of groups) {

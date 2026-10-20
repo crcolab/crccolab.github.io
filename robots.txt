@@ -7,9 +7,10 @@ User-agent: *
 Content-Signal: search=yes, ai-input=yes, ai-train=yes
 Allow: /
 
-# AI / LLM crawlers — explicitly welcome, grouped by what each one does.
-# The rule above already allows them; these groups record the decision.
-# Tokens are taken from each operator's own crawler documentation.
+# AI / LLM crawlers, search engines and archivers — explicitly welcome, grouped
+# by what each one does. The rule above already allows them; these groups record
+# the decision. Tokens are taken from each operator's own crawler documentation,
+# or from Cloudflare Radar's bot directory where the operator publishes none.
 
 # Search discovery: builds the index an AI answer cites from
 User-agent: Googlebot
@@ -21,10 +22,15 @@ User-agent: Applebot
 User-agent: Amzn-SearchBot
 User-agent: MistralAI-Index
 User-agent: meta-webindexer
+User-agent: PetalBot
+User-agent: Baiduspider
+User-agent: Terracotta
+User-agent: Terracotta-News
 Content-Signal: search=yes, ai-input=yes, ai-train=yes
 Allow: /
 
-# User-triggered retrieval: fetches a page when someone asks an assistant about it
+# User-triggered retrieval: fetches a page when someone asks an assistant about
+# it, shares a link, or points an agent at it
 User-agent: ChatGPT-User
 User-agent: Claude-User
 User-agent: Perplexity-User
@@ -32,6 +38,10 @@ User-agent: MistralAI-User
 User-agent: DuckAssistBot
 User-agent: Amzn-User
 User-agent: meta-externalfetcher
+User-agent: Manus-User
+User-agent: Novellum
+User-agent: CloudflareBrowserRenderingCrawler
+User-agent: TikTokSpider
 Content-Signal: search=yes, ai-input=yes, ai-train=yes
 Allow: /
 
@@ -45,6 +55,17 @@ User-agent: Amazonbot
 User-agent: MistralAI-Training
 User-agent: meta-externalagent
 User-agent: CCBot
+User-agent: Google-CloudVertexBot
+User-agent: FacebookBot
+User-agent: Bytespider
+User-agent: ProRataInc
+User-agent: Timpibot
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+Allow: /
+
+# Web archives: preserve snapshots of the site
+User-agent: archive.org_bot
+User-agent: Arquivo-web-crawler
 Content-Signal: search=yes, ai-input=yes, ai-train=yes
 Allow: /
 
