@@ -189,6 +189,35 @@ test('team INDEX pages use the page.title, not Jekyll built-in page.name (filena
   assert.doesNotMatch(en, /<title>index\.html/);
 });
 
+test('member Person JSON-LD sameAs carries only the http(s) links from front matter, in source order', async () => {
+  const { readdir } = await import('node:fs/promises');
+  const webLinks = source => {
+    const block = (source.split(/^---$/m)[1] ?? '').match(/^links:\n((?:[ \t]+.*\n?)*)/m)?.[1] ?? '';
+    return [...block.matchAll(/^[ \t]+[a-z_]+:[ \t]*(.*?)[ \t]*$/gm)]
+      .map(([, value]) => value.replace(/^(["'])(.*)\1$/, '$2'))
+      .filter(href => /^https?:\/\//.test(href));
+  };
+  let checked = 0;
+  for (const [dir, route] of [['_team', 'team'], ['_team_en', 'en/team']]) {
+    for (const name of (await readdir(new URL(`../${dir}/`, import.meta.url))).filter(file => file.endsWith('.md'))) {
+      const path = `_site/${route}/${name.replace(/\.md$/, '')}/index.html`;
+      const person = [...(await read(path)).matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)]
+        .map(([, json]) => JSON.parse(json))
+        .find(entry => entry['@type'] === 'Person');
+      assert.ok(person, `${path} lacks a Person JSON-LD block`);
+      const expected = webLinks(await read(`${dir}/${name}`));
+      if (expected.length) {
+        assert.deepEqual(person.sameAs, expected, `${path} sameAs must list its http(s) links in source order`);
+      } else {
+        assert.ok(!('sameAs' in person), `${path} has no web links, so sameAs must be omitted`);
+      }
+      assert.doesNotMatch(JSON.stringify(person.sameAs ?? []), /mailto:/, `${path} sameAs must not carry email`);
+      checked += 1;
+    }
+  }
+  assert.ok(checked >= 2, 'expected member pages in both locales');
+});
+
 test('idea pages without tags omit the keywords JSON-LD field', async () => {
   const zh = await read('_site/ideas/2026-03-25-crc-march-25-decks/index.html');
   assert.doesNotMatch(zh, /"keywords"\s*:\s*""/);
