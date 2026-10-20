@@ -126,6 +126,8 @@ git diff --check
 
 `git push origin main` → GitHub Pages publishes. `CNAME` pins `crcolab.art`.
 
+Agents push PR branches to the fork paulpengtw/crccolab.github.io and open PRs against crcolab/crccolab.github.io main, because the agent account has no push access here. paulpengtw-aiagent/crccolab.github.io is an unrelated copy, not a fork: PRs from it can't target this repo, so don't use it.
+
 ## When implementing design hand-offs
 
 Designs may arrive as Claude Design bundles (HTML/CSS/JS prototypes). Treat them as visual reference, not literal source:
