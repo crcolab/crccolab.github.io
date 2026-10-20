@@ -962,5 +962,6 @@ LINE 文字可能恢復了、可能一些網頁能看了，但 SaaS 工具和雲
 
 - 家庭用數位防災包：斷網、海纜斷裂或停電時，家裡的數位準備清單：[/ideas/household-digital-go-bag/](/ideas/household-digital-go-bag/)
 - 原始簡報連結：<https://paulpengtw.github.io/crc-march-25-decks/>
-- CRC 過往記錄：[/records/](/records/)
-- CRC 訊息公告：[/news/](/news/)
+- [數位韌性論壇活動頁：活動資訊、講者簡報、會後記錄與媒體報導](/events/2026-03-25-digital-resilience-forum/)
+- [CRC 過往記錄與媒體報導](/records/)
+- [CRC 最新訊息與公告](/news/)

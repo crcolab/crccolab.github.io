@@ -27,3 +27,5 @@ Because Taiwan relies heavily on subsea cables for international communications,
 Jen-Wei Chang said that Taiwan’s next step should place “continuous operation” at the heart of digital resilience, strengthen redundancy at critical nodes, and use combined exercises across agencies and operators to transform international experience into locally viable solutions.
 
 *(This article was written and compiled by DSET.)*
+
+Event details, the speakers’ slides, recaps, and other coverage of the forum are collected on the [Digital Resilience Forum event page](/en/events/2026-03-25-digital-resilience-forum/).

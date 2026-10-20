@@ -30,3 +30,5 @@ He then offered two recommendations:
 
 1. **The Ministry of Digital Affairs could publish more real-time data about subsea cables**, allowing developers to connect through APIs and learn “where a cable broke,” “why it broke,” and other information, thereby strengthening public awareness and vigilance.
 2. **Taiwan should build more subsea cables**, particularly in the “waters off the east coast,” where the sea becomes deep immediately beyond the coast. Compared with the waters off western Taiwan, cables there would be less vulnerable to damage, making the area highly suitable.
+
+Event details, the speakers’ slides, and other coverage of the forum are collected on the [Digital Resilience Forum event page](/en/events/2026-03-25-digital-resilience-forum/).

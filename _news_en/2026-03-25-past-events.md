@@ -23,3 +23,5 @@ The first { Digital Resilience Forum } examined every facet of the subsea cable 
 ℹ️Date: Wednesday, March 25
 ℹ️Time: 1:30–17:00 (check-in at 1:00)
 ℹ️Venue: Impact Hub 2F (No. 2, Section 3, Chongqing South Road, Zhongzheng District, Taipei City)
+
+Event details, recaps, and press coverage are collected on the [Digital Resilience Forum event page](/en/events/2026-03-25-digital-resilience-forum/).

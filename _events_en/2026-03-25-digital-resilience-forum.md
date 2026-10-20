@@ -37,7 +37,7 @@ The subsea cables that connect the internet have recently become a major focus. 
 Registration link: [Google Form](https://forms.gle/ThgUp5aVk9iiUv5u7)
 
 Instead of simply worrying, come learn more!!
-The first { [Digital Resilience Forum](/en/news/2026-03-25-past-events/) } will take a close look at every facet of the subsea cable issue. Alongside presentations on two technical projects, the “Taiwan Subsea Cable Dynamic Map” and “Digital Service Resilience Testing,” which will help everyone understand what exactly we should worry about when it comes to subsea cables, the forum will examine their impact from the perspectives of policy, social security, and civic participation.
+The first { Digital Resilience Forum } will take a close look at every facet of the subsea cable issue. Alongside presentations on two technical projects, the “Taiwan Subsea Cable Dynamic Map” and “Digital Service Resilience Testing,” which will help everyone understand what exactly we should worry about when it comes to subsea cables, the forum will examine their impact from the perspectives of policy, social security, and civic participation.
 
 This is CRC’s first public event. Register now and join us in identifying the problems so that we can find ways to respond.
 
@@ -46,3 +46,11 @@ This is CRC’s first public event. Register now and join us in identifying the 
 ℹ️Venue: Impact Hub 2F (No. 2, Section 3, Chongqing South Road, Zhongzheng District, Taipei City)
 
 > Seating is limited; please register here: [Google Form](https://forms.gle/ThgUp5aVk9iiUv5u7)
+
+## After the forum: slides, recaps, and press coverage
+
+- [Speakers’ slides from Cheng Peng, Li-Heng Yu, and Irvin Chen](/en/news/2026-03-25-past-events/)
+- [CRC’s forum deck: simulating a drastic drop in Taiwan’s international internet traffic](/en/ideas/2026-03-25-crc-march-25-decks/)
+- [Event recap: highlights from the forum’s first session](/en/records/2026-04-01-forum-recap-upper-half/)
+- [Rti coverage: subsea cables, traffic, and response strategies](/en/records/2026-03-27-rti-forum-coverage/)
+- [DSET coverage: comparing Taiwan’s and Ukraine’s cyber defense experience](/en/records/2026-04-10-dset-forum-coverage/)
