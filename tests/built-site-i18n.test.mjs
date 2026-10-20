@@ -677,8 +677,8 @@ test('page titles drop the suffix by display width, pinned by a fixture and ever
       const source = await read(`${dir}/${file}`);
       const frontMatter = source.match(/^---\n([\s\S]*?)\n---/)?.[1] ?? '';
       if (/^draft:\s*true\s*$/m.test(frontMatter)) continue;
-      // The prebuilt household route hard-codes its <title> in layouts/household-digital-go-bag.html; head-seo never renders it.
-      if (/^layout:\s*household-digital-go-bag\s*$/m.test(frontMatter)) continue;
+      // The prebuilt household routes hard-code their <title> in layouts/household-digital-go-bag(-en).html; head-seo never renders it.
+      if (/^layout:\s*household-digital-go-bag(-en)?\s*$/m.test(frontMatter)) continue;
       const url = frontMatter.match(/^permalink:\s*(\S+)\s*$/m)?.[1] ?? `${prefix}${file.replace(/\.md$/, '')}/`;
       const built = await read(`_site${url}index.html`).catch(error => {
         if (error.code === 'ENOENT') return null;

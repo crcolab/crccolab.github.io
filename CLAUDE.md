@@ -49,10 +49,13 @@ plus Jekyll (built by GitHub Pages on push from `main`) for the content sections
 - `ideas/` — section index + per-section `feed.xml`
 - `ideas/household-digital-go-bag/` — prebuilt Vite app from the `DTL-aug-site-lite` repo
   (built with `VITE_BASE=/ideas/household-digital-go-bag/`; its build writes each route's
-  title, description, canonical and JSON-LD). Its `index.html` lives in `_layouts/household-digital-go-bag.html`
-  (wrapped in `{% raw %}`) so the `_ideas` item can own the route; everything else in
+  title, description, canonical, hreflang and JSON-LD). Its `index.html` lives in `_layouts/household-digital-go-bag.html`
+  and its `en/index.html` in `_layouts/household-digital-go-bag-en.html` (both wrapped in
+  `{% raw %}`) so the `_ideas` and `_ideas_en` items can own those routes; everything else in
   `dist/` except `index.html`/`404.html` goes in this folder. To update, rebuild and replace
-  both, deleting the old hashed `assets/`. The `/en/` item is a translation-in-progress notice.
+  all three, deleting the old hashed `assets/`. The app serves its English under its own
+  `/en/` (`/ideas/household-digital-go-bag/en/`), so the `_ideas_en` item's permalink is there,
+  the one exception to the `/en/` prefix; `en/ideas/household-digital-go-bag/` redirects to it.
   Its build still requests Noto Sans TC from Google Fonts until upstream drops it; after a
   rebuild, strip `family=Noto+Sans+TC:…&` from the font URLs (a typography test enforces this).
   Its hero WebP lives at `/assets/2026-AUG-30-household-digital-go-bag.webp` (the items'
