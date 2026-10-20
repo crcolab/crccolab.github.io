@@ -1,6 +1,7 @@
 ---
 title: "Why Run a Mobile-Network Throttling Drill? Is There Any Point?"
 date: 2026-07-22
+last_modified_at: 2026-10-21
 category: NOTE
 summary: "Taiwan's 2026 Urban Resilience Exercise throttles mobile data for the first time: 30 minutes from 2:30 pm on August 10 and August 13. From quake- and typhoon-damaged base stations to drills in Japan, South Korea, NATO and Finland, this piece discusses the significance of bringing outage scenarios into disaster preparedness drills."
 og_title: "Why Run a Mobile-Network Throttling Drill? Is There Any Point?"
@@ -66,6 +67,8 @@ citations:
     url: "https://www.cna.com.tw/news/aipl/202607210026.aspx"
     publisher: "Central News Agency"
 ---
+
+Yes, there is. Typhoons and earthquakes can knock out base stations through power loss or damage, damage to subsea cables can slow the whole island's connection, and the servers behind many everyday apps sit overseas. Taiwan's 2026 Urban Resilience Exercise is the first to throttle mobile data: for 30 minutes from 2:30 pm on August 10 and August 13\[10\], so people can practice offline maps, cash payments, and reaching each other by phone number before a real disaster. It also answers one of the conclusions of CRC's March forum: drills, whether run by government or by civil society, need to include scenarios in which the network is damaged\[5\].
 
 Taiwan ranks among the world's best for mobile data pricing, connection speed, and connection quality. That is the fruit of years of construction and maintenance by the three major telecom operators and the government, and it is why the public enjoys a mobile network environment that is both stable and inexpensive.
 
