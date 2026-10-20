@@ -261,3 +261,43 @@ test('built pages carry a banner template offering the other locale', async () =
     assert.ok(html.indexOf('id="crc-dock"') < html.indexOf('/assets/consent.js'), `${path} dock must precede consent.js`);
   }
 });
+
+test('built hackathon listing entry defers to the event page for canonical, sitemap and Event JSON-LD', async () => {
+  const { readdir } = await import('node:fs/promises');
+  const target = 'https://crcolab.art/events/hackathon-2026/';
+  const listing = await read('_site/events/2026-05-23-hackathon-2026/index.html');
+  assert.equal(listing.match(/<link rel="canonical" href="([^"]*)"/)?.[1], target);
+  assert.equal(listing.match(/<meta property="og:url" content="([^"]*)"/)?.[1], target);
+  const robots = listing.match(/<meta name="robots" content="([^"]*)"/)?.[1] ?? '';
+  assert.ok(robots, 'the listing entry carries a robots meta');
+  assert.doesNotMatch(robots, /noindex/);
+  const sitemap = await read('_site/sitemap.xml');
+  assert.match(sitemap, /<loc>https:\/\/crcolab\.art\/events\/hackathon-2026\/<\/loc>/, 'the event page stays in the sitemap');
+  assert.doesNotMatch(sitemap, /2026-05-23-hackathon-2026/);
+  assert.match(await read('_site/events/index.html'), /href="\/events\/hackathon-2026\/"/);
+
+  const htmlPaths = [];
+  const walk = async dir => {
+    for (const dirent of await readdir(new URL(`../${dir}`, import.meta.url), { withFileTypes: true })) {
+      const path = `${dir}/${dirent.name}`;
+      if (dirent.isDirectory()) {
+        if (path !== '_site/ideas/household-digital-go-bag/assets') await walk(path);
+      } else if (dirent.name.endsWith('.html')) {
+        htmlPaths.push(path);
+      }
+    }
+  };
+  await walk('_site');
+  const hackathonEvents = [];
+  for (const path of htmlPaths) {
+    const html = await read(path);
+    for (const [, json] of html.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)) {
+      for (const item of [JSON.parse(json)].flat()) {
+        const types = [item['@type']].flat();
+        const isEvent = types.some(type => type === 'Hackathon' || /Event$/.test(type));
+        if (isEvent && String(item.startDate ?? '').startsWith('2026-05-23')) hackathonEvents.push(path);
+      }
+    }
+  }
+  assert.deepEqual(hackathonEvents, ['_site/events/hackathon-2026/index.html']);
+});
