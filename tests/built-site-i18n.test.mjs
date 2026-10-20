@@ -774,6 +774,11 @@ test('built robots.txt names every documented answer-engine crawler and blocks n
     'GPTBot', 'ClaudeBot', 'Google-Extended', 'Applebot-Extended', 'Amazonbot', 'MistralAI-Training', 'meta-externalagent', 'CCBot',
   ];
   for (const token of tokens) assert.match(robots, new RegExp(`^User-agent: ${token}$`, 'm'), `robots.txt lost ${token}`);
+  // A crawler obeys only the most specific group naming it, so every group repeats the Content Signals line.
+  const groups = robots.split(/\n\s*\n/).filter(group => /^User-agent:/m.test(group));
+  for (const group of groups) {
+    assert.match(group, /^Content-Signal: search=yes, ai-input=yes, ai-train=yes$/m, `group lacks Content-Signal: ${group.split('\n').find(line => line.startsWith('User-agent:'))}`);
+  }
 });
 
 test('built hand-written pages allow full previews and keep page chrome out of snippets', async () => {

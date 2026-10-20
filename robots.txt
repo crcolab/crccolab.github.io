@@ -1,4 +1,10 @@
+# Content Signals (https://contentsignals.org/): search = search index and
+# results with links and excerpts; ai-input = retrieval, grounding and other
+# real-time use in AI answers; ai-train = training or fine-tuning AI models.
+# All three are welcome. The line is repeated in every group, because a crawler
+# obeys only the most specific group that names it (RFC 9309).
 User-agent: *
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
 Allow: /
 
 # AI / LLM crawlers — explicitly welcome, grouped by what each one does.
@@ -15,6 +21,7 @@ User-agent: Applebot
 User-agent: Amzn-SearchBot
 User-agent: MistralAI-Index
 User-agent: meta-webindexer
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
 Allow: /
 
 # User-triggered retrieval: fetches a page when someone asks an assistant about it
@@ -25,6 +32,7 @@ User-agent: MistralAI-User
 User-agent: DuckAssistBot
 User-agent: Amzn-User
 User-agent: meta-externalfetcher
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
 Allow: /
 
 # Model training and grounding (Google-Extended and Applebot-Extended are
@@ -37,6 +45,7 @@ User-agent: Amazonbot
 User-agent: MistralAI-Training
 User-agent: meta-externalagent
 User-agent: CCBot
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
 Allow: /
 
 Sitemap: https://crcolab.art/sitemap.xml
