@@ -17,6 +17,15 @@ location_address:
 super_event:
   name: "AI for ALL: Opening Act, Taiwan Festival 2026"
   url: https://etat.com/archives/A20261010041312459
+  start_date: 2026-10-17
+  end_date: 2026-10-25
+  location_name: "B3 Lobby (Basement Level 3), New Taipei City Art Museum"
+  location_address:
+    street_address: No. 300, Guanqian Road
+    locality: Yingge District
+    region: New Taipei City
+    postal_code: "239005"
+    country: TW
 creators:
 - { name: Lee Tzu Tung, slug: tzu-tung }
 - { name: Meichun Lee, slug: meichun }

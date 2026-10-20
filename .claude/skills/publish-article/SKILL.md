@@ -35,7 +35,7 @@ Fill every payload key:
 | `author` + `author_slug` | the slug must match a `_team/<slug>.md` |
 | `image` / `og_image` + `image_alt` | see **Social card** below |
 | `og_title`, `og_description` | see **Social card** below |
-| events only | `event_type` (e.g. `ExhibitionEvent`), `location_address` {street_address, locality, region, postal_code, country}, `location_url`, `super_event` {name, url}, `creators` [{name, slug}] — these feed the Event JSON-LD; `external_url` adds the "view source ↗" button |
+| events only | `event_type` (e.g. `ExhibitionEvent`), `location_address` {street_address, locality, region, postal_code, country}, `location_url`, `super_event` {name, url, start_date, end_date, location_name, location_address} (emitted only with `start_date` + `location_name` — Google validates it as its own Event), `creators` [{name, slug}] — these feed the Event JSON-LD; `external_url` adds the "view source ↗" button |
 
 `CLAUDE.md` holds the authoritative key catalogue; `_includes/head-seo.html` is what consumes them.
 

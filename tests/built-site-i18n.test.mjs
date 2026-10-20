@@ -193,3 +193,25 @@ test('idea pages without tags omit the keywords JSON-LD field', async () => {
   const zh = await read('_site/ideas/2026-03-25-crc-march-25-decks/index.html');
   assert.doesNotMatch(zh, /"keywords"\s*:\s*""/);
 });
+
+test('built event pages only nest a superEvent that Google can validate as an Event', async () => {
+  const { readdir } = await import('node:fs/promises');
+  const pages = [];
+  for (const prefix of ['_site/events', '_site/en/events']) {
+    for (const slug of await readdir(new URL(`../${prefix}`, import.meta.url))) {
+      const html = await read(`${prefix}/${slug}/index.html`).catch(() => null);
+      if (html) pages.push([`${prefix}/${slug}`, html]);
+    }
+  }
+  let nested = 0;
+  for (const [path, html] of pages) {
+    for (const [, json] of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
+      const data = JSON.parse(json);
+      if (!data.superEvent) continue;
+      nested += 1;
+      assert.ok(data.superEvent.startDate, `${path} superEvent lacks startDate`);
+      assert.ok(data.superEvent.location?.name, `${path} superEvent lacks location`);
+    }
+  }
+  assert.ok(nested >= 2, 'the AI for ALL exhibition pages should nest the festival');
+});

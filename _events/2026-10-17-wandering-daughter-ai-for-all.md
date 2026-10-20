@@ -17,6 +17,15 @@ location_address:
 super_event:
   name: AI 萬物：起鼓，2026 臺灣嘉年華
   url: https://etat.com/archives/A20261010041312459
+  start_date: 2026-10-17
+  end_date: 2026-10-25
+  location_name: 新北市美術館 地下三樓大廳（B3）
+  location_address:
+    street_address: 館前路 300 號
+    locality: 鶯歌區
+    region: 新北市
+    postal_code: "239005"
+    country: TW
 creators:
 - { name: 李紫彤, slug: tzu-tung }
 - { name: 李梅君, slug: meichun }

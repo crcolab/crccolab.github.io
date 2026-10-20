@@ -1,0 +1,9 @@
+{%- comment -%} schema.org PostalAddress for include.address (a location_address mapping); empty when absent. {%- endcomment -%}
+{%- assign address = include.address -%}
+{%- if address -%}{ "@type": "PostalAddress"
+  {%- if address.street_address %}, "streetAddress": {{ address.street_address | jsonify }}{% endif -%}
+  {%- if address.locality %}, "addressLocality": {{ address.locality | jsonify }}{% endif -%}
+  {%- if address.region %}, "addressRegion": {{ address.region | jsonify }}{% endif -%}
+  {%- if address.postal_code %}, "postalCode": {{ address.postal_code | append: '' | jsonify }}{% endif -%}
+  {%- if address.country %}, "addressCountry": {{ address.country | jsonify }}{% endif %} }
+{%- endif -%}

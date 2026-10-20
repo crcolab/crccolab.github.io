@@ -112,19 +112,13 @@
 {% if page.section == "events" %}
 {%- comment -%}
   Optional event keys: event_type (schema.org Event subtype), location_address
-  (mapping of PostalAddress fields), location_url, super_event {name, url}, and
-  creators — a list of {name, slug} whose work is shown, emitted as workFeatured.
+  (mapping of PostalAddress fields), location_url, super_event {name, url,
+  start_date, end_date, location_name, location_address} — emitted only with a
+  start_date and location_name, since Google validates it as an Event of its own —
+  and creators — a list of {name, slug} whose work is shown, emitted as workFeatured.
 {%- endcomment -%}
-{%- capture address_json -%}
-  {%- assign address = page.location_address -%}
-  {%- if address -%}{ "@type": "PostalAddress"
-    {%- if address.street_address %}, "streetAddress": {{ address.street_address | jsonify }}{% endif -%}
-    {%- if address.locality %}, "addressLocality": {{ address.locality | jsonify }}{% endif -%}
-    {%- if address.region %}, "addressRegion": {{ address.region | jsonify }}{% endif -%}
-    {%- if address.postal_code %}, "postalCode": {{ address.postal_code | append: '' | jsonify }}{% endif -%}
-    {%- if address.country %}, "addressCountry": {{ address.country | jsonify }}{% endif %} }
-  {%- endif -%}
-{%- endcapture -%}
+{%- capture address_json -%}{% include postal-address-json.html address=page.location_address %}{%- endcapture -%}
+{%- capture super_address_json -%}{% include postal-address-json.html address=page.super_event.location_address %}{%- endcapture -%}
 {%- capture creators_json -%}
   {%- assign creator_written = false -%}
   {%- for creator in page.creators -%}
@@ -143,7 +137,10 @@
   {% if page.end_date %}"endDate": "{{ page.end_date | date: '%Y-%m-%d' }}",{% endif %}
   {% if page.location_name %}"location": { "@type": "Place", "name": {{ page.location_name | jsonify }}{% if address_json != "" %}, "address": {{ address_json }}{% endif %}{% if page.location_url %}, "url": {{ page.location_url | jsonify }}{% endif %} },
   "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",{% endif %}
-  {% if page.super_event.name %}"superEvent": { "@type": "Event", "name": {{ page.super_event.name | jsonify }}{% if page.super_event.url %}, "url": {{ page.super_event.url | jsonify }}{% endif %} },{% endif %}
+  {% assign super_event = page.super_event %}{% if super_event.name and super_event.start_date and super_event.location_name %}"superEvent": { "@type": "Event", "name": {{ super_event.name | jsonify }},
+    "startDate": "{{ super_event.start_date | date: '%Y-%m-%d' }}",{% if super_event.end_date %} "endDate": "{{ super_event.end_date | date: '%Y-%m-%d' }}",{% endif %}
+    "location": { "@type": "Place", "name": {{ super_event.location_name | jsonify }}{% if super_address_json != "" %}, "address": {{ super_address_json }}{% endif %} },
+    "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode"{% if super_event.url %}, "url": {{ super_event.url | jsonify }}{% endif %} },{% endif %}
   {% if creators_json != "" %}"workFeatured": { "@type": "CreativeWork", "name": {{ page.title | jsonify }}, "creator": [{{ creators_json }}] },
   "performer": [{{ creators_json }}],{% endif %}
   {% if page.tags and page.tags.size > 0 %}"keywords": {{ page.tags | join: ',' | jsonify }},{% endif %}
