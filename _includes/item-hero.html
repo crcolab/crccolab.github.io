@@ -1,0 +1,16 @@
+{%- comment -%}
+  Item hero (page.image). If a WebP with the same basename exists in the site's static files,
+  the <img> is wrapped in <picture> with that WebP as the source; otherwise the plain <img>.
+  og:image / twitter:image (head-seo.html) keep pointing at page.image.
+{%- endcomment -%}
+{%- assign hero_parts = page.image | split: "." -%}
+{%- assign hero_ext = hero_parts | last | downcase -%}
+{%- assign hero_webp = "" -%}
+{%- if hero_ext == "jpg" or hero_ext == "jpeg" or hero_ext == "png" -%}
+  {%- assign hero_stem_count = hero_parts | size | minus: 1 -%}
+  {%- assign hero_candidate = hero_parts | slice: 0, hero_stem_count | join: "." | append: ".webp" -%}
+  {%- assign hero_match = site.static_files | where: "path", hero_candidate | first -%}
+  {%- if hero_match -%}{%- assign hero_webp = hero_candidate -%}{%- endif -%}
+{%- endif -%}
+{%- capture hero_img -%}<img class="item__image" src="{{ page.image }}"{% if page.image_width and page.image_height %} width="{{ page.image_width }}" height="{{ page.image_height }}"{% endif %} alt="{{ page.image_alt | default: page.title | escape }}">{%- endcapture -%}
+{%- if hero_webp != "" -%}<picture><source srcset="{{ hero_webp }}" type="image/webp">{{ hero_img }}</picture>{%- else -%}{{ hero_img }}{%- endif -%}

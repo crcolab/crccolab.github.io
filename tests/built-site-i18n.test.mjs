@@ -214,6 +214,99 @@ test('root feeds and latest-json include ideas entries', async () => {
   assert.ok(Array.isArray(enLatest.ideas) && enLatest.ideas.length >= 1, 'en latest.json missing ideas[]');
 });
 
+test('item hero images serve WebP with a JPEG/PNG fallback and keep social cards on the original', async () => {
+  const { readdir, stat } = await import('node:fs/promises');
+  const repoFile = path => new URL(`../${path}`, import.meta.url);
+  const exists = path => stat(repoFile(path)).then(() => true, () => false);
+  const sizes = new Map();
+  const sizeOf = async path => {
+    if (!sizes.has(path)) sizes.set(path, (await stat(repoFile(path))).size);
+    return sizes.get(path);
+  };
+  const skipDirs = new Set(['_site/ideas/household-digital-go-bag/assets']);
+  const pages = [];
+  const walk = async dir => {
+    for (const entry of await readdir(new URL(`../${dir}/`, import.meta.url), { withFileTypes: true })) {
+      const path = `${dir}/${entry.name}`;
+      if (entry.isDirectory()) {
+        if (!skipDirs.has(path)) await walk(path);
+      } else if (entry.name.endsWith('.html')) {
+        pages.push(path);
+      }
+    }
+  };
+  await walk('_site');
+
+  const problems = [];
+  let pictures = 0;
+  for (const page of pages.sort()) {
+    const html = await read(page);
+    const isItemPage = /^_site\/(en\/)?(news|events|records|ideas)\//.test(page);
+    let heroSrc = null;
+    for (const match of isItemPage ? html.matchAll(/<img\b[^>]*>/g) : []) {
+      const tag = match[0];
+      const classes = tag.match(/\sclass="([^"]*)"/)?.[1].split(/\s+/) ?? [];
+      if (!classes.includes('item__image')) continue;
+      const src = tag.match(/\ssrc="([^"]*)"/)?.[1] ?? '(no src)';
+      const where = `${page} <img src="${src}">`;
+      heroSrc = src;
+      if (!/^\/[^?#]+\.(jpe?g|png)$/i.test(src)) {
+        problems.push(`${where}: hero src must stay a root-absolute JPEG or PNG`);
+        continue;
+      }
+      const file = src.slice(1);
+      const webp = file.replace(/\.(jpe?g|png)$/i, '.webp');
+      const before = html.slice(0, match.index);
+      const pictureOpen = before.lastIndexOf('<picture');
+      const inPicture = pictureOpen > before.lastIndexOf('</picture>');
+      if (!(await exists(webp))) {
+        if (inPicture) problems.push(`${where}: wrapped in <picture> although ${webp} does not exist`);
+        continue;
+      }
+      const sourceTags = inPicture ? html.slice(pictureOpen, match.index).match(/<source\b[^>]*>/g) ?? [] : [];
+      const hasWebpSource = sourceTags.some(source => /\stype="image\/webp"/.test(source)
+        && source.match(/\ssrcset="([^"]*)"/)?.[1] === `/${webp}`);
+      const closeAt = html.indexOf('</picture>', match.index + tag.length);
+      if (!inPicture || !hasWebpSource || closeAt < 0 || html.slice(match.index + tag.length, closeAt).trim() !== '') {
+        problems.push(`${where}: must sit inside <picture> preceded by <source type="image/webp" srcset="/${webp}">`);
+      }
+      const width = tag.match(/\swidth="([^"]*)"/)?.[1];
+      const height = tag.match(/\sheight="([^"]*)"/)?.[1];
+      if (!/^[1-9]\d*$/.test(width ?? '') || !/^[1-9]\d*$/.test(height ?? '')) {
+        problems.push(`${where}: lost its width/height`);
+      }
+      if ((await sizeOf(webp)) >= (await sizeOf(file))) problems.push(`${where}: /${webp} is not smaller than ${src}`);
+      pictures += 1;
+    }
+    let socialSeen = 0;
+    for (const [tag] of html.matchAll(/<meta\b[^>]*>/g)) {
+      const key = tag.match(/\s(?:property|name)="([^"]*)"/)?.[1];
+      if (key !== 'og:image' && key !== 'twitter:image') continue;
+      socialSeen += 1;
+      const content = tag.match(/\scontent="([^"]*)"/)?.[1] ?? '';
+      if (/\.webp(?:[?#]|$)/i.test(content)) problems.push(`${page}: ${key} must not point at a WebP (${content})`);
+      if (heroSrc && !content.endsWith(heroSrc)) problems.push(`${page}: ${key} must keep the original ${heroSrc} (got ${content})`);
+    }
+    if (heroSrc && socialSeen < 2) problems.push(`${page}: hero page is missing og:image or twitter:image`);
+  }
+
+  for (const dir of ['assets', 'ideas/household-digital-go-bag']) {
+    for (const entry of await readdir(new URL(`../${dir}/`, import.meta.url), { withFileTypes: true })) {
+      if (!entry.isFile() || !entry.name.endsWith('.webp')) continue;
+      const stem = `${dir}/${entry.name.replace(/\.webp$/, '')}`;
+      for (const ext of ['jpg', 'jpeg', 'png']) {
+        if (!(await exists(`${stem}.${ext}`))) continue;
+        if ((await sizeOf(`${dir}/${entry.name}`)) >= (await sizeOf(`${stem}.${ext}`))) {
+          problems.push(`${dir}/${entry.name} is not smaller than ${stem}.${ext}`);
+        }
+        break;
+      }
+    }
+  }
+  assert.ok(problems.length === 0, `hero images must serve WebP with a JPEG/PNG fallback and keep social cards on the original:\n${problems.join('\n')}`);
+  assert.ok(pictures >= 15, `checked ${pictures} <picture> hero images; expected at least 15`);
+});
+
 test('idea pages carry Article JSON-LD with resolved author', async () => {
   const zh = await read('_site/ideas/2026-03-25-crc-march-25-decks/index.html');
   assert.match(zh, /"@type"\s*:\s*"Article"/);
