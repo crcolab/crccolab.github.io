@@ -1,31 +1,25 @@
 User-agent: *
 Allow: /
 
-# AI / LLM crawlers — explicitly welcome
-User-agent: GPTBot
-Allow: /
+# AI / LLM crawlers — explicitly welcome, grouped by what each one does.
+# The rule above already allows them; these groups record the decision.
 
+# Search discovery: builds the index an AI answer cites from
 User-agent: OAI-SearchBot
-Allow: /
-
-User-agent: ChatGPT-User
-Allow: /
-
-User-agent: ClaudeBot
-Allow: /
-
-User-agent: Claude-Web
-Allow: /
-
-User-agent: anthropic-ai
-Allow: /
-
+User-agent: Claude-SearchBot
 User-agent: PerplexityBot
 Allow: /
 
-User-agent: Google-Extended
+# User-triggered retrieval: fetches a page when someone asks an assistant about it
+User-agent: ChatGPT-User
+User-agent: Claude-User
+User-agent: Perplexity-User
 Allow: /
 
+# Model training and grounding
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: Google-Extended
 User-agent: CCBot
 Allow: /
 
