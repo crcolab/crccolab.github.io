@@ -1,0 +1,151 @@
+---
+layout: null
+permalink: /404.html
+sitemap: false
+---
+{%- comment -%}
+  GitHub Pages serves this one file for every missing path, so it carries both
+  locales: the head script picks one from the requested path (/en/… → en-US) and
+  CSS hides the other. Without JS both blocks show, zh-Hant first.
+  The suggestion list matches cut-off links such as /ideas/2026-03-25-crc- against
+  every item URL in that locale.
+{%- endcomment -%}
+{%- assign locales = "zh-Hant,en-US" | split: "," -%}
+{%- assign sections = "news,events,records,ideas,team" | split: "," -%}
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>{{ site.data.i18n["zh-Hant"].not_found.title }}｜Cyborg Resilience Co-lab</title>
+<script>
+  (function () {
+    var locale = /^\/en(\/|$)/.test(location.pathname) ? 'en-US' : 'zh-Hant';
+    document.documentElement.lang = locale;
+    document.documentElement.setAttribute('data-locale', locale);
+    if (locale === 'en-US') document.title = {{ site.data.i18n["en-US"].not_found.title | append: "｜Cyborg Resilience Co-lab" | jsonify }};
+  })();
+</script>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Noto+Sans+TC:wght@400;500;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/sections.css">
+</head>
+<body>
+{%- for locale in locales %}
+{%- assign ui = site.data.i18n[locale] -%}
+{%- assign prefix = "" -%}{%- if locale == "en-US" -%}{%- assign prefix = "/en" -%}{%- endif %}
+<div class="not-found" lang="{{ locale }}" data-locale-block="{{ locale }}">
+  <header class="topbar">
+    <div class="topbar__inner">
+      <a class="topbar__home" href="{{ prefix }}/">
+        <span class="topbar__back" aria-hidden="true">←</span>
+        <span>Cyborg Resilience Co-lab</span>
+      </a>
+      <div class="topbar__crumb"><b>404</b></div>
+    </div>
+  </header>
+
+  <main class="index-page">
+    <div class="container">
+      <div class="section__head">
+        <h1 class="crc-heading"><span class="crc-heading__title">{{ ui.not_found.title }}</span></h1>
+        <p class="index-page__desc">{{ ui.not_found.lead }}</p>
+      </div>
+      <section class="not-found__suggest" data-suggest hidden>
+        <h2 class="not-found__label">{{ ui.not_found.suggest }}</h2>
+        <div class="index-page__list" data-suggest-list></div>
+      </section>
+      <section>
+        <h2 class="not-found__label">{{ ui.not_found.browse }}</h2>
+        <div class="index-page__list">
+          <a class="crc-news crc-news--link" href="{{ prefix }}/">
+            <div class="crc-news__row"><div><span class="crc-news__title">{{ ui.not_found.home }}</span></div><span class="crc-news__arrow" aria-hidden="true">↗</span></div>
+          </a>
+          {%- for section in sections %}
+          <a class="crc-news crc-news--link" href="{{ prefix }}/{{ section }}/">
+            <div class="crc-news__row"><div><span class="crc-news__title">{{ ui.sections[section] }}</span></div><span class="crc-news__arrow" aria-hidden="true">↗</span></div>
+          </a>
+          {%- endfor %}
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="sections-footer">
+    <div class="sections-footer__inner">
+      <span>© <span data-year></span> CRC · Cyborg Resilience Co-lab</span>
+      <a href="{{ prefix }}/feed.xml">{{ ui.footer.atom }}</a>
+    </div>
+  </footer>
+</div>
+{%- endfor %}
+{%- capture pages_json -%}
+{
+{%- for locale in locales -%}
+  {%- if locale == "en-US" -%}{%- assign suffix = "_en" -%}{%- else -%}{%- assign suffix = "" -%}{%- endif -%}
+  {{ locale | jsonify }}: [
+  {%- assign written = false -%}
+  {%- for name in sections -%}
+    {%- assign collection_key = name | append: suffix -%}
+    {%- for item in site[collection_key] -%}
+      {%- unless item.draft -%}
+        {%- if written %},{% endif -%}
+        { "url": {{ item.url | jsonify }}, "title": {{ item.title | default: item.name | jsonify }} }
+        {%- assign written = true -%}
+      {%- endunless -%}
+    {%- endfor -%}
+  {%- endfor -%}
+  ]{% unless forloop.last %},{% endunless %}
+{%- endfor -%}
+}
+{%- endcapture %}
+<script>
+  (function () {
+    var year = String(new Date().getFullYear());
+    document.querySelectorAll('[data-year]').forEach(function (el) { el.textContent = year; });
+
+    var pages = {{ pages_json }};
+    var locale = document.documentElement.getAttribute('data-locale');
+    var block = document.querySelector('[data-locale-block="' + locale + '"]');
+    var path;
+    try { path = decodeURIComponent(location.pathname); } catch (e) { path = location.pathname; }
+    path = path.toLowerCase().replace(/\/(index\.html)?$/, '');
+    var slug = path.split('/').pop();
+    // Too short a fragment (e.g. /news/a) would match everything in the section.
+    if (!block || slug.length < 4) return;
+    var section = path.slice(0, path.length - slug.length);
+    var matches = pages[locale].filter(function (page) {
+      var url = decodeURIComponent(page.url).toLowerCase();
+      return url.indexOf(section) === 0 && url.slice(section.length).indexOf(slug) === 0;
+    }).slice(0, 3);
+    if (!matches.length) return;
+    var list = block.querySelector('[data-suggest-list]');
+    matches.forEach(function (page) {
+      var link = document.createElement('a');
+      link.className = 'crc-news crc-news--link';
+      link.href = page.url;
+      var row = document.createElement('div');
+      row.className = 'crc-news__row';
+      var title = document.createElement('span');
+      title.className = 'crc-news__title';
+      title.textContent = page.title;
+      var wrap = document.createElement('div');
+      wrap.appendChild(title);
+      var arrow = document.createElement('span');
+      arrow.className = 'crc-news__arrow';
+      arrow.setAttribute('aria-hidden', 'true');
+      arrow.textContent = '↗';
+      row.appendChild(wrap);
+      row.appendChild(arrow);
+      link.appendChild(row);
+      list.appendChild(link);
+    });
+    block.querySelector('[data-suggest]').hidden = false;
+  })();
+</script>
+</body>
+</html>

@@ -141,3 +141,10 @@
   font-family:var(--font-display);color:var(--crc-purple)}
 .phase-table td{padding:10px 12px;border-bottom:1px solid var(--ink-100);vertical-align:top}
 .phase-table tr:last-child td{border-bottom:none}
+/* ---------- 404 (one page, both locales; the head script picks one) ---------- */
+html[data-locale="zh-Hant"] [data-locale-block="en-US"],
+html[data-locale="en-US"] [data-locale-block="zh-Hant"]{display:none}
+.not-found__label{margin:0;font-family:var(--font-display);font-size:var(--fs-label);font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--text-secondary)}
+.not-found__suggest{margin-bottom:44px}
+.not-found .index-page__list{margin-top:12px}
