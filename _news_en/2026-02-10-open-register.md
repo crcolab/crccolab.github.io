@@ -26,3 +26,5 @@ This is CRC’s first public event. Register now and join us in identifying the 
 ℹ️Venue: Impact Hub 2F (No. 2, Section 3, Chongqing South Road, Zhongzheng District, Taipei City)
 
 > Seating is limited; please register here: <https://forms.gle/ThgUp5aVk9iiUv5u7>
+
+The forum took place on March 25. Event details, the speakers’ slides, recaps, and press coverage are collected on the [Digital Resilience Forum event page](/en/events/2026-03-25-digital-resilience-forum/).

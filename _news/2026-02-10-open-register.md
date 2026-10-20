@@ -25,3 +25,5 @@ CRC 團隊首次辦理的公開活動，歡迎立即報名，跟我們一起辨�
 ℹ️地點：Impact Hub 2F （臺北市中正區重慶南路三段2 號）
 
 > 座位有限，煩請登記報名：<https://forms.gle/ThgUp5aVk9iiUv5u7>
+
+論壇已於三月 25 日舉行。活動資訊、講者簡報、會後記錄與媒體報導，都整理在[數位韌性論壇活動頁](/events/2026-03-25-digital-resilience-forum/)。

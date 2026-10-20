@@ -169,6 +169,91 @@ test('llms.txt documents ideas and team', async () => {
   assert.match(llms, /\/ideas\/feed\.xml/);
 });
 
+test('March forum pages link to the event hub in the same locale, and internal links resolve', async () => {
+  const { readdir } = await import('node:fs/promises');
+  const hub = '/events/2026-03-25-digital-resilience-forum/';
+  const forumPages = [
+    '/news/2026-02-10-open-register/',
+    '/news/2026-03-25-past-events/',
+    '/ideas/2026-03-25-crc-march-25-decks/',
+    '/records/2026-03-27-rti-forum-coverage/',
+    '/records/2026-04-01-forum-recap-upper-half/',
+    '/records/2026-04-10-dset-forum-coverage/',
+  ];
+  // a. the event hub lists the forum pages in its own locale
+  const hubLinks = forumPages.slice(1);
+  const [zhHub, enHub] = await Promise.all([
+    read(`_site${hub}index.html`),
+    read(`_site/en${hub}index.html`),
+  ]);
+  for (const path of hubLinks) {
+    assert.ok(zhHub.includes(`href="${path}"`), `zh event hub lacks href="${path}"`);
+    assert.ok(enHub.includes(`href="/en${path}"`), `en event hub lacks href="/en${path}"`);
+  }
+  // b. every spoke links back to the event hub in its own locale
+  const spokes = await Promise.all(forumPages.flatMap(path => [
+    read(`_site${path}index.html`).then(html => [path, html, `href="${hub}"`]),
+    read(`_site/en${path}index.html`).then(html => [`/en${path}`, html, `href="/en${hub}"`]),
+  ]));
+  for (const [page, html, link] of spokes) {
+    assert.ok(html.includes(link), `${page} does not link back to ${link}`);
+  }
+  // c. en-US forum pages never link to a zh-Hant forum page; the en decks list uses /en/ routes
+  const zhForumPaths = new Set([hub, ...forumPages]);
+  const enForumPages = [hub, ...forumPages].map(path => `/en${path}`);
+  const articleOf = html => html.match(/<article[\s\S]*?<\/article>/)?.[0] ?? '';
+  const enForumHtml = await Promise.all(enForumPages.map(page => read(`_site${page}index.html`)));
+  enForumPages.forEach((page, i) => {
+    const article = articleOf(enForumHtml[i]);
+    assert.ok(article, `${page} has no article content`);
+    for (const [, raw] of article.matchAll(/href="(\/(?!\/)[^"]*)"/g)) {
+      const path = raw.split('#')[0].split('?')[0];
+      assert.ok(!zhForumPaths.has(path), `${page} links to zh-Hant forum page ${raw}`);
+    }
+  });
+  const enDecks = articleOf(await read('_site/en/ideas/2026-03-25-crc-march-25-decks/index.html'));
+  assert.ok(enDecks.includes('href="/en/records/"'), 'en decks list lacks href="/en/records/"');
+  assert.ok(enDecks.includes('href="/en/news/"'), 'en decks list lacks href="/en/news/"');
+  // d. every internal href in the built HTML resolves to a file in _site
+  const files = [];
+  const walk = async rel => {
+    for (const entry of await readdir(new URL(`../_site/${rel}`, import.meta.url), { withFileTypes: true })) {
+      const child = rel ? `${rel}/${entry.name}` : entry.name;
+      if (entry.isDirectory()) await walk(child);
+      else files.push(child);
+    }
+  };
+  await walk('');
+  const known = new Set(files.map(file => `/${file}`));
+  const resolves = path => [path, `${path}index.html`, `${path}/index.html`, `${path}.html`].some(candidate => known.has(candidate));
+  const unescapeHtml = value => value
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;|&#x27;/g, "'")
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&');
+  const htmlPages = files.filter(file => file.endsWith('.html') && !file.startsWith('ideas/household-digital-go-bag/assets/'));
+  const broken = new Map();
+  for (const file of htmlPages) {
+    const html = await read(`_site/${file}`);
+    const page = `/${file.replace(/index\.html$/, '')}`;
+    for (const [, raw] of html.matchAll(/href="(\/(?!\/)[^"]*)"/g)) {
+      let path = unescapeHtml(raw).split('#')[0].split('?')[0] || '/';
+      try {
+        path = decodeURI(path);
+      } catch {
+        // keep the raw path when it is not valid percent-encoding
+      }
+      if (!resolves(path)) broken.set(path, [...(broken.get(path) ?? []), page]);
+    }
+  }
+  assert.equal(
+    broken.size,
+    0,
+    [...broken].map(([path, pages]) => `broken internal href ${path} on ${pages.join(', ')}`).join('\n'),
+  );
+});
+
 test('team profile pages use the member name in <title>, not the humanized slug', async () => {
   const [zh, en] = await Promise.all([
     read('_site/team/cheng/index.html'),
