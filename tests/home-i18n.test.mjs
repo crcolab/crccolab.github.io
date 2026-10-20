@@ -102,6 +102,27 @@ test('HUD target accessible names reference only the current locale', () => {
   }
 });
 
+test('homepage H1 names the organization once, as sr-only text', () => {
+  const textOf = html => html.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+  for (const [home, name] of [
+    [zh, '賽伯格韌性實驗室 Cyborg Resilience Co-lab'],
+    [en, 'Cyborg Resilience Co-lab'],
+  ]) {
+    const h1 = home.match(/<h1 class="hero__title">([\s\S]*?)<\/h1>/)?.[1] ?? '';
+    const srOnly = h1.match(/<span class="sr-only">((?:[^<]|<span[^>]*>[^<]*<\/span>)*)<\/span>/)?.[1];
+    assert.ok(srOnly !== undefined, 'H1 has an .sr-only name span');
+    assert.equal(textOf(srOnly), name);
+    assert.doesNotMatch(h1, /role="img"|aria-label=/, 'H1 must not announce the name a second time');
+    const logotypes = h1.match(/<span class="logotype[^"]*"[^>]*>/g) ?? [];
+    assert.ok(logotypes.length > 0, 'H1 logotype spans found');
+    for (const tag of logotypes) assert.match(tag, /aria-hidden="true"/);
+    const srOnlyElements = home.match(/<(\w+)[^>]*class="sr-only"[^>]*>(?:[^<]|<(\w+)[^>]*>[^<]*<\/\2>)*<\/\1>/g) ?? [];
+    const repeats = srOnlyElements.filter(el => el.includes('Cyborg Resilience Co-lab'));
+    assert.equal(repeats.length, 1, 'only the H1 .sr-only span may repeat the name on the page');
+    assert.ok(h1.includes(repeats[0]), 'the .sr-only name repeat must be the H1 span');
+  }
+});
+
 test('home pages advertise a 4th latest block for ideas', () => {
   assert.match(zh, /"key":"ideas","label":"提點子"/);
   assert.match(en, /"key":"ideas","label":"Ideas"/);
