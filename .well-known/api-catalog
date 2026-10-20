@@ -1,0 +1,19 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://crcolab.art/.well-known/api-catalog",
+      "item": [
+        { "href": "https://crcolab.art/api/latest.json", "type": "application/json" }
+      ]
+    },
+    {
+      "anchor": "https://crcolab.art/api/latest.json",
+      "service-desc": [
+        { "href": "https://crcolab.art/api/openapi.json", "type": "application/vnd.oai.openapi+json" }
+      ],
+      "describedby": [
+        { "href": "https://crcolab.art/llms.txt", "type": "text/markdown" }
+      ]
+    }
+  ]
+}

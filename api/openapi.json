@@ -1,0 +1,56 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Cyborg Resilience Co-lab latest items",
+    "version": "1.0.0",
+    "description": "Read-only JSON of the three most recent items in each content section of crcolab.art, regenerated on every site build. No authentication."
+  },
+  "servers": [{ "url": "https://crcolab.art" }],
+  "paths": {
+    "/api/latest.json": {
+      "get": {
+        "operationId": "getLatest",
+        "summary": "Latest three items per section",
+        "responses": {
+          "200": {
+            "description": "Latest items, newest first, keyed by section.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "news": { "$ref": "#/components/schemas/ItemList" },
+                    "events": { "$ref": "#/components/schemas/ItemList" },
+                    "records": { "$ref": "#/components/schemas/ItemList" },
+                    "ideas": { "$ref": "#/components/schemas/ItemList" }
+                  },
+                  "required": ["news", "events", "records", "ideas"]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ItemList": {
+        "type": "array",
+        "maxItems": 3,
+        "items": { "$ref": "#/components/schemas/Item" }
+      },
+      "Item": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string" },
+          "date": { "type": "string", "description": "Item date as YYYY-MON-DD, e.g. 2026-OCT-20.", "examples": ["2026-OCT-20"] },
+          "category": { "type": ["string", "null"] },
+          "summary": { "type": ["string", "null"], "description": "Summary truncated to 160 characters." },
+          "url": { "type": "string", "description": "Site-relative path of the item page, or an absolute URL when the item links elsewhere." }
+        },
+        "required": ["title", "date", "url"]
+      }
+    }
+  }
+}

@@ -800,3 +800,15 @@ test('built hand-written pages allow full previews and keep page chrome out of s
   }
   assert.match(await read('_site/assets/consent.js'), /banner\.setAttribute\('data-nosnippet', ''\)/);
 });
+
+test('built API catalog (RFC 9727) lists latest.json with its OpenAPI description', async () => {
+  const catalog = JSON.parse(await read('_site/.well-known/api-catalog'));
+  const openapi = JSON.parse(await read('_site/api/openapi.json'));
+  const latest = JSON.parse(await read('_site/api/latest.json'));
+  const self = catalog.linkset.find(entry => entry.anchor === 'https://crcolab.art/.well-known/api-catalog');
+  assert.deepEqual(self.item.map(link => link.href), ['https://crcolab.art/api/latest.json']);
+  const api = catalog.linkset.find(entry => entry.anchor === 'https://crcolab.art/api/latest.json');
+  assert.equal(api['service-desc'][0].href, 'https://crcolab.art/api/openapi.json');
+  const schema = openapi.paths['/api/latest.json'].get.responses['200'].content['application/json'].schema;
+  assert.deepEqual(Object.keys(latest).sort(), [...schema.required].sort(), 'openapi.json lists the sections latest.json emits');
+});

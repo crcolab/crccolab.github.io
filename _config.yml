@@ -67,6 +67,10 @@ defaults:
   - scope: { type: team_en }
     values: { layout: member, section: team, collection_name: team_en, locale: en-US }
 
+# dot-directories are skipped unless named here
+include:
+  - .well-known
+
 exclude:
   - README.md
   - LICENSE

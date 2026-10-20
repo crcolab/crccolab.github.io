@@ -60,6 +60,12 @@ plus Jekyll (built by GitHub Pages on push from `main`) for the content sections
   `og-image.png`, regenerate that WebP from it.
 - `team/` — machine-readable member index (no Atom feed; team is not time-series)
 - `api/latest.json` — Liquid-generated JSON the homepage fetches for its latest-3 blocks
+- `api/openapi.json` — hand-written OpenAPI description of `api/latest.json`; keep its
+  `required` sections in step with what `latest.json` emits (a built-site test checks)
+- `.well-known/api-catalog` — RFC 9727 linkset pointing at `api/latest.json` and its OpenAPI
+  description (`_config.yml` `include`s the dot-folder). GitHub Pages can't set headers, so the
+  homepage `Link` header and this file's `application/linkset+json` type come from Cloudflare
+  Response Header Transform Rules on the `crcolab.art` zone, not from the repo
 - `sections.css` — shared styles for section pages (loads after `styles.css`)
 
 ## Design system (must match across pages)
