@@ -1,0 +1,26 @@
+{%- comment -%}
+  Page <title>: title + "｜Cyborg Resilience Co-lab" when W + 26 <= 60, else title + "｜CRC" when W + 5 <= 60, else the bare title.
+  W counts CJK and fullwidth code points as 2 and every other code point as 1 (ranges mirror tests/built-site-i18n.test.mjs).
+{%- endcomment -%}
+{%- assign title_chars = include.title | split: "" -%}
+{%- assign title_width = 0 -%}
+{%- for ch in title_chars -%}
+{%- if ch >= "⺀" and ch < "ꓐ" -%}{%- assign title_width = title_width | plus: 2 -%}
+{%- elsif ch >= "가" and ch <= "힣" -%}{%- assign title_width = title_width | plus: 2 -%}
+{%- elsif ch >= "豈" and ch < "ﬀ" -%}{%- assign title_width = title_width | plus: 2 -%}
+{%- elsif ch >= "︰" and ch < "﹐" -%}{%- assign title_width = title_width | plus: 2 -%}
+{%- elsif ch >= "！" and ch < "｡" -%}{%- assign title_width = title_width | plus: 2 -%}
+{%- elsif ch >= "￠" and ch <= "￦" -%}{%- assign title_width = title_width | plus: 2 -%}
+{%- elsif ch >= "𠀀" and ch <= "𿿽" -%}{%- assign title_width = title_width | plus: 2 -%}
+{%- else -%}{%- assign title_width = title_width | plus: 1 -%}
+{%- endif -%}
+{%- endfor -%}
+{%- assign with_full = title_width | plus: 26 -%}
+{%- assign with_short = title_width | plus: 5 -%}
+{%- if with_full <= 60 -%}
+{{ include.title }}｜Cyborg Resilience Co-lab
+{%- elsif with_short <= 60 -%}
+{{ include.title }}｜CRC
+{%- else -%}
+{{ include.title }}
+{%- endif -%}

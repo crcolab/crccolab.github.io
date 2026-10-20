@@ -1,0 +1,31 @@
+---
+layout: null
+sitemap: false
+permalink: /tests/fixtures/title-suffix.html
+cases:
+  - {title: "Meshtastic Beginner Workshop Recap", expect: full}
+  - {title: "Meshtastic Beginner Workshop Photos", expect: short}
+  - {title: "Subsea Cables and Network Infrastructure Briefing, 2026", expect: short}
+  - {title: "Subsea Cables and Network Infrastructure Briefing (2026)", expect: none}
+  - {title: "斷網斷電時家裡的數位生活怎麼撐下去", expect: full}
+  - {title: "斷網斷電時家裡的數位生活怎麼撐下去?", expect: short}
+  - {title: "離線行動任務成功後我們在現場做了哪些事與學到了經驗教訓?", expect: short}
+  - {title: "離線行動任務成功後我們在現場做了哪些事與學到了經驗教訓呢", expect: none}
+  - {title: "【簡報】「斷網」：Offline Drill QA", expect: full}
+  - {title: "【簡報】「斷網」：Offline Drill Kit", expect: short}
+---
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<title>Page title width rule fixture</title>
+</head>
+<body>
+<ul>
+{%- for c in page.cases %}
+<li data-expect="{{ c.expect }}" data-title="{{ c.title | escape }}">{% include page-title.html title=c.title %}</li>
+{%- endfor %}
+</ul>
+</body>
+</html>
