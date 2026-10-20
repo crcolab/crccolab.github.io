@@ -276,6 +276,84 @@ test('built event pages only nest a superEvent that Google can validate as an Ev
   assert.ok(nested >= 2, 'the AI for ALL exhibition pages should nest the festival');
 });
 
+test('page titles drop the suffix by display width, pinned by a fixture and every built content page', async t => {
+  const { readdir } = await import('node:fs/promises');
+  // Mirrors _includes/page-title.html: CJK and fullwidth code points count 2, every other code point 1.
+  const wide = cp =>
+    (cp >= 0x2E80 && cp <= 0xA4CF) || (cp >= 0xAC00 && cp <= 0xD7A3) || (cp >= 0xF900 && cp <= 0xFAFF) ||
+    (cp >= 0xFE30 && cp <= 0xFE4F) || (cp >= 0xFF01 && cp <= 0xFF60) || (cp >= 0xFFE0 && cp <= 0xFFE6) ||
+    (cp >= 0x20000 && cp <= 0x3FFFD);
+  const width = s => [...s].reduce((sum, ch) => sum + (wide(ch.codePointAt(0)) ? 2 : 1), 0);
+  const pageTitle = title => {
+    if (width(title) + 26 <= 60) return { band: 'full', text: `${title}｜Cyborg Resilience Co-lab` };
+    if (width(title) + 5 <= 60) return { band: 'short', text: `${title}｜CRC` };
+    return { band: 'none', text: title };
+  };
+  const named = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'" };
+  const decode = s => s.replace(/&(#x[0-9a-f]+|#[0-9]+|amp|lt|gt|quot|apos);/gi, (_, name) => {
+    if (name[0] !== '#') return named[name.toLowerCase()];
+    const hex = name[1] === 'x' || name[1] === 'X';
+    return String.fromCodePoint(parseInt(name.slice(hex ? 2 : 1), hex ? 16 : 10));
+  });
+
+  // (a) Fixture: each <li> is rendered by the include; both its expectation and its text must match the rule.
+  const fixture = await read('_site/tests/fixtures/title-suffix.html');
+  const cases = [...fixture.matchAll(/<li data-expect="([^"]*)" data-title="([^"]*)">([\s\S]*?)<\/li>/g)]
+    .map(([, expect, title, text]) => ({ expect, title: decode(title), text: decode(text) }));
+  const fixtureMismatches = [];
+  for (const { expect, title, text } of cases) {
+    const want = pageTitle(title);
+    if (expect !== want.band) fixtureMismatches.push(`${title}: data-expect ${expect}, width rule says ${want.band}`);
+    if (text !== want.text) fixtureMismatches.push(`${title}: rendered ${text}, expected ${want.text}`);
+  }
+  assert.deepEqual(fixtureMismatches, []);
+  for (const w of [34, 35, 55, 56]) assert.ok(cases.some(c => width(c.title) === w), `fixture has no width-${w} case`);
+
+  // (b) Every built content item: its <title> is the front-matter title under the same rule.
+  const collections = [
+    ['_news', '/news/', 'zh-Hant'], ['_news_en', '/en/news/', 'en-US'],
+    ['_events', '/events/', 'zh-Hant'], ['_events_en', '/en/events/', 'en-US'],
+    ['_records', '/records/', 'zh-Hant'], ['_records_en', '/en/records/', 'en-US'],
+    ['_ideas', '/ideas/', 'zh-Hant'], ['_ideas_en', '/en/ideas/', 'en-US'],
+  ];
+  const bands = {};
+  const itemMismatches = [];
+  for (const [dir, prefix, locale] of collections) {
+    for (const file of (await readdir(new URL(`../${dir}/`, import.meta.url))).filter(name => name.endsWith('.md'))) {
+      const source = await read(`${dir}/${file}`);
+      const frontMatter = source.match(/^---\n([\s\S]*?)\n---/)?.[1] ?? '';
+      if (/^draft:\s*true\s*$/m.test(frontMatter)) continue;
+      // The prebuilt household route hard-codes its <title> in layouts/household-digital-go-bag.html; head-seo never renders it.
+      if (/^layout:\s*household-digital-go-bag\s*$/m.test(frontMatter)) continue;
+      const url = frontMatter.match(/^permalink:\s*(\S+)\s*$/m)?.[1] ?? `${prefix}${file.replace(/\.md$/, '')}/`;
+      const built = await read(`_site${url}index.html`).catch(error => {
+        if (error.code === 'ENOENT') return null;
+        throw error;
+      });
+      if (built === null) continue;
+      const titleLine = frontMatter.match(/^title:[ \t]*(.+?)[ \t]*$/m)?.[1];
+      assert.ok(titleLine, `${dir}/${file} has no title`);
+      assert.doesNotMatch(titleLine, /\\|^'| #/, `${dir}/${file}: title scalar form this check does not parse`);
+      const title = titleLine.startsWith('"') ? titleLine.slice(1, titleLine.lastIndexOf('"')) : titleLine;
+      const want = pageTitle(title);
+      const rendered = decode(built.match(/<title>([\s\S]*?)<\/title>/)?.[1] ?? '');
+      if (rendered !== want.text) itemMismatches.push(`${dir}/${file}: <title> ${rendered}, expected ${want.text}`);
+      bands[`${locale} ${want.band}`] = (bands[`${locale} ${want.band}`] ?? 0) + 1;
+    }
+  }
+  t.diagnostic(`band counts ${JSON.stringify(bands)}`);
+  assert.deepEqual(itemMismatches, []);
+  for (const band of ['full', 'short', 'none']) assert.ok(bands[`en-US ${band}`] > 0, `no en-US item lands in the ${band} band`);
+
+  // (c) A long en-US page (none band): <title> is bare, while og:title and twitter:title keep the full suffix.
+  const longPage = await read('_site/en/news/2026-02-10-open-register/index.html');
+  assert.doesNotMatch(longPage, /<title>[^<]*｜Cyborg Resilience Co-lab<\/title>/);
+  for (const name of ['og:title', 'twitter:title']) {
+    const content = decode(longPage.match(new RegExp(`<meta (?:property|name)="${name}" content="([^"]*)"`))?.[1] ?? '');
+    assert.ok(content.endsWith('｜Cyborg Resilience Co-lab'), `${name} lost the full suffix: ${content}`);
+  }
+});
+
 test('built pages carry a banner template offering the other locale', async () => {
   const pairs = [
     ['index.html', 'en-US', '/en/'],

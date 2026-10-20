@@ -5,7 +5,7 @@
 {% else %}
   {% assign page_title = page.title | default: site.title %}
 {% endif %}
-<title>{{ page_title }}｜Cyborg Resilience Co-lab</title>
+<title>{% include page-title.html title=page_title %}</title>
 <link rel="icon" type="image/png" href="/favicon.png">
 {%- comment -%} Team profiles are Person documents, not articles: no article:* / dcterms.date. {%- endcomment -%}
 {% assign is_article = false %}{% if page.collection and page.section != "team" %}{% assign is_article = true %}{% endif %}

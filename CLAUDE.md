@@ -93,6 +93,12 @@ Locale pattern: paired single-language static locales, with `zh-Hant` at existin
 - **Footer year:** `<span id="y"></span>` filled by inline script — keep that pattern.
 - **Homepage news blocks:** rendered by `script.js` from `/api/latest.json`; don't
   hard-code items into `index.html`.
+- **Page titles:** `<title>` is the page title plus `｜Cyborg Resilience Co-lab` when the
+  result is at most 60 wide (CJK and fullwidth characters count 2, everything else 1);
+  otherwise the title plus `｜CRC` if that fits in 60; otherwise the title alone. Both
+  locales follow it. `og:title`/`twitter:title` always keep the full suffix. The rule
+  lives in `_includes/page-title.html`; `tests/fixtures/title-suffix.html` pins both
+  sides of each threshold.
 
 ## Local preview
 
