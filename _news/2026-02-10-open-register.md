@@ -7,6 +7,8 @@ og_title: "報名開始：【數位韌性論壇】地緣政治下海纜與網路
 og_description: "海纜斷光怎麼辦？海纜是不是假議題？CRC 首場公開活動，分享「台灣海纜動態地圖」與「數位服務韌性檢測」，並從政策、社會安全、公民參與檢視海纜影響。三月 25 日（三）Impact Hub 2F，座位有限，立即報名。"
 image_alt: "灰底論壇海報：左側是綠、紫、白色圓點拼成的台灣地圖，下方交織白色與淺綠色波浪線。右側紫字依序為「{ 數位韌性論壇 }」、「地緣政治下 海纜與網路 基礎設施」、「3.25 (三) 1:30 / Impact Hub 2F」；底部依序標示「主辦單位」OCF_、歐噴 OPEN FUN、數位韌性松 g0v digiresith0n，「執行團隊」CRC，「指導單位」twnic、APNIC FOUNDATION isif asia。"
 image: /assets/2026-FEB-10-open-register-for-forum.jpg
+image_width: 2048
+image_height: 1717
 ---
 
 海纜斷光怎麼辦？海纜是不是假議題？

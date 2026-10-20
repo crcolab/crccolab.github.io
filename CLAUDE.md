@@ -15,7 +15,9 @@ plus Jekyll (built by GitHub Pages on push from `main`) for the content sections
 - `events/<slug>/` — self-contained event sub-pages with their own `index.html` + `styles.css`
 - `assets/` — shared images / SVGs / video
 - `_news/`, `_events/`, `_records/`, `_ideas/` — content collections, one Markdown file per item
-  (front-matter: `title`, `date`, `category`, `summary`, optional `image`,
+  (front-matter: `title`, `date`, `category`, `summary`, optional `image` (with
+  `image_width`/`image_height`, its pixel size measured from the file, so the hero
+  reserves its space before it loads),
   `source`/`external_url` for media, `start_date`/`end_date`/`location_name` for
   events (plus optional JSON-LD `event_type` such as `ExhibitionEvent`,
   `location_address` {street_address, locality, region, postal_code, country},
@@ -38,7 +40,7 @@ plus Jekyll (built by GitHub Pages on push from `main`) for the content sections
   and may use `title` in place of `name`)
 - `_team/` — member profiles (front-matter: `name`, `role`, optional
   `job_title` (occupation for the Person JSON-LD `jobTitle` only, not shown; else `role`),
-  `alternate_name` (the name in the other locale, JSON-LD `alternateName`), `bio_short`, `photo`, `photo_hud_target` (must match a landing-page
+  `alternate_name` (the name in the other locale, JSON-LD `alternateName`), `bio_short`, `photo` (with `photo_width`/`photo_height`, its pixel size), `photo_hud_target` (must match a landing-page
   `data-member-id`), `links` (email/github/mastodon/orcid/homepage), `featured`)
 - `_layouts/`, `_includes/` — Jekyll templates (item pages, section indexes, SEO head, Atom entries)
 - `news/`, `events/`, `records/` — section index pages + per-section `feed.xml`

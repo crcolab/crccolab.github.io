@@ -9,6 +9,8 @@ og_description: "Starlink alone is not the answer. At the Mar 25 Digital Resilie
 image_alt: "Square promotional graphic on a light grey background. Top left, the CRC logo on lime; top right, the logo of DSET, the Research Institute for Democracy, Society and Emerging Technology; the headline reads “DSET 出席數位韌性論壇 比較台灣與烏克蘭資安防衛經驗” (DSET attends the Digital Resilience Forum, comparing Taiwan’s and Ukraine’s cyber defense experience). Below, a photo of a speaker in glasses holding a microphone behind a laptop, a screen to the right showing a slide titled “觀察與討論” (Observations and Discussion), and audience members seen from behind. A dark blue strip at the bottom reads “國際交流 International Engagement”."
 external_url: https://dset.tw/event-news/481/
 image: /assets/2026-APR-10-dset-forum-coverage.jpg
+image_width: 2048
+image_height: 2048
 locale: en-US
 ---
 

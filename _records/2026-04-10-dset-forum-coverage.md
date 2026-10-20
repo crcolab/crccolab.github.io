@@ -9,6 +9,8 @@ og_description: "Starlink 不是單一解方。DSET 兼任研究員張仁瑋在�
 image_alt: "方形宣傳圖，淺灰底。左上為萊姆綠底的 CRC 標誌，右上為「DSET 科技、民主與社會研究中心」標誌，標題大字「DSET 出席數位韌性論壇　比較台灣與烏克蘭資安防衛經驗」。下方照片中，一名戴眼鏡的講者在筆電後持麥克風發言，右側螢幕投影標題為「觀察與討論」的簡報，前景是背對鏡頭的聽眾。底部深藍色條寫「國際交流 International Engagement」。"
 external_url: https://dset.tw/event-news/481/
 image: /assets/2026-APR-10-dset-forum-coverage.jpg
+image_width: 2048
+image_height: 2048
 ---
 
 <!-- date 2026-04-10 is an estimate; the DSET article did not include a publish date. Placed between the 3/25 forum and the 4/20 Kuma article. -->

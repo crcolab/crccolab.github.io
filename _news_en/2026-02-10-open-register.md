@@ -7,6 +7,8 @@ og_title: "Registration Open: Digital Resilience Forum on Subsea Cables · Mar 2
 og_description: "What happens when subsea cables go dark? CRC’s first public event pairs two technical projects with policy, social security, and civic participation. Mar 25, Impact Hub 2F, Taipei. Seats are limited."
 image_alt: "Grey forum poster: on the left, a map of Taiwan made of green, purple and white dots over interlacing white and pale-green wave lines. On the right, purple text reads “{ 數位韌性論壇 }” (Digital Resilience Forum), “地緣政治下 海纜與網路 基礎設施” (Subsea Cables and Network Infrastructure under Geopolitical Pressure) and “3.25 (三) 1:30 / Impact Hub 2F” (Wednesday, March 25, 1:30, Impact Hub 2F). Along the bottom: “主辦單位” (organizers) OCF_, OpenFun 歐噴 and 數位韌性松 g0v digiresith0n; “執行團隊” (executing team) CRC; “指導單位” (advisors) twnic and APNIC Foundation isif asia."
 image: /assets/2026-FEB-10-open-register-for-forum.jpg
+image_width: 2048
+image_height: 1717
 locale: en-US
 ---
 
