@@ -1,0 +1,17 @@
+{%- comment -%}
+  Item hero (page.image). The WebP is page.image_webp when that is set and exists in the site's static
+  files; otherwise the .webp sibling of page.image (webp-path.html). With a WebP, the <img> is wrapped in
+  <picture> with it as the source; otherwise the plain <img>.
+  og:image / twitter:image (head-seo.html) keep pointing at page.image.
+{%- endcomment -%}
+{%- assign hero_webp = "" -%}
+{%- if page.image_webp -%}
+  {%- assign hero_webp_match = site.static_files | where: "path", page.image_webp | first -%}
+  {%- if hero_webp_match -%}{%- assign hero_webp = page.image_webp -%}{%- endif -%}
+{%- endif -%}
+{%- if hero_webp == "" -%}
+  {%- include webp-path.html src=page.image -%}
+  {%- assign hero_webp = webp_path -%}
+{%- endif -%}
+{%- capture hero_img -%}<img class="item__image" src="{{ page.image }}"{% if page.image_width and page.image_height %} width="{{ page.image_width }}" height="{{ page.image_height }}"{% endif %} alt="{{ page.image_alt | default: page.title | escape }}">{%- endcapture -%}
+{%- if hero_webp != "" -%}<picture><source srcset="{{ hero_webp }}" type="image/webp">{{ hero_img }}</picture>{%- else -%}{{ hero_img }}{%- endif -%}

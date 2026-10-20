@@ -18,11 +18,11 @@ image_height: 1600
 
 CRC 在此正式宣佈：本次離線行動，任務成功！
 
-![離線行動現場](/assets/2026-MAY-24-offline-mission-2.jpg)
+![離線行動現場](/assets/2026-MAY-24-offline-mission-2.jpg){: width="1080" height="1394"}
 
-![離線行動現場](/assets/2026-MAY-24-offline-mission-4.jpg)
+![離線行動現場](/assets/2026-MAY-24-offline-mission-4.jpg){: width="1542" height="2048"}
 
-![離線行動現場](/assets/2026-MAY-24-offline-mission-5.jpg)
+![離線行動現場](/assets/2026-MAY-24-offline-mission-5.jpg){: width="2048" height="946"}
 
 更多後續分享，敬請關注我們。CRC 持續發電傳訊中⚡
 

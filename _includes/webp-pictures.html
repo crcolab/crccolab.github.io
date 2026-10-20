@@ -1,0 +1,33 @@
+{%- comment -%}
+  Wraps each <img> in include.html whose src has a .webp sibling (webp-path.html) in
+  <picture><source srcset="…webp" type="image/webp">…</picture>, keeping the tag's attributes and its
+  .jpg/.jpeg/.png src. The HTML is split on "<img " after a sentinel "<img @" is appended, so Liquid's
+  split (which drops trailing empty pieces) keeps every piece: HTML without an <img returns unchanged.
+{%- endcomment -%}
+{%- assign pic_pieces = include.html | append: "<img @" | split: "<img " -%}
+{%- assign pic_prev = "" -%}
+{%- for pic_piece in pic_pieces -%}
+  {%- if forloop.first -%}
+    {{ pic_piece }}
+  {%- elsif forloop.last -%}
+  {%- elsif pic_piece contains ">" -%}
+    {%- assign pic_attrs = pic_piece | split: ">" | first -%}
+    {%- assign pic_head = pic_attrs | append: ">" -%}
+    {%- assign pic_rest = pic_piece | remove_first: pic_head -%}
+    {%- assign pic_src_parts = " " | append: pic_attrs | split: ' src="' -%}
+    {%- assign pic_src = "" -%}
+    {%- if pic_src_parts.size > 1 -%}
+      {%- assign pic_src = pic_src_parts[1] | split: '"' | first -%}
+    {%- endif -%}
+    {%- include webp-path.html src=pic_src -%}
+    {%- assign pic_tail = pic_prev | slice: -18, 18 -%}
+    {%- if webp_path != "" and pic_tail != 'type="image/webp">' -%}
+      <picture><source srcset="{{ webp_path }}" type="image/webp"><img {{ pic_attrs }}></picture>{{ pic_rest }}
+    {%- else -%}
+      <img {{ pic_piece }}
+    {%- endif -%}
+  {%- else -%}
+    <img {{ pic_piece }}
+  {%- endif -%}
+  {%- assign pic_prev = pic_piece -%}
+{%- endfor -%}

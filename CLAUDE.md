@@ -17,7 +17,9 @@ plus Jekyll (built by GitHub Pages on push from `main`) for the content sections
 - `_news/`, `_events/`, `_records/`, `_ideas/` — content collections, one Markdown file per item
   (front-matter: `title`, `date`, `category`, `summary`, optional `image` (with
   `image_width`/`image_height`, its pixel size measured from the file, so the hero
-  reserves its space before it loads),
+  reserves its space before it loads; a `.webp` with the same basename next to it is
+  served automatically through `<picture>`, and `image_webp` points at one stored
+  elsewhere),
   `source`/`external_url` for media, `start_date`/`end_date`/`location_name` for
   events (plus optional JSON-LD `event_type` such as `ExhibitionEvent`,
   `location_address` {street_address, locality, region, postal_code, country},
@@ -53,6 +55,9 @@ plus Jekyll (built by GitHub Pages on push from `main`) for the content sections
   both, deleting the old hashed `assets/`. The `/en/` item is a translation-in-progress notice.
   Its build still requests Noto Sans TC from Google Fonts until upstream drops it; after a
   rebuild, strip `family=Noto+Sans+TC:…&` from the font URLs (a typography test enforces this).
+  Its hero WebP lives at `/assets/2026-AUG-30-household-digital-go-bag.webp` (the items'
+  `image_webp`), outside this folder so a rebuild can't delete it; if a rebuild changes
+  `og-image.png`, regenerate that WebP from it.
 - `team/` — machine-readable member index (no Atom feed; team is not time-series)
 - `api/latest.json` — Liquid-generated JSON the homepage fetches for its latest-3 blocks
 - `sections.css` — shared styles for section pages (loads after `styles.css`)
@@ -89,6 +94,9 @@ Locale pattern: paired single-language static locales, with `zh-Hant` at existin
   timeline consistent with CRC's actual activity. Same for `_news/` (announcement date).
   `_events/` uses the event's `start_date`.
 - **Asset paths:** use root-absolute (`/assets/cube.svg`, `/favicon.png`) so they resolve from any sub-page.
+- **Body images:** give each Markdown image its pixel size with a kramdown attribute list,
+  `![alt](/assets/x.jpg){: width="1254" height="1254"}`, so it reserves its space; a
+  `.webp` with the same basename next to it is served automatically through `<picture>`.
 - **Sub-pages:** put under `events/<slug>/` with their own `index.html` + `styles.css`. Reuse the design tokens above; deviate only when the layout demands it (e.g. schedule cards).
 - **Top bar on sub-pages:** sticky, with a `←` back-link to `/` and a breadcrumb in mono.
 - **External CTAs** (e.g. registration forms): `target="_blank" rel="noopener"`.
