@@ -65,3 +65,17 @@ test('photo_hud_target, when set, matches an existing landing-page data-member-i
     }
   }
 });
+
+test('every non-email links value in _team and _team_en is an http(s) URL', async () => {
+  for (const dir of ['_team', '_team_en']) {
+    const names = (await readdir(dir)).filter(name => name.endsWith('.md'));
+    for (const name of names) {
+      const source = await readFile(`${dir}/${name}`, 'utf8');
+      const block = (source.split(/^---$/m)[1] ?? '').match(/^links:\n((?:[ \t]+.*\n?)*)/m)?.[1] ?? '';
+      for (const [, key, value] of block.matchAll(/^[ \t]+([a-z_]+):[ \t]*(.*?)[ \t]*$/gm)) {
+        if (key === 'email') continue;
+        assert.match(value.replace(/^(["'])(.*)\1$/, '$2'), /^https?:\/\/\S+$/, `${dir}/${name}: links.${key} must be an http(s) URL`);
+      }
+    }
+  }
+});

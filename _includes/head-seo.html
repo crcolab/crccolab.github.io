@@ -229,11 +229,12 @@
   "description": {{ desc | jsonify }}
 }
 {% elsif page.section == "team" %}
+{%- comment -%} sameAs keeps only http(s) profile links, so email and handles are skipped; no key is written when none remain. {%- endcomment -%}
 {%- capture same_as_json -%}
   {%- assign first_link = true -%}
   {%- for pair in page.links -%}
     {%- assign key = pair[0] -%}{%- assign href = pair[1] -%}
-    {%- unless key == 'email' -%}{%- if href and href != "" -%}{%- unless first_link %}, {% endunless -%}{{ href | jsonify }}{%- assign first_link = false -%}{%- endif -%}{%- endunless -%}
+    {%- unless key == 'email' -%}{%- assign href_http = href | slice: 0, 7 -%}{%- assign href_https = href | slice: 0, 8 -%}{%- if href_http == "http://" or href_https == "https://" -%}{%- unless first_link %}, {% endunless -%}{{ href | jsonify }}{%- assign first_link = false -%}{%- endif -%}{%- endunless -%}
   {%- endfor -%}
 {%- endcapture -%}
 {
