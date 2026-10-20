@@ -99,6 +99,10 @@ Locale pattern: paired single-language static locales, with `zh-Hant` at existin
   `.webp` with the same basename next to it is served automatically through `<picture>`.
 - **Sub-pages:** put under `events/<slug>/` with their own `index.html` + `styles.css`. Reuse the design tokens above; deviate only when the layout demands it (e.g. schedule cards).
 - **Top bar on sub-pages:** sticky, with a `←` back-link to `/` and a breadcrumb in mono.
+- **Crawlers:** `robots.txt` allows everything and names each answer-engine crawler from its
+  operator's own docs, grouped as search / user-triggered / training; a built-site test pins the
+  list. Page chrome that shouldn't be quoted (locale prompt, cookie notice, decorative HUD text)
+  carries `data-nosnippet` on a `div`/`span`/`section`, the elements Google honours it on.
 - **External CTAs** (e.g. registration forms): `target="_blank" rel="noopener"`.
 - **Footer year:** `<span id="y"></span>` filled by inline script — keep that pattern.
 - **Homepage news blocks:** rendered by `script.js` from `/api/latest.json`; don't

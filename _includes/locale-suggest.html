@@ -7,7 +7,8 @@
   {% assign suggest_url = en_url %}
 {% endif %}
 {% assign suggest_ui = site.data.i18n[suggest_locale] %}
-<div id="crc-dock" class="crc-dock"></div>
+{%- comment -%} data-nosnippet keeps the locale prompt and cookie notice docked here out of search snippets and AI answers. {%- endcomment -%}
+<div id="crc-dock" class="crc-dock" data-nosnippet></div>
 <template id="crc-locale-suggest">
   <aside class="locale-suggest" lang="{{ suggest_locale }}" aria-label="{{ suggest_ui.language_switcher_label }}">
     <p class="locale-suggest__text">{{ suggest_ui.locale_suggest.message }}</p>

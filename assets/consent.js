@@ -54,6 +54,7 @@
   var banner = document.createElement('div');
   banner.id = 'crc-consent-banner';
   banner.setAttribute('role', 'dialog');
+  banner.setAttribute('data-nosnippet', '');
   banner.setAttribute('aria-label', copy.message);
   var message = document.createElement('div');
   message.className = 'crc-cb-text';

@@ -764,3 +764,30 @@ test('built hackathon listing entry defers to the event page for canonical, site
   }
   assert.deepEqual(hackathonEvents, ['_site/events/hackathon-2026/index.html']);
 });
+
+test('built robots.txt names every documented answer-engine crawler and blocks none of them', async () => {
+  const robots = await read('_site/robots.txt');
+  assert.doesNotMatch(robots, /^Disallow:\s*\S/m, 'robots.txt must not disallow any path');
+  const tokens = [
+    'Googlebot', 'bingbot', 'OAI-SearchBot', 'Claude-SearchBot', 'PerplexityBot', 'Applebot', 'Amzn-SearchBot', 'MistralAI-Index', 'meta-webindexer',
+    'ChatGPT-User', 'Claude-User', 'Perplexity-User', 'MistralAI-User', 'DuckAssistBot', 'Amzn-User', 'meta-externalfetcher',
+    'GPTBot', 'ClaudeBot', 'Google-Extended', 'Applebot-Extended', 'Amazonbot', 'MistralAI-Training', 'meta-externalagent', 'CCBot',
+  ];
+  for (const token of tokens) assert.match(robots, new RegExp(`^User-agent: ${token}$`, 'm'), `robots.txt lost ${token}`);
+});
+
+test('built hand-written pages allow full previews and keep page chrome out of snippets', async () => {
+  for (const path of ['index.html', 'en/index.html', 'events/hackathon-2026/index.html']) {
+    const html = await read(`_site/${path}`);
+    assert.match(html, /<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"/, `${path} robots meta`);
+  }
+  for (const path of ['index.html', 'en/index.html', 'news/index.html']) {
+    assert.match(await read(`_site/${path}`), /<div id="crc-dock" class="crc-dock" data-nosnippet>/, `${path} dock`);
+  }
+  for (const path of ['index.html', 'en/index.html']) {
+    const bars = (await read(`_site/${path}`)).match(/<div class="crc-hud__bar [^"]*"[^>]*>/g) ?? [];
+    assert.equal(bars.length, 2, `${path} HUD bars`);
+    for (const bar of bars) assert.match(bar, /data-nosnippet/, `${path} HUD bar text must stay out of snippets`);
+  }
+  assert.match(await read('_site/assets/consent.js'), /banner\.setAttribute\('data-nosnippet', ''\)/);
+});
