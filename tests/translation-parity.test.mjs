@@ -74,3 +74,41 @@ test('reviewed translations preserve specific source claims', async () => {
   const hackathon = await readFile('_news_en/2026-05-02-hackathon-2026-upcoming.md', 'utf8');
   assert.match(hackathon, /war zones, jungles, outlying islands, and remote rural communities/);
 });
+
+function parseFrontMatterMaps(source) {
+  const block = source.match(/^---\n([\s\S]*?)\n---\n/)?.[1] ?? '';
+  const root = {};
+  const stack = [{ indent: -1, map: root }];
+  for (const line of block.split('\n')) {
+    const match = line.match(/^( *)([\w-]+):(.*)$/);
+    if (!match) continue;
+    const indent = match[1].length;
+    while (stack.at(-1).indent >= indent) stack.pop();
+    const value = match[3].trim().replace(/^['"]|['"]$/g, '');
+    const map = {};
+    stack.at(-1).map[match[2]] = value === '' ? map : value;
+    stack.push({ indent, map });
+  }
+  return root;
+}
+
+test('every event with a location_name also has a complete location_address', async () => {
+  const required = ['street_address', 'locality', 'region', 'country'];
+  const hasText = value => typeof value === 'string' && value.trim() !== '';
+  const isComplete = address => required.every(key => hasText(address?.[key]));
+  const problems = [];
+  for (const dir of ['_events', '_events_en']) {
+    for (const name of (await readdir(dir)).filter(file => file.endsWith('.md')).sort()) {
+      const source = await readFile(`${dir}/${name}`, 'utf8');
+      assert.match(source, /^---\n[\s\S]*?\n---\n/, `${dir}/${name}: front matter required`);
+      const metadata = parseFrontMatterMaps(source);
+      if (hasText(metadata.location_name) && !isComplete(metadata.location_address)) {
+        problems.push(`${dir}/${name}: location_name without a complete location_address (${required.join(', ')})`);
+      }
+      if (hasText(metadata.super_event?.location_name) && !isComplete(metadata.super_event.location_address)) {
+        problems.push(`${dir}/${name}: super_event.location_name without a complete super_event.location_address (${required.join(', ')})`);
+      }
+    }
+  }
+  assert.deepEqual(problems, [], problems.join('\n'));
+});

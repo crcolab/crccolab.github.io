@@ -6,6 +6,12 @@ end_date: 2026-07-19
 category: WORKSHOP
 location_name: NPO Hub 二樓 Impact Space
 event_type: EducationEvent
+location_address:
+  street_address: 重慶南路三段 2 號
+  locality: 中正區
+  region: 臺北市
+  postal_code: "100056"
+  country: TW
 summary: 從零開始介紹 Meshtastic 的運作方式、硬體設備選擇、軟體安裝與基本設定。歡迎第一次接觸 Meshtastic 的初學者，帶著自有的裝置一起參與；若無裝置者，現場會有少量裝置可以玩玩看。
 og_title: Meshtastic 新手工作坊・七月 19 日 NPO Hub 2F
 og_description: 「網路斷線後可以用那個 Mesh 啊！」從零開始認識 Meshtastic：運作方式、硬體選擇、軟體安裝與基本設定，歡迎初學者帶裝置參與，現場也有少量裝置試玩。七月 19 日，NPO Hub 二樓 Impact Space。
