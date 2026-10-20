@@ -56,7 +56,7 @@
 {% endif %}
 {% assign section_label = ui.sections[page.section] | default: page.section %}
 <link rel="canonical" href="{{ canonical_url }}">
-{% if page.draft or page.sitemap == false %}<meta name="robots" content="noindex, nofollow">{% else %}<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">{% endif %}
+{% if page.draft or page.sitemap == false and page.canonical_url == nil %}<meta name="robots" content="noindex, nofollow">{% else %}<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">{% endif %}
 <meta name="author" content="{{ author_name | escape }}">
 {% if page.tags and page.tags.size > 0 %}<meta name="keywords" content="{{ page.tags | join: ', ' | escape }}">{% endif %}
 {% unless page.translation_exempt or page.draft %}
@@ -107,7 +107,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Press+Start+2P&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/styles.css">
 <link rel="stylesheet" href="/sections.css">
-{% if page.collection %}
+{% if page.collection and page.section != "events" or page.collection and page.canonical_url == nil %}
 <script type="application/ld+json">
 {% if page.section == "events" %}
 {%- comment -%}
@@ -116,6 +116,8 @@
   start_date, end_date, location_name, location_address} — emitted only with a
   start_date and location_name, since Google validates it as an Event of its own —
   and creators — a list of {name, slug} whose work is shown, emitted as workFeatured.
+  An events entry that sets canonical_url skips this script (see the collection check in
+  the head), so the page it canonicalizes to carries the Event.
 {%- endcomment -%}
 {%- capture address_json -%}{% include postal-address-json.html address=page.location_address %}{%- endcapture -%}
 {%- capture super_address_json -%}{% include postal-address-json.html address=page.super_event.location_address %}{%- endcapture -%}
