@@ -194,6 +194,37 @@ test('idea pages without tags omit the keywords JSON-LD field', async () => {
   assert.doesNotMatch(zh, /"keywords"\s*:\s*""/);
 });
 
+test('indexable built pages have unique meta descriptions', async () => {
+  const { readdir } = await import('node:fs/promises');
+  const skipped = '_site/ideas/household-digital-go-bag/assets';
+  const htmlPaths = [];
+  const walk = async dir => {
+    for (const entry of await readdir(new URL(`../${dir}`, import.meta.url), { withFileTypes: true })) {
+      const path = `${dir}/${entry.name}`;
+      if (entry.isDirectory()) {
+        if (path !== skipped) await walk(path);
+      } else if (entry.name.endsWith('.html')) {
+        htmlPaths.push(path);
+      }
+    }
+  };
+  await walk('_site');
+  const pathsByDescription = new Map();
+  for (const path of htmlPaths) {
+    const html = await read(path);
+    if (/<meta\s+name="robots"\s+content="[^"]*noindex/.test(html)) continue;
+    const description = html.match(/<meta\s+name="description"\s+content="([^"]*)"/)?.[1];
+    if (description === undefined) continue;
+    pathsByDescription.set(description, [...(pathsByDescription.get(description) ?? []), path]);
+  }
+  const duplicates = [...pathsByDescription].filter(([, paths]) => paths.length > 1);
+  assert.equal(
+    duplicates.length,
+    0,
+    duplicates.map(([description, paths]) => `meta description shared by ${paths.length} pages: ${description}\n  ${paths.join('\n  ')}`).join('\n'),
+  );
+});
+
 test('built event pages only nest a superEvent that Google can validate as an Event', async () => {
   const { readdir } = await import('node:fs/promises');
   const pages = [];
