@@ -110,6 +110,88 @@ test('built feed UI and metadata are localized independently', async () => {
   assert.match(enNewsFeed, /<title>Cyborg Resilience Co-lab — News<\/title>/);
 });
 
+test('built item hero images and member photos reserve their size', async () => {
+  const { readdir, readFile: readBinary } = await import('node:fs/promises');
+  const skipDirs = new Set(['_site/ideas/household-digital-go-bag/assets']);
+  const roots = ['news', 'events', 'records', 'ideas', 'team'].flatMap(s => [`_site/${s}`, `_site/en/${s}`]);
+  const pages = [];
+  const walk = async dir => {
+    for (const entry of await readdir(new URL(`../${dir}/`, import.meta.url), { withFileTypes: true })) {
+      const path = `${dir}/${entry.name}`;
+      if (entry.isDirectory()) {
+        if (!skipDirs.has(path)) await walk(path);
+      } else if (entry.name === 'index.html') {
+        pages.push(path);
+      }
+    }
+  };
+  for (const dir of roots) await walk(dir);
+
+  const imageSize = bytes => {
+    if (bytes.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) {
+      if (bytes.toString('ascii', 12, 16) !== 'IHDR') throw new Error('PNG does not start with IHDR');
+      return { width: bytes.readUInt32BE(16), height: bytes.readUInt32BE(20) };
+    }
+    if (bytes[0] !== 0xff || bytes[1] !== 0xd8) throw new Error('not a PNG or JPEG');
+    for (let i = 2; i + 9 < bytes.length;) {
+      if (bytes[i] !== 0xff) { i += 1; continue; }
+      const marker = bytes[i + 1];
+      if (marker === 0xff) { i += 1; continue; }
+      if (marker === 0xc0 || marker === 0xc2) {
+        return { height: bytes.readUInt16BE(i + 5), width: bytes.readUInt16BE(i + 7) };
+      }
+      if (marker === 0x01 || marker === 0xd8 || marker === 0xd9 || (marker >= 0xd0 && marker <= 0xd7)) {
+        i += 2;
+        continue;
+      }
+      i += 2 + bytes.readUInt16BE(i + 2);
+    }
+    throw new Error('no SOF0 or SOF2 marker');
+  };
+
+  const problems = [];
+  const sizes = new Map();
+  let itemChecked = 0;
+  let memberChecked = 0;
+  for (const page of pages.sort()) {
+    const html = await read(page);
+    for (const [tag] of html.matchAll(/<img\b[^>]*>/g)) {
+      const classes = tag.match(/\sclass="([^"]*)"/)?.[1].split(/\s+/) ?? [];
+      if (classes.includes('item__image')) itemChecked += 1;
+      else if (classes.includes('member-profile__photo')) memberChecked += 1;
+      else continue;
+      const src = tag.match(/\ssrc="([^"]*)"/)?.[1] ?? '(no src)';
+      const where = `${page} <img src="${src}">`;
+      const width = tag.match(/\swidth="([^"]*)"/)?.[1];
+      const height = tag.match(/\sheight="([^"]*)"/)?.[1];
+      if (!/^[1-9]\d*$/.test(width ?? '') || !/^[1-9]\d*$/.test(height ?? '')) {
+        problems.push(`${where}: width/height must be positive integers (width=${width ?? 'none'}, height=${height ?? 'none'})`);
+        continue;
+      }
+      if (!src.startsWith('/')) {
+        problems.push(`${where}: src must be root-absolute so the file can be located`);
+        continue;
+      }
+      const file = src.split(/[?#]/)[0].slice(1);
+      try {
+        if (!sizes.has(file)) sizes.set(file, imageSize(await readBinary(new URL(`../${file}`, import.meta.url))));
+      } catch (error) {
+        problems.push(`${where}: cannot measure ${file} (${error.message})`);
+        continue;
+      }
+      const actual = sizes.get(file);
+      if (Number(width) !== actual.width || Number(height) !== actual.height) {
+        problems.push(`${where}: width=${width} height=${height} but ${file} is ${actual.width}x${actual.height}`);
+      }
+    }
+  }
+  assert.ok(problems.length === 0, `item and member images must reserve their real size:\n${problems.join('\n')}`);
+  assert.ok(itemChecked >= 18, `checked ${itemChecked} item__image tags; expected at least 18`);
+  assert.ok(memberChecked >= 10, `checked ${memberChecked} member-profile__photo tags; expected at least 10`);
+  const sections = await read('_site/sections.css');
+  assert.match(sections, /\.item__image\{[^}]*[{;]height:auto[;}]/, 'sections.css .item__image rule must contain height:auto');
+});
+
 test('idea pages resolve author_slug to a linked team profile', async () => {
   const [zh, en] = await Promise.all([
     read('_site/ideas/2026-03-25-crc-march-25-decks/index.html'),

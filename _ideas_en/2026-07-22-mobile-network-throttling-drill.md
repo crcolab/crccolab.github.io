@@ -6,6 +6,8 @@ summary: "Taiwan's 2026 Urban Resilience Exercise throttles mobile data for the 
 og_title: "Why Run a Mobile-Network Throttling Drill? Is There Any Point?"
 og_description: "The Hualien quake hit 172 base stations; Typhoon Danas knocked out 1,300+. On Aug 10 and Aug 13, Taiwan's 2026 Urban Resilience Exercise throttles mobile data for 30 minutes. Why drill for outages?"
 image: /assets/2026-JUL-22-mobile-network-throttling-drill.jpg
+image_width: 1536
+image_height: 1024
 image_alt: "A hand holding a phone whose screen shows a speed-test result on a 4G connection: 64 kbps download, 128 ms ping. A notification above it reads, \"I heard you can still send texts normally during the mobile network throttling drill.\" The CRC logo sits in the top right corner."
 author: CHENG PENG
 author_slug: cheng

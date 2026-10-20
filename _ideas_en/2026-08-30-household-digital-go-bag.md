@@ -7,6 +7,8 @@ summary: "The English translation of the Household Digital Go-Bag is in progress
 og_title: "Household Digital Go-Bag (English translation in progress)"
 og_description: "The English translation of CRC's Household Digital Go-Bag is in progress. The Traditional Chinese guide is available now."
 image: /ideas/household-digital-go-bag/og-image.png
+image_width: 1200
+image_height: 630
 image_alt: "Household Digital Go-Bag: how to keep your home's digital life running through internet and power outages. On the right, a zipped emergency bag labelled \"packed\" with illustrations of six items laid out inside."
 author: CHENG PENG
 author_slug: cheng

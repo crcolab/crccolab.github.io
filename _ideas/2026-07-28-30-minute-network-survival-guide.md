@@ -6,6 +6,8 @@ summary: "8 月 10 日（中部）與 8 月 13 日（北部）下午 2 時 30 �
 og_title: "2026 城鎮韌性演習：你的 30 分鐘網路生存指南"
 og_description: "手機網路要降速 30 分鐘，你準備好了嗎？八月 10 日（中部）與 13 日（北部）下午 2 時 30 分起，用 3 個設定、3 張截圖、3 句約定做好準備，再附上 14:20 收尾清單與這半小時該做、別做的事。"
 image: /assets/2026-JUL-28-30-minute-network-survival-guide.jpg
+image_width: 1254
+image_height: 1254
 image_alt: "黏土風格主視覺：橘色大字「30 分鐘網路生存指南」、綠色字「手機降速演習來了」，下方寫著「3 個設定・3 張截圖・3 句約定」。一名戴圓框眼鏡的上班族坐在辦公桌前皺眉盯著手機，身旁的對話框轉著載入圈圈，牆上掛著時鐘。底部為 CRC 標誌與「Cyborg Resilience Co-lab 賽伯格韌性實驗室」字樣。"
 author: 彭宬
 author_slug: cheng

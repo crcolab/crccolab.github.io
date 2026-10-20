@@ -8,9 +8,9 @@ layout: default
 <main class="member-profile"><article class="member-profile__body container">
   <div class="member-profile__hero crc-hud">
     {% if page.photo and page.photo != "" %}
-      <img class="member-profile__photo" src="{{ page.photo }}" alt="{{ page.name | escape }}">
+      <img class="member-profile__photo" src="{{ page.photo }}"{% if page.photo_width and page.photo_height %} width="{{ page.photo_width }}" height="{{ page.photo_height }}"{% endif %} alt="{{ page.name | escape }}">
     {% else %}
-      <img class="member-profile__photo" src="/assets/team-video-poster.jpg" alt="{{ page.name | escape }}">
+      <img class="member-profile__photo" src="/assets/team-video-poster.jpg" width="1280" height="720" alt="{{ page.name | escape }}">
     {% endif %}
     <span class="crc-hud__corner tl" aria-hidden="true"></span>
     <span class="crc-hud__corner tr" aria-hidden="true"></span>

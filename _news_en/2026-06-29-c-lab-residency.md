@@ -7,6 +7,8 @@ og_title: "CRC Begins Its C-LAB Residency: Two Talks and a Year-End Presentation
 og_description: "AI accounts, aircraft incursions, war games, emergency handbooks: how do you make sense of Taiwan’s “Schrödinger” war readiness? CRC’s C-LAB residency, led by Lee Tzu-Tung, answers with art."
 image_alt: "A vertical banner hanging beside a yellow wall in a C-LAB stairwell, printed “2026 CREATORS” and listing resident creators’ names in Chinese and English across red, orange, blue, purple, green and brown blobs. A yellow circle in the middle rings the CRC members “李紫彤 LEE Tzu Tung”, “荊輔翔 CHING Fu-Shiang”, “耿璐 Lulu KENG”, “李梅君 LEE Mei-Chun” and “彭宬 PENG Cheng”."
 image: /assets/2026-JUN-29-c-lab-residency.jpg
+image_width: 964
+image_height: 1280
 locale: en-US
 ---
 

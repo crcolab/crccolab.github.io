@@ -8,6 +8,8 @@ og_title: "離線行動任務成功！g0v Summit 2026 現場實錄"
 og_description: "踩飛輪也能發電傳訊！超過 180 人次接力 67 分鐘、騎完 9.2 km，把韌性訊息送進 meshbridge 留言版；Reticulum 機器人兩天內互傳 6759 條訊息。g0v Summit 2026 離線行動，任務成功。"
 image_alt: "會場大廳裡，一名戴眼鏡、穿淺藍 T 恤的長髮男子坐在發電健身車上踩踏，對著鏡頭微笑；車身部分包著鋁箔、接著藍色電線。左側兩名男子站著，看著其中一人手上的手機，背景是落地窗與窗外綠樹。"
 image: /assets/2026-MAY-24-offline-mission-1.jpg
+image_width: 1200
+image_height: 1600
 ---
 
 感謝參與「離線行動」的沒有人們！

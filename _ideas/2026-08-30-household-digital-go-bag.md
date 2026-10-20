@@ -7,6 +7,8 @@ summary: "海底電纜斷裂、網路中斷或停電時，家裡的數位生活�
 og_title: "家庭用數位防災包：斷網斷電時，家裡的數位生活怎麼撐下去"
 og_description: "把斷網斷電時的數位生活需求，整理成為什麼要備、怎麼動手做的家用防災指南。"
 image: /ideas/household-digital-go-bag/og-image.png
+image_width: 1200
+image_height: 630
 image_alt: "家庭用數位防災包：斷網斷電時，家裡的數位生活怎麼撐下去。右側是拉鍊閉合、標示「已打包」的防災袋，袋內排列六件物品插圖。"
 author: 彭宬
 author_slug: cheng

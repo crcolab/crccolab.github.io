@@ -16,6 +16,8 @@ summary: 從零開始介紹 Meshtastic 的運作方式、硬體設備選擇、�
 og_title: Meshtastic 新手工作坊・七月 19 日 NPO Hub 2F
 og_description: 「網路斷線後可以用那個 Mesh 啊！」從零開始認識 Meshtastic：運作方式、硬體選擇、軟體安裝與基本設定，歡迎初學者帶裝置參與，現場也有少量裝置試玩。七月 19 日，NPO Hub 二樓 Impact Space。
 image: /assets/2026-JUN-24-mesh-newbies-workshop.jpg
+image_width: 2048
+image_height: 2048
 image_alt: "工作坊海報：白底上淺紫細線與萊姆綠圓點交織成斜格紋。上方黑色等寬字「07.19(日) ／ 10:30am ／ NPO Hub2F」，中央萊姆綠大字「開源通訊網路 新手村」，其下並排三個萊姆綠線條、紫色節點的網格立方體圖示。左下角為 QR code，右下依序為歐噴 OPEN FUN、CRC、TWNIC 財團法人台灣網路資訊中心 Taiwan Network Information Center 與臺灣當代文化實驗場 Taiwan Contemporary Culture Lab 的標誌。"
 ---
 
