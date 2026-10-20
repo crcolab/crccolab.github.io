@@ -40,6 +40,10 @@ zh-Hant:
     message: 我們使用匿名分析資料改善網站。只有在你同意後才會啟用分析。
     accept: 同意
     reject: 不同意
+  locale_suggest:
+    message: 本頁也有繁體中文版。
+    switch: 切換至繁體中文
+    dismiss: 不用了
   member:
     ideas_by: 由本成員撰寫的提點子
     links:
@@ -100,6 +104,10 @@ en-US:
     message: We use anonymous analytics to improve this website. Analytics starts only after you consent.
     accept: Accept
     reject: Decline
+  locale_suggest:
+    message: This page is also available in English.
+    switch: Read in English
+    dismiss: No thanks
   member:
     ideas_by: Ideas by this member
     links:

@@ -1,0 +1,8 @@
+{% assign current_locale = page.locale | default: site.lang %}
+{% if current_locale == "en-US" %}
+  {% assign zh_url = page.url | remove_first: "/en" %}
+  {% assign en_url = page.url %}
+{% else %}
+  {% assign zh_url = page.url %}
+  {% assign en_url = "/en" | append: page.url %}
+{% endif %}

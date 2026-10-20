@@ -215,3 +215,20 @@ test('built event pages only nest a superEvent that Google can validate as an Ev
   }
   assert.ok(nested >= 2, 'the AI for ALL exhibition pages should nest the festival');
 });
+
+test('built pages carry a banner template offering the other locale', async () => {
+  const pairs = [
+    ['index.html', 'en-US', '/en/'],
+    ['en/index.html', 'zh-Hant', '/'],
+    ['news/index.html', 'en-US', '/en/news/'],
+    ['en/news/index.html', 'zh-Hant', '/news/'],
+  ];
+  for (const [path, suggestLocale, href] of pairs) {
+    const html = await readFile(new URL(`../_site/${path}`, import.meta.url), 'utf8');
+    const template = html.match(/<template id="crc-locale-suggest">([\s\S]*?)<\/template>/)?.[1] ?? '';
+    assert.match(template, new RegExp(`lang="${suggestLocale}"`), `${path} suggests the wrong locale`);
+    assert.match(template, new RegExp(`href="${href}"[^>]*data-locale-option="${suggestLocale}"`), `${path} suggest link`);
+    assert.match(template, /data-locale-dismiss/);
+    assert.ok(html.indexOf('id="crc-dock"') < html.indexOf('/assets/consent.js'), `${path} dock must precede consent.js`);
+  }
+});

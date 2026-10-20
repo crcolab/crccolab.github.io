@@ -83,5 +83,6 @@
   accept.addEventListener('click', function () { dismiss('granted'); });
   reject.addEventListener('click', function () { dismiss('denied'); });
 
-  document.body.appendChild(banner);
+  // Share the bottom dock with the language suggestion when the page has one.
+  (document.getElementById('crc-dock') || document.body).appendChild(banner);
 })();

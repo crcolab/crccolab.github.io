@@ -1,11 +1,4 @@
-{% assign current_locale = page.locale | default: site.lang %}
-{% if current_locale == "en-US" %}
-  {% assign zh_url = page.url | remove_first: "/en" %}
-  {% assign en_url = page.url %}
-{% else %}
-  {% assign zh_url = page.url %}
-  {% assign en_url = "/en" | append: page.url %}
-{% endif %}
+{% include locale-urls.html %}
 {% assign ui = site.data.i18n[current_locale] %}
 <nav class="locale-switcher" aria-label="{{ ui.language_switcher_label }}">
   <a href="{{ zh_url }}" hreflang="zh-Hant" lang="zh-Hant" data-locale-option="zh-Hant"{% if current_locale == "zh-Hant" %} aria-current="page"{% endif %}>繁中</a>

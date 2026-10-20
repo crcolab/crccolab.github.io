@@ -12,7 +12,7 @@ const [css, sections, consent, hackathonCss, hackathonPage] = await Promise.all(
   readFile(new URL('../events/hackathon-2026/index.html', import.meta.url), 'utf8'),
 ]);
 
-function runConsent(dataset = {}) {
+function runConsent(dataset = {}, { dock = null } = {}) {
   const makeElement = tagName => ({
     tagName,
     children: [],
@@ -29,6 +29,7 @@ function runConsent(dataset = {}) {
     head: makeElement('head'),
     body: makeElement('body'),
     createElement: makeElement,
+    getElementById: id => (id === 'crc-dock' ? dock : null),
   };
   const writes = [];
   const updates = [];
@@ -39,7 +40,7 @@ function runConsent(dataset = {}) {
   const gtag = (...args) => updates.push(args);
 
   runInNewContext(consent, { document, localStorage, gtag });
-  const banner = document.body.children[0];
+  const banner = (dock || document.body).children[0];
   const message = banner.children[0];
   const [accept, reject] = banner.children[1].children;
   return { accept, banner, message, reject, updates, writes };
@@ -369,6 +370,12 @@ test('dataset-provided consent renders exactly the supplied locale', () => {
   assert.equal(rendered.message.textContent, 'English message');
   assert.equal(rendered.accept.textContent, 'Accept');
   assert.equal(rendered.reject.textContent, 'Decline');
+});
+
+test('consent joins the shared bottom dock when the page provides one', () => {
+  const dock = { children: [], appendChild(child) { this.children.push(child); } };
+  const { banner } = runConsent({}, { dock });
+  assert.equal(dock.children[0], banner);
 });
 
 test('dataset-free consent renders meaningful legacy copy', () => {

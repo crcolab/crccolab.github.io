@@ -411,6 +411,25 @@ button.team-card__names{min-height:var(--control-min);min-width:var(--control-mi
 .locale-switcher{display:inline-flex;align-items:center;gap:4px;font-size:var(--fs-supporting)}
 .locale-switcher a{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
 
+/* ---------- bottom dock: language suggestion above the consent banner ---------- */
+/* Fixed, so revealing either bar never shifts layout. */
+.crc-dock{position:fixed;left:0;right:0;bottom:0;z-index:9999;display:flex;flex-direction:column}
+.crc-dock #crc-consent-banner{position:static}
+.locale-suggest{display:flex;align-items:center;gap:12px 18px;flex-wrap:wrap;padding:14px 24px;
+  background:var(--crc-purple);color:#fff;border-top:3px solid var(--crc-lime);
+  font-family:var(--font-body);font-size:var(--fs-supporting)}
+.locale-suggest__text{flex:1;min-width:220px;margin:0;line-height:1.65}
+.locale-suggest__actions{display:flex;gap:10px;flex-wrap:wrap}
+.locale-suggest__accept,.locale-suggest__dismiss{display:inline-flex;align-items:center;justify-content:center;
+  min-height:var(--control-min);padding:0 16px;border-radius:10px;cursor:pointer;
+  font-family:var(--font-display);font-weight:600;font-size:var(--fs-supporting);line-height:1.2}
+.locale-suggest__accept{background:var(--crc-lime);color:var(--crc-purple);border:2px solid var(--crc-lime);text-decoration:none}
+.locale-suggest__accept:hover{background:var(--lime-600);border-color:var(--lime-600)}
+.locale-suggest__dismiss{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.6)}
+.locale-suggest__dismiss:hover{border-color:#fff;background:rgba(255,255,255,.1)}
+.locale-suggest a:focus-visible,.locale-suggest button:focus-visible{outline:3px solid #fff;outline-offset:2px}
+@media (max-width:640px){.locale-suggest{padding:14px 16px}}
+
 /* ---------- Cyborg↔cyber glitch (see docs/.../2026-07-15-cyborg-cyber-glitch-design.md) ---------- */
 :root{
   /* Measured once from the SVG glyph geometry — see Task 1 of the plan. */

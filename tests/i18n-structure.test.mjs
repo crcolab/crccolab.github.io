@@ -32,7 +32,7 @@ test('both locale dictionaries expose the shared interface contract', () => {
     const dictionary = localeBlock(copy, locale);
     for (const key of [
       'language_switcher_label', 'navigation', 'sections', 'view_source',
-      'back_to', 'feed', 'footer', 'consent',
+      'back_to', 'feed', 'footer', 'consent', 'locale_suggest',
     ]) {
       assert.match(dictionary, new RegExp(`^  ${key}:`, 'm'), `${locale} is missing ${key}`);
     }
@@ -40,6 +40,7 @@ test('both locale dictionaries expose the shared interface contract', () => {
       ['navigation', 'ideas'], ['sections', 'ideas'], ['sections', 'team'],
       ['back_to', 'ideas'], ['back_to', 'team'], ['feed', 'ideas'],
       ['member', 'ideas_by'],
+      ['locale_suggest', 'message'], ['locale_suggest', 'switch'], ['locale_suggest', 'dismiss'],
     ]) {
       const [outer, inner] = nested;
       // Note: `$` under the /m flag matches end-of-LINE, which is trivially true

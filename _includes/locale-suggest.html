@@ -1,0 +1,19 @@
+{% include locale-urls.html %}
+{% if current_locale == "en-US" %}
+  {% assign suggest_locale = "zh-Hant" %}
+  {% assign suggest_url = zh_url %}
+{% else %}
+  {% assign suggest_locale = "en-US" %}
+  {% assign suggest_url = en_url %}
+{% endif %}
+{% assign suggest_ui = site.data.i18n[suggest_locale] %}
+<div id="crc-dock" class="crc-dock"></div>
+<template id="crc-locale-suggest">
+  <aside class="locale-suggest" lang="{{ suggest_locale }}" aria-label="{{ suggest_ui.language_switcher_label }}">
+    <p class="locale-suggest__text">{{ suggest_ui.locale_suggest.message }}</p>
+    <div class="locale-suggest__actions">
+      <a class="locale-suggest__accept" href="{{ suggest_url }}" hreflang="{{ suggest_locale }}" data-locale-option="{{ suggest_locale }}">{{ suggest_ui.locale_suggest.switch }}</a>
+      <button type="button" class="locale-suggest__dismiss" data-locale-dismiss>{{ suggest_ui.locale_suggest.dismiss }}</button>
+    </div>
+  </aside>
+</template>
