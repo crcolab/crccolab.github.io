@@ -1244,3 +1244,12 @@ a{color:inherit}
 @media (max-width:420px){
   .offgrid-speakers{grid-template-columns:1fr; max-width:280px}
 }
+
+/* Recap and slides, added after the event */
+.recap-photos{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; margin-top:32px; align-items:start}
+.recap-photos img{display:block; width:100%; height:auto; border-radius:var(--radius)}
+.deck-group{margin-top:28px}
+.deck-group h3{margin:0 0 10px; color:inherit}
+.deck-group ul{margin:0; padding-left:20px}
+.deck-group li{margin:6px 0}
+.deck-group a{color:inherit; text-decoration:underline}

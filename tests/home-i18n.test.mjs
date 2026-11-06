@@ -80,7 +80,7 @@ test('Chinese homepage localizes its brand and feed labels', () => {
     ['CRC — 所有更新', '/feed.xml'],
     ['CRC — 最新訊息', '/news/feed.xml'],
     ['CRC — 活動', '/events/feed.xml'],
-    ['CRC — 記錄／報導', '/records/feed.xml'],
+    ['CRC — 媒體報導', '/records/feed.xml'],
   ]) {
     assert.match(zh, new RegExp(`title="${title}" href="${href.replaceAll('.', '\\.')}"`));
   }

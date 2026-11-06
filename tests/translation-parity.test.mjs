@@ -62,17 +62,14 @@ test('reviewed translations preserve specific source claims', async () => {
   const residency = await readFile('_news_en/2026-06-29-c-lab-residency.md', 'utf8');
   assert.equal((residency.match(/state of war preparedness/g) || []).length, 2);
 
-  const offlineMission = await readFile('_records_en/2026-05-24-offline-mission-recap.md', 'utf8').then(parseDocument);
-  assert.match(offlineMission.metadata.summary, /More than 180 participant turns/);
-  assert.match(offlineMission.body, /More than \*\*180 participant turns\*\*/);
+  const offlineMission = await readFile('events/hackathon-2026/index.html', 'utf8');
+  assert.match(offlineMission, /More than <strong>180 participant turns<\/strong>/);
 
   const vulnerability = 'Surrounded by sea, Taiwan is especially sensitive and vulnerable to changes affecting subsea cables, and this vulnerability is even more pronounced amid unstable geopolitics.';
-  for (const file of ['_news_en/2026-02-10-open-register.md', '_news_en/2026-03-25-past-events.md']) {
+  for (const file of ['_events_en/2026-03-25-digital-resilience-forum.md']) {
     assert.match(await readFile(file, 'utf8'), new RegExp(vulnerability.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }
 
-  const hackathon = await readFile('_news_en/2026-05-02-hackathon-2026-upcoming.md', 'utf8');
-  assert.match(hackathon, /war zones, jungles, outlying islands, and remote rural communities/);
 });
 
 function parseFrontMatterMaps(source) {

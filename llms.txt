@@ -10,9 +10,9 @@ All content pages are static HTML — no JavaScript required to read them.
 
 ## Sections
 
-- [Latest News 最新訊息](https://crcolab.art/news/): announcements and updates
-- [Events 活動](https://crcolab.art/events/): forums, hackathons, workshops
-- [As Seen on Media 記錄/報導](https://crcolab.art/records/): event records, press coverage, panels, talks
+- [Latest News 最新訊息](https://crcolab.art/news/): announcements not tied to one event
+- [Events 活動](https://crcolab.art/events/): one page per event (forums, hackathons, workshops, exhibitions, talks), holding its sign-up, recap and slides
+- [As Seen on Media 媒體報導](https://crcolab.art/records/): outside press coverage of CRC
 - [Ideas 提點子](https://crcolab.art/ideas/): long-form working papers, essays, and thinking-in-progress
 - [Team 團隊](https://crcolab.art/team/): individual member profiles (schema.org Person, machine-readable)
 

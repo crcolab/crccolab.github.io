@@ -21,7 +21,8 @@ plus Jekyll (built by GitHub Pages on push from `main`) for the content sections
   served automatically through `<picture>`, and `image_webp` points at one stored
   elsewhere),
   `source`/`external_url` for media, `start_date`/`end_date`/`location_name` for
-  events (plus optional JSON-LD `event_type` such as `ExhibitionEvent`,
+  events, `signup_url` for sign-up buttons at the top, middle and bottom of the post, labelled with the event date (never "register now", so it stays true
+  after the event; `_includes/event-date-text.html` builds the date from `start_date`/`end_date`) (plus optional JSON-LD `event_type` such as `ExhibitionEvent`,
   `location_address` {street_address, locality, region, postal_code, country},
   `location_url`, `super_event` {name, url, start_date, end_date, location_name,
   location_address} — emitted only with `start_date` and `location_name`, since Google
@@ -69,6 +70,8 @@ plus Jekyll (built by GitHub Pages on push from `main`) for the content sections
   description (`_config.yml` `include`s the dot-folder). GitHub Pages can't set headers, so the
   homepage `Link` header and this file's `application/linkset+json` type come from Cloudflare
   Response Header Transform Rules on the `crcolab.art` zone, not from the repo
+- `redirects/` — moved pages, since GitHub Pages can't send a 301: one file per old URL with `layout: redirect`,
+  `redirect_to` (may carry a `#section`), `permalink` (the old URL) and `sitemap: false`
 - `sections.css` — shared styles for section pages (loads after `styles.css`)
 
 ## Design system (must match across pages)
@@ -95,13 +98,19 @@ Locale pattern: paired single-language static locales, with `zh-Hant` at existin
 - **No local build tooling beyond Jekyll-on-Pages.** GitHub Pages runs Jekyll on push;
   don't introduce bundlers, npm, or frameworks. `Gemfile` (github-pages gem) exists
   only for local preview; `_site/` and `Gemfile.lock` stay gitignored.
+- **Which section:** `_events/` holds one post per event with its whole lifecycle in that post: sign-up, then recap
+  (`{: #recap}`), slides (`{: #slides}`) and links to coverage (`{: #coverage}`). Don't make separate posts for sign-ups,
+  recaps or decks, because they bury the sign-up; send people to `/events/<slug>/#slides`. `_records/` (shown as 媒體報導 /
+  Media) is outside media coverage only. `_news/` is announcements not tied to one event. `_ideas/` is essays and guides.
+  An `_events/` post with no `location_name` (a talk at someone else's event) emits Article, not Event, JSON-LD.
 - **Adding a content item:** drop a Markdown file in `_news/`/`_events/`/`_records/`
   named `YYYY-MM-DD-slug.md` — indexes, feeds, sitemap, and homepage JSON update
   automatically on build. No registration file to edit.
 - **Date convention for `_records/`:** use the date CRC engaged with / shared the
   coverage, not the source article's original publish date. Keeps the records
   timeline consistent with CRC's actual activity. Same for `_news/` (announcement date).
-  `_events/` uses the event's `start_date`.
+  `_events/` uses the event's `start_date`, unless an upcoming event's post carries its release date as `date`; set
+  `start_date` too and the post shows an event-date chip (活動 DEC 5) beside it.
 - **Asset paths:** use root-absolute (`/assets/cube.svg`, `/favicon.png`) so they resolve from any sub-page.
 - **Body images:** give each Markdown image its pixel size with a kramdown attribute list,
   `![alt](/assets/x.jpg){: width="1254" height="1254"}`, so it reserves its space; a

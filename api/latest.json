@@ -11,6 +11,7 @@ permalink: /api/latest.json
       "title": {{ item.title | jsonify }},
       "date": {{ item.date | date: "%Y-%b-%d" | upcase | jsonify }},
       "category": {{ item.category | jsonify }},
+      {% assign event_start = item.start_date | date: "%Y-%m-%d" %}{% assign event_posted = item.date | date: "%Y-%m-%d" %}{% if item.start_date and event_start != event_posted %}"event_date": {{ item.start_date | date: "%b %-d" | upcase | jsonify }},{% endif %}
       "summary": {{ item.summary | strip_newlines | truncate: 160 | jsonify }},
       "url": {{ item.link | default: item.url | jsonify }}
     }{% unless forloop.last %},{% endunless %}

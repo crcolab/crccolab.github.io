@@ -1,0 +1,16 @@
+{%- comment -%}
+  Sets event_date_text to an event's date with the month spelled out (2026 年十二月 5 日 / Dec 5, 2026),
+  or its days as a range within one month. Pass doc (the event) and ui (the locale's i18n block).
+{%- endcomment -%}
+{%- assign ed_start = include.doc.start_date | default: include.doc.date -%}
+{%- assign ed_days = ed_start | date: "%-d" -%}
+{%- if include.doc.end_date -%}
+  {%- assign ed_start_month = ed_start | date: "%Y-%m" -%}
+  {%- assign ed_end_month = include.doc.end_date | date: "%Y-%m" -%}
+  {%- assign ed_end_day = include.doc.end_date | date: "%-d" -%}
+  {%- if ed_start_month == ed_end_month and ed_end_day != ed_days -%}{%- assign ed_days = ed_days | append: "–" | append: ed_end_day -%}{%- endif -%}
+{%- endif -%}
+{%- assign ed_month = ed_start | date: "%-m" | minus: 1 -%}
+{%- assign ed_year = ed_start | date: "%Y" -%}
+{%- assign ed_month_name = include.ui.months[ed_month] -%}
+{%- assign event_date_text = include.ui.event_date_format | replace: "YEAR", ed_year | replace: "MONTH", ed_month_name | replace: "DAY", ed_days -%}

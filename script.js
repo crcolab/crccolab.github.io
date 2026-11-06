@@ -25,7 +25,7 @@ export async function loadNews(){
   }
 
   container.innerHTML = sections.map(section => {
-    const items = (data[section.key] || []).map(item => `<a class="crc-news crc-news--link" href="${escapeHtml(item.url)}"><div class="crc-news__meta"><span class="crc-news__date">${escapeHtml(item.date)}</span><span class="crc-news__cat">${escapeHtml(item.category)}</span></div><div class="crc-news__row"><div><h4 class="crc-news__title">${escapeHtml(item.title)}</h4><p class="crc-news__excerpt">${escapeHtml(item.summary)}</p></div><span class="crc-news__arrow" aria-hidden="true">↗</span></div></a>`).join('');
+    const items = (data[section.key] || []).map(item => `<a class="crc-news crc-news--link" href="${escapeHtml(item.url)}"><div class="crc-news__meta"><span class="crc-news__date">${escapeHtml(item.date)}</span><span class="crc-news__cat">${escapeHtml(item.category)}</span>${item.event_date ? `<span class="crc-news__cat">${escapeHtml(container.dataset.eventLabel || '')} ${escapeHtml(item.event_date)}</span>` : ''}</div><div class="crc-news__row"><div><h4 class="crc-news__title">${escapeHtml(item.title)}</h4><p class="crc-news__excerpt">${escapeHtml(item.summary)}</p></div><span class="crc-news__arrow" aria-hidden="true">↗</span></div></a>`).join('');
     return `<section class="news__section"><div class="news__section-head"><h3 class="news__section-title">${escapeHtml(section.label)}</h3><a class="news__section-more" href="${section.href}">${escapeHtml(section.viewAll)} →</a></div>${items}</section>`;
   }).join('');
 }

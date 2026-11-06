@@ -3,7 +3,7 @@ title: 「斷網防災包」簡報下載（Action! 灰色地帶生存指南論�
 date: 2026-08-30
 category: TALK
 source: Doublethink Lab ✕ Watchout ✕ CRC
-summary: 「簡報下載」彭宬代表 CRC 賽伯格韌性實驗室，於台灣民主實驗室、沃草與 CRC 合辦的「Action! 灰色地帶生存指南：資訊戰解析 ✕ 斷網通訊論壇」擔任講者，分享關鍵通訊受阻時的離線工具與實用備案，簡報《斷網防災包》開放下載。
+summary: 「簡報下載」彭宬代表 CRC 賽伯格韌性實驗室，於台灣民主實驗室主辦的「Action! 灰色地帶生存指南：資訊戰解析 ✕ 斷網通訊論壇」擔任講者，分享關鍵通訊受阻時的離線工具與實用備案，簡報《斷網防災包》開放下載。
 og_title: "「斷網防災包」簡報下載（Action! 灰色地帶生存指南論壇）"
 og_description: "海纜中斷、網駭竊資、認知操弄──灰色地帶作戰不必等飛彈落地。彭宬在「Action! 灰色地帶生存指南」論壇分享關鍵通訊受阻時的離線工具與實用備案，簡報《斷網防災包》開放下載。"
 og_image: /assets/2026-AUG-30-greyzone-forum-slides.jpg

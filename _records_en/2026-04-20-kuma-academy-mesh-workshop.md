@@ -3,7 +3,7 @@ title: "Kuma Academy: “When the Internet Goes Down, No One Has a Backup Plan�
 date: 2026-04-20
 category: MEDIA
 source: 黑熊學院 Kuma Academy
-summary: "Kuma Academy recaps Sean Ching’s presentation at a CRC Mesh workshop: why off-grid communications backups are needed; Mesh communication ranges in cities and open terrain; Taiwan’s community experience with the MESHTW channel and Meshtastic Taiwan Community; and the newly developed Meshbridge message board, which lets users without hardware devices connect to a Mesh network through Wi-Fi."
+summary: "Kuma Academy recaps Sean Ching’s talk at a CRC Mesh workshop: why off-grid backups matter; Mesh ranges in cities and open terrain; Taiwan’s community experience (MESHTW channel, Meshtastic Taiwan Community); and the new Meshbridge message board, which connects users without hardware over Wi-Fi."
 og_title: "Kuma Academy: “When the Internet Goes Down, No One Has a Backup Plan”"
 og_description: "In an outage, what matters is reaching family nearby. Kuma Academy recaps Sean Ching’s CRC Mesh workshop: 3–5 km urban range, the MESHTW channel, and the hardware-free Meshbridge message board."
 og_image: /assets/2026-APR-20-kuma-academy-mesh-workshop.jpg

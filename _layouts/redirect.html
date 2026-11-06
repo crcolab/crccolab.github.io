@@ -1,0 +1,14 @@
+<!doctype html>
+{%- comment -%} A moved page: GitHub Pages can't send a 301, so this refreshes to page.redirect_to (which may carry a #section). {%- endcomment -%}
+<html lang="{{ page.locale }}">
+<head>
+  <meta charset="utf-8">
+  <title>{{ page.title }}</title>
+  <meta name="robots" content="noindex">
+  <link rel="canonical" href="{{ page.redirect_to | split: '#' | first | absolute_url }}">
+  <meta http-equiv="refresh" content="0; url={{ page.redirect_to }}">
+</head>
+<body>
+  <p><a href="{{ page.redirect_to }}">{{ page.title }}</a></p>
+</body>
+</html>

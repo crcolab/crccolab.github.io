@@ -1,0 +1,9 @@
+{%- comment -%}
+  An event whose post date is its release date, not the day it happens, also shows when it happens.
+  Pass doc (the event) and label (ui.event_date_label).
+{%- endcomment -%}
+{%- if include.doc.start_date -%}
+  {%- assign chip_start = include.doc.start_date | date: "%Y-%m-%d" -%}
+  {%- assign chip_date = include.doc.date | date: "%Y-%m-%d" -%}
+  {%- if chip_start != chip_date -%}<span class="crc-news__cat">{{ include.label }} {{ include.doc.start_date | date: "%b %-d" | upcase }}</span>{%- endif -%}
+{%- endif -%}

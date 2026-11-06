@@ -3,7 +3,7 @@ title: "Rti Coverage: Communications Resilience During Internet and Power Outage
 date: 2026-06-08
 category: MEDIA
 source: Rti 中央廣播電臺
-summary: "“When a power-grid outage shuts down cellular base stations, how can a household power its Wi-Fi router? Routers generally require only 10 to 28 volts, so vehicle battery modules are a particularly convenient and readily available source of electricity in an emergency.” From one of the sessions on CRC’s digital resilience track at g0v Summit 2026."
+summary: "“When a power-grid outage shuts down cellular base stations, how can a household power its Wi-Fi router? Routers generally require only 10 to 28 volts, so vehicle battery modules are a particularly convenient and readily available source of electricity in an emergency.” CRC at g0v Summit 2026."
 og_title: "Rti Coverage: Communications Resilience During Internet and Power Outages"
 og_description: "When the grid fails, what powers your Wi-Fi router? Routers need only 10–28 volts, so vehicle batteries can step in. Rti on a CRC session at g0v Summit 2026, from Ukraine and Myanmar to LINE and PTT."
 og_image: /assets/2026-JUN-08-rti-blackout-resilience.jpg

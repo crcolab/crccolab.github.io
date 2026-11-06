@@ -12,7 +12,7 @@ location_address:
   region: Taipei City
   postal_code: "100056"
   country: TW
-summary: "Starting from scratch, this workshop introduces how Meshtastic works, how to choose hardware, how to install the software, and how to complete the basic setup. Beginners encountering Meshtastic for the first time are welcome to bring their own devices; a small number of devices will also be available on site for participants who do not have one to try out."
+summary: "Starting from scratch, this workshop covers how Meshtastic works, choosing hardware, installing the software, and basic setup. First-time beginners are welcome to bring their own devices; a small number will also be available on site for participants without one to try out."
 og_title: "Meshtastic Beginner Workshop · Jul 19, NPO Hub 2F"
 og_description: "“When the internet goes down, you can use that Mesh thing!” Learn Meshtastic from scratch: how it works, hardware, software, and setup. Bring a device or try one on site. Jul 19, Impact Space, NPO Hub 2F."
 image: /assets/2026-JUN-24-mesh-newbies-workshop.jpg
