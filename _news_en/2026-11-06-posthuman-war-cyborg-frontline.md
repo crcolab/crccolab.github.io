@@ -23,7 +23,7 @@ tags:
 - Lee Tzu-Tung
 ---
 
-[supqueerclubb](https://www.instagram.com/supqueerclubb) invited [Cyborg Resilience Co-lab (CRC)](/en/) to teach this session at Yonghe Community University.
+Invited by [supqueerclubb](https://www.instagram.com/supqueerclubb)
 
 Time: Fri, Nov 6, 19:00-21:00\\
 Location: Yonghe Community University (No. 71, Yongli Rd., Yonghe Dist., New Taipei City, on the Fuhe Junior High School campus)\\
@@ -31,7 +31,7 @@ Registration:
 
 ## ❑ Speakers
 
-[Meichun Lee](/en/team/meichun/) @mg.leeee is an assistant research fellow at the Institute of Ethnology, Academia Sinica, and a post/anthropologist who moves between the digital, data, and the cyborg. Co-founder of CRC. Participant in and researcher of g0v, and author of the book 《「沒有人」的運動》 (“The ‘Nobody’ Movement”). Has worked in theater, television, and Hsinchu Science Park. Committed to thinking through digital activism, data politics, technology, and geopolitics from a cat’s point of view.
+[Meichun Lee](/en/team/meichun/) @mg.leeee is an assistant research fellow at the Institute of Ethnology, Academia Sinica, and a post/anthropologist who moves between the digital, data, and the cyborg. Co-founder of [Cyborg Resilience Co-lab (CRC)](/en/). Participant in and researcher of g0v, and author of the book 《「沒有人」的運動》 (“The ‘Nobody’ Movement”). Has worked in theater, television, and Hsinchu Science Park. Committed to thinking through digital activism, data politics, technology, and geopolitics from a cat’s point of view.
 
 \-
 
