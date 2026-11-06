@@ -52,7 +52,7 @@ permalink: /
   <link rel="alternate" type="application/atom+xml" title="CRC — 所有更新" href="/feed.xml">
   <link rel="alternate" type="application/atom+xml" title="CRC — 最新訊息" href="/news/feed.xml">
   <link rel="alternate" type="application/atom+xml" title="CRC — 活動" href="/events/feed.xml">
-  <link rel="alternate" type="application/atom+xml" title="CRC — 記錄／報導" href="/records/feed.xml">
+  <link rel="alternate" type="application/atom+xml" title="CRC — 媒體報導" href="/records/feed.xml">
   <link rel="alternate" type="application/atom+xml" title="CRC — 提點子" href="/ideas/feed.xml">
   <meta property="og:site_name" content="Cyborg Resilience Co-lab" />
   <meta property="og:type" content="website" />
@@ -128,15 +128,15 @@ permalink: /
     <nav class="site-nav">
       <a href="#about" class="site-nav__link">關於</a>
       <a href="#team" class="site-nav__link">團隊</a>
-      <a href="/news/" class="site-nav__link">訊息</a>
+      <a href="/news/" class="site-nav__link">最新訊息</a>
       <a href="/events/" class="site-nav__link">活動</a>
-      <a href="/records/" class="site-nav__link">記錄／報導</a>
+      <a href="/records/" class="site-nav__link">媒體報導</a>
       <a href="/ideas/" class="site-nav__link">提點子</a>
     </nav>
     <div class="site-header__actions">
       {% include locale-switcher.html %}
       <button class="theme-toggle" id="theme-toggle" aria-label="切換淺色／紫色主題" title="切換主題">◐</button>
-      <a class="crc-btn crc-btn--primary crc-btn--sm site-header__latest" href="#news">最新消息<span class="crc-btn__arrow" aria-hidden="true">↗</span></a>
+      <a class="crc-btn crc-btn--primary crc-btn--sm site-header__latest" href="#news">近期動態<span class="crc-btn__arrow" aria-hidden="true">↗</span></a>
     </div>
   </header>
 
@@ -436,7 +436,8 @@ permalink: /
 
         <div id="news-list" class="news__list"
              data-api-url="/api/latest.json"
-             data-sections='[{"key":"news","label":"最新訊息","viewAll":"查看全部","href":"/news/"},{"key":"events","label":"活動","viewAll":"查看全部","href":"/events/"},{"key":"records","label":"記錄／報導","viewAll":"查看全部","href":"/records/"},{"key":"ideas","label":"提點子","viewAll":"查看全部","href":"/ideas/"}]'></div>
+             data-event-label="活動"
+             data-sections='[{"key":"news","label":"最新訊息","viewAll":"查看全部","href":"/news/"},{"key":"events","label":"活動","viewAll":"查看全部","href":"/events/"},{"key":"records","label":"媒體報導","viewAll":"查看全部","href":"/records/"},{"key":"ideas","label":"提點子","viewAll":"查看全部","href":"/ideas/"}]'></div>
       </div>
     </div>
   </section>
@@ -457,9 +458,9 @@ permalink: /
           <h4>導覽</h4>
           <a href="#about">關於</a>
           <a href="#team">團隊</a>
-          <a href="/news/">訊息</a>
+          <a href="/news/">最新訊息</a>
           <a href="/events/">活動</a>
-          <a href="/records/">記錄／報導</a>
+          <a href="/records/">媒體報導</a>
         </div>
         <div class="footer__col">
           <h4>連結</h4>

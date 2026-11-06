@@ -3,7 +3,7 @@ title: "CNA Coverage: Lee Tzu-Tung’s Solo Exhibition “Mercy and Vengeance in
 date: 2026-07-01
 category: MEDIA
 source: 中央社 CNA
-summary: "CRC artist Lee Tzu-Tung recently presented the solo exhibition Mercy and Vengeance in the Bardo in Sweden. Through artworks and workshops, the exhibition considered forms of violence ranging from gender-based violence to posthuman warfare. The Temple of the Wandering Daughter continues CRC’s shared exploration of posthuman warfare, drones, and the politics of technology."
+summary: "Through artworks and workshops, CRC artist Lee Tzu-Tung’s solo show Mercy and Vengeance in the Bardo in Sweden considered violence from gender-based violence to posthuman warfare. The Temple of the Wandering Daughter continues CRC’s work on posthuman warfare, drones, and the politics of technology."
 og_title: "CNA Coverage: Lee Tzu-Tung’s Solo Exhibition “Mercy and Vengeance in the Bardo” in Sweden"
 og_description: "From gender-based violence to posthuman warfare: in Sweden, CRC artist Lee Tzu-Tung’s solo exhibition Mercy and Vengeance in the Bardo seeks healing and resistance through artworks and workshops."
 og_image: /assets/2026-JUL-01-cna-lee-tzutung-sweden.jpg

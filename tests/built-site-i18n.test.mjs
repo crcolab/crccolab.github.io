@@ -186,7 +186,7 @@ test('built item hero images and member photos reserve their size', async () => 
     }
   }
   assert.ok(problems.length === 0, `item and member images must reserve their real size:\n${problems.join('\n')}`);
-  assert.ok(itemChecked >= 18, `checked ${itemChecked} item__image tags; expected at least 18`);
+  assert.ok(itemChecked >= 14, `checked ${itemChecked} item__image tags; expected at least 14`);
   assert.ok(memberChecked >= 10, `checked ${memberChecked} member-profile__photo tags; expected at least 10`);
   const sections = await read('_site/sections.css');
   assert.match(sections, /\.item__image\{[^}]*[{;]height:auto[;}]/, 'sections.css .item__image rule must contain height:auto');
@@ -397,7 +397,7 @@ test('item hero images serve WebP with a JPEG/PNG fallback and keep social cards
     }
   }
   assert.ok(problems.length === 0, `hero and body images must serve WebP with a JPEG/PNG fallback and keep social cards on the original:\n${problems.join('\n')}`);
-  assert.ok(pictures >= 15, `checked ${pictures} <picture> hero images; expected at least 15`);
+  assert.ok(pictures >= 14, `checked ${pictures} <picture> hero images; expected at least 14`);
   assert.ok(pictures + bodyPictures >= 35, `checked ${pictures + bodyPictures} <picture> images (${pictures} heroes, ${bodyPictures} body); expected at least 35`);
 });
 
@@ -419,7 +419,7 @@ test('every built page advertises the ideas Atom feed', async () => {
   const [home, section, item] = await Promise.all([
     read('_site/index.html'),
     read('_site/news/index.html'),
-    read('_site/records/2026-05-24-g0v-summit-panel-slides/index.html'),
+    read('_site/records/2026-03-27-rti-forum-coverage/index.html'),
   ]);
   for (const html of [home, section, item]) {
     assert.match(html, /rel="alternate" type="application\/atom\+xml" title="CRC — 提點子" href="\/ideas\/feed\.xml"/);
@@ -442,15 +442,12 @@ test('March forum pages link to the event hub in the same locale, and internal l
   const { readdir } = await import('node:fs/promises');
   const hub = '/events/2026-03-25-digital-resilience-forum/';
   const forumPages = [
-    '/news/2026-02-10-open-register/',
-    '/news/2026-03-25-past-events/',
     '/ideas/2026-03-25-crc-march-25-decks/',
     '/records/2026-03-27-rti-forum-coverage/',
-    '/records/2026-04-01-forum-recap-upper-half/',
     '/records/2026-04-10-dset-forum-coverage/',
   ];
   // a. the event hub lists the forum pages in its own locale
-  const hubLinks = forumPages.slice(1);
+  const hubLinks = forumPages;
   const [zhHub, enHub] = await Promise.all([
     read(`_site${hub}index.html`),
     read(`_site/en${hub}index.html`),
@@ -700,7 +697,7 @@ test('page titles drop the suffix by display width, pinned by a fixture and ever
   for (const band of ['full', 'short', 'none']) assert.ok(bands[`en-US ${band}`] > 0, `no en-US item lands in the ${band} band`);
 
   // (c) A long en-US page (none band): <title> is bare, while og:title and twitter:title keep the full suffix.
-  const longPage = await read('_site/en/news/2026-02-10-open-register/index.html');
+  const longPage = await read('_site/en/events/2026-03-25-digital-resilience-forum/index.html');
   assert.doesNotMatch(longPage, /<title>[^<]*｜Cyborg Resilience Co-lab<\/title>/);
   for (const name of ['og:title', 'twitter:title']) {
     const content = decode(longPage.match(new RegExp(`<meta (?:property|name)="${name}" content="([^"]*)"`))?.[1] ?? '');
@@ -811,4 +808,24 @@ test('built API catalog (RFC 9727) lists latest.json with its OpenAPI descriptio
   assert.equal(api['service-desc'][0].href, 'https://crcolab.art/api/openapi.json');
   const schema = openapi.paths['/api/latest.json'].get.responses['200'].content['application/json'].schema;
   assert.deepEqual(Object.keys(latest).sort(), [...schema.required].sort(), 'openapi.json lists the sections latest.json emits');
+});
+
+test('sign-up buttons name the event date, so they stay true after the event', async () => {
+  const form = 'https://forms\\.gle/MQHwkDoSG12PkQRBA';
+  const cases = [
+    ['_site/events/2026-10-28-digital-go-bag-for-civil-society/index.html', '報名 2026 年十二月 5 日活動'],
+    ['_site/en/events/2026-10-28-digital-go-bag-for-civil-society/index.html', 'Register for the Dec 5, 2026 event'],
+  ];
+  for (const [page, label] of cases) {
+    const html = await read(page);
+    const button = `class="crc-btn[^"]*" href="${form}" target="_blank" rel="noopener">${label} `;
+    assert.equal((html.match(new RegExp(button, 'g')) || []).length, 3, `${page} needs top, middle and bottom buttons`);
+    const [before, afterOpen] = html.split('<div class="item__body">');
+    const body = afterOpen.slice(0, afterOpen.indexOf('</div>'));
+    const after = afterOpen.slice(afterOpen.indexOf('</div>'));
+    for (const [where, part] of [['top', before], ['middle', body], ['bottom', after]]) {
+      assert.match(part, new RegExp(button), `${page} has no ${where} button`);
+    }
+    assert.ok(body.indexOf('crc-btn') > body.length / 4 && body.indexOf('crc-btn') < body.length * 3 / 4, `${page}: the middle button is not near the middle`);
+  }
 });

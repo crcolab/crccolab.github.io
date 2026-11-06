@@ -45,6 +45,7 @@
         "properties": {
           "title": { "type": "string" },
           "date": { "type": "string", "description": "Item date as YYYY-MON-DD, e.g. 2026-OCT-20.", "examples": ["2026-OCT-20"] },
+          "event_date": { "type": "string", "description": "When the event happens, as MON D. Only on events whose date is their release date.", "examples": ["DEC 5"] },
           "category": { "type": ["string", "null"] },
           "summary": { "type": ["string", "null"], "description": "Summary truncated to 160 characters." },
           "url": { "type": "string", "description": "Site-relative path of the item page, or an absolute URL when the item links elsewhere." }

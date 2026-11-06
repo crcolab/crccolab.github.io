@@ -3,7 +3,7 @@ title: "Rti Coverage: Taiwan’s Community Meshtastic Coverage Has Reached 80%"
 date: 2026-06-15
 category: MEDIA
 source: Rti 中央廣播電臺
-summary: "“Sean Ching said that the community had only about 50 members in its early days but has now grown to nearly 20,000 people across Taipei, Taichung, Kaohsiung, Hualien, and other parts of Taiwan, with an estimated 1,000-plus devices in operation.” An in-depth report on one of the sessions on CRC’s digital resilience track at g0v Summit 2026."
+summary: "“Sean Ching said that the community had only about 50 members in its early days but has now grown to nearly 20,000 people across Taipei, Taichung, Kaohsiung, Hualien, and other parts of Taiwan, with an estimated 1,000-plus devices in operation.” In-depth report from CRC at g0v Summit 2026."
 og_title: "Rti Coverage: Taiwan’s Community Meshtastic Coverage Has Reached 80%"
 og_description: "From about 50 members to nearly 20,000: Taiwan’s Meshtastic community now runs 1,000-plus devices with roughly 80% coverage. Rti’s in-depth report on a CRC session at g0v Summit 2026."
 og_image: /assets/2026-JUN-15-rti-meshtastic.jpg

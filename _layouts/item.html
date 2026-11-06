@@ -4,10 +4,13 @@ layout: default
 {% assign ui = site.data.i18n[page.locale] %}
 {% assign prefix = "" %}{% if page.locale == "en-US" %}{% assign prefix = "/en" %}{% endif %}
 <main class="item-page"><article class="item container">
-  <div class="crc-news__meta"><span class="crc-news__date">{{ page.date | date: "%Y-%b-%d" | upcase }}</span><span class="crc-news__cat">{{ page.category }}</span>{% if page.source %}<span class="crc-news__cat">{{ page.source }}</span>{% endif %}</div>
+  <div class="crc-news__meta"><span class="crc-news__date">{{ page.date | date: "%Y-%b-%d" | upcase }}</span><span class="crc-news__cat">{{ page.category }}</span>{% include event-date-chip.html doc=page label=ui.event_date_label %}{% if page.source %}<span class="crc-news__cat">{{ page.source }}</span>{% endif %}</div>
   <h1 class="item__title">{{ page.title }}</h1>
   {% if page.image and page.image != "" %}{% include item-hero.html %}{% endif %}
-  <div class="item__body">{% include webp-pictures.html html=content %}</div>
+  {% if page.signup_url %}{% include event-date-text.html doc=page ui=ui %}{% capture signup_button %}<p class="item__signup"><a class="crc-btn crc-btn--primary crc-btn--md" href="{{ page.signup_url }}" target="_blank" rel="noopener">{{ ui.signup | replace: "DATE", event_date_text }} <span class="crc-btn__arrow" aria-hidden="true">↗</span></a></p>{% endcapture %}{{ signup_button }}{% endif %}
+  {% capture item_body %}{% include webp-pictures.html html=content %}{% endcapture %}
+  <div class="item__body">{% if page.signup_url %}{% include body-with-middle-button.html html=item_body button=signup_button %}{% else %}{{ item_body }}{% endif %}</div>
+  {% if page.signup_url %}{{ signup_button }}{% endif %}
   {% if page.external_url %}<p><a class="crc-btn crc-btn--primary crc-btn--md" href="{{ page.external_url }}" target="_blank" rel="noopener">{{ ui.view_source }} <span class="crc-btn__arrow" aria-hidden="true">↗</span></a></p>{% endif %}
   <p class="item__backlink"><a href="{{ prefix }}/{{ page.section }}/">← {{ ui.back_to[page.section] }}</a></p>
 </article></main>

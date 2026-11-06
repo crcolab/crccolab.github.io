@@ -1,0 +1,26 @@
+{%- comment -%}
+  Puts include.button at the top-level block boundary nearest the middle of include.html, measured by length.
+  Kramdown separates top-level blocks with a blank line and indents nested ones, so splitting on a paragraph end
+  followed by an unindented tag never lands inside a blockquote or list. A body too short to have a middle gets none.
+{%- endcomment -%}
+{%- capture mb_sep -%}</p>
+
+<{%- endcapture -%}
+{%- assign mb_pieces = include.html | split: mb_sep -%}
+{%- if mb_pieces.size < 4 -%}
+  {{- include.html -}}
+{%- else -%}
+  {%- assign mb_half = include.html | size | divided_by: 2 -%}
+  {%- assign mb_seen = 0 -%}
+  {%- assign mb_done = false -%}
+  {%- for mb_piece in mb_pieces -%}
+    {{- mb_piece -}}
+    {%- unless forloop.last -%}
+      {%- assign mb_len = mb_piece | size -%}
+      {%- assign mb_seen = mb_seen | plus: mb_len -%}
+      </p>{% if mb_done == false and mb_seen >= mb_half %}{{ include.button }}{% assign mb_done = true %}{% endif %}
+
+<
+    {%- endunless -%}
+  {%- endfor -%}
+{%- endif -%}

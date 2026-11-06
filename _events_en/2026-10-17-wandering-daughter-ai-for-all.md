@@ -1,5 +1,6 @@
 ---
 title: Wandering Daughter’s Warfarring
+last_modified_at: 2026-11-06
 date: 2026-10-17
 start_date: 2026-10-17
 end_date: 2026-10-25
@@ -96,3 +97,46 @@ During wartime, cellular towers and internet infrastructure may be cut off, rend
 **Intelligence / Collaboration / Counter-attack**
 
 Computers can be used to gather intelligence, analyze data, coordinate actions, and learn how to build countermeasures such as drones. They can also become tools for launching digital attacks and information warfare.
+
+## After the Opening: One Wandering Daughter Temple, Three Installations
+{: #recap}
+
+![In a grey concrete exhibition hall, visitors stand in a semicircle listening to a speaker holding a microphone. Beside the speaker is a camouflage pop-up tent glowing with warm candlelight inside, with strands of black hair and electric candles on the floor. On the right, an upright screen shows a mock social media feed titled “Wandering Daughter’s Gathering”, with a woman presenting the news above captions.](/assets/2026-OCT-20-wandering-daughter-temple.jpg){: width="2048" height="1366"}
+
+Over the past few months, [CRC, the Cyborg Resilience Co-Lab](/en/), has been researching drones and talking about how to evade surveillance. We have played with radio and tested Meshtastic, imagining how people could still reach one another if the network went down one day. We have also run workshops, thinking with people from different backgrounds about how to actually prepare if war or disaster really came.
+
+Then, one day, all of this somehow turned into an art exhibition.
+
+We carried this research, these experiments and these discussions into the New Taipei City Art Museum, where they became *Wandering Daughter’s Dronecraft* (孤娘的無人機藝).
+
+### Why “Wandering Daughters”?
+
+In Taiwanese folk religion, some unmarried, childless women cannot enter the traditional patrilineal system of ancestor worship after death. They become beings left outside the family order, yet they may also be worshipped, because people believe they hold spiritual power.
+
+We wanted to start from that kind of existence and ask a question: as technology keeps identifying and classifying the world, and as war relies more and more on drones and artificial intelligence, which people, which bodies, are easily overlooked or even shut out? And so this rather peculiar “Wandering Daughter temple” came to appear in the museum. ✨✨✨
+
+01｜Tent \| If the drones in the sky are watching us, could we slip out of their sight?
+
+01｜Meshtastic and radio \| If the network goes down, can we still find each other?
+
+03｜Computer \| In a world where information, technology and war are intertwined, how do we gather intelligence, work together, and find ways to respond?
+
+They look like three different things, but behind them lies a shared concern: facing an increasingly unpredictable future, perhaps we need not simply wait for things to happen, and can begin to learn, experiment, and look for other possibilities with the people around us?
+
+For CRC, this exhibition has also been a very special process. The members were originally just a few people from different fields (art x academia x engineering x activism) who wanted to make something together. We never expected to end up placing technology, civil defense, art and Taiwanese folk religion in the same space.
+
+This is probably the resilience we imagine: not necessarily having everything ready, but still being able to find people to work things out with when facing the unknown.
+
+“#Wandering Daughter’s Dronecraft” is on view now!
+
+Dates｜Oct 17–25, 2026
+
+Location｜Exchange and Exhibition Area, B3 (Basement Level 3), New Taipei City Art Museum (no ticket required for this area)
+
+This work is one of the special exhibitions of AI for ALL: Opening Act, Taiwan Festival 2026. If you happen to be at the New Taipei City Art Museum, come and see this rather different “Wandering Daughter temple.”
+
+![Looking through a gap in the camouflage tent: an open black tool case holds a monitor playing drone footage from above, in which a person in a red shirt crouches beside a drone on cracked asphalt. Captions read “以及日常環境的理解 and their everyday surroundings”, and the news headlines read “從砍樹到肉粽攻擊 無人機謠言如何發酵” and “Gray-Zone Warfare Turns Tree-Cutting and Dumplings into Security Threats”. Electric candles stand beside the case, which rests on boxes covered in newspaper.](/assets/2026-OCT-20-wandering-daughter-temple-2.jpg){: width="2048" height="1366"}
+
+![A heap of porous pale grey rock wrapped in strings of pearls, resting on loose strands of black hair, with a lit electric candle on either side and the camouflage tent out of focus behind.](/assets/2026-OCT-20-wandering-daughter-temple-3.jpg){: width="2048" height="1366"}
+
+Photos courtesy of AI for ALL: Opening Act, Taiwan Festival 2026. Official photographer: 王士源 Shih Yuan Wang

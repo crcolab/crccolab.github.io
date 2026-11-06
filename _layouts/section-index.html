@@ -25,6 +25,7 @@ layout: default
         <div class="crc-news__meta">
           <span class="crc-news__date">{{ item.date | date: "%Y-%b-%d" | upcase }}</span>
           <span class="crc-news__cat">{{ item.category }}</span>
+          {% include event-date-chip.html doc=item label=ui.event_date_label %}
           {% if item.source %}<span class="crc-news__cat">{{ item.source }}</span>{% endif %}
           {% if item.translation_exempt %}<span class="crc-news__cat">{{ ui.bilingual_event }}</span>{% endif %}
         </div>

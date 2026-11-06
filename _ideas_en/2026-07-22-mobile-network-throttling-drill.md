@@ -3,7 +3,7 @@ title: "Why Run a Mobile-Network Throttling Drill? Is There Any Point?"
 date: 2026-07-22
 last_modified_at: 2026-10-21
 category: NOTE
-summary: "Taiwan's 2026 Urban Resilience Exercise throttles mobile data for the first time: 30 minutes from 2:30 pm on August 10 and August 13. From quake- and typhoon-damaged base stations to drills in Japan, South Korea, NATO and Finland, this piece discusses the significance of bringing outage scenarios into disaster preparedness drills."
+summary: "Taiwan's 2026 Urban Resilience Exercise throttles mobile data for the first time: 30 minutes from 2:30 pm on August 10 and August 13. From quake- and typhoon-damaged base stations to drills in Japan, South Korea, NATO and Finland, this piece discusses bringing outage scenarios into disaster drills."
 og_title: "Why Run a Mobile-Network Throttling Drill? Is There Any Point?"
 og_description: "The Hualien quake hit 172 base stations; Typhoon Danas knocked out 1,300+. On Aug 10 and Aug 13, Taiwan's 2026 Urban Resilience Exercise throttles mobile data for 30 minutes. Why drill for outages?"
 image: /assets/2026-JUL-22-mobile-network-throttling-drill.jpg

@@ -3,11 +3,12 @@ title: "Blackout Preparedness Kit: Slide Deck Download (Action! Grey-Zone Surviv
 date: 2026-08-30
 category: TALK
 source: Doublethink Lab ✕ Watchout ✕ CRC
-summary: "CHENG PENG spoke on behalf of CRC Cyborg Resilience Co-lab at the Action! Grey-Zone Survival Guide forum — Information Warfare Analysis ✕ Offline Communication — hosted by Doublethink Lab sharing offline tools and practical fallbacks for when critical communications are disrupted. The Blackout Preparedness Kit slide deck is available for download."
+summary: "CHENG PENG spoke for CRC at the Action! Grey-Zone Survival Guide: Information Warfare Analysis ✕ Offline Communication Forum, hosted by Doublethink Lab, sharing offline tools and practical fallbacks for disrupted communications. The Blackout Preparedness Kit deck is available to download."
 og_title: "Blackout Preparedness Kit: Slide Deck Download (Action! Grey-Zone Survival Guide Forum)"
-og_description: "Grey-zone warfare doesn’t wait for missiles. Download CHENG PENG’s Blackout Preparedness Kit: offline tools and practical fallbacks for when critical communications are disrupted."
+og_description: "Subsea cable cuts, cyber intrusion, cognitive manipulation: grey-zone warfare doesn’t wait for missiles. At the Action! Grey-Zone Survival Guide forum, CHENG PENG shared offline tools and practical fallbacks for disrupted communications. The Blackout Preparedness Kit deck is available to download."
 og_image: /assets/2026-AUG-30-greyzone-forum-slides.jpg
 image_alt: "Purple social card over a lattice of lime square dots and white arcs. Top left, the CRC logo; in the centre the large white title “斷網防災包” above the lime English title “Blackout Preparedness Kit”; bottom left a lime tag reading “八月 AUG 30”; bottom right “Action! 灰色地帶生存指南論壇｜Grey-Zone Survival Guide Forum” and “簡報下載｜Slide deck download”."
+external_url: https://drive.google.com/file/d/1RtH03YMiR1zPndD-mCebYJMf6FQiR8hb/view?usp=drive_link
 tags:
   - blackout preparedness kit
   - grey-zone operations
@@ -20,11 +21,10 @@ tags:
   - Doublethink Lab
   - Watchout
   - slide deck download
-external_url: https://drive.google.com/file/d/1RtH03YMiR1zPndD-mCebYJMf6FQiR8hb/view?usp=drive_link
 locale: en-US
 ---
 
-CHENG PENG spoke on behalf of [CRC Cyborg Resilience Co-lab](/en/) at the "Action! Grey-Zone Survival Guide: Information Warfare Analysis ✕ Offline Communication Forum". The forum was co-hosted by Doublethink Lab, Watchout, and CRC Cyborg Resilience Co-lab.
+CHENG PENG spoke on behalf of [CRC Cyborg Resilience Co-lab](/en/) at the "Action! Grey-Zone Survival Guide: Information Warfare Analysis ✕ Offline Communication Forum". The forum was hosted by Doublethink Lab.
 
 **Slide deck download**
 
@@ -46,7 +46,10 @@ Their true aim is to "gradually change the strategic status quo without triggeri
 
 ▍What you will learn at this forum:
 
-- Seeing through threats: dissecting the newest grey-zone cyber operation tactics of 2026.
-- Mental defense: building a personal line of cognitive defense against information warfare and emotional manipulation, and rejecting black-and-white extreme narratives.
-- Blackout backup plans: hands-on analysis of a 30-minute connection-throttling drill! A rundown of offline tools and practical fallbacks for when critical communications are blocked.
-- Interactive experience: try young creators' knowledge-translation works in person, letting preparedness awareness blend naturally into daily life.
+．Seeing through threats: dissecting the newest grey-zone cyber operation tactics of 2026.
+
+．Mental defense: building a personal line of cognitive defense against information warfare and emotional manipulation, and rejecting black-and-white extreme narratives.
+
+．Blackout backup plans: hands-on analysis of a 30-minute connection-throttling drill! A rundown of offline tools and practical fallbacks for when critical communications are blocked.
+
+．Interactive experience: try young creators' knowledge-translation works in person, letting preparedness awareness blend naturally into daily life.

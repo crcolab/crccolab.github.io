@@ -110,7 +110,7 @@
 <link rel="stylesheet" href="/sections.css">
 {% if page.collection and page.section != "events" or page.collection and page.canonical_url == nil %}
 <script type="application/ld+json">
-{% if page.section == "events" %}
+{% if page.section == "events" and page.location_name %}
 {%- comment -%}
   Optional event keys: event_type (schema.org Event subtype), location_address
   (mapping of PostalAddress fields), location_url, super_event {name, url,

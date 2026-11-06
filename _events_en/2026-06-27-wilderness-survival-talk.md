@@ -12,7 +12,7 @@ location_address:
   locality: Da’an District
   region: Taipei City
   country: TW
-summary: "Taiwan is an island beset by disasters: everyone fears for themselves, yet everyone also trains themselves. Approaching the subject through civil defense, digital resilience, and primary healthcare, this talk discusses how a new kind of organizer outside traditional organizational structures can develop agency in high-risk environments."
+summary: "Taiwan is an island beset by disasters: everyone fears for themselves, yet everyone also trains themselves. Through civil defense, digital resilience, and primary healthcare, this talk discusses how organizers outside traditional structures can develop agency in high-risk environments."
 og_title: "Practicing Survival at the Edge of the Wasteland · Jun 27, Co-Space"
 og_description: "Everyone fears, yet everyone trains. Yi-Cheng Liu, Lulu Keng, and De-Ray Chen on how new organizers find agency via civil defense, digital resilience, and primary healthcare. Jun 27, 14:00–16:00, Co-Space."
 external_url: https://www.accupass.com/event/2606080939521378773067

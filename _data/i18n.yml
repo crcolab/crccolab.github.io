@@ -3,37 +3,41 @@ zh-Hant:
   navigation:
     about: 關於
     team: 團隊
-    news: 訊息
+    news: 最新訊息
     events: 活動
-    records: 記錄／報導
+    records: 媒體報導
     ideas: 提點子
-    latest: 最新消息
+    latest: 近期動態
   sections:
     news: 最新訊息
     events: 活動
-    records: 記錄／報導
+    records: 媒體報導
     ideas: 提點子
     team: 團隊
   section_descriptions:
-    news: "CRC 賽伯格韌性實驗室的公告與消息：論壇和工作坊報名、活動預告、駐村近況與專案發布。關心數位韌性與離線通訊的人，可以從這裡掌握我們的最新動態。"
-    events: "CRC 主辦與協辦的論壇、黑客松與工作坊，主題涵蓋海纜、斷網應變與離線通訊，歡迎公民、技術社群與研究者一起參與。"
-    records: "CRC 參與的座談、演講、工作坊紀錄與媒體報導，附簡報與原文連結，方便讀者與媒體回顧我們在海纜、斷網應變與離線通訊上做過的事。"
+    news: "CRC 賽伯格韌性實驗室不限於單一活動的公告與消息：駐村近況、專案發布與組織動態。想報名活動或找簡報，請到活動頁。"
+    events: "CRC 主辦、協辦與受邀參與的論壇、黑客松、工作坊與展覽。每場活動一篇，從報名、活動記錄到簡報下載，都在同一頁。"
+    records: "外部媒體與單位怎麼報導 CRC：央廣、中央社、DSET、黑熊學院等，附原文連結。CRC 自己的活動記錄與簡報，都在活動頁。"
     ideas: "CRC 成員正在發展的論述、隨筆與實用指南，從對外網路流量劇減模擬、行動網路降速演練到家庭數位防災包，寫給想在斷網前先準備好的你。"
   view_all: 查看全部
   view_source: 閱讀原文
   back_to:
     news: 所有訊息
     events: 所有活動
-    records: 所有記錄／報導
+    records: 所有媒體報導
     ideas: 所有提點子
     team: 所有成員
   bilingual_event: 雙語活動頁
+  event_date_label: 活動
+  signup: "報名 DATE活動"
+  event_date_format: "YEAR 年MONTH DAY 日"
+  months: [一月, 二月, 三月, 四月, 五月, 六月, 七月, 八月, 九月, 十月, 十一月, 十二月]
   feed:
     label: Atom 訂閱
     all: 所有更新
     news: 最新訊息
     events: 活動
-    records: 記錄／報導
+    records: 媒體報導
     ideas: 提點子
     subtitle: CRC 賽伯格韌性實驗室的最新訊息、活動與媒體報導
   footer:
@@ -84,9 +88,9 @@ en-US:
     ideas: Ideas
     team: Team
   section_descriptions:
-    news: "CRC news: forum and workshop sign-ups, upcoming events, residencies, and project releases, for anyone following digital resilience and off-grid communication."
-    events: "Forums, hackathons, and workshops CRC hosts or co-hosts on subsea cables, outages, and off-grid communication, for citizens, technologists, and researchers."
-    records: "CRC talks, panels, workshop recaps, and press coverage on subsea cables, outages, and off-grid communication, with slides and sources for readers and reporters."
+    news: "CRC announcements not tied to one event: residencies, project releases and updates. To sign up for an event or find its slides, head to Events."
+    events: "Forums, hackathons, workshops and exhibitions CRC hosts, co-hosts or joins. One page per event, from sign-up to recap and slide downloads."
+    records: "How outside media cover CRC: reporting from Rti, CNA, DSET, Kuma Academy and others, with links to the originals. Our own recaps and slides are in Events."
     ideas: "Essays and guides from CRC members, from traffic-drop simulations and mobile throttling drills to a household digital go-bag, for anyone preparing for outages."
   view_all: View all
   view_source: View source
@@ -97,6 +101,10 @@ en-US:
     ideas: All ideas
     team: All members
   bilingual_event: Bilingual event page
+  event_date_label: Event
+  signup: "Register for the DATE event"
+  event_date_format: "MONTH DAY, YEAR"
+  months: [Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
   feed:
     label: Atom feed
     all: All updates

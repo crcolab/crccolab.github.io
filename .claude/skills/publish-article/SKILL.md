@@ -11,9 +11,9 @@ Enriching an existing post: do the payload in step 2, then steps 4–5. Only tou
 
 ## 1. Place it
 
-`_news/` announcements · `_events/` events · `_records/` third-party coverage · `_ideas/` essays and notes.
+`_events/` one post per event, with its sign-up, recap and slides all in that post (`{: #recap}`, `{: #slides}`, `{: #coverage}`), so a new recap or deck is added to the existing post, never posted separately · `_records/` outside media coverage only · `_news/` announcements not tied to one event · `_ideas/` essays and guides.
 
-Date it by CRC's engagement — the day CRC announced, ran, or shared the thing — not the source's own publish date. `_events/` uses `start_date`.
+Date it by CRC's engagement — the day CRC announced, ran, or shared the thing — not the source's own publish date. `_events/` uses `start_date`, or the release date with `start_date` set separately for an upcoming event, which shows an event-date chip.
 
 The filename date is the URL: `/ideas/<filename-without-.md>/`. Redating a published post therefore retires its live URL, so confirm that trade before renaming one. Pick a slug that will not go stale — if the author's own text disagrees about a title (two English names for one work), use a neutral slug rather than either name.
 
@@ -35,7 +35,7 @@ Fill every payload key:
 | `author` + `author_slug` | the slug must match a `_team/<slug>.md` |
 | `image` / `og_image` + `image_alt` | see **Social card** below |
 | `og_title`, `og_description` | see **Social card** below |
-| events only | `event_type` (e.g. `ExhibitionEvent`), `location_address` {street_address, locality, region, postal_code, country}, `location_url`, `super_event` {name, url, start_date, end_date, location_name, location_address} (emitted only with `start_date` + `location_name` — Google validates it as its own Event), `creators` [{name, slug}] — these feed the Event JSON-LD; `external_url` adds the "view source ↗" button |
+| events only | `signup_url` (buttons at the top, middle and bottom, labelled with the event date, never "register now", so nobody has to revisit it after the event), `event_type` (e.g. `ExhibitionEvent`), `location_address` {street_address, locality, region, postal_code, country}, `location_url`, `super_event` {name, url, start_date, end_date, location_name, location_address} (emitted only with `start_date` + `location_name` — Google validates it as its own Event), `creators` [{name, slug}] — these feed the Event JSON-LD; `external_url` adds the "view source ↗" button |
 
 `CLAUDE.md` holds the authoritative key catalogue; `_includes/head-seo.html` is what consumes them.
 
