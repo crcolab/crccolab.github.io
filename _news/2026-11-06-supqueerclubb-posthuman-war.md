@@ -2,11 +2,11 @@
 title: "【11/6 永和社大超酷俱樂部講座+工作坊】後人類戰爭中的賽伯格前線"
 date: 2026-11-06
 category: TALK
-summary: CRC 受邀參與永和社大「性別藝想－超酷俱樂部」十一月 6 日的講座與工作坊：李梅君、李紫彤從女性主義視角談後人類戰爭，再以反監控時尚探索無人機與演算法如何看見身體，以及拒絕辨識的可能。
-og_title: 後人類戰爭中的賽伯格前線・CRC 受邀・十一月 6 日 永和社大
-og_description: CRC 受邀：永和社大「性別藝想－超酷俱樂部」主辦，李梅君、李紫彤從女性主義視角談後人類戰爭，接著進入反監控時尚工作坊：無人機與演算法如何看見身體？十一月 6 日 19:00–21:00。
-og_image: /assets/2026-NOV-06-posthuman-war-cyborg-frontline.jpg
-image_alt: 紫色社群分享圖，背景是萊姆綠方點與白色弧線交織的格紋。左上角為 CRC 標誌，中央白色大字「後人類戰爭中的賽伯格前線」，下方萊姆綠英文「The Cyborg Frontline in Posthuman War」；左下萊姆綠標籤寫「十一月 NOV 6」，右下寫「永和社大｜Yonghe Community University」與「CRC 受邀 Invited｜主辦 Host：性別藝想－超酷俱樂部 supqueerclubb」。
+summary: 受超酷俱樂部邀請，CRC 的李梅君、李紫彤十一月 6 日在永和社大從女性主義視角談後人類戰爭，再以反監控時尚工作坊探索無人機與演算法如何看見身體，以及不被看見、拒絕辨識的可能。
+og_title: 受超酷俱樂部邀請：後人類戰爭中的賽伯格前線・十一月 6 日
+og_description: 受超酷俱樂部邀請，CRC 的李梅君、李紫彤從女性主義視角談後人類戰爭，接著進入反監控時尚工作坊：無人機與演算法如何看見身體？十一月 6 日 19:00–21:00，永和社大。
+og_image: /assets/2026-NOV-06-supqueerclubb-posthuman-war.jpg
+image_alt: 紫色社群分享圖，背景是萊姆綠方點與白色弧線交織的格紋。左上角為 CRC 標誌，中央白色大字「後人類戰爭中的賽伯格前線」，下方萊姆綠大字「受超酷俱樂部邀請 Invited by supqueerclubb」；左下萊姆綠標籤寫「十一月 NOV 6」，右下寫「The Cyborg Frontline in Posthuman War」與「永和社大｜Yonghe Community University」。
 tags:
 - 後人類戰爭
 - 賽伯格

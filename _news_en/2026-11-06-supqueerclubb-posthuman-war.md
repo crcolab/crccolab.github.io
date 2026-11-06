@@ -3,10 +3,10 @@ title: "[Nov 6 supqueerclubb Talk + Workshop at Yonghe Community University] The
 date: 2026-11-06
 category: TALK
 summary: "Invited by supqueerclubb, CRC’s Meichun Lee and Lee Tzu-Tung take on posthuman war from a feminist perspective at Yonghe Community University on Nov 6, followed by an anti-surveillance fashion workshop on how drones and algorithms see the body and how we might refuse recognition."
-og_title: "The Cyborg Frontline in Posthuman War: CRC Invited by supqueerclubb, Nov 6"
+og_title: "Invited by supqueerclubb: The Cyborg Frontline in Posthuman War, Nov 6"
 og_description: "Invited by supqueerclubb, CRC’s Meichun Lee and Lee Tzu-Tung bring a feminist lens to posthuman war, plus an anti-surveillance fashion workshop. Nov 6, Yonghe Community University."
-og_image: /assets/2026-NOV-06-posthuman-war-cyborg-frontline.jpg
-image_alt: "Purple social card over a lattice of lime square dots and white arcs. Top left, the CRC logo; in the centre the large white title “後人類戰爭中的賽伯格前線” above the lime “The Cyborg Frontline in Posthuman War”; bottom left a lime tag “十一月 NOV 6”; bottom right “永和社大｜Yonghe Community University” and “CRC 受邀 Invited｜主辦 Host：性別藝想－超酷俱樂部 supqueerclubb”."
+og_image: /assets/2026-NOV-06-supqueerclubb-posthuman-war.jpg
+image_alt: "Purple social card over a lattice of lime square dots and white arcs. Top left, the CRC logo; in the centre the large white title “後人類戰爭中的賽伯格前線” above the large lime “受超酷俱樂部邀請 Invited by supqueerclubb”; bottom left a lime tag “十一月 NOV 6”; bottom right “The Cyborg Frontline in Posthuman War” and “永和社大｜Yonghe Community University”."
 locale: en-US
 tags:
 - posthuman war
