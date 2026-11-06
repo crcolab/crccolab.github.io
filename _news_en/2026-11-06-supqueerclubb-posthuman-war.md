@@ -1,5 +1,5 @@
 ---
-title: "[Nov 6 Talk + Workshop] The Cyborg Frontline in Posthuman War"
+title: "[Nov 6 supqueerclubb Talk + Workshop at Yonghe Community University] The Cyborg Frontline in Posthuman War"
 date: 2026-11-06
 category: TALK
 summary: "Invited by supqueerclubb, CRC’s Meichun Lee and Lee Tzu-Tung take on posthuman war from a feminist perspective at Yonghe Community University on Nov 6, followed by an anti-surveillance fashion workshop on how drones and algorithms see the body and how we might refuse recognition."
