@@ -23,7 +23,7 @@ tags:
 - Lee Tzu-Tung
 ---
 
-**This event is hosted by [supqueerclubb](https://www.instagram.com/supqueerclubb) at Yonghe Community University. [Cyborg Resilience Co-lab (CRC)](/en/) was invited to speak and is not the organizer.**
+[supqueerclubb](https://www.instagram.com/supqueerclubb) invited [Cyborg Resilience Co-lab (CRC)](/en/) to teach this session at Yonghe Community University.
 
 Time: Fri, Nov 6, 19:00-21:00\\
 Location: Yonghe Community University (No. 71, Yongli Rd., Yonghe Dist., New Taipei City, on the Fuhe Junior High School campus)\\
