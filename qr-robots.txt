@@ -1,0 +1,7 @@
+# robots.txt for qr.crcolab.art, served there by a Cloudflare Redirect Rule
+# (qr.crcolab.art/robots.txt → crcolab.art/qr-robots.txt). That host only
+# redirects printed QR codes to pages on crcolab.art, so crawlers have nothing
+# to fetch there, and keeping them out keeps the scan counts in Cloudflare
+# analytics to people. The pages it points at are crawlable: see /robots.txt.
+User-agent: *
+Disallow: /

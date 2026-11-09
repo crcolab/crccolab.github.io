@@ -70,6 +70,12 @@ plus Jekyll (built by GitHub Pages on push from `main`) for the content sections
   description (`_config.yml` `include`s the dot-folder). GitHub Pages can't set headers, so the
   homepage `Link` header and this file's `application/linkset+json` type come from Cloudflare
   Response Header Transform Rules on the `crcolab.art` zone, not from the repo
+- `qr-robots.txt` — the robots.txt of `qr.crcolab.art`, a QR-code redirect host that lives only in
+  Cloudflare: a proxied `AAAA qr → 100::` record plus Redirect Rules (one 302 per code, e.g.
+  `/cso-gobag/` → `/pub/cso-gobag/?utm_source=qr&utm_medium=print&utm_campaign=cso-gobag`, then
+  `/robots.txt` → this file, then a catch-all to `/`; codes from one print run share a `utm_campaign`
+  and differ by `utm_content`, and off-site targets get no UTM tags). Scans are counted in Cloudflare HTTP Traffic
+  analytics filtered to that host; it disallows all crawlers so the counts stay people
 - `redirects/` — moved pages, since GitHub Pages can't send a 301: one file per old URL with `layout: redirect`,
   `redirect_to` (may carry a `#section`), `permalink` (the old URL) and `sitemap: false`
 - `sections.css` — shared styles for section pages (loads after `styles.css`)
