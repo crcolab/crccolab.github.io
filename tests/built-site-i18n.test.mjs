@@ -782,6 +782,18 @@ test('built robots.txt names every documented answer-engine crawler and blocks n
   }
 });
 
+test('built qr-robots.txt shuts every crawler out of the qr.crcolab.art redirect host', async () => {
+  // A Cloudflare Redirect Rule sends qr.crcolab.art/robots.txt here (RFC 9309 has crawlers follow it across hosts).
+  const robots = await read('_site/qr-robots.txt');
+  const groups = robots.split(/\n\s*\n/).filter(group => /^User-agent:/m.test(group));
+  assert.equal(groups.length, 1, 'one group, so no crawler finds a more specific group that allows it');
+  assert.match(groups[0], /^User-agent: \*$/m);
+  assert.match(groups[0], /^Disallow: \/$/m);
+  assert.doesNotMatch(robots, /^(Allow|Sitemap):/m);
+  const sitemap = await read('_site/sitemap.xml');
+  assert.doesNotMatch(sitemap, /qr-robots/);
+});
+
 test('built hand-written pages allow full previews and keep page chrome out of snippets', async () => {
   for (const path of ['index.html', 'en/index.html', 'events/hackathon-2026/index.html']) {
     const html = await read(`_site/${path}`);
