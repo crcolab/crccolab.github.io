@@ -113,7 +113,7 @@ test('built feed UI and metadata are localized independently', async () => {
 test('built item hero images and member photos reserve their size', async () => {
   const { readdir, readFile: readBinary } = await import('node:fs/promises');
   const skipDirs = new Set(['_site/ideas/household-digital-go-bag/assets']);
-  const roots = ['news', 'events', 'records', 'ideas', 'team'].flatMap(s => [`_site/${s}`, `_site/en/${s}`]);
+  const roots = ['news', 'events', 'records', 'ideas', 'pub', 'team'].flatMap(s => [`_site/${s}`, `_site/en/${s}`]);
   const pages = [];
   const walk = async dir => {
     for (const entry of await readdir(new URL(`../${dir}/`, import.meta.url), { withFileTypes: true })) {
@@ -282,7 +282,7 @@ test('item hero images serve WebP with a JPEG/PNG fallback and keep social cards
   let bodyPictures = 0;
   for (const page of pages.sort()) {
     const html = await read(page);
-    const isItemPage = /^_site\/(en\/)?(news|events|records|ideas)\//.test(page);
+    const isItemPage = /^_site\/(en\/)?(news|events|records|ideas|pub)\//.test(page);
     let heroSrc = null;
     for (const match of isItemPage ? html.matchAll(/<img\b[^>]*>/g) : []) {
       const tag = match[0];
@@ -666,6 +666,7 @@ test('page titles drop the suffix by display width, pinned by a fixture and ever
     ['_events', '/events/', 'zh-Hant'], ['_events_en', '/en/events/', 'en-US'],
     ['_records', '/records/', 'zh-Hant'], ['_records_en', '/en/records/', 'en-US'],
     ['_ideas', '/ideas/', 'zh-Hant'], ['_ideas_en', '/en/ideas/', 'en-US'],
+    ['_pub', '/pub/', 'zh-Hant'], ['_pub_en', '/en/pub/', 'en-US'],
   ];
   const bands = {};
   const itemMismatches = [];
@@ -676,7 +677,7 @@ test('page titles drop the suffix by display width, pinned by a fixture and ever
       if (/^draft:\s*true\s*$/m.test(frontMatter)) continue;
       // The prebuilt household routes hard-code their <title> in layouts/household-digital-go-bag(-en).html; head-seo never renders it.
       if (/^layout:\s*household-digital-go-bag(-en)?\s*$/m.test(frontMatter)) continue;
-      const url = frontMatter.match(/^permalink:\s*(\S+)\s*$/m)?.[1] ?? `${prefix}${file.replace(/\.md$/, '')}/`;
+      const url = frontMatter.match(/^permalink:\s*(\S+)\s*$/m)?.[1] ?? `${prefix}${file.replace(/\.md$/, '').replace(dir.startsWith('_pub') ? /^\d{4}-\d{2}-\d{2}-/ : /^$/, '')}/`;
       const built = await read(`_site${url}index.html`).catch(error => {
         if (error.code === 'ENOENT') return null;
         throw error;

@@ -38,6 +38,12 @@ collections:
   ideas_en:
     output: true
     permalink: /en/ideas/:name/
+  pub:
+    output: true
+    permalink: /pub/:slug/
+  pub_en:
+    output: true
+    permalink: /en/pub/:slug/
   team:
     output: true
     permalink: /team/:name/
@@ -62,6 +68,10 @@ defaults:
     values: { layout: idea, section: ideas, collection_name: ideas, locale: zh-Hant }
   - scope: { type: ideas_en }
     values: { layout: idea, section: ideas, collection_name: ideas_en, locale: en-US }
+  - scope: { type: pub }
+    values: { layout: idea, section: pub, collection_name: pub, locale: zh-Hant }
+  - scope: { type: pub_en }
+    values: { layout: idea, section: pub, collection_name: pub_en, locale: en-US }
   - scope: { type: team }
     values: { layout: member, section: team, collection_name: team, locale: zh-Hant }
   - scope: { type: team_en }

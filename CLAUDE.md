@@ -35,7 +35,7 @@ plus Jekyll (built by GitHub Pages on push from `main`) for the content sections
   actually served — ignored when the page falls back to the site-wide cover, which
   carries its own fixed alt) and `last_modified_at` (else the item date);
   `_records/` items with `external_url` also emit it as JSON-LD `isBasedOn`;
-  `_ideas/` additionally supports
+  `_ideas/` and `_pub/` additionally support
   `author`, `author_slug` (must match a `_team/<slug>.md` when set), `draft`,
   `canonical_url`, `download_url` (a PDF; adds download buttons above and below the body and
   JSON-LD `associatedMedia`) with optional `download_name` (saved filename) and `download_size`,
@@ -64,10 +64,13 @@ plus Jekyll (built by GitHub Pages on push from `main`) for the content sections
   Its hero WebP lives at `/assets/2026-AUG-30-household-digital-go-bag.webp` (the items'
   `image_webp`), outside this folder so a rebuild can't delete it; if a rebuild changes
   `og-image.png`, regenerate that WebP from it.
-- `pub/cso-gobag/` — the PDF of the 《給公民社會的數位防災包》 handbook. Its page is the
-  `_ideas`/`_ideas_en` item `2026-12-05-digital-go-bag-for-civil-society` (permalinks
-  `/pub/cso-gobag/` and `/en/pub/cso-gobag/`), which the landing-page nav links to and the
-  `qr.crcolab.art/cso-gobag/` QR code redirects to, so keep that URL stable
+- `_pub/`, `_pub_en/` — publications (shown as 著作 / Publications): handbooks and guides CRC
+  publishes, rendered with the `idea` layout and taking the `_ideas` keys. Unlike the other
+  collections the URL drops the filename date (`/pub/:slug/`), so `2026-12-05-cso-gobag.md` is
+  `/pub/cso-gobag/`, the page the `qr.crcolab.art/cso-gobag/` QR code redirects to; keep that
+  slug stable. The PDF itself sits in `pub/cso-gobag/`. `pub/`, `en/pub/` hold the section
+  index and feed; the landing-page nav links there with a lime button (`site-nav__link--pub`)
+  that stays visible on phones
 - `team/` — machine-readable member index (no Atom feed; team is not time-series)
 - `api/latest.json` — Liquid-generated JSON the homepage fetches for its latest-3 blocks
 - `api/openapi.json` — hand-written OpenAPI description of `api/latest.json`; keep its
@@ -157,7 +160,7 @@ Needs Ruby 3.3 (see .ruby-version) — Ruby 3.4+ breaks the github-pages gem (re
 ## Locales
 
 - Existing routes are `zh-Hant`; the static `en-US` mirror lives under `/en/`.
-- Add paired content with the same filename to `_news`/`_news_en`, `_events`/`_events_en`, `_records`/`_records_en`, `_ideas`/`_ideas_en`, or `_team`/`_team_en`.
+- Add paired content with the same filename to `_news`/`_news_en`, `_events`/`_events_en`, `_records`/`_records_en`, `_ideas`/`_ideas_en`, `_pub`/`_pub_en`, or `_team`/`_team_en`.
 - Keep shared dates, categories, source URLs, external URLs, and image paths identical.
 - Translate the full title, summary, body, headings, image alt text, and link labels; do not use runtime or machine translation.
 - `/events/hackathon-2026/` is the only translation exception and must not receive an `/en/` duplicate.

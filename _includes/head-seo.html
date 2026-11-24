@@ -103,6 +103,7 @@
 <link rel="alternate" type="application/atom+xml" title="CRC — {{ ui.feed.events }}" href="{{ feed_prefix }}/events/feed.xml">
 <link rel="alternate" type="application/atom+xml" title="CRC — {{ ui.feed.records }}" href="{{ feed_prefix }}/records/feed.xml">
 <link rel="alternate" type="application/atom+xml" title="CRC — {{ ui.feed.ideas }}" href="{{ feed_prefix }}/ideas/feed.xml">
+<link rel="alternate" type="application/atom+xml" title="CRC — {{ ui.feed.pub }}" href="{{ feed_prefix }}/pub/feed.xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -154,7 +155,7 @@
   "url": {{ canonical_url | jsonify }},
   "organizer": { "@type": "Organization", "name": "Cyborg Resilience Co-lab", "url": "{{ site.url }}" }
 }
-{% elsif page.section == "ideas" %}
+{% elsif page.section == "ideas" or page.section == "pub" %}
 {%- comment -%}
   about / mentions / citations entries may be plain strings or mappings.
   A mapping with no `name` cannot become a schema.org name string, so it is skipped;
@@ -216,7 +217,7 @@
   {% if page.license and page.license != "" %}"license": {{ page.license | jsonify }},{% endif %}
   {% if page.download_url and page.download_url != "" %}"associatedMedia": { "@type": "MediaObject", "contentUrl": {{ page.download_url | absolute_url | jsonify }}, "encodingFormat": "application/pdf"{% if page.download_name %}, "name": {{ page.download_name | jsonify }}{% endif %} },{% endif %}
   "mainEntityOfPage": {{ canonical_url | jsonify }},
-  "isPartOf": { "@type": "CollectionPage", "url": "{{ feed_prefix | append: '/ideas/' | absolute_url }}" },
+  "isPartOf": { "@type": "CollectionPage", "url": "{{ feed_prefix | append: '/' | append: page.section | append: '/' | absolute_url }}" },
   "author": {% if author_target %}{
     "@type": "Person",
     "name": {{ author_target.name | jsonify }},

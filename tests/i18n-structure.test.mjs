@@ -142,7 +142,7 @@ test('project guidance describes paired static locales and the readable type hie
 });
 
 test('section index descriptions come from i18n in both locales and stay out of front matter', async () => {
-  const sections = ['news', 'events', 'records', 'ideas'];
+  const sections = ['news', 'events', 'records', 'ideas', 'pub'];
   // Display width: CJK, Hangul and fullwidth code points take two columns, everything else one.
   const columns = text => [...text].reduce((total, char) => {
     const code = char.codePointAt(0);
@@ -171,7 +171,7 @@ test('section index descriptions come from i18n in both locales and stay out of 
       values.push(text);
     }
   }
-  assert.equal(new Set(values).size, 8, 'section descriptions must be distinct across both locales');
+  assert.equal(new Set(values).size, sections.length * 2, 'section descriptions must be distinct across both locales');
   for (const section of sections) {
     for (const path of [`${section}/index.html`, `en/${section}/index.html`]) {
       const frontMatter = (await read(path)).match(/^---\n([\s\S]*?)\n---\n/)?.[1];

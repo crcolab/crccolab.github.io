@@ -186,8 +186,8 @@ img,svg,video{max-width:100%}
   color:var(--text-primary);transition:background var(--dur-fast) var(--ease-out)}
 .site-nav__link:hover{background:var(--purple-50)}
 .theme-purple .site-nav__link:hover{background:rgba(255,255,255,.1)}
-.site-nav__link--gobag{justify-content:center;background:var(--crc-lime);color:var(--crc-purple);font-weight:700}
-.site-nav__link--gobag:hover,.theme-purple .site-nav__link--gobag:hover{background:var(--lime-600)}
+.site-nav__link--pub{justify-content:center;background:var(--crc-lime);color:var(--crc-purple);font-weight:700}
+.site-nav__link--pub:hover,.theme-purple .site-nav__link--pub:hover{background:var(--lime-600)}
 .site-header__actions{display:flex;align-items:center;gap:12px}
 .theme-toggle{width:38px;height:38px;border-radius:10px;border:2px solid var(--border-brand);background:transparent;color:var(--text-brand);
   font-size:18px;cursor:pointer;display:grid;place-items:center;transition:background var(--dur-fast) var(--ease-out)}
@@ -592,13 +592,13 @@ button.team-card__names{min-height:var(--control-min);min-width:var(--control-mi
 @media (max-width:900px){
   .about__body,.news__grid{grid-template-columns:1fr}
   .team__grid{grid-template-columns:repeat(2,1fr)}
-  .site-nav__link:not(.site-nav__link--gobag){display:none}
+  .site-nav__link:not(.site-nav__link--pub){display:none}
   .hero__title .crc-mark{width:min(280px,60vw);height:auto;aspect-ratio:385.35/162.34}
 }
 @media (max-width:520px){
   .site-header{flex-wrap:wrap;gap:8px}
   .site-header__latest{display:none}
-  .site-nav__link--gobag{padding-inline:10px}
+  .site-nav__link--pub{padding-inline:10px}
   .hero__cubes{flex-wrap:nowrap;gap:12px}
   .hero__cubes .crc-cube{width:72px;flex:none}
   .about__content{position:relative}

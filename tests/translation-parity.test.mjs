@@ -8,6 +8,7 @@ const pairs = [
   ['_events', '_events_en', EXEMPT_EVENTS],
   ['_records', '_records_en', new Set()],
   ['_ideas', '_ideas_en', new Set()],
+  ['_pub', '_pub_en', new Set()],
   ['_team', '_team_en', new Set()],
 ];
 
