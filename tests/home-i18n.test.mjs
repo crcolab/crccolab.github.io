@@ -128,6 +128,11 @@ test('home pages advertise a 4th latest block for ideas', () => {
   assert.match(en, /"key":"ideas","label":"Ideas"/);
 });
 
+test('home pages advertise a 5th latest block for publications, after ideas', () => {
+  assert.match(zh, /"key":"ideas"[^}]*\},\{"key":"pub","label":"著作","viewAll":"查看全部","href":"\/pub\/"\}\]/);
+  assert.match(en, /"key":"ideas"[^}]*\},\{"key":"pub","label":"Publications","viewAll":"View all","href":"\/en\/pub\/"\}\]/);
+});
+
 test('every team card exposes a profile link to /team/<slug>/', () => {
   const slugs = ['lulu', 'meichun', 'cheng', 'tzu-tung', 'sean', 'rosa-kuo'];
   for (const slug of slugs) {

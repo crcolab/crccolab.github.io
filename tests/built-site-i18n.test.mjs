@@ -212,6 +212,8 @@ test('root feeds and latest-json include ideas entries', async () => {
   assert.match(enFeed, /\/en\/ideas\/2026-03-25-crc-march-25-decks\//);
   assert.ok(Array.isArray(zhLatest.ideas) && zhLatest.ideas.length >= 1, 'zh latest.json missing ideas[]');
   assert.ok(Array.isArray(enLatest.ideas) && enLatest.ideas.length >= 1, 'en latest.json missing ideas[]');
+  assert.ok(zhLatest.pub?.some(item => item.url === '/pub/cso-gobag/'), 'zh latest.json missing pub[] with the go-bag handbook');
+  assert.ok(enLatest.pub?.some(item => item.url === '/en/pub/cso-gobag/'), 'en latest.json missing pub[] with the go-bag handbook');
 });
 
 test('item hero images serve WebP with a JPEG/PNG fallback and keep social cards on the original', async () => {

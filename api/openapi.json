@@ -22,9 +22,10 @@
                     "news": { "$ref": "#/components/schemas/ItemList" },
                     "events": { "$ref": "#/components/schemas/ItemList" },
                     "records": { "$ref": "#/components/schemas/ItemList" },
-                    "ideas": { "$ref": "#/components/schemas/ItemList" }
+                    "ideas": { "$ref": "#/components/schemas/ItemList" },
+                    "pub": { "$ref": "#/components/schemas/ItemList" }
                   },
-                  "required": ["news", "events", "records", "ideas"]
+                  "required": ["news", "events", "records", "ideas", "pub"]
                 }
               }
             }
