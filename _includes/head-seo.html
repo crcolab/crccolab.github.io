@@ -115,8 +115,10 @@
 {%- comment -%}
   Optional event keys: event_type (schema.org Event subtype), location_address
   (mapping of PostalAddress fields), location_url, super_event {name, url,
-  start_date, end_date, location_name, location_address} — emitted only with a
-  start_date and location_name, since Google validates it as an Event of its own —
+  start_date, end_date, location_name, location_address, description,
+  organizer {name, url}} — emitted only with a start_date and location_name, since
+  Google validates it as an Event of its own and flags a missing description,
+  organizer or eventStatus —
   and creators — a list of {name, slug} whose work is shown, emitted as workFeatured.
   An events entry that sets canonical_url skips this script (see the collection check in
   the head), so the page it canonicalizes to carries the Event.
@@ -144,7 +146,11 @@
   {% assign super_event = page.super_event %}{% if super_event.name and super_event.start_date and super_event.location_name %}"superEvent": { "@type": "Event", "name": {{ super_event.name | jsonify }},
     "startDate": "{{ super_event.start_date | date: '%Y-%m-%d' }}",{% if super_event.end_date %} "endDate": "{{ super_event.end_date | date: '%Y-%m-%d' }}",{% endif %}
     "location": { "@type": "Place", "name": {{ super_event.location_name | jsonify }}{% if super_address_json != "" %}, "address": {{ super_address_json }}{% endif %} },
-    "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode"{% if super_event.url %}, "url": {{ super_event.url | jsonify }}{% endif %} },{% endif %}
+    "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+    "eventStatus": "https://schema.org/EventScheduled"{% if super_event.description %},
+    "description": {{ super_event.description | strip_newlines | jsonify }}{% endif %}{% if super_event.organizer.name %},
+    "organizer": { "@type": "Organization", "name": {{ super_event.organizer.name | jsonify }}{% if super_event.organizer.url %}, "url": {{ super_event.organizer.url | jsonify }}{% endif %} }{% endif %}{% if super_event.url %},
+    "url": {{ super_event.url | jsonify }}{% endif %} },{% endif %}
   {% if creators_json != "" %}"workFeatured": { "@type": "CreativeWork", "name": {{ page.title | jsonify }}, "creator": [{{ creators_json }}] },
   "performer": [{{ creators_json }}],{% endif %}
   {% if page.tags and page.tags.size > 0 %}"keywords": {{ page.tags | join: ',' | jsonify }},{% endif %}

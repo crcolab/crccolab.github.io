@@ -25,8 +25,9 @@ plus Jekyll (built by GitHub Pages on push from `main`) for the content sections
   after the event; `_includes/event-date-text.html` builds the date from `start_date`/`end_date`) (plus optional JSON-LD `event_type` such as `ExhibitionEvent`,
   `location_address` {street_address, locality, region, postal_code, country},
   `location_url`, `super_event` {name, url, start_date, end_date, location_name,
-  location_address} — emitted only with `start_date` and `location_name`, since Google
-  validates it as an Event of its own — and `creators` — a list of
+  location_address, description, organizer {name, url}} — emitted only with `start_date`
+  and `location_name`, since Google validates it as an Event of its own (it flags a missing
+  description or organizer; a built-site test requires both) — and `creators` — a list of
   {name, slug} with slug matching `_team/<slug>.md`), `link` to point listings at another URL; all collections also accept the
   SEO keys `tags` (list, becomes keywords/`article:tag`), `og_image` (social-card
   fallback after `image`), `og_title`/`og_description` (social-card copy for

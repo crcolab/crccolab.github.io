@@ -1,6 +1,6 @@
 ---
 title: Wandering Daughter’s Warfarring
-last_modified_at: 2026-11-06
+last_modified_at: 2026-11-24
 date: 2026-10-17
 start_date: 2026-10-17
 end_date: 2026-10-25
@@ -17,7 +17,11 @@ location_address:
   country: TW
 super_event:
   name: "AI for ALL: Opening Act, Taiwan Festival 2026"
+  description: "A festival under the banner AI for ALL / ALL for AI, with work and live performances by Taiwanese and international artists at B3 of the New Taipei City Art Museum, and international forums on unequal AI development, geopolitics and national policy."
   url: https://etat.com/archives/A20261010041312459
+  organizer:
+    name: ETAT
+    url: https://www.aiforall.asia/
   start_date: 2026-10-17
   end_date: 2026-10-25
   location_name: "B3 Lobby (Basement Level 3), New Taipei City Art Museum"

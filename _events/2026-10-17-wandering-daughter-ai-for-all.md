@@ -1,6 +1,6 @@
 ---
 title: 孤娘的無人機藝
-last_modified_at: 2026-11-06
+last_modified_at: 2026-11-24
 date: 2026-10-17
 start_date: 2026-10-17
 end_date: 2026-10-25
@@ -17,7 +17,11 @@ location_address:
   country: TW
 super_event:
   name: AI 萬物：起鼓，2026 臺灣嘉年華
+  description: 以「AI for ALL / ALL for AI」為倡議的藝術節，於新北市美術館 B3 展出臺灣與國際藝術家的作品與現場表演，並舉辦國際論壇，探討 AI 發展的不對稱、地緣政治與國家政策。
   url: https://etat.com/archives/A20261010041312459
+  organizer:
+    name: 在地實驗 ETAT
+    url: https://www.aiforall.asia/
   start_date: 2026-10-17
   end_date: 2026-10-25
   location_name: 新北市美術館 地下三樓大廳（B3）

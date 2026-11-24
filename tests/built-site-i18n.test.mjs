@@ -624,6 +624,10 @@ test('built event pages only nest a superEvent that Google can validate as an Ev
       nested += 1;
       assert.ok(data.superEvent.startDate, `${path} superEvent lacks startDate`);
       assert.ok(data.superEvent.location?.name, `${path} superEvent lacks location`);
+      // Search Console flags a nested Event without these as an Events structured data issue.
+      assert.ok(data.superEvent.eventStatus, `${path} superEvent lacks eventStatus`);
+      assert.ok(data.superEvent.description, `${path} superEvent lacks description (super_event.description)`);
+      assert.ok(data.superEvent.organizer?.name, `${path} superEvent lacks organizer (super_event.organizer.name)`);
     }
   }
   assert.ok(nested >= 2, 'the AI for ALL exhibition pages should nest the festival');
