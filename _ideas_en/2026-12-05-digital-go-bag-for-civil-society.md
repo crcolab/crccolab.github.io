@@ -1,0 +1,80 @@
+---
+title: Digital Go-Bag for Civil Society
+date: 2026-12-05
+category: RELEASE
+locale: en-US
+permalink: /en/pub/cso-gobag/
+summary: "When the internet slows or cuts out, how does your team stay in touch and keep working? CRC’s Digital Go-Bag for Civil Society handbook walks you through mapping tasks and contact steps, picking offline channels, building and testing a PACE communications plan, and stocking data and power. Free PDF, in Traditional Chinese."
+og_description: "When the internet slows or cuts out, how does your team stay in touch? Map your tasks, pick offline channels, then build and test a PACE communications plan. Free PDF handbook in Traditional Chinese, licensed CC BY-NC 4.0."
+og_image: /assets/2026-NOV-23-digital-go-bag-for-civil-society-card.jpg
+image_alt: "Purple social card over a lattice of lime square dots and white arcs. Top left, the CRC logo; in the centre the large white title “給公民社會的數位防災包” above the lime English title “Digital Go-Bag for Civil Society”; bottom right “免費下載 PDF｜Free PDF download” and “CC BY-NC 4.0”."
+author: Claire Cheng, Rosa Kuo, CHENG PENG
+download_url: /pub/cso-gobag/digital-go-bag-for-civil-society.pdf
+download_name: 給公民社會的數位防災包.pdf
+download_size: 2.5 MB
+license: https://creativecommons.org/licenses/by-nc/4.0/
+tags:
+  - Digital Go-Bag for Civil Society
+  - digital go-bag
+  - digital preparedness
+  - internet outage
+  - network throttling
+  - communications backup plan
+  - PACE plan
+  - offline communication
+  - communications resilience
+  - civil society
+  - NGO
+  - handbook download
+about:
+  - Digital resilience
+  - Communications backup planning
+  - Internet outage response
+  - Civil society organizations
+mentions:
+  - name: Friedrich Naumann Foundation for Freedom, Taiwan Office
+    url: https://www.freiheit.org/taiwan
+  - name: g0v Digital Resilience Hackathon
+    url: https://digiresi.g0v.tw/
+  - name: 歐噴有限公司
+  - name: Watchout (沃草有限公司)
+---
+
+*Digital Go-Bag for Civil Society* is a communications-resilience handbook from [Cyborg Resilience Co-lab](/en/) for civic groups and organizations of every kind. Emailing colleagues, meeting on Google Meet, paying with LINE Pay: the internet makes work easier, and it also makes us depend on it. If the connection went down one day, would our work grind to a halt?
+
+The handbook takes a team step by step through mapping its tasks, priorities and contact steps, choosing the offline channels it can actually operate, arranging them into a PACE plan (Primary, Alternate, Contingency, Emergency) and testing it, and finally stocking the data and power that make the plan usable when the network is down. The appendix holds worksheets you can fill in directly.
+
+The handbook is written in Traditional Chinese; an English edition is in the works.
+
+**First priority: while you still have a connection, download this handbook and save it, or print it.** Already offline? Turn to page 24, “When the network goes down: three things to do first,” to see your first step.
+
+![Cover of *Digital Go-Bag for Civil Society*. Over a glitchy background of pale purple, pink and cyan noise, the black-outlined white title reads “給公民社會的數位防災包”. Two black tags beneath it read “網路連線失敗！” (Connection failed!) and “請切換手動模式” (Switch to manual mode), beside a right-pointing arrow. In the centre is a staggered stack of purple “ERROR” windows; the top one reads “You are offline.” with a “FIX” button.](/assets/2026-NOV-23-digital-go-bag-for-civil-society-cover.jpg){: .item__cover width="720" height="1017"}
+
+## Contents
+
+- Foreword: Pack a digital go-bag so outages and slowdowns don’t cut you off
+- 1　Build a communications backup plan, starting by cutting your dependence on the internet
+- 2　Map your team’s tasks, priorities and contact steps
+- 3　Pick the offline channels you can handle
+- 4　Build your team’s offline communications plan
+- 5　Test your team’s communications plan
+- 6　Stock data and power so the backup plan actually works
+- 7　When the network goes down: three things to do first
+- Appendix: Inventory worksheets
+
+## Authors and partners
+
+Authors: Claire Cheng, [Rosa Kuo](/en/team/rosa-kuo/), [CHENG PENG](/en/team/cheng/)\\
+Partners: [Friedrich Naumann Foundation for Freedom, Taiwan Office](https://www.freiheit.org/taiwan){: target="_blank" rel="noopener"}, [g0v Digital Resilience Hackathon](https://digiresi.g0v.tw/){: target="_blank" rel="noopener"}, 歐噴有限公司\\
+Cover design and layout: Watchout (沃草有限公司)\\
+Edition: Version 1.0, December 2026
+
+The handbook launches on Saturday, Dec 5, at NPO Hub, alongside a communications drill: [Handbook Launch × Communications Drill](/en/events/2026-10-28-digital-go-bag-for-civil-society/).
+
+## License and citation
+
+The handbook is licensed under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/){: target="_blank" rel="noopener"}. When quoting or reposting it, credit it as:
+
+> 鄭婷宇、郭景晏、彭宬（2026），《給公民社會的數位防災包》，賽伯格韌性實驗室，CC BY-NC 4.0
+
+The handbook is a reference for planning and drilling communications backups. How well any method works still depends on the disaster, the infrastructure, your equipment, power and conditions on the ground. Review, update and test your backup plan regularly to fit your organization’s needs.

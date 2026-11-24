@@ -213,6 +213,8 @@
   {% if mentions_json != "" %}"mentions": [{{ mentions_json }}],{% endif %}
   {% if citation_json != "" %}"citation": [{{ citation_json }}],{% endif %}
   "isAccessibleForFree": true,
+  {% if page.license and page.license != "" %}"license": {{ page.license | jsonify }},{% endif %}
+  {% if page.download_url and page.download_url != "" %}"associatedMedia": { "@type": "MediaObject", "contentUrl": {{ page.download_url | absolute_url | jsonify }}, "encodingFormat": "application/pdf"{% if page.download_name %}, "name": {{ page.download_name | jsonify }}{% endif %} },{% endif %}
   "mainEntityOfPage": {{ canonical_url | jsonify }},
   "isPartOf": { "@type": "CollectionPage", "url": "{{ feed_prefix | append: '/ideas/' | absolute_url }}" },
   "author": {% if author_target %}{

@@ -37,7 +37,9 @@ plus Jekyll (built by GitHub Pages on push from `main`) for the content sections
   `_records/` items with `external_url` also emit it as JSON-LD `isBasedOn`;
   `_ideas/` additionally supports
   `author`, `author_slug` (must match a `_team/<slug>.md` when set), `draft`,
-  `canonical_url`, plus JSON-LD `about`, `mentions` and `citations` — each a list of
+  `canonical_url`, `download_url` (a PDF; adds download buttons above and below the body and
+  JSON-LD `associatedMedia`) with optional `download_name` (saved filename) and `download_size`,
+  `license` (URL, JSON-LD `license`), plus JSON-LD `about`, `mentions` and `citations` — each a list of
   strings or `{name, url}` mappings, entries without a name are dropped; `mentions`
   entries may set `type` (default `Organization`), `citations` entries a `publisher`
   and may use `title` in place of `name`)
@@ -62,6 +64,10 @@ plus Jekyll (built by GitHub Pages on push from `main`) for the content sections
   Its hero WebP lives at `/assets/2026-AUG-30-household-digital-go-bag.webp` (the items'
   `image_webp`), outside this folder so a rebuild can't delete it; if a rebuild changes
   `og-image.png`, regenerate that WebP from it.
+- `pub/cso-gobag/` — the PDF of the 《給公民社會的數位防災包》 handbook. Its page is the
+  `_ideas`/`_ideas_en` item `2026-12-05-digital-go-bag-for-civil-society` (permalinks
+  `/pub/cso-gobag/` and `/en/pub/cso-gobag/`), which the landing-page nav links to and the
+  `qr.crcolab.art/cso-gobag/` QR code redirects to, so keep that URL stable
 - `team/` — machine-readable member index (no Atom feed; team is not time-series)
 - `api/latest.json` — Liquid-generated JSON the homepage fetches for its latest-3 blocks
 - `api/openapi.json` — hand-written OpenAPI description of `api/latest.json`; keep its
