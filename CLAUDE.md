@@ -69,8 +69,7 @@ plus Jekyll (built by GitHub Pages on push from `main`) for the content sections
   collections the URL drops the filename date (`/pub/:slug/`), so `2026-12-05-cso-gobag.md` is
   `/pub/cso-gobag/`, the page the `qr.crcolab.art/cso-gobag/` QR code redirects to; keep that
   slug stable. The PDF itself sits in `pub/cso-gobag/`. `pub/`, `en/pub/` hold the section
-  index and feed; the landing-page nav links there with a lime button (`site-nav__link--pub`)
-  that stays visible on phones
+  index and feed; the landing-page nav links there (著作 / Publications)
 - `team/` — machine-readable member index (no Atom feed; team is not time-series)
 - `api/latest.json` — Liquid-generated JSON the homepage fetches for its latest-3 blocks
 - `api/openapi.json` — hand-written OpenAPI description of `api/latest.json`; keep its
