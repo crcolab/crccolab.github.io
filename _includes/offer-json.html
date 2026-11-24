@@ -1,0 +1,5 @@
+{%- comment -%}
+  schema.org Offer for an event: include.price (a number; 0 for free entry), include.currency
+  (default TWD), include.url (where to get a place) and include.valid_from (when it opened).
+{%- endcomment -%}
+{ "@type": "Offer", "price": {{ include.price | jsonify }}, "priceCurrency": {{ include.currency | default: 'TWD' | jsonify }}, "availability": "https://schema.org/InStock", "url": {{ include.url | absolute_url | jsonify }}{% if include.valid_from %}, "validFrom": "{{ include.valid_from | date: '%Y-%m-%d' }}"{% endif %} }

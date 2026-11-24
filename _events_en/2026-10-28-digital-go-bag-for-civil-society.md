@@ -6,6 +6,12 @@ end_date: 2026-12-05
 category: WORKSHOP
 location_name: Impact Space, 2F, NPO Hub
 event_type: EducationEvent
+price: 0
+performers:
+- { name: Rosa Kuo, slug: rosa-kuo }
+- { name: Meichun Lee, slug: meichun }
+- { name: Sean, slug: sean }
+- { name: CHENG PENG, slug: cheng }
 signup_url: https://forms.gle/MQHwkDoSG12PkQRBA
 location_url: https://maps.app.goo.gl/NkJ4DXWq9MKSUfSw9
 location_address:

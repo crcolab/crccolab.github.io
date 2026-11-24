@@ -628,9 +628,37 @@ test('built event pages only nest a superEvent that Google can validate as an Ev
       assert.ok(data.superEvent.eventStatus, `${path} superEvent lacks eventStatus`);
       assert.ok(data.superEvent.description, `${path} superEvent lacks description (super_event.description)`);
       assert.ok(data.superEvent.organizer?.name, `${path} superEvent lacks organizer (super_event.organizer.name)`);
+      assert.ok(data.superEvent.image, `${path} superEvent lacks image`);
+      assert.ok(data.superEvent.performer?.length, `${path} superEvent lacks performer (super_event.performers, else the page's)`);
+      assert.equal(typeof data.superEvent.offers?.price, 'number', `${path} superEvent lacks offers (super_event.price)`);
     }
   }
   assert.ok(nested >= 2, 'the AI for ALL exhibition pages should nest the festival');
+});
+
+test('built event pages give every Event the fields Search Console recommends', async () => {
+  const { readdir } = await import('node:fs/promises');
+  let events = 0;
+  for (const prefix of ['_site/events', '_site/en/events']) {
+    for (const slug of await readdir(new URL(`../${prefix}`, import.meta.url))) {
+      const path = `${prefix}/${slug}/index.html`;
+      const html = await read(path).catch(() => null);
+      if (!html) continue;
+      for (const [, json] of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
+        const data = JSON.parse(json);
+        const types = [data['@type']].flat();
+        if (!types.some(type => type === 'Hackathon' || /Event$/.test(type))) continue;
+        events += 1;
+        for (const key of ['startDate', 'location', 'eventStatus', 'description', 'organizer', 'image']) {
+          assert.ok(data[key], `${path} Event lacks ${key}`);
+        }
+        assert.equal(typeof data.offers?.price, 'number', `${path} Event lacks offers (set price, 0 when free)`);
+        assert.ok(data.offers.url, `${path} Event offer lacks url`);
+        assert.ok(data.performer?.length, `${path} Event lacks performer (set performers or creators)`);
+      }
+    }
+  }
+  assert.ok(events >= 10, `expected the event pages to carry Event JSON-LD, found ${events}`);
 });
 
 test('page titles drop the suffix by display width, pinned by a fixture and every built content page', async t => {

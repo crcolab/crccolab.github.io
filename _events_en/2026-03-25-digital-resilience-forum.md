@@ -7,6 +7,11 @@ end_date: 2026-03-25
 category: FORUM
 location_name: "Impact Hub 2F, No. 2, Section 3, Chongqing South Road, Zhongzheng District, Taipei"
 event_type: EducationEvent
+price: 0
+performers:
+- { name: CHENG PENG, slug: cheng }
+- { name: 尤理衡, url: "https://seadog007.me/" }
+- { name: Irvin Chen, url: "https://tw.linkedin.com/in/irvinchen" }
 location_address:
   street_address: No. 2, Section 3, Chongqing South Road
   locality: Zhongzheng District

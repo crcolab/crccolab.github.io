@@ -6,6 +6,9 @@ end_date: 2026-07-19
 category: WORKSHOP
 location_name: Impact Space, 2F, NPO Hub
 event_type: EducationEvent
+price: 0
+performers:
+- { name: Sean, slug: sean }
 location_address:
   street_address: No. 2, Section 3, Chongqing South Road
   locality: Zhongzheng District

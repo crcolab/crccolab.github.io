@@ -6,6 +6,12 @@ end_date: 2026-12-05
 category: WORKSHOP
 location_name: NPO Hub 二樓 Impact Space
 event_type: EducationEvent
+price: 0
+performers:
+- { name: 郭景晏, slug: rosa-kuo }
+- { name: 李梅君, slug: meichun }
+- { name: 荊輔翔, slug: sean }
+- { name: 彭宬, slug: cheng }
 signup_url: https://forms.gle/MQHwkDoSG12PkQRBA
 location_url: https://maps.app.goo.gl/NkJ4DXWq9MKSUfSw9
 location_address:

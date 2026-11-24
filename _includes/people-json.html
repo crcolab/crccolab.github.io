@@ -1,0 +1,14 @@
+{%- comment -%}
+  Comma-separated schema.org people for include.people: a list of {name, slug, type, url}.
+  type defaults to Person (use Organization for a group); slug links the team page under
+  include.prefix, else url is used. Entries without a name are dropped; empty when none remain.
+{%- endcomment -%}
+{%- assign people_written = false -%}
+{%- for person in include.people -%}
+  {%- if person.name and person.name != "" -%}
+    {%- if people_written %}, {% endif -%}
+    { "@type": {{ person.type | default: 'Person' | jsonify }}, "name": {{ person.name | jsonify }}
+    {%- if person.slug and person.slug != "" %}, "url": "{{ include.prefix | append: '/team/' | append: person.slug | append: '/' | absolute_url }}"{% elsif person.url and person.url != "" %}, "url": {{ person.url | absolute_url | jsonify }}{% endif %} }
+    {%- assign people_written = true -%}
+  {%- endif -%}
+{%- endfor -%}

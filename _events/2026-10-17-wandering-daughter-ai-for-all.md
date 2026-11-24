@@ -8,6 +8,7 @@ category: EXHIBITION
 location_name: 新北市美術館 地下三樓（B3）
 external_url: https://etat.com/archives/A20261010041312459
 event_type: ExhibitionEvent
+price: 0
 location_url: https://ntcart.museum/
 location_address:
   street_address: 館前路 300 號
@@ -22,6 +23,7 @@ super_event:
   organizer:
     name: 在地實驗 ETAT
     url: https://www.aiforall.asia/
+  price: 0
   start_date: 2026-10-17
   end_date: 2026-10-25
   location_name: 新北市美術館 地下三樓大廳（B3）

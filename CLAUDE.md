@@ -25,10 +25,14 @@ plus Jekyll (built by GitHub Pages on push from `main`) for the content sections
   after the event; `_includes/event-date-text.html` builds the date from `start_date`/`end_date`) (plus optional JSON-LD `event_type` such as `ExhibitionEvent`,
   `location_address` {street_address, locality, region, postal_code, country},
   `location_url`, `super_event` {name, url, start_date, end_date, location_name,
-  location_address, description, organizer {name, url}} — emitted only with `start_date`
+  location_address, description, organizer {name, url}, image (else the page's), performers
+  (else the page's), price, price_currency} — emitted only with `start_date`
   and `location_name`, since Google validates it as an Event of its own (it flags a missing
-  description or organizer; a built-site test requires both) — and `creators` — a list of
-  {name, slug} with slug matching `_team/<slug>.md`), `link` to point listings at another URL; all collections also accept the
+  description, organizer, image, performer or offers; a built-site test requires them) — `creators` — a list of
+  {name, slug} with slug matching `_team/<slug>.md` — `performers` (speakers or facilitators,
+  a list of {name, slug, type, url}, type defaulting to Person; else the creators are used) and
+  `price` (0 when free, with `price_currency` defaulting to TWD; emitted as an Offer pointing at
+  `signup_url`, else the post), and `organizer` {name, url} when someone other than CRC ran the event (else CRC). A built-site test requires every Event to carry performer and offers), `link` to point listings at another URL; all collections also accept the
   SEO keys `tags` (list, becomes keywords/`article:tag`), `og_image` (social-card
   fallback after `image`), `og_title`/`og_description` (social-card copy for
   `og:*`/`twitter:*`, else the title and summary; the site name is appended to

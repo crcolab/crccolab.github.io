@@ -7,6 +7,11 @@ end_date: 2026-03-25
 category: FORUM
 location_name: Impact Hub 2F（臺北市中正區重慶南路三段2號）
 event_type: EducationEvent
+price: 0
+performers:
+- { name: 彭宬, slug: cheng }
+- { name: 尤理衡, url: "https://seadog007.me/" }
+- { name: Irvin Chen, url: "https://tw.linkedin.com/in/irvinchen" }
 location_address:
   street_address: 重慶南路三段 2 號
   locality: 中正區

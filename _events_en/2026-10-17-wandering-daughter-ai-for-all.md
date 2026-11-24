@@ -8,6 +8,7 @@ category: EXHIBITION
 location_name: B3 (Basement Level 3), New Taipei City Art Museum
 external_url: https://etat.com/archives/A20261010041312459
 event_type: ExhibitionEvent
+price: 0
 location_url: https://ntcart.museum/EN/
 location_address:
   street_address: No. 300, Guanqian Road
@@ -22,6 +23,7 @@ super_event:
   organizer:
     name: ETAT
     url: https://www.aiforall.asia/
+  price: 0
   start_date: 2026-10-17
   end_date: 2026-10-25
   location_name: "B3 Lobby (Basement Level 3), New Taipei City Art Museum"

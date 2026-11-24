@@ -6,6 +6,14 @@ end_date: 2026-06-27
 category: TALK
 location_name: Co-Space
 event_type: EducationEvent
+price: 0
+organizer:
+  name: Taiwan Contemporary Culture Lab
+  url: https://clab.org.tw/
+performers:
+- { name: Yi-Cheng Liu }
+- { name: Lulu Keng, slug: lulu }
+- { name: De-Ray Chen }
 location_url: https://clab.org.tw/en/
 location_address:
   street_address: No. 177, Section 1, Jianguo South Road

@@ -116,25 +116,27 @@
   Optional event keys: event_type (schema.org Event subtype), location_address
   (mapping of PostalAddress fields), location_url, super_event {name, url,
   start_date, end_date, location_name, location_address, description,
-  organizer {name, url}} — emitted only with a start_date and location_name, since
-  Google validates it as an Event of its own and flags a missing description,
-  organizer or eventStatus —
-  and creators — a list of {name, slug} whose work is shown, emitted as workFeatured.
+  organizer {name, url}, image (else the page's), performers (else the page's),
+  price, price_currency} — emitted only with a start_date and location_name,
+  since Google validates it as an Event of its own and flags a missing description,
+  organizer, eventStatus, image, performer or offers —
+  creators — a list of {name, slug} whose work is shown, emitted as workFeatured;
+  performers — a list of {name, slug, type, url} (type defaults to Person) emitted as
+  performer, else the creators are; and price (0 for free) with price_currency (default
+  TWD), emitted as an Offer pointing at signup_url, else the page; organizer {name, url}
+  when someone other than CRC ran the event (else CRC).
   An events entry that sets canonical_url skips this script (see the collection check in
   the head), so the page it canonicalizes to carries the Event.
 {%- endcomment -%}
 {%- capture address_json -%}{% include postal-address-json.html address=page.location_address %}{%- endcapture -%}
 {%- capture super_address_json -%}{% include postal-address-json.html address=page.super_event.location_address %}{%- endcapture -%}
-{%- capture creators_json -%}
-  {%- assign creator_written = false -%}
-  {%- for creator in page.creators -%}
-    {%- if creator.name and creator.name != "" -%}
-      {%- if creator_written %}, {% endif -%}
-      { "@type": "Person", "name": {{ creator.name | jsonify }}{% if creator.slug and creator.slug != "" %}, "url": "{{ feed_prefix | append: '/team/' | append: creator.slug | append: '/' | absolute_url }}"{% endif %} }
-      {%- assign creator_written = true -%}
-    {%- endif -%}
-  {%- endfor -%}
-{%- endcapture -%}
+{%- capture creators_json -%}{% include people-json.html people=page.creators prefix=feed_prefix %}{%- endcapture -%}
+{%- capture performers_json -%}{% include people-json.html people=page.performers prefix=feed_prefix %}{%- endcapture -%}
+{%- if performers_json == "" -%}{%- assign performers_json = creators_json -%}{%- endif -%}
+{%- capture super_performers_json -%}{% include people-json.html people=page.super_event.performers prefix=feed_prefix %}{%- endcapture -%}
+{%- if super_performers_json == "" -%}{%- assign super_performers_json = performers_json -%}{%- endif -%}
+{%- assign offer_url = page.signup_url | default: canonical_url -%}
+{%- assign super_offer_url = page.super_event.url | default: canonical_url -%}
 {
   "@context": "https://schema.org",
   "@type": {{ page.event_type | default: 'Event' | jsonify }},
@@ -150,16 +152,22 @@
     "eventStatus": "https://schema.org/EventScheduled"{% if super_event.description %},
     "description": {{ super_event.description | strip_newlines | jsonify }}{% endif %}{% if super_event.organizer.name %},
     "organizer": { "@type": "Organization", "name": {{ super_event.organizer.name | jsonify }}{% if super_event.organizer.url %}, "url": {{ super_event.organizer.url | jsonify }}{% endif %} }{% endif %}{% if super_event.url %},
-    "url": {{ super_event.url | jsonify }}{% endif %} },{% endif %}
-  {% if creators_json != "" %}"workFeatured": { "@type": "CreativeWork", "name": {{ page.title | jsonify }}, "creator": [{{ creators_json }}] },
-  "performer": [{{ creators_json }}],{% endif %}
+    "url": {{ super_event.url | jsonify }}{% endif %},
+    "image": {{ super_event.image | default: seo_image | absolute_url | jsonify }}{% if super_performers_json != "" %},
+    "performer": [{{ super_performers_json }}]{% endif %}{% if super_event.price != nil %},
+    "isAccessibleForFree": {% if super_event.price == 0 %}true{% else %}false{% endif %},
+    "offers": {% include offer-json.html price=super_event.price currency=super_event.price_currency url=super_offer_url %}{% endif %} },{% endif %}
+  {% if creators_json != "" %}"workFeatured": { "@type": "CreativeWork", "name": {{ page.title | jsonify }}, "creator": [{{ creators_json }}] },{% endif %}
+  {% if performers_json != "" %}"performer": [{{ performers_json }}],{% endif %}
+  {% if page.price != nil %}"isAccessibleForFree": {% if page.price == 0 %}true{% else %}false{% endif %},
+  "offers": {% include offer-json.html price=page.price currency=page.price_currency url=offer_url valid_from=page.date %},{% endif %}
   {% if page.tags and page.tags.size > 0 %}"keywords": {{ page.tags | join: ',' | jsonify }},{% endif %}
   "eventStatus": "https://schema.org/EventScheduled",
   "inLanguage": "{{ locale }}",
   "image": {{ seo_image | absolute_url | jsonify }},
   "description": {{ desc | jsonify }},
   "url": {{ canonical_url | jsonify }},
-  "organizer": { "@type": "Organization", "name": "Cyborg Resilience Co-lab", "url": "{{ site.url }}" }
+  "organizer": {% if page.organizer.name %}{ "@type": "Organization", "name": {{ page.organizer.name | jsonify }}{% if page.organizer.url %}, "url": {{ page.organizer.url | jsonify }}{% endif %} }{% else %}{ "@type": "Organization", "name": "Cyborg Resilience Co-lab", "url": "{{ site.url }}" }{% endif %}
 }
 {% elsif page.section == "ideas" or page.section == "pub" %}
 {%- comment -%}

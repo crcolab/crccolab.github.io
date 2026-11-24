@@ -6,6 +6,9 @@ end_date: 2026-07-19
 category: WORKSHOP
 location_name: NPO Hub 二樓 Impact Space
 event_type: EducationEvent
+price: 0
+performers:
+- { name: 荊輔翔, slug: sean }
 location_address:
   street_address: 重慶南路三段 2 號
   locality: 中正區

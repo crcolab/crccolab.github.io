@@ -6,6 +6,14 @@ end_date: 2026-06-27
 category: TALK
 location_name: 共享吧
 event_type: EducationEvent
+price: 0
+organizer:
+  name: 臺灣當代文化實驗場
+  url: https://clab.org.tw/
+performers:
+- { name: 劉以正 }
+- { name: 耿璐, slug: lulu }
+- { name: 陳德叡 }
 location_url: https://clab.org.tw/
 location_address:
   street_address: 建國南路一段 177 號
