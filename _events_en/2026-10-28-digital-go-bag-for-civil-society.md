@@ -47,7 +47,7 @@ But beyond physical preparedness, have you ever thought about this:
 
 When the internet is unavailable, how can we still reach one another, get information, and take action?
 
-After a year of exchanges with many of you, the [CRC](/en/) team has completed the 🔺 *Digital Go-Bag for Civil Society* handbook 🔺
+After a year of exchanges with many of you, the [CRC](/en/) team has completed the 🔺 [*Digital Go-Bag for Civil Society*](/en/pub/cso-gobag/) handbook 🔺
 
 Drawn from events in Taiwan and abroad and from in-depth interviews, this handbook walks you step by step through the scenarios in which digital networks may fail, the impacts they may have, and the responses available.
 

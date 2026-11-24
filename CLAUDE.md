@@ -39,7 +39,9 @@ plus Jekyll (built by GitHub Pages on push from `main`) for the content sections
   `author`, `author_slug` (must match a `_team/<slug>.md` when set), `draft`,
   `canonical_url`, `download_url` (a PDF; adds download buttons above and below the body and
   JSON-LD `associatedMedia`) with optional `download_name` (saved filename) and `download_size`,
-  `license` (URL, JSON-LD `license`), plus JSON-LD `about`, `mentions` and `citations` — each a list of
+  `license` (URL, JSON-LD `license`), `authors` (list of {name, slug} for several JSON-LD
+  Person authors; `author` stays the byline text), `fulltext` (an `_includes/` path to Markdown,
+  rendered as a collapsed 閱讀手冊全文 section under the body, so the page carries the PDF's text), plus JSON-LD `about`, `mentions` and `citations` — each a list of
   strings or `{name, url}` mappings, entries without a name are dropped; `mentions`
   entries may set `type` (default `Organization`), `citations` entries a `publisher`
   and may use `title` in place of `name`)

@@ -34,6 +34,7 @@ zh-Hant:
   bilingual_event: 雙語活動頁
   download_pdf: 下載 PDF
   download_size: "（SIZE）"
+  fulltext: 閱讀手冊全文
   event_date_label: 活動
   signup: "報名 DATE活動"
   event_date_format: "YEAR 年MONTH DAY 日"
@@ -114,6 +115,7 @@ en-US:
   bilingual_event: Bilingual event page
   download_pdf: Download PDF
   download_size: " (SIZE)"
+  fulltext: Read the full text
   event_date_label: Event
   signup: "Register for the DATE event"
   event_date_format: "MONTH DAY, YEAR"

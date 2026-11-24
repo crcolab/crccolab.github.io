@@ -218,7 +218,11 @@
   {% if page.download_url and page.download_url != "" %}"associatedMedia": { "@type": "MediaObject", "contentUrl": {{ page.download_url | absolute_url | jsonify }}, "encodingFormat": "application/pdf"{% if page.download_name %}, "name": {{ page.download_name | jsonify }}{% endif %} },{% endif %}
   "mainEntityOfPage": {{ canonical_url | jsonify }},
   "isPartOf": { "@type": "CollectionPage", "url": "{{ feed_prefix | append: '/' | append: page.section | append: '/' | absolute_url }}" },
-  "author": {% if author_target %}{
+  "author": {% if page.authors and page.authors.size > 0 %}[
+    {%- for person in page.authors -%}
+      { "@type": "Person", "name": {{ person.name | jsonify }}{% if person.slug and person.slug != "" %}, "url": "{{ feed_prefix | append: '/team/' | append: person.slug | append: '/' | absolute_url }}"{% endif %} }{% unless forloop.last %}, {% endunless %}
+    {%- endfor -%}
+  ]{% elsif author_target %}{
     "@type": "Person",
     "name": {{ author_target.name | jsonify }},
     "url": "{{ feed_prefix | append: '/team/' | append: page.author_slug | append: '/' | absolute_url }}"

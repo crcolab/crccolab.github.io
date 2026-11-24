@@ -31,6 +31,7 @@ layout: default
   {% if page.image and page.image != "" %}{% include item-hero.html %}{% endif %}
   {% if page.download_url %}{% capture download_button %}<p class="item__download"><a class="crc-btn crc-btn--primary crc-btn--md" href="{{ page.download_url }}" download{% if page.download_name %}="{{ page.download_name | escape }}"{% endif %} type="application/pdf">{{ ui.download_pdf }}{% if page.download_size %}{{ ui.download_size | replace: "SIZE", page.download_size }}{% endif %} <span class="crc-btn__arrow" aria-hidden="true">↓</span></a></p>{% endcapture %}{{ download_button }}{% endif %}
   <div class="item__body">{% include webp-pictures.html html=content %}</div>
+  {% if page.fulltext %}{% capture fulltext_md %}{% include {{ page.fulltext }} %}{% endcapture %}<details class="item__fulltext" id="fulltext"><summary>{{ ui.fulltext }}</summary><div class="item__body">{{ fulltext_md | markdownify }}</div></details>{% endif %}
   {% if page.download_url %}{{ download_button }}{% endif %}
   <p class="item__backlink"><a href="{{ prefix }}/{{ page.section }}/">← {{ ui.back_to[page.section] }}</a></p>
 </article></main>
