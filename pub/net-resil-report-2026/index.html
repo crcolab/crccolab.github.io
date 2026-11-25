@@ -1,0 +1,1917 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How does your digital service’s internet resilience stand in Taiwan?｜CRC</title>
+  <meta name="description" content="Hosted on the island, a digital service still fails to load as shipped, because its names, certificates, clocks and embedded files answer from abroad. A dependency map of 13 top events over 26 shared dependencies, traced through 50% Degradation, Global Cutoff and Island Partition.">
+  <link rel="canonical" href="https://crcolab.art/pub/net-resil-report-2026/">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="author" content="Cyborg Resilience Co-lab">
+  <meta property="og:site_name" content="Cyborg Resilience Co-lab">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://crcolab.art/pub/net-resil-report-2026/">
+  <meta property="og:title" content="How does your digital service’s internet resilience stand in Taiwan?｜Cyborg Resilience Co-lab">
+  <meta property="og:description" content="主機落地，萬事OK？海纜受損時，有機會讓數位服務還能通嗎？">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:image" content="https://crcolab.art/assets/2026-NOV-25-net-resil-report-2026.jpg">
+  <meta property="og:image:alt" content="強化台灣數位服務的網路韌性 — How does your digital service’s internet resilience stand in Taiwan? With the CRC logo, on a purple lattice.">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How does your digital service’s internet resilience stand in Taiwan?｜Cyborg Resilience Co-lab">
+  <meta name="twitter:description" content="主機落地，萬事OK？海纜受損時，有機會讓數位服務還能通嗎？">
+  <meta name="twitter:image" content="https://crcolab.art/assets/2026-NOV-25-net-resil-report-2026.jpg">
+  <meta name="twitter:image:alt" content="強化台灣數位服務的網路韌性 — How does your digital service’s internet resilience stand in Taiwan? With the CRC logo, on a purple lattice.">
+  <link rel="stylesheet" href="assets/reader.css">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <style>
+    body {
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+    }
+    .mock-page {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 72px 80px;
+      box-sizing: border-box;
+    }
+
+    /* ── Header ──────────────────────────────────────────────────────── */
+    .mock-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: 56px;
+      background: var(--color-paper);
+      border-bottom: 1px solid var(--color-rule);
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      padding: 0 72px;
+      max-width: 1440px;
+      margin: 0 auto;
+      box-sizing: border-box;
+    }
+    .mock-header-brand {
+      font: 600 14px/1 var(--font-display);
+      color: var(--color-ink);
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .mock-header-nav {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .mock-header-nav a {
+      font: 13px/1 var(--font-body);
+      color: var(--color-muted);
+      text-decoration: none;
+    }
+    .mock-header-nav a[aria-current="page"] {
+      color: var(--color-ink);
+      font-weight: 600;
+    }
+    /* Narrow screens: let the header wrap instead of breaking link text
+       into one letter per line (seen at 390 px, 2026-11-13). */
+    .mock-header a { white-space: nowrap; }
+    @media (max-width: 720px) {
+      .mock-header {
+        height: auto;
+        min-height: 56px;
+        flex-wrap: wrap;
+        gap: 8px 16px;
+        padding: 12px 16px;
+      }
+      .mock-header-nav { flex-wrap: wrap; gap: 8px 16px; }
+    }
+
+    /* ── Hero ────────────────────────────────────────────────────────── */
+    .mock-hero {
+      padding: 32px 0 24px;
+    }
+    .mock-hero h2 {
+      font: 600 clamp(22px, 2.4vw, 36px)/1.2 var(--font-display);
+      margin: 0 0 8px;
+    }
+
+    /* ── Shared panel ────────────────────────────────────────────────── */
+    .panel {
+      background: var(--color-paper-2);
+      border-radius: 24px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      padding: 16px;
+      box-sizing: border-box;
+    }
+
+    /* ── Map wrapper — SVG lives here, spans map + band ─────────────── */
+    .map-wrapper {
+      position: relative;
+    }
+
+    /* ── Main desk ───────────────────────────────────────────────────── */
+    .mock-desk {
+      position: relative;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 48px;
+      margin-bottom: 28px;
+    }
+
+    /* ── Capability column (leftmost) ────────────────────────────────── */
+    .cap-col {
+      width: 200px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* Large solid-ink capability card (active) */
+    .cap-card-large {
+      background: var(--color-ink);
+      color: var(--color-paper);
+      font: 600 15px/1.4 var(--font-display);
+      border-radius: 9px;
+      padding: 16px 14px;
+      box-sizing: border-box;
+    }
+
+    /* Small outlined capability cards (inactive, clickable) */
+    .cap-card-small {
+      display: block;
+      background: var(--color-paper);
+      color: var(--color-ink);
+      border: 1px solid var(--color-ink);
+      border-radius: 9px;
+      padding: 9px 12px;
+      font: 600 12px/1.3 var(--font-display);
+      text-decoration: none;
+      box-sizing: border-box;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .cap-card-small:hover {
+      background: var(--color-paper-2);
+    }
+
+    /* Idle large capability card — same shape as .cap-card-large, plain background */
+    .cap-card-large--idle {
+      background: transparent;
+      color: var(--color-ink);
+      border: 1px solid var(--color-ink);
+      display: block;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .cap-card-large--idle:hover {
+      background: var(--color-paper-2);
+    }
+
+    /* ── Events panel (2nd column) ───────────────────────────────────── */
+    .events-panel {
+      width: 280px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Selected top event LARGE card */
+    .event-1a {
+      background: var(--color-selected);
+      border: 2px solid var(--color-accent);
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+    .event-1a::after {
+      content: "";
+      position: absolute;
+      inset: -6px;
+      border-radius: 16px;
+      background: var(--color-accent);
+      opacity: 0;
+      pointer-events: none;
+      z-index: -1;
+      animation: breathe 1.8s cubic-bezier(0.4,0,0.2,1) infinite;
+    }
+    @keyframes breathe {
+      0%,100% { opacity: 0; }
+      50%      { opacity: 0.22; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .event-1a::after { animation: none; opacity: 0; }
+    }
+    .here-bar {
+      display: block;
+      font: 700 9px/1.2 var(--font-display);
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: #fff;
+      background: var(--color-accent);
+      padding: 6px 14px;
+    }
+    .event-1a-body {
+      padding: 16px 14px 22px;
+    }
+    .event-1a-title {
+      font: 600 20px/1.3 var(--font-display);
+      margin: 0 0 14px;
+    }
+    .event-1a-gate {
+      font: 600 12px/1 var(--font-body);
+      color: var(--color-muted);
+      margin: 0;
+    }
+
+    /* Sibling events small group */
+    .small-events-group {
+      background: var(--color-paper);
+      border: 1px solid var(--color-rule);
+      border-radius: 14px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .sm-event-card {
+      background: var(--color-paper-2);
+      border: 1px solid var(--color-rule);
+      border-radius: 7px;
+      padding: 8px 10px;
+      cursor: pointer;
+      transition: border-color 0.12s;
+    }
+    .sm-event-card:hover {
+      border-color: var(--color-accent);
+    }
+    .sm-event-name {
+      font: 600 11px/1.35 var(--font-display);
+      margin: 0 0 4px;
+    }
+    .sm-event-gate {
+      font: 11px/1 var(--font-body);
+      color: var(--color-muted);
+      margin: 0;
+    }
+
+    /* ── Children panel (3rd column) ─────────────────────────────────── */
+    .children-panel {
+      width: 296px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .child-card {
+      background: var(--color-paper);
+      border: 1px solid var(--color-rule);
+      border-radius: 8px;
+      padding: 12px 13px;
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      box-sizing: border-box;
+      cursor: pointer;
+      transition: border-color 0.12s;
+    }
+    .child-card:hover {
+      border-color: var(--color-accent);
+    }
+    .child-name {
+      font: 600 12px/1.35 var(--font-display);
+      margin: 0;
+    }
+    .child-card--opened {
+      border: 2px solid var(--color-accent);
+    }
+    .child-card--leaf-selected {
+      background: var(--color-selected);
+      border-color: var(--color-accent);
+    }
+    /* ── Opened-gate sub-group (4th column) ──────────────────────────── */
+    .th-group {
+      width: 196px;
+      flex-shrink: 0;
+      align-self: flex-start;
+      background: var(--color-paper);
+      border: 1px solid var(--color-rule);
+      border-radius: 14px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      box-sizing: border-box;
+    }
+    .th-child-card {
+      background: var(--color-paper-2);
+      border: 1px solid var(--color-rule);
+      border-radius: 7px;
+      padding: 8px 10px;
+      min-height: 46px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      transition: border-color 0.12s;
+    }
+    .th-child-card:hover {
+      border-color: var(--color-accent);
+    }
+    .th-child-card--leaf-selected {
+      background: var(--color-selected);
+      border-color: var(--color-accent);
+    }
+    .th-child-card--band-opened {
+      border: 2px solid var(--color-accent);
+    }
+    .th-child-name {
+      font: 600 11px/1.35 var(--font-display);
+      margin: 0;
+    }
+
+    /* ── Shared base trees band ──────────────────────────────────────── */
+    .base-trees-band {
+      background: var(--color-paper-2);
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      padding: 16px 20px 20px;
+      margin-bottom: 28px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    .base-trees-label {
+      font: 600 11px/1.3 var(--font-display);
+      color: var(--color-muted);
+      white-space: nowrap;
+      padding-top: 14px;
+      flex-shrink: 0;
+    }
+    .base-trees-row {
+      flex: 1;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    .base-tree-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .base-tree-card {
+      background: var(--color-paper);
+      border: 1px solid var(--color-rule);
+      border-radius: 8px;
+      padding: 11px 13px;
+      font: 600 13px/1.35 var(--font-display);
+      box-sizing: border-box;
+    }
+    .base-tree-card--opened {
+      border: 2px solid var(--color-accent);
+      background: var(--color-selected);
+    }
+    .base-tree-child {
+      background: var(--color-paper);
+      border: 1px solid var(--color-rule);
+      border-radius: 6px;
+      padding: 7px 10px;
+      font: 600 11px/1.35 var(--font-display);
+      box-sizing: border-box;
+      margin-left: 20px;
+      cursor: pointer;
+      transition: border-color 0.12s;
+    }
+    .base-tree-child:hover {
+      border-color: var(--color-accent);
+    }
+    .base-tree-child--leaf-selected {
+      background: var(--color-selected);
+      border-color: var(--color-accent);
+    }
+
+    /* ── Reading pane — full width below map ─────────────────────────── */
+    .reading-pane {
+      border-top: 1px solid var(--color-rule);
+      padding-top: 20px;
+      display: flex;
+      flex-direction: row;
+      gap: 48px;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      padding-bottom: 64px;
+    }
+    .pane-main {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 240px;
+    }
+    .pane-heading {
+      font: 600 20px/1.3 var(--font-display);
+      margin: 0;
+    }
+    .pane-action {
+      display: inline-block;
+      font: 600 13px/1 var(--font-body);
+      color: var(--color-accent);
+      text-decoration: none;
+    }
+    .pane-stratum {
+      font: 600 10px/1.2 var(--font-display);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin: 0;
+    }
+    .pane-rungs {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+    .pane-rung-link {
+      font: 12px/1 var(--font-body);
+      color: var(--color-accent);
+      text-decoration: none;
+      border: 1px solid var(--color-accent);
+      border-radius: 4px;
+      padding: 3px 8px;
+    }
+    .pane-preview {
+      font: 14px/1.6 var(--font-body);
+      color: var(--color-muted);
+      margin: 8px 0 0;
+      max-width: 640px;
+    }
+    .pane-preview p { margin: 0 0 0.75em; }
+    .pane-preview a { color: var(--color-accent); }
+
+    /* Loading state (legacy, unused — skeleton replaces it) */
+    /* ── Loading skeleton layout ─────────────────────────────────────── */
+    .skel-page {
+      padding-top: 32px;
+    }
+    /* Hero title bar */
+    .skel-hero {
+      margin-bottom: 24px;
+    }
+    /* Map-shaped skeleton desk: mirrors .mock-desk layout */
+    .skel-desk {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 48px;
+      margin-bottom: 28px;
+    }
+    .skel-col {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    /* Reading-pane skeleton */
+    .skel-pane {
+      border-top: 1px solid var(--color-rule);
+      padding-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* Map intro */
+    .intro{max-width:1440px;margin:0 auto;padding:0 72px;box-sizing:border-box}
+    .intro a{color:var(--color-ink);text-decoration-color:var(--color-accent);text-underline-offset:3px}
+    .intro a:hover,.i-link:hover{color:var(--color-accent)}
+    .intro h2{font:600 clamp(28px,3vw,44px)/1.12 var(--font-display);text-wrap:balance;margin:0 0 24px;max-width:22ch}
+    .intro h3{font:600 var(--text-h3)/1.2 var(--font-display);margin:0 0 8px}
+    .i-sec{border-top:1px solid var(--color-rule);padding:88px 0}
+    .i-p{font:var(--text-body)/1.7 var(--font-body);max-width:66ch;margin:0 0 16px;text-wrap:pretty}
+    .i-src{font:var(--text-small)/1.55 var(--font-body);color:var(--color-muted);margin:0}
+    .i-open{min-height:calc(100svh - 56px);display:grid;grid-template-columns:5fr 6fr;align-items:center;gap:64px;padding:48px 0 72px;box-sizing:border-box}
+    .i-title{font:600 clamp(40px,4.4vw,68px)/1.02 var(--font-display);letter-spacing:-.025em;text-wrap:balance;margin:0 0 32px}
+    .i-lead{font:20px/1.6 var(--font-body);max-width:44ch;margin:0 0 32px}
+    .i-row{display:flex;flex-wrap:wrap;align-items:center;gap:16px 28px;margin:0;font:15px/1.5 var(--font-body)}
+    .intro .i-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:99px;background:var(--color-ink);color:var(--color-paper);text-decoration:none;font:600 15px/1 var(--font-display)}
+    .intro .i-btn:hover{background:var(--color-accent);color:var(--color-paper)}
+    .i-muted{color:var(--color-muted)}
+    .i-cred{margin-top:48px;display:grid;gap:32px}
+    .i-cred .i-row{font-size:19px;gap:12px 24px}
+    .i-cred img{display:block;height:32px}
+    .i-cred a+a img{height:44px}
+    .i-link{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-decoration:underline var(--color-accent);text-underline-offset:3px}
+    .sig{margin:0}
+    .sig svg,.i-levels svg{display:block;width:100%;height:auto;overflow:visible}
+    .sea{fill:var(--color-paper-2)}
+    .coast{stroke:var(--color-muted);stroke-dasharray:6 6;fill:none}
+    .t-name{font:600 15px var(--font-body);fill:var(--color-ink)}
+    .t-sub{font:13px var(--font-body);fill:var(--color-muted)}
+    .t-lab{font:600 15px var(--font-display);fill:var(--color-ink)}
+    .ln{fill:none;stroke:var(--color-accent);stroke-width:4;stroke-linecap:round}
+    .dom{fill:none;stroke:var(--color-ink);stroke-width:3}
+    .dead{fill:none;stroke:var(--color-muted);stroke-width:2;stroke-dasharray:3 5}
+    .stn{fill:var(--color-paper);stroke:var(--color-ink);stroke-width:2.5}
+    .cut,.hub{fill:var(--color-ink)}
+    .sig .ln{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset var(--dur-slow) var(--ease) calc(var(--i)*90ms),opacity var(--dur-std),stroke var(--dur-std)}
+    .sig .off{transition-delay:calc(300ms + var(--i)*90ms)}
+    .sig .end{fill:var(--color-paper);stroke:var(--color-muted);stroke-width:2;opacity:0;transition:opacity var(--dur-micro) calc(800ms + var(--i)*90ms)}
+    .sig .cut{transform-box:fill-box;transform-origin:center;transform:scaleY(0);transition:transform var(--dur-micro) var(--ease) calc(var(--i)*70ms)}
+    .sig .lvl{opacity:0;transition:opacity var(--dur-std) .32s}
+    .sig.drawn .ln{stroke-dashoffset:0}
+    .sig.drawn .end{opacity:1}
+    .sig.cutoff .off{stroke:var(--color-muted);opacity:.35;transition-delay:calc(var(--i)*70ms)}
+    .sig.cutoff .cut{transform:none}
+    .sig.cutoff .lvl{opacity:1}
+    .i-levels{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin:48px 0 0;padding:0;list-style:none}
+    .i-levels svg{max-width:320px;margin-bottom:20px}
+    .i-levels p{font:16px/1.6 var(--font-body);margin:0 0 8px;max-width:40ch}
+    .mini{display:grid;grid-template-columns:170px 210px 270px 1fr;gap:36px;align-items:start;margin:48px 0 0;padding:32px 32px 56px;background:var(--color-surface);border:1px solid var(--color-rule);border-radius:var(--radius-pane);position:relative;text-decoration:none}
+    .intro .mini:hover{border-color:var(--color-accent);color:var(--color-ink)}
+    .mc{display:flex;flex-direction:column;gap:6px;position:relative}
+    .m-cap,.m-ch{font:600 12px/1.3 var(--font-display);border:1px solid var(--color-rule);border-radius:6px;padding:7px 9px;background:var(--color-paper-2)}
+    .m-cap{font-size:13px;border-color:var(--color-ink);background:none;opacity:.55}
+    .m-cap.on{background:var(--color-ink);color:var(--color-paper);opacity:1;padding:13px 10px}
+    .m-ev,.m-ch.on{background:var(--color-selected);border:2px solid var(--color-accent)}
+    .m-ev{border-radius:9px;overflow:hidden}
+    .m-ev .here-bar{font-size:11px;padding:5px 10px}
+    .m-evt{font:600 16px/1.25 var(--font-display);padding:10px 12px 4px}
+    .m-gate{font:600 12px/1 var(--font-display);padding:4px 12px 12px;display:flex;align-items:center;gap:8px}
+    .m-pane{border-top:1px solid var(--color-rule);padding-top:12px}
+    .m-pt{font:600 18px/1.2 var(--font-display);margin:0 0 6px}
+    .m-px{font:13px/1.55 var(--font-body);color:var(--color-muted);margin:0 0 12px}
+    .m-rung{display:inline-block;margin:0 4px 6px 0;font:12px/1 var(--font-body);color:var(--color-accent);border:1px solid;border-radius:4px;padding:3px 8px}
+    .num{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--color-accent);color:var(--color-paper);font:600 12px/1 var(--font-display);flex-shrink:0}
+    .mc>.num{position:absolute;top:-11px;right:-11px}
+    .m-try{position:absolute;right:32px;bottom:22px;font:var(--text-small)/1 var(--font-body);color:var(--color-accent)}
+    .i-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:28px;list-style:none;margin:36px 0 56px;padding:0}
+    .i-steps li{display:grid;grid-template-columns:22px 1fr;column-gap:12px;align-content:start}
+    .i-steps h3{font-size:17px;margin:0 0 6px}
+    .i-steps p{font:15px/1.55 var(--font-body);margin:0;grid-column:2}
+    #main-page{scroll-margin-top:56px}
+    @media (max-width:720px){.intro{padding:0 20px}.i-sec{padding:56px 0}.i-open,.i-levels,.mini,.i-steps{grid-template-columns:1fr;min-height:0}}
+  </style>
+</head>
+<body><span id="cap-reach-and-communicate" class="source-alias" tabindex="-1"></span><span id="cap-store-and-retrieve-data" class="source-alias" tabindex="-1"></span><span id="cap-authenticate-and-transact" class="source-alias" tabindex="-1"></span><span id="cap-operate-and-deploy" class="source-alias" tabindex="-1"></span>
+
+<!-- map-intro:start · An introduction above the map (2026-11-25). Report claims are the report's own
+     sentences, each linked to its section; the step names come from the Dec 4 deck "Is Hosting in
+     Taiwan Enough?". The title is the owner's (2026-11-25). No section signs (§) on this page. -->
+<div class="intro" id="intro">
+  <section class="i-open" aria-labelledby="intro-title">
+    <div>
+      <h1 class="i-title" id="intro-title">How does your digital service’s internet resilience stand in Taiwan?</h1>
+      <p class="i-lead">Hosted on the island, it still fails to load as shipped, because its names, certificates, clocks and embedded files answer from abroad.</p>
+      <p class="i-row">
+        <a class="i-btn" href="#main-page" data-intro-scroll="main-page">Go to the map <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg></a>
+        <a href="#intro-read" data-intro-scroll="intro-read">How to read the map</a>
+      </p>
+      <div class="i-cred">
+        <p class="i-row"><span class="i-muted">Supported by</span><a href="https://twnic.tw/"><img src="assets/logos/twnic-logo.svg" alt="TWNIC"></a></p>
+        <p class="i-row"><span class="i-muted">Presented by</span><a href="https://crcolab.art/"><img src="assets/logos/crc-logo-black.svg" alt="Cyborg Resilience Co-lab"></a><a href="https://openfun.tw/"><img src="assets/logos/openfun-logo-black.svg" alt="OpenFun"></a></p>
+      </div>
+    </div>
+    <figure class="sig" id="intro-sig" aria-label="A service hosted in Taiwan with four dependencies that answer from abroad: DNS resolution, TLS/PKI and trust, Time holds, and CDN and third-party embeds. At Global Cutoff each is cut at the coast.">
+      <svg viewBox="0 0 620 420" aria-hidden="true">
+        <rect class="sea" x="340" y="0" width="280" height="420" rx="0"/>
+        <line class="coast" x1="340" y1="0" x2="340" y2="420"/>
+        <text class="t-sub" x="16" y="408">Taiwan</text>
+        <text class="t-sub" x="604" y="408" text-anchor="end">Abroad</text>
+        <text class="t-lab lvl" x="604" y="26" text-anchor="end">Global Cutoff</text>
+
+        <path class="ln" style="--i:0" pathLength="1" d="M 72 210 C 170 210, 170 72, 250 72 H 340"/>
+        <path class="ln" style="--i:1" pathLength="1" d="M 72 210 C 170 210, 170 164, 250 164 H 340"/>
+        <path class="ln" style="--i:2" pathLength="1" d="M 72 210 C 170 210, 170 256, 250 256 H 340"/>
+        <path class="ln" style="--i:3" pathLength="1" d="M 72 210 C 170 210, 170 348, 250 348 H 340"/>
+        <path class="ln off" style="--i:0" pathLength="1" d="M 340 72 H 586"/>
+        <path class="ln off" style="--i:1" pathLength="1" d="M 340 164 H 586"/>
+        <path class="ln off" style="--i:2" pathLength="1" d="M 340 256 H 586"/>
+        <path class="ln off" style="--i:3" pathLength="1" d="M 340 348 H 586"/>
+        <circle class="end" style="--i:0" cx="592" cy="72" r="6"/>
+        <circle class="end" style="--i:1" cx="592" cy="164" r="6"/>
+        <circle class="end" style="--i:2" cx="592" cy="256" r="6"/>
+        <circle class="end" style="--i:3" cx="592" cy="348" r="6"/>
+        <rect class="cut" style="--i:0" x="335" y="57" width="10" height="30" rx="3"/>
+        <rect class="cut" style="--i:1" x="335" y="149" width="10" height="30" rx="3"/>
+        <rect class="cut" style="--i:2" x="335" y="241" width="10" height="30" rx="3"/>
+        <rect class="cut" style="--i:3" x="335" y="333" width="10" height="30" rx="3"/>
+
+        <text class="t-name" x="358" y="58">DNS resolution</text>
+        <text class="t-sub" x="358" y="96">names</text>
+        <text class="t-name" x="358" y="150">TLS/PKI and trust</text>
+        <text class="t-sub" x="358" y="188">certificates</text>
+        <text class="t-name" x="358" y="242">⇒ Time holds</text>
+        <text class="t-sub" x="358" y="280">clocks</text>
+        <text class="t-name" x="358" y="334">CDN and third-party embeds</text>
+        <text class="t-sub" x="358" y="372">embedded files</text>
+
+        <circle class="hub" cx="60" cy="210" r="13"/>
+        <text class="t-lab" x="20" y="252">Your service</text>
+        <text class="t-sub" x="20" y="272">hosted in Taiwan</text>
+      </svg>
+    </figure>
+  </section>
+
+  <section class="i-sec" aria-labelledby="intro-links">
+    <h2 id="intro-links">The island’s links out break every year</h2>
+    <p class="i-p">At the end of February 2026, 15 international and 10 domestic submarine cables served Taiwan. Over the past four years, cables within 24 nautical miles of Taiwan suffered seven to eight incidents a year on average. A cable repair takes weeks to months, because the repair waits for a ship: about 32 days for an international cable and about 110 days for a domestic cable.</p>
+    <p class="i-src">From Cables, landing stations, and power, after a MODA press release of April 7, 2026 and 李又如, Open Culture Foundation, September 8, 2026.</p>
+
+    <p class="i-p" style="margin-top:48px">The report defines three disruption levels by their effect, not their cause. The three levels form an escalation ladder: each level includes every effect of the level below it. The report anchors its analysis on 50% Degradation. The disruption ladder</p>
+    <ol class="i-levels">
+      <li>
+        <svg viewBox="0 0 260 150" aria-hidden="true">
+          <rect class="sea" x="160" y="0" width="100" height="150"/>
+          <line class="coast" x1="160" y1="0" x2="160" y2="150"/>
+          <path class="dom" d="M 50 36 V 114"/>
+          <path class="ln" d="M 50 36 H 160"/><path class="ln" d="M 50 114 H 160"/>
+          <path class="ln" stroke-width="2" d="M 160 36 H 246"/><path class="ln" stroke-width="2" d="M 160 114 H 246"/>
+          <circle class="stn" cx="50" cy="36" r="6"/><circle class="stn" cx="50" cy="114" r="6"/>
+          <text class="t-sub" x="4" y="40">North</text><text class="t-sub" x="4" y="118">South</text>
+          <text class="t-sub" x="254" y="144" text-anchor="end">Abroad</text>
+        </svg>
+        <h3>50% Degradation</h3>
+        <p>The island loses approximately 50% of its foreign-routed bandwidth, the bandwidth that connects it to the global internet.</p>
+        <p class="i-muted">Looks like a brownout (slow, lossy service).</p>
+      </li>
+      <li>
+        <svg viewBox="0 0 260 150" aria-hidden="true">
+          <rect class="sea" x="160" y="0" width="100" height="150"/>
+          <line class="coast" x1="160" y1="0" x2="160" y2="150"/>
+          <path class="dom" d="M 50 36 V 114"/>
+          <path class="ln" d="M 50 36 H 160"/><path class="ln" d="M 50 114 H 160"/>
+          <path class="dead" d="M 166 36 H 246"/><path class="dead" d="M 166 114 H 246"/>
+          <rect class="cut" x="155" y="24" width="10" height="24" rx="2"/><rect class="cut" x="155" y="102" width="10" height="24" rx="2"/>
+          <circle class="stn" cx="50" cy="36" r="6"/><circle class="stn" cx="50" cy="114" r="6"/>
+          <text class="t-sub" x="4" y="40">North</text><text class="t-sub" x="4" y="118">South</text>
+          <text class="t-sub" x="254" y="144" text-anchor="end">Abroad</text>
+        </svg>
+        <h3>Global Cutoff</h3>
+        <p>Takes the conditions of 50% Degradation and removes the remaining foreign-routed bandwidth.</p>
+        <p class="i-muted">Looks like a hard edge (international traffic stops outright).</p>
+      </li>
+      <li>
+        <svg viewBox="0 0 260 150" aria-hidden="true">
+          <rect class="sea" x="160" y="0" width="100" height="150"/>
+          <line class="coast" x1="160" y1="0" x2="160" y2="150"/>
+          <path class="dead" d="M 50 44 V 106"/>
+          <rect class="cut" x="38" y="70" width="24" height="10" rx="2"/>
+          <path class="ln" d="M 50 36 H 160"/><path class="ln" d="M 50 114 H 160"/>
+          <path class="dead" d="M 166 36 H 246"/><path class="dead" d="M 166 114 H 246"/>
+          <rect class="cut" x="155" y="24" width="10" height="24" rx="2"/><rect class="cut" x="155" y="102" width="10" height="24" rx="2"/>
+          <circle class="stn" cx="50" cy="36" r="6"/><circle class="stn" cx="50" cy="114" r="6"/>
+          <text class="t-sub" x="4" y="40">North</text><text class="t-sub" x="4" y="118">South</text>
+          <text class="t-sub" x="254" y="144" text-anchor="end">Abroad</text>
+        </svg>
+        <h3>Island Partition</h3>
+        <p>Adds the loss of north–south connectivity inside Taiwan to that total global loss.</p>
+        <p class="i-muted">Looks like a split between north and south.</p>
+      </li>
+    </ol>
+  </section>
+
+  <section class="i-sec" id="intro-read" aria-labelledby="intro-read-title">
+    <h2 id="intro-read-title">What does my service sit on?</h2>
+    <p class="i-p">The map below answers that with four fault trees, one per capability, holding 13 top events over 26 shared dependencies. A fault tree is a diagram of the faults that can cause one failure.</p>
+
+    <a class="mini" href="index.html?cap=cap-reach-and-communicate&amp;at=event-1a-your-users-load-your-service&amp;leaf=occ-1a-your-users-load-your-service-dns-resolution" aria-label="Open this example on the map: Reach and communicate, Your users load your service, DNS resolution">
+      <div class="mc">
+        <span class="num" aria-hidden="true">1</span>
+        <div class="m-cap on">Reach and communicate</div>
+        <div class="m-cap">Store and retrieve data</div>
+        <div class="m-cap">Authenticate and transact</div>
+        <div class="m-cap">Operate and deploy</div>
+      </div>
+      <div class="mc">
+        <span class="num" aria-hidden="true">2</span>
+        <div class="m-ev">
+          <span class="here-bar">You are here</span>
+          <div class="m-evt">Your users load your service</div>
+          <div class="m-gate"><span class="num" aria-hidden="true">3</span>AND</div>
+        </div>
+      </div>
+      <div class="mc">
+        <span class="num" aria-hidden="true">4</span>
+        <div class="m-ch">Delivery path</div>
+        <div class="m-ch">⇒ Time holds (certificate validity)</div>
+        <div class="m-ch">Access networks and address translation</div>
+        <div class="m-ch on">DNS resolution</div>
+        <div class="m-ch">TLS/PKI and trust</div>
+        <div class="m-ch">CDN and third-party embeds (render-critical assets)</div>
+        <div class="m-ch">Geo and media licensing (location and media features)</div>
+      </div>
+      <div class="mc">
+        <span class="num" aria-hidden="true">5</span>
+        <div class="m-pane">
+          <p class="m-pt">DNS resolution</p>
+          <p class="m-px">When name resolution fails, three top events fail with it: Your users load your service, Your cloud-hosted data is readable and writable, and Online checkout approves.</p>
+          <div><span class="m-rung">50% Degradation →</span><span class="m-rung">Global Cutoff →</span><span class="m-rung">Island Partition →</span></div>
+        </div>
+      </div>
+      <span class="m-try">Open this example on the map →</span>
+    </a>
+
+    <ol class="i-steps">
+      <li><span class="num" aria-hidden="true">1</span><div><h3>Pick a capability</h3></div><p>The map starts from four: reach and communicate, store and retrieve data, authenticate and transact, operate and deploy.</p></li>
+      <li><span class="num" aria-hidden="true">2</span><div><h3>Pick a top event</h3></div><p>A top event is a capability that the users or the team of a service need.</p></li>
+      <li><span class="num" aria-hidden="true">3</span><div><h3>Read its gate</h3></div><p>Below the top event, a gate states whether every child must hold (<code>AND</code>) or any one child suffices (<code>OR</code>).</p></li>
+      <li><span class="num" aria-hidden="true">4</span><div><h3>Open a dependency</h3></div><p>A leaf names one shared dependency and points to the section that grounds it. Three base trees recur under every capability. They are drawn once and referenced with ⇒.</p></li>
+      <li><span class="num" aria-hidden="true">5</span><div><h3>Jump to each level</h3></div><p>The reading pane links each dependency to its trace at 50% Degradation, Global Cutoff and Island Partition.</p></li>
+    </ol>
+
+    <div class="i-row" style="margin-top:0">
+      <a class="i-btn" href="#main-page" data-intro-scroll="main-page">Start from a capability <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg></a>
+    </div>
+  </section>
+</div>
+<!-- map-intro:end -->
+
+<!-- Page wrapper -->
+<main class="mock-page" id="main-page">
+  <!-- Loading skeleton: replaces the old text "Loading dependency map…" -->
+  <div class="skel-page" id="loading-skel" aria-busy="true" aria-label="Loading dependency map">
+    <!-- Hero title bar -->
+    <div class="skel-hero">
+      <div data-slot="skeleton" class="bg-accent animate-pulse rounded-md" style="height:32px;width:320px;max-width:80%;"></div>
+    </div>
+    <!-- Map desk skeleton -->
+    <div class="skel-desk">
+      <!-- Capability column: 4 blocks -->
+      <div class="skel-col" style="width:200px;flex-shrink:0;">
+        <div data-slot="skeleton" class="bg-accent animate-pulse rounded-md" style="height:56px;"></div>
+        <div data-slot="skeleton" class="bg-accent animate-pulse rounded-md" style="height:40px;"></div>
+        <div data-slot="skeleton" class="bg-accent animate-pulse rounded-md" style="height:40px;"></div>
+        <div data-slot="skeleton" class="bg-accent animate-pulse rounded-md" style="height:40px;"></div>
+      </div>
+      <!-- Events column: one large card + two small -->
+      <div class="skel-col" style="width:280px;flex-shrink:0;">
+        <div data-slot="skeleton" class="bg-accent animate-pulse rounded-md" style="height:110px;"></div>
+        <div data-slot="skeleton" class="bg-accent animate-pulse rounded-md" style="height:52px;"></div>
+        <div data-slot="skeleton" class="bg-accent animate-pulse rounded-md" style="height:52px;"></div>
+      </div>
+      <!-- Conditions column: ~6 condition-card-sized blocks -->
+      <div class="skel-col" style="width:296px;flex-shrink:0;">
+        <div data-slot="skeleton" class="bg-accent animate-pulse rounded-md" style="height:58px;"></div>
+        <div data-slot="skeleton" class="bg-accent animate-pulse rounded-md" style="height:58px;"></div>
+        <div data-slot="skeleton" class="bg-accent animate-pulse rounded-md" style="height:58px;"></div>
+        <div data-slot="skeleton" class="bg-accent animate-pulse rounded-md" style="height:58px;"></div>
+        <div data-slot="skeleton" class="bg-accent animate-pulse rounded-md" style="height:58px;"></div>
+        <div data-slot="skeleton" class="bg-accent animate-pulse rounded-md" style="height:58px;"></div>
+      </div>
+    </div>
+    <!-- Reading pane skeleton -->
+    <div class="skel-pane">
+      <div data-slot="skeleton" class="bg-accent animate-pulse rounded-md" style="height:24px;width:260px;max-width:60%;"></div>
+      <div data-slot="skeleton" class="bg-accent animate-pulse rounded-md" style="height:16px;width:480px;max-width:90%;"></div>
+      <div data-slot="skeleton" class="bg-accent animate-pulse rounded-md" style="height:16px;width:420px;max-width:80%;"></div>
+      <div data-slot="skeleton" class="bg-accent animate-pulse rounded-md" style="height:16px;width:380px;max-width:75%;"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+(function () {
+'use strict';
+
+// ── Constants ──────────────────────────────────────────────────────────────
+var ACCENT = 'var(--color-accent)';
+var INK    = 'var(--color-ink)';
+var NS     = 'http://www.w3.org/2000/svg';
+
+var STRATUM_LABELS = { P: 'Physical', N: 'Network', A: 'Application infrastructure', H: 'Human-organizational' };
+
+// ── Data / state ───────────────────────────────────────────────────────────
+var DATA = null;           // surface-data.json
+var GATES_BY_ID = {};      // { gateId: gate }
+var CAPS_BY_ID  = {};      // { capId: cap }
+var STATE = { capId: null, at: [], leafOccId: null };
+
+var IDLE_TITLE = "Start from one digital service’s capability to find its dependencies under network disruption";
+
+// ── URL state helpers ──────────────────────────────────────────────────────
+// The map keeps its place in the history entry ({ map: "cap=…&at=…&leaf=…" }), not in the
+// address bar, so the URL stays index.html (owner, 2026-11-25). Back and Forward still walk the
+// reader's steps. A link that arrives with ?cap, ?at or ?leaf (search, the reading pane, the
+// intro) is read once and then moved into the history entry.
+function mapSearch() {
+  var hs = history.state;
+  if (hs && typeof hs.map === 'string') return '?' + hs.map;
+  return location.search;
+}
+function writeState(qs, push) {
+  history[push ? 'pushState' : 'replaceState']({ map: qs }, '', location.pathname + location.hash);
+}
+
+function parseState() {
+  if (!DATA) return { capId: null, at: [], leafOccId: null };
+  var params = new URLSearchParams(mapSearch());
+  var rawCap = params.get('cap');
+  var rawAt  = (params.get('at') || '').split(',').filter(Boolean);
+  var rawLeaf = params.get('leaf') || null;
+
+  // Resolve capability
+  var cap = rawCap && CAPS_BY_ID[rawCap]
+    ? CAPS_BY_ID[rawCap]
+    : null;
+
+  // If no cap but an at-param provided, infer cap from the first gate ID
+  if (!cap && rawAt[0]) {
+    cap = inferCap(rawAt[0]);
+  }
+  // No URL params at all → idle landing state
+  if (!cap && !rawAt[0] && !rawLeaf) {
+    return { capId: null, at: [], leafOccId: null };
+  }
+  if (!cap) cap = DATA.capabilities[0];
+  if (!cap) return { capId: null, at: [], leafOccId: null };
+
+  // Capability-only state: cap param present but no at/leaf → all events unchosen
+  if (rawAt.length === 0 && !rawLeaf) {
+    return { capId: cap.id, at: [], leafOccId: null };
+  }
+
+  // Resolve event: first at must be an event of the selected cap
+  var eventId = rawAt[0] && cap.events.indexOf(rawAt[0]) >= 0
+    ? rawAt[0]
+    : cap.events[0];
+
+  // Rest of at-path
+  var rest = rawAt.slice(1).filter(function(id) { return !!GATES_BY_ID[id]; });
+  var at = eventId ? [eventId].concat(rest) : [];
+
+  // Handle bare base-tree deep link: ?at=base-b1-... (rawAt[0] is a base tree, not an event)
+  if (rawAt.length >= 1 && rawAt[0] && at[1] === undefined) {
+    var rawAt0Gate = GATES_BY_ID[rawAt[0]];
+    if (rawAt0Gate && rawAt0Gate.base && cap.events.indexOf(rawAt[0]) < 0) {
+      at = [at[0], rawAt[0]];
+    }
+  }
+
+  // (c) Leaf wins: truncate at to the leaf's own parent — the top event if the
+  // leaf occurrence is directly under it, or the nested gate (at[1]) if the leaf
+  // is under that gate. Anything beyond the parent (opened base tree, transfer,
+  // deeper gate) is dropped so only one bright path is shown.
+  // URL is cleaned up by history.replaceState in render().
+  if (rawLeaf && at.length > 0 && at[0]) {
+    var psEvtGate = GATES_BY_ID[at[0]];
+    if (psEvtGate) {
+      // Check if leaf is directly under the top event
+      for (var psi = 0; psi < psEvtGate.children.length; psi++) {
+        if (psEvtGate.children[psi].id === rawLeaf) { at = at.slice(0, 1); break; }
+      }
+      // If at still has more entries, check the opened nested gate at[1]
+      if (at.length > 1 && at[1]) {
+        var psNgGate = GATES_BY_ID[at[1]];
+        if (psNgGate && !psNgGate.base) {
+          for (var psi = 0; psi < psNgGate.children.length; psi++) {
+            if (psNgGate.children[psi].id === rawLeaf) { at = at.slice(0, 2); break; }
+          }
+        }
+      }
+    }
+  }
+
+  return { capId: cap.id, at: at, leafOccId: rawLeaf };
+}
+
+function stateToParams(s) {
+  var p = new URLSearchParams();
+  if (s.capId) p.set('cap', s.capId);
+  if (s.at && s.at.length) p.set('at', s.at.join(','));
+  if (s.leafOccId) p.set('leaf', s.leafOccId);
+  return p.toString();
+}
+
+function inferCap(gateId) {
+  var gate = GATES_BY_ID[gateId];
+  if (gate && gate.capability && CAPS_BY_ID[gate.capability]) return CAPS_BY_ID[gate.capability];
+  for (var ci = 0; ci < DATA.capabilities.length; ci++) {
+    var cap = DATA.capabilities[ci];
+    for (var ei = 0; ei < cap.events.length; ei++) {
+      var event = GATES_BY_ID[cap.events[ei]];
+      if (!event) continue;
+      for (var chi = 0; chi < event.children.length; chi++) {
+        if (event.children[chi].target === gateId) return cap;
+      }
+    }
+  }
+  return DATA.capabilities[0] || null;
+}
+
+// ── Path completion ────────────────────────────────────────────────────────
+// Returns a normalised at-array so that a visible card always references any
+// base-tree that is part of the path. Called in render() before using STATE.at.
+function normalizeAt(at, cap) {
+  if (!at || at.length < 2) return at;
+  var eventGate = GATES_BY_ID[at[0]];
+  if (!eventGate) return at;
+
+  var at1Gate = GATES_BY_ID[at[1]];
+  if (!at1Gate || !at1Gate.base) return at; // at[1] is not a base tree — nothing to fix
+
+  var baseTreeId = at[1];
+
+  // Case A: event has a direct transfer/gate child pointing to the base tree → valid
+  for (var i = 0; i < eventGate.children.length; i++) {
+    var c = eventGate.children[i];
+    if ((c.kind === 'gate' || c.kind === 'transfer') && c.target === baseTreeId) return at;
+  }
+
+  // Case B: find the first nested gate (child of the event) whose children reference the base tree
+  for (var i = 0; i < eventGate.children.length; i++) {
+    var c = eventGate.children[i];
+    if (c.kind !== 'gate' && c.kind !== 'transfer') continue;
+    var ng = GATES_BY_ID[c.target];
+    if (!ng) continue;
+    for (var j = 0; j < ng.children.length; j++) {
+      var nc = ng.children[j];
+      if ((nc.kind === 'gate' || nc.kind === 'transfer') && nc.target === baseTreeId) {
+        return [at[0], c.target, baseTreeId];
+      }
+    }
+  }
+
+  // Case C: nothing under this event references the base tree — find another event
+  var caps = DATA.capabilities.slice();
+  // prefer current cap first
+  if (cap) caps.sort(function(a, b) { return a.id === cap.id ? -1 : b.id === cap.id ? 1 : 0; });
+  for (var ci = 0; ci < caps.length; ci++) {
+    var cp = caps[ci];
+    for (var ei = 0; ei < cp.events.length; ei++) {
+      var eg = GATES_BY_ID[cp.events[ei]];
+      if (!eg) continue;
+      // direct child
+      for (var chi = 0; chi < eg.children.length; chi++) {
+        var ec = eg.children[chi];
+        if ((ec.kind === 'gate' || ec.kind === 'transfer') && ec.target === baseTreeId) {
+          return [eg.id, baseTreeId];
+        }
+      }
+      // via nested gate
+      for (var chi = 0; chi < eg.children.length; chi++) {
+        var ec = eg.children[chi];
+        if (ec.kind !== 'gate' && ec.kind !== 'transfer') continue;
+        var ng2 = GATES_BY_ID[ec.target];
+        if (!ng2) continue;
+        for (var nci = 0; nci < ng2.children.length; nci++) {
+          var nc = ng2.children[nci];
+          if ((nc.kind === 'gate' || nc.kind === 'transfer') && nc.target === baseTreeId) {
+            return [eg.id, ec.target, baseTreeId];
+          }
+        }
+      }
+    }
+  }
+
+  return at; // no fix found, return unchanged
+}
+
+// ── Navigation ─────────────────────────────────────────────────────────────
+function navigate(newState, push) {
+  STATE = newState;
+  writeState(stateToParams(newState), push);
+  doRender();
+}
+
+function doRender() {
+  if (typeof document.startViewTransition === 'function') {
+    // A newer render skips the running one; that rejection is expected (#290).
+    document.startViewTransition(render).ready.catch(function () {});
+  } else {
+    render();
+  }
+}
+
+// ── Render helpers ─────────────────────────────────────────────────────────
+function esc(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function makeDivHTML(cls, id, content, attrs) {
+  var idAttr = id ? ' id="' + esc(id) + '"' : '';
+  var extraAttrs = attrs ? ' ' + attrs : '';
+  return '<div class="' + esc(cls) + '"' + idAttr + extraAttrs + '>' + content + '</div>';
+}
+
+// ── Capability-only state ──────────────────────────────────────────────────
+function renderCapabilityOnly() {
+  var cap = CAPS_BY_ID[STATE.capId];
+  if (!cap) { renderIdle(); return; }
+
+  // Hero: capability title
+  document.querySelector('#hero-title').textContent = cap.title;
+
+  // Capability column: chosen cap as solid-ink large card, others small
+  var capHtml = '<div class="cap-card-large" id="cap-col-active"><span id="cap-' + esc(cap.id) + '"></span>' + esc(cap.title) + '</div>';
+  var others = DATA.capabilities.filter(function(c) { return c.id !== cap.id; });
+  for (var oi = 0; oi < others.length; oi++) {
+    var oc = others[oi];
+    capHtml += '<button class="cap-card-small" id="cap-' + esc(oc.id) + '" data-cap-id="' + esc(oc.id) + '">' + esc(oc.title) + '</button>';
+  }
+  document.getElementById('cap-col').innerHTML = capHtml;
+
+  // Events panel: all events as plain idle-style cards — no selection, no glow
+  var eventsHtml = '';
+  for (var ei = 0; ei < cap.events.length; ei++) {
+    var eg = GATES_BY_ID[cap.events[ei]];
+    if (!eg) continue;
+    eventsHtml += '<button class="cap-card-large cap-card-large--idle" data-event-id="' + esc(eg.id) + '">'
+      + '<p style="margin:0 0 4px">' + esc(eg.title) + '</p>'
+      + '<p class="sm-event-gate" style="margin:0">' + esc(eg.operator) + '</p>'
+      + '</button>';
+  }
+  document.getElementById('events-panel').innerHTML = eventsHtml;
+
+  // Children panel: skeleton
+  var skelHtml = '';
+  for (var csi = 0; csi < 6; csi++) {
+    skelHtml += '<div data-slot="skeleton" class="bg-accent animate-pulse rounded-md" style="height:58px;"></div>';
+  }
+  document.getElementById('children-panel').innerHTML = skelHtml;
+
+  // Opened col: hidden
+  var openedColEl = document.getElementById('opened-col');
+  openedColEl.innerHTML = '';
+  openedColEl.style.display = 'none';
+
+  // Band: skeleton (same as idle)
+  var bandRow = document.getElementById('band-row');
+  var bandSkel = '';
+  for (var bi = 0; bi < 3; bi++) {
+    bandSkel += '<div class="base-tree-col">';
+    bandSkel += '<div data-slot="skeleton" class="bg-accent animate-pulse rounded-md" style="height:42px;margin-bottom:8px;"></div>';
+    bandSkel += '<div style="margin-left:20px;display:flex;flex-direction:column;gap:6px;">';
+    for (var bci = 0; bci < (bi === 1 ? 3 : 2); bci++) {
+      bandSkel += '<div data-slot="skeleton" class="bg-accent animate-pulse rounded-md" style="height:32px;"></div>';
+    }
+    bandSkel += '</div>';
+    bandSkel += '</div>';
+  }
+  bandRow.innerHTML = bandSkel;
+
+  // Reading pane: skeleton
+  renderReadingPane(null, null, null, []);
+
+  // Connectors drawn in requestAnimationFrame
+  requestAnimationFrame(drawConnectors);
+}
+
+// ── Idle landing state ─────────────────────────────────────────────────────
+function renderIdle() {
+  // Hero
+  var heroEl = document.querySelector('#hero-title');
+  if (heroEl) heroEl.textContent = IDLE_TITLE;
+
+  // Capability column: all caps as large--idle, clickable
+  var idleCapHtml = '';
+  for (var ii = 0; ii < DATA.capabilities.length; ii++) {
+    var ic = DATA.capabilities[ii];
+    idleCapHtml += '<button class="cap-card-large cap-card-large--idle" id="cap-' + esc(ic.id) + '" data-cap-id="' + esc(ic.id) + '">' + esc(ic.title) + '</button>';
+  }
+  document.getElementById('cap-col').innerHTML = idleCapHtml;
+
+  // Events panel: skeleton (1 large + 2 small)
+  document.getElementById('events-panel').innerHTML =
+    '<div data-slot="skeleton" class="bg-accent animate-pulse rounded-md" style="height:110px;"></div>'
+    + '<div data-slot="skeleton" class="bg-accent animate-pulse rounded-md" style="height:52px;"></div>'
+    + '<div data-slot="skeleton" class="bg-accent animate-pulse rounded-md" style="height:52px;"></div>';
+
+  // Children panel: 6 condition-card-sized skeletons
+  var idleChSkel = '';
+  for (var ici = 0; ici < 6; ici++) {
+    idleChSkel += '<div data-slot="skeleton" class="bg-accent animate-pulse rounded-md" style="height:58px;"></div>';
+  }
+  document.getElementById('children-panel').innerHTML = idleChSkel;
+
+  // Opened col: hidden
+  var idleOcEl = document.getElementById('opened-col');
+  idleOcEl.innerHTML = '';
+  idleOcEl.style.display = 'none';
+
+  // Band: skeleton placeholders (3 columns, each with a card bar + 2-3 child bars)
+  var idleBRow = document.getElementById('band-row');
+  var idleBSkel = '';
+  for (var ibi = 0; ibi < 3; ibi++) {
+    idleBSkel += '<div class="base-tree-col">';
+    idleBSkel += '<div data-slot="skeleton" class="bg-accent animate-pulse rounded-md" style="height:42px;margin-bottom:8px;"></div>';
+    idleBSkel += '<div style="margin-left:20px;display:flex;flex-direction:column;gap:6px;">';
+    for (var ibci = 0; ibci < (ibi === 1 ? 3 : 2); ibci++) {
+      idleBSkel += '<div data-slot="skeleton" class="bg-accent animate-pulse rounded-md" style="height:32px;"></div>';
+    }
+    idleBSkel += '</div>';
+    idleBSkel += '</div>';
+  }
+  idleBRow.innerHTML = idleBSkel;
+
+  // Reading pane: skeleton bars
+  renderReadingPane(null, null, null, []);
+
+  // No connectors in idle state
+  requestAnimationFrame(function() {
+    var idleDimG  = document.getElementById('conn-dim');
+    var idleBrG   = document.getElementById('conn-bright');
+    if (idleDimG)  idleDimG.innerHTML  = '';
+    if (idleBrG)   idleBrG.innerHTML   = '';
+  });
+}
+
+// ── Main render ────────────────────────────────────────────────────────────
+function render() {
+  // Idle landing state: no capability selected
+  if (!STATE.capId) { renderIdle(); return; }
+
+  // Capability-only state: cap selected but no event chosen
+  if (STATE.at.length === 0) { renderCapabilityOnly(); return; }
+
+  var cap = STATE.capId ? CAPS_BY_ID[STATE.capId] : DATA.capabilities[0];
+
+  // Path completion: normalise at so a visible card references any base-tree in the path
+  var normalizedAt = normalizeAt(STATE.at, cap);
+  if (normalizedAt !== STATE.at) {
+    STATE.at = normalizedAt;
+    writeState(stateToParams(STATE), false);
+  }
+
+  var at  = STATE.at || [];
+  // (c) Leaf-wins normalization: clean up URLs where both a leaf and a base-tree
+  // at[2] are selected and the leaf belongs to gate at[1]. replaceState so the
+  // address bar shows the canonical form.
+  if (STATE.leafOccId && at.length > 2 && at[2]) {
+    var rnAt2Gate = GATES_BY_ID[at[2]];
+    if (rnAt2Gate && rnAt2Gate.base) {
+      var rnAt1Gate = GATES_BY_ID[at[1]];
+      if (rnAt1Gate) {
+        for (var rni = 0; rni < rnAt1Gate.children.length; rni++) {
+          if (rnAt1Gate.children[rni].id === STATE.leafOccId) {
+            at = at.slice(0, 2);
+            STATE.at = at;
+            writeState(stateToParams(STATE), false);
+            break;
+          }
+        }
+      }
+    }
+  }
+  var eventGate = at[0] ? GATES_BY_ID[at[0]] : (cap ? GATES_BY_ID[cap.events[0]] : null);
+  var openedChildGateId = at[1] || null;  // gate ID of opened child (via at[1])
+  var openedGate = openedChildGateId ? GATES_BY_ID[openedChildGateId] : null;
+  // base-tree opened via a transfer in the opened nested gate (at[2])
+  var bandFromNestedId = (at.length > 2 && at[2] && GATES_BY_ID[at[2]] && GATES_BY_ID[at[2]].base) ? at[2] : null;
+  var leafOccId = STATE.leafOccId;
+
+  // Restore the opened column to the desk before replacing the base-tree band.
+  // A previous render may have mounted it inside that band.
+  var openedColEl = document.getElementById('opened-col');
+  var mapContainerEl = document.getElementById('map-container');
+  var childrenPanelEl = document.getElementById('children-panel');
+  if (openedColEl && mapContainerEl && childrenPanelEl) {
+    mapContainerEl.insertBefore(openedColEl, childrenPanelEl.nextSibling);
+    openedColEl.style.marginTop = '';
+  }
+
+  // Find which occurrence in the current event's children is opened (kind=gate/transfer with target=openedChildGateId)
+  var openedChildOcc = null;
+  if (openedGate && eventGate) {
+    for (var i = 0; i < eventGate.children.length; i++) {
+      var c = eventGate.children[i];
+      if ((c.kind === 'gate' || c.kind === 'transfer') && c.target === openedChildGateId) {
+        openedChildOcc = c;
+        break;
+      }
+    }
+  }
+
+  // Hero title
+  document.querySelector('#hero-title') && (document.querySelector('#hero-title').textContent = eventGate ? eventGate.title : '');
+
+  // ── Capability column
+  var capHtml = '';
+  if (cap) {
+    capHtml += '<div class="cap-card-large" id="cap-col-active"><span id="cap-' + esc(cap.id) + '"></span>' + esc(cap.title) + '</div>';
+    var others = DATA.capabilities.filter(function(c) { return c.id !== cap.id; });
+    if (others.length) {
+      for (var oi = 0; oi < others.length; oi++) {
+        var oc = others[oi];
+        capHtml += '<button class="cap-card-small" id="cap-' + esc(oc.id) + '" data-cap-id="' + esc(oc.id) + '">' + esc(oc.title) + '</button>';
+      }
+    }
+  }
+  document.getElementById('cap-col').innerHTML = capHtml;
+
+  // ── Events panel
+  var eventsHtml = '';
+  if (eventGate) {
+    eventsHtml += '<div class="event-1a" id="event-col-active">'
+      + '<span class="here-bar">YOU ARE HERE</span>'
+      + '<div class="event-1a-body">'
+      + '<p class="event-1a-title">' + esc(eventGate.title) + '</p>'
+      + '<p class="event-1a-gate">' + esc(eventGate.operator) + '</p>'
+      + '</div></div>';
+    var siblings = cap ? cap.events.filter(function(eid) { return eid !== eventGate.id; }) : [];
+    if (siblings.length) {
+      eventsHtml += '<div class="small-events-group">';
+      for (var si = 0; si < siblings.length; si++) {
+        var sg = GATES_BY_ID[siblings[si]];
+        if (!sg) continue;
+        eventsHtml += '<div class="sm-event-card" data-event-id="' + esc(sg.id) + '">'
+          + '<p class="sm-event-name">' + esc(sg.title) + '</p>'
+          + '<p class="sm-event-gate">' + esc(sg.operator) + '</p>'
+          + '</div>';
+      }
+      eventsHtml += '</div>';
+    }
+  }
+  document.getElementById('events-panel').innerHTML = eventsHtml;
+
+  // ── Children panel (children of selected event)
+  var childrenHtml = '';
+  if (eventGate) {
+    for (var ci = 0; ci < eventGate.children.length; ci++) {
+      var child = eventGate.children[ci];
+      var isOpened = child === openedChildOcc;
+      var isLeafSelected = child.kind === 'leaf' && child.id === leafOccId;
+      var cls = 'child-card';
+      if (isOpened) cls += ' child-card--opened';
+      if (isLeafSelected) cls += ' child-card--leaf-selected';
+      var label = child.label;
+      // Stratum shown in the reading pane; keep the card title-only for full width.
+      var inner = '<p class="child-name">' + esc(label) + '</p>';
+      childrenHtml += '<div class="' + cls + '" id="child-occ-' + esc(child.id) + '"'
+        + ' data-occ-id="' + esc(child.id) + '"'
+        + ' data-kind="' + esc(child.kind) + '"'
+        + ' data-target="' + esc(child.target) + '">'
+        + inner + '</div>';
+    }
+  }
+  document.getElementById('children-panel').innerHTML = childrenHtml;
+
+  // ── Opened-gate 4th column
+  var openedColEl = document.getElementById('opened-col');
+  if (openedGate && openedGate.children.length) {
+    var thHtml = '';
+    for (var ti = 0; ti < openedGate.children.length; ti++) {
+      var tc = openedGate.children[ti];
+      var isLeafSel = tc.kind === 'leaf' && tc.id === leafOccId;
+      var isBandOpened = bandFromNestedId && (tc.kind === 'gate' || tc.kind === 'transfer') && tc.target === bandFromNestedId;
+      var thCls = 'th-child-card' + (isLeafSel ? ' th-child-card--leaf-selected' : '') + (isBandOpened ? ' th-child-card--band-opened' : '');
+      var tlabel = tc.label;
+      // transfer labels already contain ⇒ from the source
+      thHtml += '<div class="' + thCls + '"'
+        + ' id="opened-occ-' + esc(tc.id) + '"'
+        + ' data-occ-id="' + esc(tc.id) + '"'
+        + ' data-kind="' + esc(tc.kind) + '"'
+        + ' data-target="' + esc(tc.target) + '">'
+        + '<p class="th-child-name">' + esc(tlabel) + '</p>'
+        + '</div>';
+    }
+    openedColEl.innerHTML = thHtml;
+    openedColEl.style.display = '';
+  } else {
+    openedColEl.innerHTML = '';
+    openedColEl.style.display = 'none';
+  }
+
+  // ── Band: always show base trees (gates where base===true), sorted by alias B1/B2/B3
+  var bandRow = document.getElementById('band-row');
+  var baseTrees = DATA.gates.filter(function(g) { return g.base; });
+  baseTrees.sort(function(a, b) {
+    var A = a.alias || '', B = b.alias || '';
+    return A < B ? -1 : A > B ? 1 : 0;
+  });
+  var bandHtml = '';
+  for (var bi = 0; bi < baseTrees.length; bi++) {
+    var bt = baseTrees[bi];
+    var isOpenedTree = openedChildGateId === bt.id || bandFromNestedId === bt.id;
+    var btCls = 'base-tree-card' + (isOpenedTree ? ' base-tree-card--opened' : '');
+    bandHtml += '<div class="base-tree-col">';
+    bandHtml += '<div class="' + btCls + '" id="band-' + esc(bt.id) + '">' + esc(bt.title) + '</div>';
+    for (var bci = 0; bci < bt.children.length; bci++) {
+      var btc = bt.children[bci];
+      var isLeafSel2 = btc.kind === 'leaf' && btc.id === leafOccId;
+      var btcCls = 'base-tree-child' + (isLeafSel2 ? ' base-tree-child--leaf-selected' : '');
+      bandHtml += '<div class="' + btcCls + '"'
+        + ' id="band-' + esc(bt.id) + '-' + bci + '"'
+        + ' data-occ-id="' + esc(btc.id) + '"'
+        + ' data-kind="' + esc(btc.kind) + '"'
+        + ' data-target="' + esc(btc.target) + '">'
+        + esc(btc.label) + '</div>';
+    }
+    bandHtml += '</div>';
+  }
+  bandRow.innerHTML = bandHtml;
+
+  // When a nested gate is opened from a shared base tree, place its children
+  // directly below that gate's occurrence in the base-tree band. A direct
+  // click on a base-tree child has only [event, gate] in at, so derive the
+  // containing base tree from the child's target in that case.
+  if (openedColEl && openedColEl.style.display !== 'none') {
+    var openedBaseTree = bandFromNestedId ? GATES_BY_ID[bandFromNestedId] : null;
+    var openedBaseChildIndex = -1;
+
+    if (openedBaseTree) {
+      for (var obci = 0; obci < openedBaseTree.children.length; obci++) {
+        var openedBaseChild = openedBaseTree.children[obci];
+        if ((openedBaseChild.kind === 'gate' || openedBaseChild.kind === 'transfer') && openedBaseChild.target === openedChildGateId) {
+          openedBaseChildIndex = obci;
+          break;
+        }
+      }
+    }
+
+    if (!openedBaseTree && openedChildGateId) {
+      for (var bti = 0; bti < DATA.gates.length && !openedBaseTree; bti++) {
+        var candidateBaseTree = DATA.gates[bti];
+        if (!candidateBaseTree.base) continue;
+        for (var cbci = 0; cbci < candidateBaseTree.children.length; cbci++) {
+          var candidateBaseChild = candidateBaseTree.children[cbci];
+          if ((candidateBaseChild.kind === 'gate' || candidateBaseChild.kind === 'transfer') && candidateBaseChild.target === openedChildGateId) {
+            openedBaseTree = candidateBaseTree;
+            openedBaseChildIndex = cbci;
+            break;
+          }
+        }
+      }
+    }
+
+    if (openedBaseTree && openedBaseChildIndex >= 0) {
+      var openedBaseChildEl = document.getElementById('band-' + openedBaseTree.id + '-' + openedBaseChildIndex);
+      if (openedBaseChildEl) {
+        openedBaseChildEl.insertAdjacentElement('afterend', openedColEl);
+        openedColEl.style.marginTop = '0px';
+      }
+    }
+  }
+
+  // ── Reading pane
+  renderReadingPane(leafOccId, eventGate, openedGate, baseTrees);
+
+  // ── SVG connectors
+  requestAnimationFrame(drawConnectors);
+}
+
+function findLeafPreview(leafOccId, eventGate, openedGate, baseTrees) {
+  if (!leafOccId) return null;
+  // Search eventGate children
+  if (eventGate) {
+    for (var i = 0; i < eventGate.children.length; i++) {
+      var c = eventGate.children[i];
+      if (c.id === leafOccId && c.kind === 'leaf') {
+        return { occ: c, preview: DATA.leafPreviews[c.target] || null };
+      }
+    }
+  }
+  // Search openedGate children
+  if (openedGate) {
+    for (var i = 0; i < openedGate.children.length; i++) {
+      var c = openedGate.children[i];
+      if (c.id === leafOccId && c.kind === 'leaf') {
+        return { occ: c, preview: DATA.leafPreviews[c.target] || null };
+      }
+    }
+  }
+  // Search band base tree children
+  if (baseTrees) {
+    for (var bi = 0; bi < baseTrees.length; bi++) {
+      var bt = baseTrees[bi];
+      for (var i = 0; i < bt.children.length; i++) {
+        var c = bt.children[i];
+        if (c.id === leafOccId && c.kind === 'leaf') {
+          return { occ: c, preview: DATA.leafPreviews[c.target] || null };
+        }
+      }
+    }
+  }
+  return null;
+}
+
+function skeletonBar(w, h) {
+  return '<div data-slot="skeleton" class="bg-accent animate-pulse rounded-md" style="height:' + h + 'px;width:' + w + ';max-width:100%;"></div>';
+}
+
+function renderReadingPane(leafOccId, eventGate, openedGate, baseTrees) {
+  var pane = document.getElementById('reading-pane');
+  var found = findLeafPreview(leafOccId, eventGate, openedGate, baseTrees);
+  if (!found || !found.preview) {
+    // No leaf selected: show skeleton bars instead of the placeholder text
+    pane.innerHTML = '<div class="pane-main">'
+      + skeletonBar('260px', 24)
+      + skeletonBar('480px', 16)
+      + skeletonBar('420px', 16)
+      + skeletonBar('380px', 16)
+      + '</div>';
+    return;
+  }
+  var occ = found.occ;
+  var preview = found.preview;
+  var stratum = occ.stratum ? STRATUM_LABELS[occ.stratum] || occ.stratum : '';
+
+
+  pane.innerHTML = '<div class="pane-main">'
+    + (stratum ? '<p class="pane-stratum">' + esc(stratum) + '</p>' : '')
+    + '<h2 class="pane-heading">' + esc(preview.title) + '</h2>'
+    + '<div class="pane-preview">' + (preview.previewHtml || '') + '</div>'
+    + '</div>';
+}
+
+// ── Click handling ─────────────────────────────────────────────────────────
+document.getElementById('main-page').addEventListener('click', function(e) {
+  if (!DATA) return;
+  var target = e.target;
+  while (target && target !== this) {
+    // Capability card (inactive → capability-only state)
+    if (target.dataset && target.dataset.capId) {
+      var newCap = CAPS_BY_ID[target.dataset.capId];
+      if (newCap) {
+        navigate({ capId: newCap.id, at: [], leafOccId: null }, true);
+      }
+      return;
+    }
+    // Sibling event card
+    if (target.dataset && target.dataset.eventId) {
+      var eid = target.dataset.eventId;
+      navigate({ capId: STATE.capId, at: [eid], leafOccId: null }, true);
+      return;
+    }
+    // Child occurrence card (in children panel or opened col or band)
+    if (target.dataset && target.dataset.occId) {
+      var occId = target.dataset.occId;
+      var kind  = target.dataset.kind;
+      var tgt   = target.dataset.target;
+      if (kind === 'leaf') {
+        // General rule: selecting a leaf truncates at to the leaf's own parent.
+        // Parent is the top event (at[0]) if the leaf is a direct child of it,
+        // or the opened nested gate (at[1]) if the leaf belongs to that gate.
+        // Anything after the parent (opened base tree, transfer, deeper gate) is dropped
+        // so only one bright path is highlighted.
+        var leafAt = STATE.at.slice();
+        var evtG = leafAt[0] ? GATES_BY_ID[leafAt[0]] : null;
+        if (evtG) {
+          var foundInEvt = false;
+          for (var lki = 0; lki < evtG.children.length; lki++) {
+            if (evtG.children[lki].id === occId) { foundInEvt = true; break; }
+          }
+          if (foundInEvt) {
+            leafAt = [leafAt[0]];
+          } else if (leafAt.length > 1 && leafAt[1]) {
+            var ngG = GATES_BY_ID[leafAt[1]];
+            if (ngG && !ngG.base) {
+              for (var lki = 0; lki < ngG.children.length; lki++) {
+                if (ngG.children[lki].id === occId) { leafAt = [leafAt[0], leafAt[1]]; break; }
+              }
+            }
+          }
+        }
+        navigate({ capId: STATE.capId, at: leafAt, leafOccId: occId }, true);
+        return;
+      }
+      if (kind === 'gate' || kind === 'transfer') {
+        // (b) Opening a gate/transfer clears the leaf (already: leafOccId: null).
+        var newAt = [STATE.at[0], tgt].filter(Boolean);
+        navigate({ capId: STATE.capId, at: newAt, leafOccId: null }, true);
+        return;
+      }
+    }
+    target = target.parentElement;
+  }
+});
+
+// ── SVG connector drawing ──────────────────────────────────────────────────
+var SEG = [];
+
+function makePath(d, stroke, sw, opacity, arrow) {
+  var el = document.createElementNS(NS, 'path');
+  el.setAttribute('d', d);
+  el.setAttribute('fill', 'none');
+  el.setAttribute('stroke', stroke);
+  el.setAttribute('stroke-width', String(sw));
+  el.setAttribute('stroke-linecap', 'round');
+  el.setAttribute('stroke-linejoin', 'round');
+  if (opacity != null) el.setAttribute('opacity', String(opacity));
+  if (arrow) el.setAttribute('marker-end', 'url(#' + arrow + ')');
+  return el;
+}
+
+function seg(g, x1, y1, x2, y2, stroke, sw, opacity, arrow) {
+  SEG.push({ x1: x1, y1: y1, x2: x2, y2: y2 });
+  var d = 'M ' + x1 + ',' + y1 + (Math.abs(x1-x2)<0.5 ? ' V '+y2 : ' H '+x2);
+  g.appendChild(makePath(d, stroke, sw, opacity, arrow));
+}
+
+function drawMapToBand(g, srcRight, srcMidY, laneX, gutterY, tgtMidX, tgtTop, stroke, sw, op, arrow) {
+  SEG.push({ x1: srcRight, y1: srcMidY, x2: laneX,   y2: srcMidY });
+  SEG.push({ x1: laneX,   y1: srcMidY, x2: laneX,   y2: gutterY });
+  SEG.push({ x1: laneX,   y1: gutterY, x2: tgtMidX, y2: gutterY });
+  SEG.push({ x1: tgtMidX, y1: gutterY, x2: tgtMidX, y2: tgtTop  });
+  var d = 'M '+srcRight+','+srcMidY+' H '+laneX+' V '+gutterY+' H '+tgtMidX+' V '+tgtTop;
+  g.appendChild(makePath(d, stroke, sw, op, arrow));
+}
+
+function drawConnectors() {
+  // Idle state: clear connectors and skip
+  if (!STATE.capId) {
+    var idleD = document.getElementById('conn-dim');
+    var idleB = document.getElementById('conn-bright');
+    if (idleD) idleD.innerHTML = '';
+    if (idleB) idleB.innerHTML = '';
+    return;
+  }
+
+  var wrapper   = document.getElementById('map-wrapper');
+  var container = document.getElementById('map-container');
+  var band      = document.getElementById('base-trees-band');
+  var svg       = document.getElementById('conn-svg');
+  var dimG      = document.getElementById('conn-dim');
+  var brightG   = document.getElementById('conn-bright');
+  if (!wrapper || !svg || !dimG || !brightG) return;
+
+  SEG = [];
+  dimG.innerHTML    = '';
+  brightG.innerHTML = '';
+
+  // Align opened-col vertically to the opened child occurrence card
+  var openedColEl = document.getElementById('opened-col');
+  if (openedColEl && openedColEl.style.display !== 'none' && !openedColEl.closest('.base-tree-col')) {
+    openedColEl.style.marginTop = '0px';
+    void openedColEl.offsetHeight;
+    // Find the child card marked --opened in the children panel
+    var openedChEl = document.querySelector('#children-panel .child-card--opened');
+    if (openedChEl) {
+      var containerRect0 = container.getBoundingClientRect();
+      var openedRect     = openedChEl.getBoundingClientRect();
+      var thRect0        = openedColEl.getBoundingClientRect();
+      var c2MidY = openedRect.top  - containerRect0.top  + openedRect.height / 2;
+      var desiredTop = c2MidY - thRect0.height / 2;
+      if (desiredTop < 0) desiredTop = 0;
+      openedColEl.style.marginTop = desiredTop + 'px';
+      void openedColEl.offsetHeight;
+    }
+  }
+
+  var wrapperRect = wrapper.getBoundingClientRect();
+
+  svg.setAttribute('width',  String(Math.ceil(wrapperRect.width)));
+  svg.setAttribute('height', String(Math.ceil(wrapperRect.height)));
+
+  function r(id) {
+    var el = document.getElementById(id);
+    if (!el) return null;
+    var b = el.getBoundingClientRect();
+    return {
+      left:  b.left  - wrapperRect.left,
+      right: b.right - wrapperRect.left,
+      top:   b.top   - wrapperRect.top,
+      bottom:b.bottom- wrapperRect.top,
+      midX:  b.left  - wrapperRect.left + b.width  / 2,
+      midY:  b.top   - wrapperRect.top  + b.height / 2,
+    };
+  }
+
+  // Capability-only state: dim lines from cap → each event card, nothing accent
+  if (STATE.at.length === 0) {
+    var capOnlyCapR = r('cap-col-active');
+    if (capOnlyCapR) {
+      var capOnlyEvts = document.getElementById('events-panel').querySelectorAll('[data-event-id]');
+      var capOnlyData = [];
+      for (var coi = 0; coi < capOnlyEvts.length; coi++) {
+        var coe = capOnlyEvts[coi];
+        var cob = coe.getBoundingClientRect();
+        capOnlyData.push({ left: cob.left - wrapperRect.left, midY: cob.top - wrapperRect.top + cob.height / 2 });
+      }
+      if (capOnlyData.length) {
+        var coTrunkX = (capOnlyCapR.right + capOnlyData[0].left) / 2;
+        var coYs = [capOnlyCapR.midY];
+        for (var coi = 0; coi < capOnlyData.length; coi++) coYs.push(capOnlyData[coi].midY);
+        var coTop = coYs[0], coBot = coYs[0];
+        for (var coi = 1; coi < coYs.length; coi++) { if (coYs[coi] < coTop) coTop = coYs[coi]; if (coYs[coi] > coBot) coBot = coYs[coi]; }
+        seg(dimG, capOnlyCapR.right, capOnlyCapR.midY, coTrunkX, capOnlyCapR.midY, INK, 1.5, 0.12, null);
+        seg(dimG, coTrunkX, coTop, coTrunkX, coBot, INK, 1.5, 0.12, null);
+        for (var coi = 0; coi < capOnlyData.length; coi++) seg(dimG, coTrunkX, capOnlyData[coi].midY, capOnlyData[coi].left, capOnlyData[coi].midY, INK, 1.5, 0.12, 'arr-off');
+      }
+    }
+    return;
+  }
+
+  var capR   = r('cap-col-active');
+  var evtR   = r('event-col-active');
+  if (capR && evtR) {
+    var trunkX = (capR.right + evtR.left) / 2;
+    // dim: cap → trunk → event
+    seg(dimG, capR.right, capR.midY, trunkX, capR.midY, INK, 1.5, 0.12, null);
+    seg(dimG, trunkX, capR.midY, trunkX, evtR.midY, INK, 1.5, 0.12, null);
+    seg(dimG, trunkX, evtR.midY, evtR.left, evtR.midY, INK, 1.5, 0.12, 'arr-off');
+    // bright: cap → selected event
+    seg(brightG, capR.right, capR.midY, trunkX, capR.midY, ACCENT, 2, null, null);
+    seg(brightG, trunkX, capR.midY, trunkX, evtR.midY, ACCENT, 2, null, null);
+    seg(brightG, trunkX, evtR.midY, evtR.left, evtR.midY, ACCENT, 2, null, 'arr-on');
+  }
+
+  // event → children
+  if (evtR) {
+    var childEls = document.getElementById('children-panel').querySelectorAll('.child-card');
+    var childData = [];
+    for (var ci = 0; ci < childEls.length; ci++) {
+      var cel = childEls[ci];
+      var cr = cel.getBoundingClientRect();
+      childData.push({
+        el: cel,
+        left: cr.left - wrapperRect.left,
+        midY: cr.top  - wrapperRect.top + cr.height / 2,
+        isOnPath: cel.classList.contains('child-card--opened') || cel.classList.contains('child-card--leaf-selected'),
+      });
+    }
+    if (childData.length) {
+      var minLeft = childData[0].left;
+      for (var ci = 1; ci < childData.length; ci++) if (childData[ci].left < minLeft) minLeft = childData[ci].left;
+      var trunkX2 = (evtR.right + minLeft) / 2;
+      var allYs = [evtR.midY];
+      for (var ci = 0; ci < childData.length; ci++) allYs.push(childData[ci].midY);
+      var trunkTop2 = allYs[0], trunkBot2 = allYs[0];
+      for (var ci = 1; ci < allYs.length; ci++) { if (allYs[ci] < trunkTop2) trunkTop2 = allYs[ci]; if (allYs[ci] > trunkBot2) trunkBot2 = allYs[ci]; }
+
+      seg(dimG, evtR.right, evtR.midY, trunkX2, evtR.midY, INK, 1.5, 0.12, null);
+      seg(dimG, trunkX2, trunkTop2, trunkX2, trunkBot2, INK, 1.5, 0.12, null);
+      for (var ci = 0; ci < childData.length; ci++) seg(dimG, trunkX2, childData[ci].midY, childData[ci].left, childData[ci].midY, INK, 1.5, 0.12, 'arr-off');
+
+      var brightYs = [evtR.midY];
+      for (var ci = 0; ci < childData.length; ci++) if (childData[ci].isOnPath) brightYs.push(childData[ci].midY);
+      if (brightYs.length > 1) {
+        var bTop = brightYs[0], bBot = brightYs[0];
+        for (var ci = 1; ci < brightYs.length; ci++) { if (brightYs[ci] < bTop) bTop = brightYs[ci]; if (brightYs[ci] > bBot) bBot = brightYs[ci]; }
+        seg(brightG, evtR.right, evtR.midY, trunkX2, evtR.midY, ACCENT, 2, null, null);
+        seg(brightG, trunkX2, bTop, trunkX2, bBot, ACCENT, 2, null, null);
+        for (var ci = 0; ci < childData.length; ci++) if (childData[ci].isOnPath) seg(brightG, trunkX2, childData[ci].midY, childData[ci].left, childData[ci].midY, ACCENT, 2, null, 'arr-on');
+      }
+    }
+  }
+
+  // opened-col children (from opened child card)
+  if (openedColEl && openedColEl.style.display !== 'none') {
+    var openedChEl2 = document.querySelector('#children-panel .child-card--opened');
+    if (openedChEl2) {
+      var ocR = openedChEl2.getBoundingClientRect();
+      var ocRight = ocR.right - wrapperRect.left;
+      var ocMidY  = ocR.top - wrapperRect.top + ocR.height / 2;
+      var thEls = openedColEl.querySelectorAll('.th-child-card');
+      var thData = [];
+      for (var ti = 0; ti < thEls.length; ti++) {
+        var tel = thEls[ti];
+        var tb = tel.getBoundingClientRect();
+        thData.push({ left: tb.left - wrapperRect.left, midY: tb.top - wrapperRect.top + tb.height / 2, isLeafSel: tel.classList.contains('th-child-card--leaf-selected') });
+      }
+      if (thData.length) {
+        var trunkX3 = (ocRight + thData[0].left) / 2;
+        var tYs = [ocMidY]; for (var ti = 0; ti < thData.length; ti++) tYs.push(thData[ti].midY);
+        var tTop = tYs[0], tBot = tYs[0];
+        for (var ti = 1; ti < tYs.length; ti++) { if (tYs[ti] < tTop) tTop = tYs[ti]; if (tYs[ti] > tBot) tBot = tYs[ti]; }
+        seg(dimG, ocRight, ocMidY, trunkX3, ocMidY, INK, 1.5, 0.12, null);
+        seg(dimG, trunkX3, tTop, trunkX3, tBot, INK, 1.5, 0.12, null);
+        for (var ti = 0; ti < thData.length; ti++) seg(dimG, trunkX3, thData[ti].midY, thData[ti].left, thData[ti].midY, INK, 1.5, 0.12, 'arr-off');
+        // bright for selected leaf in opened col
+        for (var ti = 0; ti < thData.length; ti++) {
+          if (thData[ti].isLeafSel) {
+            seg(brightG, ocRight, ocMidY, trunkX3, ocMidY, ACCENT, 2, null, null);
+            seg(brightG, trunkX3, ocMidY, trunkX3, thData[ti].midY, ACCENT, 2, null, null);
+            seg(brightG, trunkX3, thData[ti].midY, thData[ti].left, thData[ti].midY, ACCENT, 2, null, 'arr-on');
+          }
+        }
+      }
+    }
+  }
+
+  // transfers in children panel → band base tree cards
+  var cpEl  = document.getElementById('children-panel');
+  var bandEl = document.getElementById('base-trees-band');
+  if (cpEl && bandEl) {
+    var cpRight = cpEl.getBoundingClientRect().right - wrapperRect.left;
+    var mapBot  = container.getBoundingClientRect().bottom - wrapperRect.top;
+    var bandTop = bandEl.getBoundingClientRect().top - wrapperRect.top;
+    var span    = bandTop - mapBot;
+    var laneBase = cpRight + 8;
+
+    var transferEls = cpEl.querySelectorAll('.child-card[data-kind="transfer"]');
+    var laneIdx = 0;
+    for (var ti = 0; ti < transferEls.length; ti++) {
+      var tel2 = transferEls[ti];
+      var tgt2 = tel2.dataset.target;
+      if (!tgt2) { laneIdx++; continue; }
+      var bandTargetEl = document.getElementById('band-' + tgt2);
+      if (!bandTargetEl) { laneIdx++; continue; }
+      var telR = tel2.getBoundingClientRect();
+      var btR2 = bandTargetEl.getBoundingClientRect();
+      var laneX = laneBase + laneIdx * 10;
+      var gutY  = mapBot + span * (0.3 + laneIdx * 0.2);
+      var isAccent = tel2.classList.contains('child-card--opened');
+      var stroke2 = isAccent ? ACCENT : INK;
+      var sw2     = isAccent ? 2 : 1.5;
+      var op2     = isAccent ? null : 0.12;
+      var arr2    = isAccent ? 'arr-on' : 'arr-off';
+      drawMapToBand(
+        isAccent ? brightG : dimG,
+        telR.right - wrapperRect.left, telR.top - wrapperRect.top + telR.height / 2,
+        laneX, gutY,
+        btR2.left - wrapperRect.left + btR2.width / 2, btR2.top - wrapperRect.top,
+        stroke2, sw2, op2, arr2
+      );
+      laneIdx++;
+    }
+  }
+
+  // transfers in opened-col → band base tree cards (when base tree is opened via a nested gate)
+  if (openedColEl && openedColEl.style.display !== 'none') {
+    var ocBandEls = openedColEl.querySelectorAll('.th-child-card--band-opened');
+    if (ocBandEls.length > 0) {
+      var ocBandRight = openedColEl.getBoundingClientRect().right - wrapperRect.left;
+      var laneX_oc   = ocBandRight + 8;
+      var mapBotOc   = container.getBoundingClientRect().bottom - wrapperRect.top;
+      var bandTopOc  = bandEl.getBoundingClientRect().top - wrapperRect.top;
+      var spanOc     = bandTopOc - mapBotOc;
+      for (var oci2 = 0; oci2 < ocBandEls.length; oci2++) {
+        var ocBtel   = ocBandEls[oci2];
+        var ocBtgt   = ocBtel.dataset.target;
+        if (!ocBtgt) continue;
+        var bandOcEl = document.getElementById('band-' + ocBtgt);
+        if (!bandOcEl) continue;
+        var ocBtelR  = ocBtel.getBoundingClientRect();
+        var bandOcR  = bandOcEl.getBoundingClientRect();
+        var gutYOc   = mapBotOc + spanOc * 0.5;
+        drawMapToBand(
+          brightG,
+          ocBtelR.right - wrapperRect.left, ocBtelR.top - wrapperRect.top + ocBtelR.height / 2,
+          laneX_oc, gutYOc,
+          bandOcR.left - wrapperRect.left + bandOcR.width / 2, bandOcR.top - wrapperRect.top,
+          ACCENT, 2, null, 'arr-on'
+        );
+      }
+    }
+  }
+
+  // band internal: base tree card → children
+  var BAND_SETS = [];
+  var bandCols = document.getElementById('band-row').querySelectorAll('.base-tree-col');
+  for (var bi2 = 0; bi2 < bandCols.length; bi2++) {
+    var col = bandCols[bi2];
+    var btCard = col.querySelector('.base-tree-card');
+    var btChildren = col.querySelectorAll('.base-tree-child');
+    if (btCard && btChildren.length) {
+      BAND_SETS.push({ card: btCard, children: btChildren });
+    }
+  }
+  for (var bi2 = 0; bi2 < BAND_SETS.length; bi2++) {
+    var bs = BAND_SETS[bi2];
+    var parR = bs.card.getBoundingClientRect();
+    var parLeft = parR.left - wrapperRect.left;
+    var parBottom = parR.bottom - wrapperRect.top;
+    var trX = parLeft + 8;
+    var childRects = [];
+    for (var bci = 0; bci < bs.children.length; bci++) {
+      var bc = bs.children[bci].getBoundingClientRect();
+      childRects.push({ left: bc.left - wrapperRect.left, midY: bc.top - wrapperRect.top + bc.height / 2 });
+    }
+    if (!childRects.length) continue;
+    var trunkTop3 = parBottom + 4;
+    var trunkBot3 = childRects[childRects.length - 1].midY;
+    seg(dimG, trX, trunkTop3, trX, trunkBot3, INK, 1.5, 0.12, null);
+    for (var bci = 0; bci < childRects.length; bci++) {
+      seg(dimG, trX, childRects[bci].midY, childRects[bci].left, childRects[bci].midY, INK, 1.5, 0.12, 'arr-off');
+    }
+  }
+}
+
+// ── Init ───────────────────────────────────────────────────────────────────
+function buildPage() {
+  var main = document.getElementById('main-page');
+  main.innerHTML =
+    // Hero
+    '<section class="mock-hero"><h2 id="hero-title"></h2></section>'
+
+    // Map wrapper
+    + '<div id="map-wrapper" class="map-wrapper">'
+
+    // SVG overlay
+    + '<svg id="conn-svg" aria-hidden="true" style="position:absolute;top:0;left:0;pointer-events:none;z-index:5;overflow:visible;" width="0" height="0">'
+    + '<defs>'
+    + '<marker id="arr-on" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0.5 L6,3.5 L0,6.5 Z" fill="var(--color-accent)"/></marker>'
+    + '<marker id="arr-off" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0.5 L6,3.5 L0,6.5 Z" fill="var(--color-ink)"/></marker>'
+    + '<marker id="arr-down-on" markerWidth="7" markerHeight="7" refX="3.5" refY="6" orient="auto"><path d="M0.5,0 L3.5,6 L6.5,0 Z" fill="var(--color-accent)"/></marker>'
+    + '<marker id="arr-down-off" markerWidth="7" markerHeight="7" refX="3.5" refY="6" orient="auto"><path d="M0.5,0 L3.5,6 L6.5,0 Z" fill="var(--color-ink)"/></marker>'
+    + '</defs>'
+    + '<g id="conn-dim"></g>'
+    + '<g id="conn-bright"></g>'
+    + '</svg>'
+
+    // Desk
+    + '<div id="map-container" class="mock-desk">'
+    + '<div id="cap-col" class="cap-col"></div>'
+    + '<div id="events-panel" class="panel events-panel"></div>'
+    + '<div id="children-panel" class="panel children-panel"></div>'
+    + '<div id="opened-col" class="th-group" style="display:none"></div>'
+    + '</div>'
+
+    // Band
+    + '<div id="base-trees-band" class="base-trees-band">'
+    + '<div class="base-trees-label">Shared base trees</div>'
+    + '<div id="band-row" class="base-trees-row"></div>'
+    + '</div>'
+
+    + '</div>' // /map-wrapper
+
+    // Reading pane
+    + '<div id="reading-pane" class="reading-pane"></div>';
+}
+
+async function init() {
+  try {
+    var resp = await fetch(document.documentElement.getAttribute('data-surface-data') || 'assets/surface-data.json');
+    DATA = await resp.json();
+  } catch (e) {
+    var skelEl = document.getElementById('loading-skel');
+    if (skelEl) {
+      skelEl.removeAttribute('aria-busy');
+      skelEl.innerHTML = '<p style="padding:48px 0;font:14px/1.5 var(--font-body);color:var(--color-muted)">Could not load surface-data.json. Run the wrapper build first.</p>';
+    }
+    return;
+  }
+
+  // Build lookups
+  for (var gi = 0; gi < DATA.gates.length; gi++) GATES_BY_ID[DATA.gates[gi].id] = DATA.gates[gi];
+  for (var ci = 0; ci < DATA.capabilities.length; ci++) CAPS_BY_ID[DATA.capabilities[ci].id] = DATA.capabilities[ci];
+
+  buildPage();
+  STATE = parseState();
+  // Move the place into the history entry and leave the address bar as index.html (this also
+  // drops unknown params like ?v=, and at[2] when the leaf-wins rule applied inside parseState).
+  writeState(stateToParams(STATE), false);
+  doRender();
+
+  document.fonts.ready.then(drawConnectors);
+  window.addEventListener('resize', drawConnectors);
+  window.addEventListener('popstate', function() {
+    STATE = parseState();
+    doRender();
+  });
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+
+}());
+</script>
+
+<!-- map-intro script: the signature figure, in-page scrolling, and deep links landing on the map -->
+<script>
+(function () {
+'use strict';
+var intro = document.getElementById('intro');
+if (!intro) return;
+
+// In-page links scroll without adding a #hash (the map owns the URL's query and history).
+intro.addEventListener('click', function (event) {
+  var link = event.target instanceof Element ? event.target.closest('[data-intro-scroll]') : null;
+  if (!link) return;
+  var target = document.getElementById(link.getAttribute('data-intro-scroll'));
+  if (!target) return;
+  event.preventDefault();
+  target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+// The signature figure draws once when it is first seen, then is cut at the coast.
+var sig = document.getElementById('intro-sig');
+if (sig) {
+  var play = function () {
+    sig.classList.add('drawn');
+    setTimeout(function () { sig.classList.add('cutoff'); }, 1500);
+  };
+  if ('IntersectionObserver' in window) {
+    var seen = new IntersectionObserver(function (entries) {
+      if (entries.some(function (e) { return e.isIntersecting; })) { seen.disconnect(); requestAnimationFrame(play); }
+    }, { threshold: 0.4 });
+    seen.observe(sig);
+  } else play();
+}
+
+// A link into a place on the map (?cap, ?at or ?leaf) lands on the map, not on this introduction.
+var hs = history.state;
+var params = new URLSearchParams(hs && typeof hs.map === 'string' ? hs.map : location.search);
+if (params.get('cap') || params.get('at') || params.get('leaf')) {
+  var started = performance.now();
+  var land = function () {
+    var ready = document.querySelector('#cap-col > *');
+    if (!ready && performance.now() - started < 8000) { requestAnimationFrame(land); return; }
+    if (window.scrollY < 8) document.getElementById('main-page').scrollIntoView({ block: 'start' });
+  };
+  land();
+}
+}());
+</script>
+
+<aside class="phone-notice" data-phone-notice hidden><div><p class="phone-notice-message" lang="en">Please view this report on a device with a screen wider than 768 pixels.</p></div><button type="button" class="phone-notice-dismiss">Got it</button></aside><script type="module" src="assets/locale.js"></script></body>
+</html>
