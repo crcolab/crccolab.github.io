@@ -124,7 +124,8 @@
   performers — a list of {name, slug, type, url} (type defaults to Person) emitted as
   performer, else the creators are; and price (0 for free) with price_currency (default
   TWD), emitted as an Offer pointing at signup_url, else the page; organizer {name, url}
-  when someone other than CRC ran the event (else CRC).
+  when someone other than CRC ran the event (else CRC), or organizers, a list of
+  {name, url}, when several co-hosts ran it.
   An events entry that sets canonical_url skips this script (see the collection check in
   the head), so the page it canonicalizes to carries the Event.
 {%- endcomment -%}
@@ -167,7 +168,11 @@
   "image": {{ seo_image | absolute_url | jsonify }},
   "description": {{ desc | jsonify }},
   "url": {{ canonical_url | jsonify }},
-  "organizer": {% if page.organizer.name %}{ "@type": "Organization", "name": {{ page.organizer.name | jsonify }}{% if page.organizer.url %}, "url": {{ page.organizer.url | jsonify }}{% endif %} }{% else %}{ "@type": "Organization", "name": "Cyborg Resilience Co-lab", "url": "{{ site.url }}" }{% endif %}
+  "organizer": {% if page.organizers and page.organizers.size > 0 %}[
+    {%- for org in page.organizers -%}
+      { "@type": "Organization", "name": {{ org.name | jsonify }}{% if org.url %}, "url": {{ org.url | jsonify }}{% endif %} }{% unless forloop.last %}, {% endunless %}
+    {%- endfor -%}
+  ]{% elsif page.organizer.name %}{ "@type": "Organization", "name": {{ page.organizer.name | jsonify }}{% if page.organizer.url %}, "url": {{ page.organizer.url | jsonify }}{% endif %} }{% else %}{ "@type": "Organization", "name": "Cyborg Resilience Co-lab", "url": "{{ site.url }}" }{% endif %}
 }
 {% elsif page.section == "ideas" or page.section == "pub" %}
 {%- comment -%}

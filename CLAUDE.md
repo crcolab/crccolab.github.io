@@ -32,7 +32,7 @@ plus Jekyll (built by GitHub Pages on push from `main`) for the content sections
   {name, slug} with slug matching `_team/<slug>.md` — `performers` (speakers or facilitators,
   a list of {name, slug, type, url}, type defaulting to Person; else the creators are used) and
   `price` (0 when free, with `price_currency` defaulting to TWD; emitted as an Offer pointing at
-  `signup_url`, else the post), and `organizer` {name, url} when someone other than CRC ran the event (else CRC). A built-site test requires every Event to carry performer and offers), `link` to point listings at another URL; all collections also accept the
+  `signup_url`, else the post), and `organizer` {name, url} when someone other than CRC ran the event (else CRC), or `organizers`, a list of {name, url}, for several co-hosts. A built-site test requires every Event to carry performer and offers), `link` to point listings at another URL; all collections also accept the
   SEO keys `tags` (list, becomes keywords/`article:tag`), `og_image` (social-card
   fallback after `image`), `og_title`/`og_description` (social-card copy for
   `og:*`/`twitter:*`, else the title and summary; the site name is appended to
