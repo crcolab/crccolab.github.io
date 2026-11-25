@@ -680,7 +680,7 @@
     <h2 id="intro-read-title">What does my service sit on?</h2>
     <p class="i-p">The map below answers that with four fault trees, one per capability, holding 13 top events over 26 shared dependencies. A fault tree is a diagram of the faults that can cause one failure.</p>
 
-    <a class="mini" href="index.html?cap=cap-reach-and-communicate&amp;at=event-1a-your-users-load-your-service&amp;leaf=occ-1a-your-users-load-your-service-dns-resolution" aria-label="Open this example on the map: Reach and communicate, Your users load your service, DNS resolution">
+    <a class="mini" href="./?cap=cap-reach-and-communicate&amp;at=event-1a-your-users-load-your-service&amp;leaf=occ-1a-your-users-load-your-service-dns-resolution" aria-label="Open this example on the map: Reach and communicate, Your users load your service, DNS resolution">
       <div class="mc">
         <span class="num" aria-hidden="true">1</span>
         <div class="m-cap on">Reach and communicate</div>
@@ -778,6 +778,9 @@
 <script>
 (function () {
 'use strict';
+if (/\/index\.html$/.test(location.pathname)) {
+  history.replaceState(history.state, '', location.pathname.replace(/\/index\.html$/, '/') + location.search + location.hash);
+}
 
 // ── Constants ──────────────────────────────────────────────────────────────
 var ACCENT = 'var(--color-accent)';
@@ -804,8 +807,12 @@ function mapSearch() {
   if (hs && typeof hs.map === 'string') return '?' + hs.map;
   return location.search;
 }
+// The address bar never shows index.html: /pub/…/index.html reads as /pub/…/.
+function cleanPath() {
+  return location.pathname.replace(/\/index\.html$/, '/');
+}
 function writeState(qs, push) {
-  history[push ? 'pushState' : 'replaceState']({ map: qs }, '', location.pathname + location.hash);
+  history[push ? 'pushState' : 'replaceState']({ map: qs }, '', cleanPath() + location.hash);
 }
 
 function parseState() {
@@ -834,6 +841,17 @@ function parseState() {
   // Capability-only state: cap param present but no at/leaf → all events unchosen
   if (rawAt.length === 0 && !rawLeaf) {
     return { capId: cap.id, at: [], leafOccId: null };
+  }
+
+  // A link to a nested gate (?at=gate-…) opens it under its parent top event.
+  if (rawAt[0] && cap.events.indexOf(rawAt[0]) < 0 && GATES_BY_ID[rawAt[0]] && !GATES_BY_ID[rawAt[0]].base) {
+    for (var pei = 0; pei < cap.events.length; pei++) {
+      var pEvt = GATES_BY_ID[cap.events[pei]];
+      if (pEvt && pEvt.children.some(function (c) { return c.target === rawAt[0]; })) {
+        rawAt = [pEvt.id].concat(rawAt);
+        break;
+      }
+    }
   }
 
   // Resolve event: first at must be an event of the selected cap
