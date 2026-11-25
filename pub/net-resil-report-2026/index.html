@@ -550,7 +550,7 @@
     .num{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--color-accent);color:var(--color-paper);font:600 12px/1 var(--font-display);flex-shrink:0}
     .mc>.num{position:absolute;top:-11px;right:-11px}
     .m-try{position:absolute;right:32px;bottom:22px;font:var(--text-small)/1 var(--font-body);color:var(--color-accent)}
-    .i-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:28px;list-style:none;margin:36px 0 56px;padding:0}
+    .i-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;list-style:none;margin:36px 0 56px;padding:0}
     .i-steps li{display:grid;grid-template-columns:22px 1fr;column-gap:12px;align-content:start}
     .i-steps h3{font-size:17px;margin:0 0 6px}
     .i-steps p{font:15px/1.55 var(--font-body);margin:0;grid-column:2}
@@ -707,11 +707,9 @@
         <div class="m-ch">Geo and media licensing (location and media features)</div>
       </div>
       <div class="mc">
-        <span class="num" aria-hidden="true">5</span>
         <div class="m-pane">
           <p class="m-pt">DNS resolution</p>
           <p class="m-px">When name resolution fails, three top events fail with it: Your users load your service, Your cloud-hosted data is readable and writable, and Online checkout approves.</p>
-          <div><span class="m-rung">50% Degradation →</span><span class="m-rung">Global Cutoff →</span><span class="m-rung">Island Partition →</span></div>
         </div>
       </div>
       <span class="m-try">Open this example on the map →</span>
@@ -722,7 +720,6 @@
       <li><span class="num" aria-hidden="true">2</span><div><h3>Pick a top event</h3></div><p>A top event is a capability that the users or the team of a service need.</p></li>
       <li><span class="num" aria-hidden="true">3</span><div><h3>Read its gate</h3></div><p>Below the top event, a gate states whether every child must hold (<code>AND</code>) or any one child suffices (<code>OR</code>).</p></li>
       <li><span class="num" aria-hidden="true">4</span><div><h3>Open a dependency</h3></div><p>A leaf names one shared dependency and points to the section that grounds it. Three base trees recur under every capability. They are drawn once and referenced with ⇒.</p></li>
-      <li><span class="num" aria-hidden="true">5</span><div><h3>Jump to each level</h3></div><p>The reading pane links each dependency to its trace at 50% Degradation, Global Cutoff and Island Partition.</p></li>
     </ol>
 
     <div class="i-row" style="margin-top:0">
