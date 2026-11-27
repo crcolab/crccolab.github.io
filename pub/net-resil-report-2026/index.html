@@ -454,6 +454,39 @@
     }
     .pane-preview p { margin: 0 0 0.75em; }
     .pane-preview a { color: var(--color-accent); }
+    /* Feedback: a side column in the reading pane that opens a prefilled GitHub issue (2026-11-27). */
+    .pane-issue {
+      flex: 0 1 260px;
+      margin-left: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 16px 18px;
+      border: 1px solid var(--color-rule);
+      border-radius: 10px;
+      background: var(--color-surface);
+    }
+    .pane-issue p {
+      font: 14px/1.5 var(--font-body);
+      color: var(--color-muted);
+      margin: 0;
+    }
+    .pane-issue a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border: 1px solid var(--color-ink);
+      border-radius: 99px;
+      font: 600 13px/1 var(--font-display);
+      color: var(--color-ink);
+      text-decoration: none;
+    }
+    .pane-issue a:hover { border-color: var(--color-accent); color: var(--color-accent); }
+    .pane-issue a:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+    /* Once it wraps below the dependency, it starts at the left edge with the text. */
+    @media (max-width: 1100px) { .pane-issue { margin-left: 0; } }
 
     /* Loading state (legacy, unused — skeleton replaces it) */
     /* ── Loading skeleton layout ─────────────────────────────────────── */
@@ -1409,6 +1442,26 @@ function skeletonBar(w, h) {
   return '<div data-slot="skeleton" class="bg-accent animate-pulse rounded-md" style="height:' + h + 'px;width:' + w + ';max-width:100%;"></div>';
 }
 
+// ── Feedback ───────────────────────────────────────────────────────────────
+// The report's own repository is private, so readers file issues on the site's public repository.
+// The issue carries the dependency's name and a link back to this place on the map.
+var ISSUE_NEW = 'https://github.com/crcolab/crccolab.github.io/issues/new';
+
+function issueHtml(leafTitle) {
+  var qs = stateToParams(STATE);
+  var place = location.origin + cleanPath() + (qs ? '?' + qs : '');
+  var title = '[Network resilience map] ' + (leafTitle ? leafTitle + ': ' : '');
+  var body = 'Page: ' + place + '\n'
+    + (leafTitle ? 'Dependency: ' + leafTitle + '\n' : '')
+    + '\nWhat is wrong, unclear or missing?\n\n';
+  var href = ISSUE_NEW + '?title=' + encodeURIComponent(title) + '&body=' + encodeURIComponent(body);
+  return '<aside class="pane-issue" aria-label="Feedback">'
+    + '<p>' + (leafTitle ? 'Spot an error in this dependency, or one the map is missing?' : 'Spot an error, or a dependency the map is missing?') + '</p>'
+    + '<a href="' + esc(href) + '" target="_blank" rel="noopener">Open an issue on GitHub'
+    + ' <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>'
+    + '</aside>';
+}
+
 function renderReadingPane(leafOccId, eventGate, openedGate, baseTrees) {
   var pane = document.getElementById('reading-pane');
   var found = findLeafPreview(leafOccId, eventGate, openedGate, baseTrees);
@@ -1419,7 +1472,8 @@ function renderReadingPane(leafOccId, eventGate, openedGate, baseTrees) {
       + skeletonBar('480px', 16)
       + skeletonBar('420px', 16)
       + skeletonBar('380px', 16)
-      + '</div>';
+      + '</div>'
+      + issueHtml(null);
     return;
   }
   var occ = found.occ;
@@ -1431,7 +1485,8 @@ function renderReadingPane(leafOccId, eventGate, openedGate, baseTrees) {
     + (stratum ? '<p class="pane-stratum">' + esc(stratum) + '</p>' : '')
     + '<h2 class="pane-heading">' + esc(preview.title) + '</h2>'
     + '<div class="pane-preview">' + (preview.previewHtml || '') + '</div>'
-    + '</div>';
+    + '</div>'
+    + issueHtml(preview.title);
 }
 
 // ── Click handling ─────────────────────────────────────────────────────────
